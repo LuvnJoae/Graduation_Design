@@ -31,7 +31,27 @@ public class IOUtils {
     }
 
     /**
-     * 写入txt文件
+     * 写入txt文件 (选择是否为追加) （重载）
+     * @param path 存储路径
+     * @param contents 写入String[]形式的数据
+     * @param appendFlag 是否追加数据
+     */
+    public void writeTxt(String path, String[] contents, boolean appendFlag) {
+        try (
+                FileWriter writer = new FileWriter(path, appendFlag);
+                BufferedWriter bw = new BufferedWriter(writer)
+        ) {
+            for (String content : contents) {
+                bw.write(content + "\r\n");
+            }
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 写入txt文件 (默认不追加) （重载）
      * @param path 存储路径
      * @param contents 写入String[]形式的数据
      */
@@ -41,6 +61,45 @@ public class IOUtils {
                 BufferedWriter bw = new BufferedWriter(writer)
         ) {
             for (String content : contents) {
+                bw.write(content + "\r\n");
+            }
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 写入txt文件 (选择是否为追加) （重载）
+     * @param path 存储路径
+     * @param contents 写入StringBuilder[]形式的数据
+     * @param appendFlag 是否追加数据
+     */
+    public void writeTxt(String path, StringBuilder[] contents, boolean appendFlag) {
+        try (
+                FileWriter writer = new FileWriter(path, appendFlag);
+                BufferedWriter bw = new BufferedWriter(writer)
+        ) {
+            for (StringBuilder content : contents) {
+                bw.write(content + "\r\n");
+            }
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 写入txt文件 (默认不追加) （重载）
+     * @param path 存储路径
+     * @param contents 写入StringBuilder[]形式的数据
+     */
+    public void writeTxt(String path, StringBuilder[] contents) {
+        try (
+                FileWriter writer = new FileWriter(path);
+                BufferedWriter bw = new BufferedWriter(writer)
+        ) {
+            for (StringBuilder content : contents) {
                 bw.write(content + "\r\n");
             }
             bw.flush();
