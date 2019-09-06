@@ -3,15 +3,24 @@ package HecToDec;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class demo {
-    public static void main(String[] args) {
+public class Read_Write {
+    /**
+     * 用于按照一定规则 读 与 写 数据（电压、电流、送丝速度）
+     * @param _sourcePath 源文件路径
+     * @param _targetDir 目标文件夹路径
+     * @param radix 写入的数据进制
+     * @param rangeTranFlag 数据范围是否转换
+     */
+    public void process(String _sourcePath, String _targetDir, int radix, boolean rangeTranFlag) {
         // 设置源文件路径 与 目标文件路径
-        String sourcePath = "resource/Data/test.txt";
-        String targetDir = "resource/Data/target_hex/";
+        String sourcePath = _sourcePath;
+        String targetDir = _targetDir;
         String targetFileName = "1";
         String targetFileType = ".txt";
         // 加载读取与写入工具类
         IOUtils IOUtils = new IOUtils();
+        // 判断目标文件夹是否存在，不存在则创建
+        IOUtils.DirExists(targetDir);
         // 读取源文件
         ArrayList<String> sourceList = IOUtils.readTxt(sourcePath);  // 接收读取的txt内容（字符串形式）
         // 从源文件中提取有用数据（对象初始化）
@@ -48,14 +57,34 @@ public class demo {
         String[] strings = {"Seq\tVoltage\tCurrent\tWire_Feed_Speed"};
         IOUtils.writeTxt(targetDir + targetFileName + targetFileType, strings);
 
-        // 开始 根据 部件序号 写入文件 （当全部数据读完后，跳出循环）
+        // 开始 根据 部件序号 写入文件 （当全部数据读完后，跳出循环）（转成10进制）
         while (row < rowStrings.length){
             // 判断，如果焊机已准备，将四个数据写成一个字符串（StringBuilder）
             if (flag[row].toString().equals("2B")){
                 rowStrings[row].append(seq).append("\t");  // 序号
-                rowStrings[row].append(Voltage[row]).append("\t");  // 电压
-                rowStrings[row].append(Current[row]).append("\t");  // 电流
-                rowStrings[row].append(Wire_Feed_Speed[row]);  // 送丝速度
+                // 是否按照说明书的给定范围进行数值转换
+                if (radix == 10) {
+                    if (rangeTranFlag) {
+                        rowStrings[row].append( (Double.valueOf(Integer.valueOf(Voltage[row].toString(), 16))/65535)*100 ).append("\t");  // 电压(16 -> 10)
+                        rowStrings[row].append( (Double.valueOf(Integer.valueOf(Current[row].toString(), 16))/65535)*1000 ).append("\t");  // 电流(16 -> 10)
+                        rowStrings[row].append( (Double.valueOf(Integer.valueOf(Wire_Feed_Speed[row].toString(), 16))/65535)*22 );  // 送丝速度(16 -> 10)
+                    }else {
+                        rowStrings[row].append( Integer.valueOf(Voltage[row].toString(), 16)).append("\t");  // 电压(16 -> 10)
+                        rowStrings[row].append( Integer.valueOf(Current[row].toString(), 16)).append("\t");  // 电流(16 -> 10)
+                        rowStrings[row].append( Integer.valueOf(Wire_Feed_Speed[row].toString(), 16));  // 送丝速度(16 -> 10)
+                    }
+
+                }else if (radix == 16) {
+                    rowStrings[row].append(Voltage[row]).append("\t");  // 电压
+                    rowStrings[row].append(Current[row]).append("\t");  // 电流
+                    rowStrings[row].append(Wire_Feed_Speed[row]);  // 送丝速度
+                }else {
+                    rowStrings[row].append(Voltage[row]).append("\t");  // 电压
+                    rowStrings[row].append(Current[row]).append("\t");  // 电流
+                    rowStrings[row].append(Wire_Feed_Speed[row]);  // 送丝速度
+                }
+
+
                 row++;  // 每写完一行，行号增加
                 seq++;  // seq增加
             }else if(flag[row].toString().equals("22")){  // 读到flag == ‘22’时，说明一个部件已转存加载完成，开始写入
@@ -74,12 +103,5 @@ public class demo {
                 beforeRow = row;  // 记录上一部件的结束行号
             }
         }
-
-
-
-
-
-
-
     }
 }

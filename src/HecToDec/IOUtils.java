@@ -99,6 +99,7 @@ public class IOUtils {
                 FileWriter writer = new FileWriter(path);
                 BufferedWriter bw = new BufferedWriter(writer)
         ) {
+
             for (StringBuilder content : contents) {
                 bw.write(content + "\r\n");
             }
@@ -108,6 +109,16 @@ public class IOUtils {
         }
     }
 
+    /**
+     * 如果不存在该文件夹，则创建该文件夹
+     * @param path
+     */
+    public void DirExists(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
     public void readJson(String path){
         //暂时不需要
     }
