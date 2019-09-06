@@ -22,15 +22,15 @@ public class demo {
         // 从源文件中提取有用数据（数据转存）
         for (int i = 0; i < sourceList.size(); i++) {
             // 将每个字节分割
-            String[] strs = sourceList.get(i).split(" ");
+            String[] splitStrs = sourceList.get(i).split(" ");
             // 转存 焊机启动标志位
-            flag[i] = new StringBuilder(strs[4]);
+            flag[i] = new StringBuilder(splitStrs[4]);
             // 转存数据 判断焊机已启动，存储相关信息
             if (flag[i].toString().equals("2B")){
                 // 转存电压、电流、送丝速度
-                Voltage[i] = new StringBuilder(strs[11]).append(strs[12]);
-                Current[i] = new StringBuilder(strs[13]).append(strs[14]);
-                Wire_Feed_Speed[i] = new StringBuilder(strs[19]).append(strs[20]);
+                Voltage[i] = new StringBuilder(splitStrs[11]).append(splitStrs[12]);
+                Current[i] = new StringBuilder(splitStrs[13]).append(splitStrs[14]);
+                Wire_Feed_Speed[i] = new StringBuilder(splitStrs[19]).append(splitStrs[20]);
             }
         }
         // 创建 用于存储 有用数据 的字符串数组 （for循环是针对StringBuilder[]的元素初始化）
