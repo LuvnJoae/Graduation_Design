@@ -2,6 +2,8 @@ package com.lichang.utils;
 
 import com.lichang.DBbeans.Admin;
 
+import java.util.Map;
+
 public class Login_LogoutUtils {
     public Login_LogoutUtils() {
 
@@ -23,12 +25,17 @@ public class Login_LogoutUtils {
 
         String sqlStr = null;
 
+        /*
+            身份验证
+         */
         if (Admin.class == obj.getClass()) {
             Admin admin = (Admin) obj;
             username = admin.getUsername();
             password = admin.getPassword();
             table = "admin";
-            sqlStr = SqlStrUtil.generateSql("admin", "admin", "admin");
+            sqlStr = SqlStrUtil.generateSql(username, password, table);
+
+//            Map<String, Object> DB_userInfoMap = JdbcTemplateUtil.querySingle(sqlStr);
 
 
         }
