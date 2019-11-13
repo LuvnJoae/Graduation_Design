@@ -25,12 +25,12 @@ public class Login_LogoutUtils {
             预留信息
          */
         String resultStr = "登录失败";
+
         String username = null;
         String password = null;
         String table = null;
 
         String sqlStr = null;
-
         /*
             身份验证
          */

@@ -54,7 +54,7 @@ public class Login extends JFrame {
         /*
             将输入的账户信息，转存为Bean对象
          */
-        // 登录工具预留
+        // 登录信息预留
         String username = usernameTextField1.getText().trim();
         String password = new String(passwordField1.getPassword());
         Object userInfo = null;
@@ -66,13 +66,15 @@ public class Login extends JFrame {
         } else if (admRadioButton.isSelected()) {
             userInfo = new Admin(username, password);
         }
-
         /*
             账户信息认证
          */
         String loginResult = Login_LogoutUtils.login(userInfo);
         log.debug(loginResult);
 
+        /*
+            账户认证后的界面跳转
+         */
 
         /*
             记得添加 Enter监听 与 点击监听
