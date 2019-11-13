@@ -7,6 +7,7 @@ package com.lichang.ui;
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
 import com.lichang.utils.LoggerUtil;
+import com.lichang.utils.Login_LogoutUtils;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -56,18 +57,22 @@ public class Login extends JFrame {
         // 登录工具预留
         String username = usernameTextField1.getText().trim();
         String password = new String(passwordField1.getPassword());
+        Object userInfo = null;
 
         log.debug("username: " + username + "  " + "password: " + password);
 
         if (empRadioButton.isSelected()) {
-            Employee userInfoEmp = new Employee(username, password);
+            userInfo = new Employee(username, password);
         } else if (admRadioButton.isSelected()) {
-            Admin userInfoAdmin = new Admin(username, password);
+            userInfo = new Admin(username, password);
         }
 
         /*
             账户信息认证
          */
+        String loginResult = Login_LogoutUtils.login(userInfo);
+        log.debug(loginResult);
+
 
         /*
             记得添加 Enter监听 与 点击监听

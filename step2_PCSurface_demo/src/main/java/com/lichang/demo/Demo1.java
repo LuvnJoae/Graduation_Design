@@ -1,9 +1,9 @@
 package com.lichang.demo;
 
-import com.lichang.DBbeans.Admin;
 import com.lichang.ui.Login;
-import com.lichang.utils.JdbcTemplateUtil;
-import com.lichang.utils.SqlStrUtil;
+import com.lichang.utils.dao.JdbcTemplateUtil;
+import com.lichang.utils.dao.JdbcUtil;
+import com.lichang.utils.dao.SqlStrUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -13,9 +13,7 @@ public class Demo1 {
 
 
     public static void main(String[] args) {
-        String sqlStr = SqlStrUtil.generateSql("admin", "admin", "admin");
-        Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr);
-        System.out.println(map);
+        new Login();
     }
 
 

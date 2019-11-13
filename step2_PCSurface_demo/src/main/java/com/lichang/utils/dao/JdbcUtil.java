@@ -1,5 +1,6 @@
-package com.lichang.utils;
+package com.lichang.utils.dao;
 
+import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
