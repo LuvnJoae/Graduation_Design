@@ -52,6 +52,8 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "usernameTextField1"
+				"focusTraversalPolicyProvider": true
+				"nextFocusableComponent": new FormReference( "passwordField1" )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 115
 				"y": 120
@@ -60,6 +62,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField1"
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "passwordField1KeyPressed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 115
 				"y": 155

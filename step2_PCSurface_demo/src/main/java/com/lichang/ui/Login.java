@@ -70,17 +70,29 @@ public class Login extends JFrame {
             账户信息认证
          */
         String loginResult = Login_LogoutUtils.login(userInfo);
-        log.debug(loginResult);
+        log.info(loginResult);
 
         /*
             账户认证后的界面跳转
          */
-
-        /*
-            记得添加 Enter监听 与 点击监听
-         */
-
+        if (!loginResult.equals("登录成功！")) {
+            JOptionPane.showMessageDialog(this, loginResult, "提示", JOptionPane.WARNING_MESSAGE);
+        }else {
+            JOptionPane.showMessageDialog(this, loginResult, "提示", JOptionPane.WARNING_MESSAGE);
+        }
     }
+
+    /**
+     * Enter 按键 监听，等效于点击登录按钮
+     *      在密码栏
+     * @param e
+     */
+    private void passwordField1KeyPressed(KeyEvent e) {
+        if (e.getKeyCode()==e.VK_ENTER) {
+            button1ActionPerformed(null);
+        }
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -128,8 +140,20 @@ public class Login extends JFrame {
         label5.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 16));
         contentPane.add(label5);
         label5.setBounds(61, 150, 50, 30);
+
+        //---- usernameTextField1 ----
+        usernameTextField1.setFocusTraversalPolicyProvider(true);
+        usernameTextField1.setNextFocusableComponent(passwordField1);
         contentPane.add(usernameTextField1);
         usernameTextField1.setBounds(115, 120, 170, 26);
+
+        //---- passwordField1 ----
+        passwordField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                passwordField1KeyPressed(e);
+            }
+        });
         contentPane.add(passwordField1);
         passwordField1.setBounds(115, 155, 170, 25);
 
