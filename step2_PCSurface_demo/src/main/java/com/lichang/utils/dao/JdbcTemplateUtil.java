@@ -52,10 +52,10 @@ public class JdbcTemplateUtil {
      * 查询 多条记录， 返回Bean对象List
      * @return List<Bean>
      */
-    public static List<?> queryMultForBean(String sqlStr, Object obj, List<Object> paramsList) {
+    public static List<?> queryMultForBean(String sqlStr, Class<?> cla, List<Object> paramsList) {
         log.info("查询 多条记录， 返回 Admin 的 Bean对象");
         try {
-            List<?> listBean = template.query(sqlStr, paramsList.toArray(), new BeanPropertyRowMapper<>(obj.getClass()));
+            List<?> listBean = template.query(sqlStr, paramsList.toArray(), new BeanPropertyRowMapper<>(cla));
             return listBean;
         } catch (DataAccessException e) {
             log.error("查询不到该信息", e);

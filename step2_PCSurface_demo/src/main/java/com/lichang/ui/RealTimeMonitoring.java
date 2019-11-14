@@ -54,6 +54,7 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
+        panel2 = new JPanel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -64,12 +65,14 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-            border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER
-            , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
-            .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (
-            new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r"
-            .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+            EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+            . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
+            java . awt. Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+            { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
+            throw new RuntimeException( ) ;} } );
+
+
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -306,6 +309,28 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(scrollPane2);
         scrollPane2.setBounds(505, 360, 415, 190);
 
+        //======== panel2 ========
+        {
+            panel2.setLayout(null);
+
+            {
+                // compute preferred size
+                Dimension preferredSize = new Dimension();
+                for(int i = 0; i < panel2.getComponentCount(); i++) {
+                    Rectangle bounds = panel2.getComponent(i).getBounds();
+                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                }
+                Insets insets = panel2.getInsets();
+                preferredSize.width += insets.right;
+                preferredSize.height += insets.bottom;
+                panel2.setMinimumSize(preferredSize);
+                panel2.setPreferredSize(preferredSize);
+            }
+        }
+        contentPane.add(panel2);
+        panel2.setBounds(495, 160, 200, 150);
+
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -358,5 +383,6 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
+    private JPanel panel2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

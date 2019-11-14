@@ -39,4 +39,26 @@ public class SqlStrUtil {
         paramsList.add(password);
         return paramsList; // 占位符参数列表
     }
+
+    /**
+     * 合成Sql语句 2
+     *      查询表  table
+     *      查询参数 num
+     * @param table
+     * @return
+     */
+    public static String generateSql2(String table) {
+        log.debug("查询Sql合成2：table");
+        String sqlStr = "select * from "
+                + table
+                + " where num = ?";
+        return sqlStr;
+    }
+
+    public static List<Object> generateList2(int num) {
+        log.debug("查询Sql的params合成2 ：username，password");
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(num);
+        return paramsList; // 占位符参数列表
+    }
 }
