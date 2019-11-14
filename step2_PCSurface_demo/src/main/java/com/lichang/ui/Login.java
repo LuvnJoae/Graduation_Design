@@ -93,7 +93,6 @@ public class Login extends JFrame {
         }
     }
 
-
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
@@ -112,7 +111,7 @@ public class Login extends JFrame {
         setBackground(Color.white);
         setAlwaysOnTop(true);
         setForeground(SystemColor.windowText);
-        setTitle("login");
+        setTitle("\u767b\u5f55");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         Container contentPane = getContentPane();
@@ -122,7 +121,7 @@ public class Login extends JFrame {
         label2.setText("\u710a\u63a5\u6570\u636e\u76d1\u6d4b\u4e0e\u7ba1\u7406\u7cfb\u7edf");
         label2.setFont(new Font("\u5fae\u8edf\u6b63\u9ed1\u9ad4", Font.BOLD, 22));
         contentPane.add(label2);
-        label2.setBounds(115, 45, 245, 60);
+        label2.setBounds(115, 45, 255, 60);
 
         //---- label3 ----
         label3.setIcon(new ImageIcon(getClass().getResource("/img/\u8c6a\u4e50logo\uff08\u4ec5\u56fe\uff09.png")));
@@ -159,11 +158,10 @@ public class Login extends JFrame {
 
         //---- button1 ----
         button1.setText("\u767b\u5f55");
-        button1.setHorizontalAlignment(SwingConstants.LEFT);
         button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 16));
         button1.addActionListener(e -> button1ActionPerformed(e));
         contentPane.add(button1);
-        button1.setBounds(290, 120, 65, 60);
+        button1.setBounds(290, 120, 70, 60);
 
         //---- empRadioButton ----
         empRadioButton.setText("\u5458\u5de5");
@@ -181,7 +179,7 @@ public class Login extends JFrame {
         //---- label1 ----
         label1.setText("v1.0");
         contentPane.add(label1);
-        label1.setBounds(365, 235, 31, label1.getPreferredSize().height);
+        label1.setBounds(360, 225, 31, 20);
 
         {
             // compute preferred size
@@ -197,7 +195,7 @@ public class Login extends JFrame {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
-        pack();
+        setSize(405, 285);
         setLocationRelativeTo(getOwner());
 
         //---- buttonGroup1 ----
