@@ -12,6 +12,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
@@ -27,28 +28,39 @@ public class LineChart {
     private static Logger log = LoggerUtil.getLogger();
 
     /**
-     * 生成折现模型 chart
+     * 生成折线模型 chart
      * @return
      */
-    public JFreeChart getRealTimeLineChart() {
+    public JFreeChart getRealTimeLineChart(String title, String categoryAxisLable, String valueAxisLable) {
         log.debug("生成折线图模型");
-        CategoryDataset dataset = getDataset("current");
+        CategoryDataset dataset = getDataset("all");
         JFreeChart chart = ChartFactory.createLineChart(
-                "Current",
-                "Seq",
-                "I /A",
+                title,
+                categoryAxisLable,
+                valueAxisLable,
                 dataset, // 数据集
                 PlotOrientation.VERTICAL,
                 true,  // 显示图例
                 true, // 采用标准生成器
                 false // 是否生成超链接
         );
-        CategoryPlot plot= (CategoryPlot) chart.getPlot();
-        plot.setBackgroundPaint(Color.white);
-        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);
-        plot.setOutlinePaint(Color.BLACK);
+
+        CategoryPlot plot= (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
+
+        plot.setBackgroundPaint(Color.white);  // 背景颜色
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
+        plot.setOutlinePaint(Color.BLACK); // 轮廓颜色
+        plot.setNoDataMessage("数据加载失败");  // 错误提示
+
+        LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer(); // 获取渲染器
+        renderer.setBaseShapesVisible(true); // 显示数据点
 
         return chart;
+    }
+
+    //无参 重载
+    public JFreeChart getRealTimeLineChart() {
+        return getRealTimeLineChart("", "", "");
     }
 
     /**
@@ -74,7 +86,13 @@ public class LineChart {
             for (Machine_data machine_data : machine_data_BeansList) {
                 dataset.addValue(machine_data.getVoltage(), "Voltage", String.valueOf(machine_data.getSeq()));
             }
-        } else {
+        } else if (para.equals("all")) {
+            for (Machine_data machine_data : machine_data_BeansList) {
+                dataset.addValue(machine_data.getCurrent(), "Current", String.valueOf(machine_data.getSeq()));
+                dataset.addValue(machine_data.getVoltage(), "Voltage", String.valueOf(machine_data.getSeq()));
+            }
+        }
+        else {
             log.error("参数输入错误");
             return null;
         }

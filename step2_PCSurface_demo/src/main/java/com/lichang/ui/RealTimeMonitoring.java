@@ -7,13 +7,16 @@ package com.lichang.ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.table.*;
-import com.jgoodies.forms.factories.*;
 import com.lichang.ui.chart.LineChart;
-import net.miginfocom.swing.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+
 
 /**
  * @author unknown
@@ -21,12 +24,34 @@ import org.jfree.chart.JFreeChart;
 public class RealTimeMonitoring extends JFrame {
     private LineChart lineChart = new LineChart();
     private JFreeChart realTimeLineChart = lineChart.getRealTimeLineChart();
-//    current_voltagePanel = new ChartPanel(relTimeLineChart); // 做出更改时，用这个替代原定义。
+//    current_voltagePanel = new ChartPanel(realTimeLineChart); // 做出更改时，用这个替代原定义。
 
     public RealTimeMonitoring() {
         initComponents();
-
         setVisible(true);
+    }
+
+    private void current_voltagePanelMouseClicked(MouseEvent e) {
+        JDialog jDialog = new JDialog(this, "",true);
+
+//        JFrame frame = new JFrame("电压、电流实时波形");
+
+
+
+        ChartPanel chartPanel = new ChartPanel(realTimeLineChart);
+
+        jDialog.add(chartPanel);
+        jDialog.setBounds(200,100,800,600);
+        jDialog.setAlwaysOnTop(true);
+        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        jDialog.setVisible(true);
+
+//        frame.add(chartPanel);
+//        frame.setBounds(200,100,800,600);
+//        frame.setAlwaysOnTop(true);
+//        frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+//        frame.setVisible(true);
+
     }
 
     private void initComponents() {
@@ -62,7 +87,7 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        current_voltagePanel = new JPanel();
+        current_voltagePanel = new ChartPanel(realTimeLineChart);
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -73,13 +98,11 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
-            javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
-            . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
-            .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans.
-            PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
-            equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
+            , 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+            , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
+            panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -313,6 +336,12 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== current_voltagePanel ========
         {
+            current_voltagePanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    current_voltagePanelMouseClicked(e);
+                }
+            });
             current_voltagePanel.setLayout(null);
 
             {
