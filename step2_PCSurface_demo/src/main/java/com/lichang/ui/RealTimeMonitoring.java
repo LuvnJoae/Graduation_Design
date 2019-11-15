@@ -6,9 +6,12 @@ package com.lichang.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Field;
 import javax.swing.*;
 import javax.swing.table.*;
 import com.lichang.ui.chart.LineChart;
+import org.jdesktop.observablecollections.*;
+import org.jfree.chart.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
@@ -31,12 +34,12 @@ public class RealTimeMonitoring extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * 用于点击 折线图后的 放大操作。
+     * @param e
+     */
     private void current_voltagePanelMouseClicked(MouseEvent e) {
         JDialog jDialog = new JDialog(this, "",true);
-
-//        JFrame frame = new JFrame("电压、电流实时波形");
-
-
 
         ChartPanel chartPanel = new ChartPanel(realTimeLineChart);
 
@@ -45,12 +48,14 @@ public class RealTimeMonitoring extends JFrame {
         jDialog.setAlwaysOnTop(true);
         jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
         jDialog.setVisible(true);
+    }
 
-//        frame.add(chartPanel);
-//        frame.setBounds(200,100,800,600);
-//        frame.setAlwaysOnTop(true);
-//        frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
-//        frame.setVisible(true);
+    /**
+     * 测试： 刷新 折线图
+     * @param e
+     */
+    private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
+
 
     }
 
@@ -88,6 +93,7 @@ public class RealTimeMonitoring extends JFrame {
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
         current_voltagePanel = new ChartPanel(realTimeLineChart);
+        button9 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -98,11 +104,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder( 0
-            , 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
-            , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) ,
-            panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new
+            javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax
+            .swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java
+            .awt.Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt
+            .Color.red),panel1. getBorder()));panel1. addPropertyChangeListener(new java.beans.
+            PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".
+            equals(e.getPropertyName()))throw new RuntimeException();}});
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -362,6 +370,18 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(current_voltagePanel);
         current_voltagePanel.setBounds(500, 160, 470, 190);
 
+        //---- button9 ----
+        button9.setText("text");
+        button9.addActionListener(e -> {
+            try {
+                button9ActionPerformed(e);
+            } catch (NoSuchFieldException ex) {
+                ex.printStackTrace();
+            }
+        });
+        contentPane.add(button9);
+        button9.setBounds(new Rectangle(new Point(320, 220), button9.getPreferredSize()));
+
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -414,5 +434,6 @@ public class RealTimeMonitoring extends JFrame {
     private JScrollPane scrollPane2;
     private JTable table2;
     private JPanel current_voltagePanel;
+    private JButton button9;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
