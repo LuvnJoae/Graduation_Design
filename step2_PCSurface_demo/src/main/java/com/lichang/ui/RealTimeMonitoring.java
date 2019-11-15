@@ -34,33 +34,31 @@ public class RealTimeMonitoring extends JFrame {
         JFreeChart realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
         JPanel chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
 
-        { // 局部代码块，用于节省内存
-            chartPanel.setLayout(null);
-            {
-                // compute preferred size（窗口大小属性）
-                Dimension preferredSize = new Dimension();
-                for(int i = 0; i < chartPanel.getComponentCount(); i++) {
-                    Rectangle bounds = chartPanel.getComponent(i).getBounds();
-                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                }
-                Insets insets = chartPanel.getInsets();
-                preferredSize.width += insets.right;
-                preferredSize.height += insets.bottom;
-                chartPanel.setMinimumSize(preferredSize);
-                chartPanel.setPreferredSize(preferredSize);
+        chartPanel.setLayout(null);
+        {
+            // compute preferred size（窗口大小属性）
+            Dimension preferredSize = new Dimension();
+            for(int i = 0; i < chartPanel.getComponentCount(); i++) {
+                Rectangle bounds = chartPanel.getComponent(i).getBounds();
+                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
             }
+            Insets insets = chartPanel.getInsets();
+            preferredSize.width += insets.right;
+            preferredSize.height += insets.bottom;
+            chartPanel.setMinimumSize(preferredSize);
+            chartPanel.setPreferredSize(preferredSize);
+        }
             /*
                 添加事件： 点击放大
              */
-            chartPanel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    log.debug("点击事件");
-                    chartPanelMouseClicked(e, realTimeLineChart);
-                }
-            });
-        }
+        chartPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                log.debug("点击事件");
+                chartPanelMouseClicked(e, realTimeLineChart);
+            }
+        });
 
         getContentPane().add(chartPanel);
         chartPanel.setBounds(500, 160, 470, 190);
@@ -92,8 +90,6 @@ public class RealTimeMonitoring extends JFrame {
      */
     private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
         initChartPanel();
-//        validate();
-//        repaint();
     }
 
     private void initComponents() {
