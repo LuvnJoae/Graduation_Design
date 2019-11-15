@@ -10,13 +10,22 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import com.jgoodies.forms.factories.*;
+import com.lichang.ui.chart.LineChart;
+import net.miginfocom.swing.*;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 
 /**
  * @author unknown
  */
 public class RealTimeMonitoring extends JFrame {
+    private LineChart lineChart = new LineChart();
+    private JFreeChart realTimeLineChart = lineChart.getRealTimeLineChart();
+//    current_voltagePanel = new ChartPanel(relTimeLineChart); // 做出更改时，用这个替代原定义。
+
     public RealTimeMonitoring() {
         initComponents();
+
         setVisible(true);
     }
 
@@ -44,7 +53,6 @@ public class RealTimeMonitoring extends JFrame {
         currentStatuLabel1 = new JLabel();
         completedNumberLabel1 = new JLabel();
         faultNumberLabel2 = new JLabel();
-        label8 = new JLabel();
         label9 = new JLabel();
         button5 = new JButton();
         button6 = new JButton();
@@ -54,7 +62,7 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        panel2 = new JPanel();
+        current_voltagePanel = new JPanel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -65,14 +73,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-            EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-            . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
-            java . awt. Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-            { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
-            throw new RuntimeException( ) ;} } );
-
-
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
+            javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax
+            . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
+            .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans.
+            PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .
+            equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -139,7 +146,7 @@ public class RealTimeMonitoring extends JFrame {
             }
         }
         contentPane.add(panel1);
-        panel1.setBounds(705, 0, panel1.getPreferredSize().width, 55);
+        panel1.setBounds(755, 0, panel1.getPreferredSize().width, 55);
 
         //---- button1 ----
         button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
@@ -149,17 +156,17 @@ public class RealTimeMonitoring extends JFrame {
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
         contentPane.add(button2);
-        button2.setBounds(245, 60, 120, 30);
+        button2.setBounds(295, 60, 120, 30);
 
         //---- button3 ----
         button3.setText("\u6545\u969c\u6821\u9a8c");
         contentPane.add(button3);
-        button3.setBounds(465, 60, 120, 30);
+        button3.setBounds(525, 60, 120, 30);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
         contentPane.add(button4);
-        button4.setBounds(705, 60, 120, 30);
+        button4.setBounds(765, 60, 120, 30);
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 920, 10);
 
@@ -203,25 +210,20 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(faultNumberLabel2);
         faultNumberLabel2.setBounds(135, 240, 60, 25);
 
-        //---- label8 ----
-        label8.setText("\u7535\u538b\u5b9e\u65f6\u6ce2\u5f62");
-        contentPane.add(label8);
-        label8.setBounds(560, 120, 90, 25);
-
         //---- label9 ----
-        label9.setText("\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62");
+        label9.setText("\u7535\u538b\u3001\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62");
         contentPane.add(label9);
-        label9.setBounds(755, 120, 90, 25);
+        label9.setBounds(675, 125, 120, 25);
 
         //---- button5 ----
         button5.setText("\u6545\u969c\u76d1\u6d4b");
         contentPane.add(button5);
-        button5.setBounds(0, 330, 120, 30);
+        button5.setBounds(0, 355, 120, 30);
 
         //---- button6 ----
         button6.setText("\u6e05\u7a7a");
         contentPane.add(button6);
-        button6.setBounds(355, 330, 60, 30);
+        button6.setBounds(425, 355, 60, 30);
 
         //======== scrollPane1 ========
         {
@@ -259,17 +261,17 @@ public class RealTimeMonitoring extends JFrame {
             scrollPane1.setViewportView(table1);
         }
         contentPane.add(scrollPane1);
-        scrollPane1.setBounds(0, 360, 415, 190);
+        scrollPane1.setBounds(0, 385, 485, 190);
 
         //---- button7 ----
         button7.setText("\u53c2\u6570\u76d1\u6d4b");
         contentPane.add(button7);
-        button7.setBounds(510, 329, 120, 30);
+        button7.setBounds(500, 355, 120, 30);
 
         //---- button8 ----
         button8.setText("\u91cd\u8bbe");
         contentPane.add(button8);
-        button8.setBounds(865, 330, 60, 30);
+        button8.setBounds(915, 355, 60, 30);
 
         //======== scrollPane2 ========
         {
@@ -307,29 +309,29 @@ public class RealTimeMonitoring extends JFrame {
             scrollPane2.setViewportView(table2);
         }
         contentPane.add(scrollPane2);
-        scrollPane2.setBounds(505, 360, 415, 190);
+        scrollPane2.setBounds(500, 385, 475, 190);
 
-        //======== panel2 ========
+        //======== current_voltagePanel ========
         {
-            panel2.setLayout(null);
+            current_voltagePanel.setLayout(null);
 
             {
                 // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel2.getComponentCount(); i++) {
-                    Rectangle bounds = panel2.getComponent(i).getBounds();
+                for(int i = 0; i < current_voltagePanel.getComponentCount(); i++) {
+                    Rectangle bounds = current_voltagePanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                 }
-                Insets insets = panel2.getInsets();
+                Insets insets = current_voltagePanel.getInsets();
                 preferredSize.width += insets.right;
                 preferredSize.height += insets.bottom;
-                panel2.setMinimumSize(preferredSize);
-                panel2.setPreferredSize(preferredSize);
+                current_voltagePanel.setMinimumSize(preferredSize);
+                current_voltagePanel.setPreferredSize(preferredSize);
             }
         }
-        contentPane.add(panel2);
-        panel2.setBounds(495, 160, 200, 150);
+        contentPane.add(current_voltagePanel);
+        current_voltagePanel.setBounds(500, 160, 470, 190);
 
         {
             // compute preferred size
@@ -345,7 +347,7 @@ public class RealTimeMonitoring extends JFrame {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
-        setSize(930, 585);
+        setSize(980, 615);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -373,7 +375,6 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel currentStatuLabel1;
     private JLabel completedNumberLabel1;
     private JLabel faultNumberLabel2;
-    private JLabel label8;
     private JLabel label9;
     private JButton button5;
     private JButton button6;
@@ -383,6 +384,6 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
-    private JPanel panel2;
+    private JPanel current_voltagePanel;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

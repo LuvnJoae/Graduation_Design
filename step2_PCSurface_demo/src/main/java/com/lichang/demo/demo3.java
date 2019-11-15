@@ -17,12 +17,13 @@ import java.awt.*;
 public class demo3 extends JFrame {
     public demo3() throws HeadlessException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setBounds(100,100,100,100);
+        setBounds(500, 160, 600, 500);
 
         LineChart lineChart = new LineChart();
-        JFreeChart realTimeLineChart = lineChart.RealTimeLineChart();
+        JFreeChart realTimeLineChart = lineChart.getRealTimeLineChart();
 
         JPanel jPanel = new ChartPanel(realTimeLineChart);
+        jPanel.setBounds(500, 160, 470, 190);
         this.add(jPanel);
 
         setVisible(true);

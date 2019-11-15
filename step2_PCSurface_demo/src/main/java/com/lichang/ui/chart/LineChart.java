@@ -30,13 +30,13 @@ public class LineChart {
      * 生成折现模型 chart
      * @return
      */
-    public JFreeChart RealTimeLineChart() {
+    public JFreeChart getRealTimeLineChart() {
         log.debug("生成折线图模型");
         CategoryDataset dataset = getDataset("current");
         JFreeChart chart = ChartFactory.createLineChart(
-                "电流折线图",
-                "参数序号",
-                "电流值 /A",
+                "Current",
+                "Seq",
+                "I /A",
                 dataset, // 数据集
                 PlotOrientation.VERTICAL,
                 true,  // 显示图例

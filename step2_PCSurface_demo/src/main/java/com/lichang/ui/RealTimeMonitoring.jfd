@@ -72,7 +72,7 @@ new FormModel {
 					"height": 30
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 705
+				"x": 755
 				"height": 55
 				"y": 0
 			} )
@@ -91,7 +91,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 245
+				"x": 295
 				"y": 60
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
@@ -100,7 +100,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 465
+				"x": 525
 				"y": 60
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
@@ -109,7 +109,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 705
+				"x": 765
 				"y": 60
 			} )
 			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
@@ -193,22 +193,13 @@ new FormModel {
 				"y": 240
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label8"
-				"text": "电压实时波形"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 560
-				"y": 120
-				"width": 90
-				"height": 25
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label9"
-				"text": "电流实时波形"
+				"text": "电压、电流实时波形"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 90
+				"width": 120
 				"height": 25
-				"x": 755
-				"y": 120
+				"x": 675
+				"y": 125
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button5"
@@ -217,7 +208,7 @@ new FormModel {
 				"width": 120
 				"height": 30
 				"x": 0
-				"y": 330
+				"y": 355
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button6"
@@ -225,8 +216,8 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 60
 				"height": 30
-				"x": 355
-				"y": 330
+				"x": 425
+				"y": 355
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -291,8 +282,8 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 0
-				"y": 360
-				"width": 415
+				"y": 385
+				"width": 485
 				"height": 190
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
@@ -301,8 +292,8 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 510
-				"y": 329
+				"x": 500
+				"y": 355
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button8"
@@ -310,8 +301,8 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 60
 				"height": 30
-				"x": 865
-				"y": 330
+				"x": 915
+				"y": 355
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
@@ -386,22 +377,22 @@ new FormModel {
 					"enabled": false
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 505
-				"y": 360
-				"width": 415
+				"x": 500
+				"y": 385
+				"width": 475
 				"height": 190
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
-				name: "panel2"
+				name: "current_voltagePanel"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 495
+				"x": 500
 				"y": 160
-				"width": 200
-				"height": 150
+				"width": 470
+				"height": 190
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 55, 25 )
-			"size": new java.awt.Dimension( 930, 585 )
+			"location": new java.awt.Point( 35, 0 )
+			"size": new java.awt.Dimension( 980, 615 )
 		} )
 	}
 }
