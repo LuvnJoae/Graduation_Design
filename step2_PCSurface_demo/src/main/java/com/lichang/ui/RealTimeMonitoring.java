@@ -23,7 +23,7 @@ public class RealTimeMonitoring extends JFrame {
 
     public RealTimeMonitoring() {
         initComponents();
-        initChartPanel();
+//        initChartPanel();
         setVisible(true);
     }
 
