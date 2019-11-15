@@ -31,7 +31,7 @@ public class LineChart {
      * 生成折线模型 chart
      * @return
      */
-    public JFreeChart getRealTimeLineChart(String title, String categoryAxisLable, String valueAxisLable) {
+    public static JFreeChart getRealTimeLineChart(String title, String categoryAxisLable, String valueAxisLable) {
         log.debug("生成折线图模型");
         CategoryDataset dataset = getDataset("all");
         JFreeChart chart = ChartFactory.createLineChart(
@@ -59,7 +59,7 @@ public class LineChart {
     }
 
     //无参 重载
-    public JFreeChart getRealTimeLineChart() {
+    public static JFreeChart getRealTimeLineChart() {
         return getRealTimeLineChart("", "", "");
     }
 
@@ -69,7 +69,7 @@ public class LineChart {
      * @return
      */
     @Test
-    private CategoryDataset getDataset(String para) {
+    private static CategoryDataset getDataset(String para) {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();

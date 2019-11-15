@@ -6,43 +6,79 @@ package com.lichang.ui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Field;
 import javax.swing.*;
 import javax.swing.table.*;
 import com.lichang.ui.chart.LineChart;
-import org.jdesktop.observablecollections.*;
-import org.jfree.chart.*;
+import com.lichang.utils.LoggerUtil;
+import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.StandardXYItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
 
 /**
  * @author unknown
  */
 public class RealTimeMonitoring extends JFrame {
-    private LineChart lineChart = new LineChart();
-    private JFreeChart realTimeLineChart = lineChart.getRealTimeLineChart();
-//    current_voltagePanel = new ChartPanel(realTimeLineChart); // 做出更改时，用这个替代原定义。
+
+    private static Logger log = LoggerUtil.getLogger();
 
     public RealTimeMonitoring() {
         initComponents();
+        initChartPanel();
         setVisible(true);
     }
 
     /**
-     * 用于点击 折线图后的 放大操作。
+     *  用于生成 折线图 的ChartPanel
+     */
+    private void initChartPanel() {
+        JFreeChart realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
+        JPanel chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
+
+        { // 局部代码块，用于节省内存
+            chartPanel.setLayout(null);
+            {
+                // compute preferred size（窗口大小属性）
+                Dimension preferredSize = new Dimension();
+                for(int i = 0; i < chartPanel.getComponentCount(); i++) {
+                    Rectangle bounds = chartPanel.getComponent(i).getBounds();
+                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                }
+                Insets insets = chartPanel.getInsets();
+                preferredSize.width += insets.right;
+                preferredSize.height += insets.bottom;
+                chartPanel.setMinimumSize(preferredSize);
+                chartPanel.setPreferredSize(preferredSize);
+            }
+            /*
+                添加事件： 点击放大
+             */
+            chartPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    log.debug("点击事件");
+                    chartPanelMouseClicked(e, realTimeLineChart);
+                }
+            });
+        }
+
+        getContentPane().add(chartPanel);
+        chartPanel.setBounds(500, 160, 470, 190);
+    }
+
+    /**
+     * 事件：用于点击 折线图后的 放大操作。
      * @param e
      */
-    private void current_voltagePanelMouseClicked(MouseEvent e) {
+    private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
+        log.debug("放大操作");
+        // 新建 用于展示的JDialog
         JDialog jDialog = new JDialog(this, "",true);
 
+        //给这个JDialog中，新建一个ChartPanel。
         ChartPanel chartPanel = new ChartPanel(realTimeLineChart);
 
+        //添加并设置相应属性
         jDialog.add(chartPanel);
         jDialog.setBounds(200,100,800,600);
         jDialog.setAlwaysOnTop(true);
@@ -55,8 +91,9 @@ public class RealTimeMonitoring extends JFrame {
      * @param e
      */
     private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
-
-
+        initChartPanel();
+//        validate();
+//        repaint();
     }
 
     private void initComponents() {
@@ -92,7 +129,6 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        current_voltagePanel = new ChartPanel(realTimeLineChart);
         button9 = new JButton();
 
         //======== this ========
@@ -104,13 +140,11 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new
-            javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e",javax
-            .swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java
-            .awt.Font("Dialo\u0067",java.awt.Font.BOLD,12),java.awt
-            .Color.red),panel1. getBorder()));panel1. addPropertyChangeListener(new java.beans.
-            PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("borde\u0072".
-            equals(e.getPropertyName()))throw new RuntimeException();}});
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
+            0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
+            . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
+            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
+            beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -342,34 +376,6 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(scrollPane2);
         scrollPane2.setBounds(500, 385, 475, 190);
 
-        //======== current_voltagePanel ========
-        {
-            current_voltagePanel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    current_voltagePanelMouseClicked(e);
-                }
-            });
-            current_voltagePanel.setLayout(null);
-
-            {
-                // compute preferred size
-                Dimension preferredSize = new Dimension();
-                for(int i = 0; i < current_voltagePanel.getComponentCount(); i++) {
-                    Rectangle bounds = current_voltagePanel.getComponent(i).getBounds();
-                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                }
-                Insets insets = current_voltagePanel.getInsets();
-                preferredSize.width += insets.right;
-                preferredSize.height += insets.bottom;
-                current_voltagePanel.setMinimumSize(preferredSize);
-                current_voltagePanel.setPreferredSize(preferredSize);
-            }
-        }
-        contentPane.add(current_voltagePanel);
-        current_voltagePanel.setBounds(500, 160, 470, 190);
-
         //---- button9 ----
         button9.setText("text");
         button9.addActionListener(e -> {
@@ -380,7 +386,7 @@ public class RealTimeMonitoring extends JFrame {
             }
         });
         contentPane.add(button9);
-        button9.setBounds(new Rectangle(new Point(320, 220), button9.getPreferredSize()));
+        button9.setBounds(new Rectangle(new Point(360, 220), button9.getPreferredSize()));
 
         {
             // compute preferred size
@@ -396,7 +402,7 @@ public class RealTimeMonitoring extends JFrame {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
-        setSize(980, 615);
+        setSize(990, 625);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -433,7 +439,6 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
-    private JPanel current_voltagePanel;
     private JButton button9;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

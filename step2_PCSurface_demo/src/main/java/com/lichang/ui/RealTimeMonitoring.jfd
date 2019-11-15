@@ -382,26 +382,17 @@ new FormModel {
 				"width": 475
 				"height": 190
 			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
-				name: "current_voltagePanel"
-				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "current_voltagePanelMouseClicked", true ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 500
-				"y": 160
-				"width": 470
-				"height": 190
-			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button9"
 				"text": "text"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button9ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 320
+				"x": 360
 				"y": 220
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 55, 0 )
-			"size": new java.awt.Dimension( 980, 615 )
+			"size": new java.awt.Dimension( 990, 625 )
 		} )
 	}
 }
