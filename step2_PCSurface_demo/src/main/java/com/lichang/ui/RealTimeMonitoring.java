@@ -22,6 +22,7 @@ public class RealTimeMonitoring extends JFrame {
     private static Logger log = LoggerUtil.getLogger();
     private JFreeChart realTimeLineChart;
     private JPanel chartPanel;
+    private JPanel chartPanel2;
     private JDialog jDialog;
 
     public RealTimeMonitoring() {
@@ -37,12 +38,13 @@ public class RealTimeMonitoring extends JFrame {
 
         realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
         if (chartPanel != null) {
+            this.getContentPane().remove(chartPanel);
+            this.getContentPane().repaint();
 
+            chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
         } else {
-
+            chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
         }
-        realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
-        chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
 
         chartPanel.setLayout(null);
         {
@@ -59,48 +61,50 @@ public class RealTimeMonitoring extends JFrame {
             chartPanel.setMinimumSize(preferredSize);
             chartPanel.setPreferredSize(preferredSize);
         }
-            /*
-                添加事件： 点击放大
-             */
+
+        chartPanel.setBounds(500, 160, 470, 190);
+        getContentPane().add(chartPanel);
+
+        this.invalidate();
+        this.validate();
+        /*
+           添加事件： 点击放大
+        */
         chartPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 log.debug("点击事件");
-//                chartPanelMouseClicked(e, realTimeLineChart);
+                chartPanelMouseClicked(e, realTimeLineChart);
             }
         });
-
-        getContentPane().add(chartPanel);
-        chartPanel.setBounds(500, 160, 470, 190);
     }
 
     /**
      * 事件：用于点击 折线图后的 放大操作。
      * @param e
      */
-//    private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
-//        log.debug("放大操作");
-//        // 新建 用于展示的JDialog
-//        jDialog = new JDialog(this, "",true);
-//
-//        //给这个JDialog中，新建一个ChartPanel。
-//        chartPanel2 = new ChartPanel(realTimeLineChart);
-//
-//        //添加并设置相应属性
-//        jDialog.add(chartPanel2);
-//        jDialog.setBounds(200,100,800,600);
-//        jDialog.setAlwaysOnTop(true);
-//        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
-//        jDialog.setVisible(true);
-//    }
+    private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
+        log.debug("放大操作");
+        // 新建 用于展示的JDialog
+        jDialog = new JDialog(this, "",true);
+
+        //给这个JDialog中，新建一个ChartPanel。
+        chartPanel2 = new ChartPanel(realTimeLineChart);
+
+        //添加并设置相应属性
+        jDialog.add(chartPanel2);
+        jDialog.setBounds(200,100,800,600);
+        jDialog.setAlwaysOnTop(true);
+        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        jDialog.setVisible(true);
+    }
 
     /**
      * 测试： 刷新 折线图
      * @param e
      */
     private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
-        getContentPane().remove(chartPanel);
-
+        initChartPanel();
     }
 
     private void initComponents() {
