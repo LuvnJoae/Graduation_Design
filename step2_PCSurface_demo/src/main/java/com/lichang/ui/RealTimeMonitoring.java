@@ -20,10 +20,13 @@ import org.jfree.chart.JFreeChart;
 public class RealTimeMonitoring extends JFrame {
 
     private static Logger log = LoggerUtil.getLogger();
+    private JFreeChart realTimeLineChart;
+    private JPanel chartPanel;
+    private JDialog jDialog;
 
     public RealTimeMonitoring() {
         initComponents();
-//        initChartPanel();
+        initChartPanel();
         setVisible(true);
     }
 
@@ -31,8 +34,15 @@ public class RealTimeMonitoring extends JFrame {
      *  用于生成 折线图 的ChartPanel
      */
     private void initChartPanel() {
-        JFreeChart realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
-        JPanel chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
+
+        realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
+        if (chartPanel != null) {
+
+        } else {
+
+        }
+        realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
+        chartPanel = new ChartPanel(realTimeLineChart); // 通过chart创建ChartPanel面板
 
         chartPanel.setLayout(null);
         {
@@ -56,7 +66,7 @@ public class RealTimeMonitoring extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 log.debug("点击事件");
-                chartPanelMouseClicked(e, realTimeLineChart);
+//                chartPanelMouseClicked(e, realTimeLineChart);
             }
         });
 
@@ -68,28 +78,29 @@ public class RealTimeMonitoring extends JFrame {
      * 事件：用于点击 折线图后的 放大操作。
      * @param e
      */
-    private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
-        log.debug("放大操作");
-        // 新建 用于展示的JDialog
-        JDialog jDialog = new JDialog(this, "",true);
-
-        //给这个JDialog中，新建一个ChartPanel。
-        ChartPanel chartPanel = new ChartPanel(realTimeLineChart);
-
-        //添加并设置相应属性
-        jDialog.add(chartPanel);
-        jDialog.setBounds(200,100,800,600);
-        jDialog.setAlwaysOnTop(true);
-        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
-        jDialog.setVisible(true);
-    }
+//    private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
+//        log.debug("放大操作");
+//        // 新建 用于展示的JDialog
+//        jDialog = new JDialog(this, "",true);
+//
+//        //给这个JDialog中，新建一个ChartPanel。
+//        chartPanel2 = new ChartPanel(realTimeLineChart);
+//
+//        //添加并设置相应属性
+//        jDialog.add(chartPanel2);
+//        jDialog.setBounds(200,100,800,600);
+//        jDialog.setAlwaysOnTop(true);
+//        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
+//        jDialog.setVisible(true);
+//    }
 
     /**
      * 测试： 刷新 折线图
      * @param e
      */
     private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
-        initChartPanel();
+        getContentPane().remove(chartPanel);
+
     }
 
     private void initComponents() {
@@ -136,11 +147,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
-            0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
-            . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
-            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
-            beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
+            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
             panel1.setLayout(null);
 
             //---- label2 ----
