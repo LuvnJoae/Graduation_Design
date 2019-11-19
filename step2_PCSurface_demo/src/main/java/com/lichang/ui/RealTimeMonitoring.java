@@ -118,17 +118,20 @@ public class RealTimeMonitoring extends JFrame {
         /*
             修改表头1、2
          */
-        String[] table1HeaderName = {"故障时间", "编号","故障表现", "最大频次", "判定"};
         DefaultTableModel table1model = (DefaultTableModel) table1.getModel();
-        table1model.setColumnIdentifiers(table1HeaderName);
         table1.getTableHeader().setPreferredSize(new Dimension(1, 30)); // 设置表头高度
         table1.getTableHeader().setFont(new Font("", Font.BOLD, 15)); //设置表头字体
+        //表头内容、列宽度，已在JFormDesigner中设置
+//        String[] table1HeaderName = {"故障时间", "编号","故障表现", "最大频次", "判定"};
+//        table1model.setColumnIdentifiers(table1HeaderName);
 
-        String[] table2HeaderName = {"序号","电压 实时值", "电流 实时值", "送丝速度"};
         DefaultTableModel table2model = (DefaultTableModel) table2.getModel();
-        table2model.setColumnIdentifiers(table2HeaderName);
         table2.getTableHeader().setPreferredSize(new Dimension(1, 30)); // 设置表头高度
         table2.getTableHeader().setFont(new Font("", Font.BOLD, 15)); //设置表头字体
+        // 表头内容、列宽度，已在JFormDesigner中设置
+//        String[] table2HeaderName = {"序号","电压 实时值", "电流 实时值", "送丝速度"};
+//        table2model.setColumnIdentifiers(table2HeaderName);
+
     }
 
     /**
@@ -278,8 +281,6 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        button9 = new JButton();
-        button10 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -290,12 +291,12 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-            ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-            . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-            propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-            ; }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
+            border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
+            , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
+            .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (
+            new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
+            .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -456,9 +457,15 @@ public class RealTimeMonitoring extends JFrame {
                     {null, null, null, null, null},
                 },
                 new String[] {
-                    null, null, null, null, null
+                    "\u6545\u969c\u65f6\u95f4", "\u7f16\u53f7", "\u6545\u969c\u8868\u73b0", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a"
                 }
             ));
+            {
+                TableColumnModel cm = table1.getColumnModel();
+                cm.getColumn(0).setPreferredWidth(100);
+                cm.getColumn(1).setPreferredWidth(40);
+                cm.getColumn(4).setPreferredWidth(40);
+            }
             table1.setEnabled(false);
             table1.setRowHeight(30);
             table1.setRowMargin(3);
@@ -483,18 +490,25 @@ public class RealTimeMonitoring extends JFrame {
             //---- table2 ----
             table2.setModel(new DefaultTableModel(
                 new Object[][] {
-                    {"", "", "", "", ""},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
+                    {"", "", "", ""},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
                 },
                 new String[] {
-                    null, null, null, null, null
+                    "\u5e8f\u53f7", "\u7535\u538b \u5b9e\u65f6\u503c", "\u7535\u6d41 \u5b9e\u65f6\u503c", "\u9001\u4e1d\u901f\u5ea6"
                 }
             ));
+            {
+                TableColumnModel cm = table2.getColumnModel();
+                cm.getColumn(0).setPreferredWidth(40);
+                cm.getColumn(1).setPreferredWidth(100);
+                cm.getColumn(2).setPreferredWidth(100);
+                cm.getColumn(3).setPreferredWidth(100);
+            }
             table2.setRowHeight(30);
             table2.setRowMargin(3);
             table2.setEnabled(false);
@@ -502,29 +516,6 @@ public class RealTimeMonitoring extends JFrame {
         }
         contentPane.add(scrollPane2);
         scrollPane2.setBounds(500, 385, 475, 190);
-
-        //---- button9 ----
-        button9.setText("text");
-        button9.addActionListener(e -> {
-            try {
-                button9ActionPerformed(e);
-            } catch (NoSuchFieldException ex) {
-                ex.printStackTrace();
-            }
-        });
-        contentPane.add(button9);
-        button9.setBounds(new Rectangle(new Point(360, 220), button9.getPreferredSize()));
-
-        //---- button10 ----
-        button10.setText("table");
-        button10.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                button10MouseClicked(e);
-            }
-        });
-        contentPane.add(button10);
-        button10.setBounds(new Rectangle(new Point(365, 260), button10.getPreferredSize()));
 
         {
             // compute preferred size
@@ -577,7 +568,5 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
-    private JButton button9;
-    private JButton button10;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
