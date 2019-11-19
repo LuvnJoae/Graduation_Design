@@ -225,21 +225,8 @@ new FormModel {
 					name: "table1"
 					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 						add( new java.util.Vector {
-							add( "" )
-							add( "" )
-							add( "" )
-						} )
-						add( new java.util.Vector {
-							add( "" )
 							add( null )
 							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( "" )
-						} )
-						add( new java.util.Vector {
 							add( null )
 							add( null )
 							add( null )
@@ -248,13 +235,40 @@ new FormModel {
 							add( null )
 							add( null )
 							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
 						} )
 						add( new java.util.Vector {
 							add( null )
 							add( null )
 							add( null )
+							add( null )
+							add( null )
 						} )
 						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
 							add( null )
 							add( null )
 							add( null )
@@ -263,16 +277,24 @@ new FormModel {
 						add( null )
 						add( null )
 						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
 					}, new java.util.Vector {
 						add( null )
 						add( null )
 						add( null )
-					}, new java.util.Vector {
-						add( false )
 						add( null )
 						add( null )
 					}, new java.util.Vector {
-						add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+						add( null )
+						add( null )
+						add( null )
 						add( null )
 						add( null )
 					} )
