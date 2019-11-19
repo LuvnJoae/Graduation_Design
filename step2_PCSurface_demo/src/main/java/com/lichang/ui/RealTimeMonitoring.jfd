@@ -194,21 +194,12 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label9"
-				"text": "电压、电流实时波形"
+				"text": "电压、电流实时波形（点击放大）"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
+				"width": 230
 				"height": 25
-				"x": 675
-				"y": 125
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button5"
-				"text": "故障监测"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 0
-				"y": 355
+				"x": 660
+				"y": 120
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button6"
@@ -309,21 +300,12 @@ new FormModel {
 				"height": 190
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button7"
-				"text": "参数监测"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 500
-				"y": 355
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button8"
-				"text": "重设"
+				"text": "手动刷新"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 60
+				"width": 90
 				"height": 30
-				"x": 915
+				"x": 885
 				"y": 355
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -403,6 +385,50 @@ new FormModel {
 				"y": 385
 				"width": 475
 				"height": 190
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "产品编号："
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 670
+				"y": 355
+				"width": 65
+				"height": 30
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label8"
+				"text": "1"
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 0, false )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 736
+				"y": 358
+				"width": 50
+				"height": 25
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label10"
+				"text": "参数监测"
+				"background": &Color0 new java.awt.Color( 204, 255, 204, 255 )
+				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 1, 2, false )
+				"labelFor": new FormReference( "table2" )
+				"icon": sfield com.jformdesigner.model.FormObject NULL_VALUE
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 500
+				"y": 356
+				"width": 65
+				"height": 29
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label11"
+				"text": "故障监测"
+				"background": #Color0
+				"font": #SwingDerivedFont0
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 65
+				"height": 29
+				"x": 2
+				"y": 356
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 55, 0 )

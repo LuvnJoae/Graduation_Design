@@ -273,14 +273,16 @@ public class RealTimeMonitoring extends JFrame {
         completedNumberLabel1 = new JLabel();
         faultNumberLabel2 = new JLabel();
         label9 = new JLabel();
-        button5 = new JButton();
         button6 = new JButton();
         scrollPane1 = new JScrollPane();
         table1 = new JTable();
-        button7 = new JButton();
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
+        label1 = new JLabel();
+        label8 = new JLabel();
+        label10 = new JLabel();
+        label11 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -291,12 +293,11 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing.
-            border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER
-            , javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font
-            .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (
-            new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r"
-            .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
+            0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
+            . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
+            red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
+            beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -428,14 +429,9 @@ public class RealTimeMonitoring extends JFrame {
         faultNumberLabel2.setBounds(135, 240, 60, 25);
 
         //---- label9 ----
-        label9.setText("\u7535\u538b\u3001\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62");
+        label9.setText("\u7535\u538b\u3001\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62\uff08\u70b9\u51fb\u653e\u5927\uff09");
         contentPane.add(label9);
-        label9.setBounds(675, 125, 120, 25);
-
-        //---- button5 ----
-        button5.setText("\u6545\u969c\u76d1\u6d4b");
-        contentPane.add(button5);
-        button5.setBounds(0, 355, 120, 30);
+        label9.setBounds(660, 120, 230, 25);
 
         //---- button6 ----
         button6.setText("\u6e05\u7a7a");
@@ -474,15 +470,10 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(scrollPane1);
         scrollPane1.setBounds(0, 385, 485, 190);
 
-        //---- button7 ----
-        button7.setText("\u53c2\u6570\u76d1\u6d4b");
-        contentPane.add(button7);
-        button7.setBounds(500, 355, 120, 30);
-
         //---- button8 ----
-        button8.setText("\u91cd\u8bbe");
+        button8.setText("\u624b\u52a8\u5237\u65b0");
         contentPane.add(button8);
-        button8.setBounds(915, 355, 60, 30);
+        button8.setBounds(885, 355, 90, 30);
 
         //======== scrollPane2 ========
         {
@@ -516,6 +507,34 @@ public class RealTimeMonitoring extends JFrame {
         }
         contentPane.add(scrollPane2);
         scrollPane2.setBounds(500, 385, 475, 190);
+
+        //---- label1 ----
+        label1.setText("\u4ea7\u54c1\u7f16\u53f7\uff1a");
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD));
+        contentPane.add(label1);
+        label1.setBounds(670, 355, 65, 30);
+
+        //---- label8 ----
+        label8.setText("1");
+        label8.setFont(label8.getFont().deriveFont(label8.getFont().getStyle() | Font.BOLD));
+        contentPane.add(label8);
+        label8.setBounds(736, 358, 50, 25);
+
+        //---- label10 ----
+        label10.setText("\u53c2\u6570\u76d1\u6d4b");
+        label10.setBackground(new Color(204, 255, 204));
+        label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 2f));
+        label10.setLabelFor(table2);
+        label10.setIcon(null);
+        contentPane.add(label10);
+        label10.setBounds(500, 356, 65, 29);
+
+        //---- label11 ----
+        label11.setText("\u6545\u969c\u76d1\u6d4b");
+        label11.setBackground(new Color(204, 255, 204));
+        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 2f));
+        contentPane.add(label11);
+        label11.setBounds(2, 356, 65, 29);
 
         {
             // compute preferred size
@@ -560,13 +579,15 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel completedNumberLabel1;
     private JLabel faultNumberLabel2;
     private JLabel label9;
-    private JButton button5;
     private JButton button6;
     private JScrollPane scrollPane1;
     private JTable table1;
-    private JButton button7;
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
+    private JLabel label1;
+    private JLabel label8;
+    private JLabel label10;
+    private JLabel label11;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
