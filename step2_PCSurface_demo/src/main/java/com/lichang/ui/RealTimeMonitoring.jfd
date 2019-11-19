@@ -225,9 +225,9 @@ new FormModel {
 					name: "table1"
 					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 						add( new java.util.Vector {
-							add( "故障时间" )
-							add( "故障类型" )
-							add( "故障表现" )
+							add( "" )
+							add( "" )
+							add( "" )
 						} )
 						add( new java.util.Vector {
 							add( "" )
@@ -310,24 +310,14 @@ new FormModel {
 					name: "table2"
 					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 						add( new java.util.Vector {
-							add( "参数" )
-							add( "设定值" )
-							add( "实时值（起弧）" )
-							add( "实时值（稳定）" )
+							add( "" )
+							add( "" )
+							add( "" )
+							add( "" )
+							add( "" )
 						} )
 						add( new java.util.Vector {
 							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
 							add( null )
 							add( null )
 							add( null )
@@ -338,14 +328,31 @@ new FormModel {
 							add( null )
 							add( null )
 							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
 						} )
 						add( new java.util.Vector {
 							add( null )
 							add( null )
 							add( null )
 							add( null )
+							add( null )
 						} )
 						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
 							add( null )
 							add( null )
 							add( null )
@@ -356,21 +363,25 @@ new FormModel {
 						add( null )
 						add( null )
 						add( null )
-					}, new java.util.Vector {
-						add( null )
-						add( null )
-						add( null )
 						add( null )
 					}, new java.util.Vector {
 						add( null )
 						add( null )
 						add( null )
-						add( false )
+						add( null )
+						add( null )
 					}, new java.util.Vector {
 						add( null )
 						add( null )
 						add( null )
-						add( new com.jformdesigner.model.SwingTableColumn( null, 0, 0, 0, false ) )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
 					} )
 					"rowHeight": 30
 					"rowMargin": 3
@@ -389,6 +400,14 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 360
 				"y": 220
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button10"
+				"text": "table"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button10MouseClicked", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 365
+				"y": 260
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 55, 0 )
