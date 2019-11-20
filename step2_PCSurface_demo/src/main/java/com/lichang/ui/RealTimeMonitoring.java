@@ -25,6 +25,13 @@ import org.jfree.chart.JFreeChart;
  */
 public class RealTimeMonitoring extends JFrame {
 
+    //TODO: 整体待解决问题（低优先级）
+    //1. 用户信息的动态绑定
+    //2. 产品编号、检测结果的动态绑定
+    //3. 已完成工件、故障工件的动态绑定（低优先）
+    //4. 当前焊机、工作状态的动态绑定（低优先）
+    //标记时间：2019/11/20 17:22  预解决时间:
+
     private static Logger log = LoggerUtil.getLogger(); // 日志
 
     // 自定义的变量
