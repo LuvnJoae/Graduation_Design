@@ -1,4 +1,4 @@
-package com.lichang.utils.dao;
+package com.lichang.utils;
 
 import com.lichang.utils.LoggerUtil;
 import javafx.scene.chart.StackedBarChart;
