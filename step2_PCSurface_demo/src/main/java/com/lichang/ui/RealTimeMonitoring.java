@@ -77,7 +77,7 @@ public class RealTimeMonitoring extends JFrame {
             chartPanel.setPreferredSize(preferredSize);
         }
 
-        chartPanel.setBounds(500, 160, 470, 190);
+        chartPanel.setBounds(500, 124, 470, 200);
         getContentPane().add(chartPanel);
 
         this.invalidate();
@@ -98,6 +98,8 @@ public class RealTimeMonitoring extends JFrame {
      * 事件（折线图）：用于点击 折线图后的 放大操作。
      * @param e
      */
+    //TODO: 放大后的图表添加具体信息，并标记错误信息
+    //标记时间：2019/11/20 17:09  预解决时间：11.20/ 21
     private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
         log.debug("放大操作");
         // 新建 用于展示的JDialog
@@ -155,7 +157,7 @@ public class RealTimeMonitoring extends JFrame {
         DefaultTableModel table1Model = (DefaultTableModel)table1.getModel(); //获取当前模型
 
         // 向模型中添加数据
-        Timestamp time = machine_fault_data_BeansList.get(0).getTime();
+        String time = machine_fault_data_BeansList.get(0).getTime().toString().split("\\.")[0]; // 去除timestamp后面的 .0
         int num = machine_fault_data_BeansList.get(0).getNum();
         String fault_type = machine_fault_data_BeansList.get(0).getFault_type();
         int fault_maxnum = machine_fault_data_BeansList.get(0).getFault_maxNum();
@@ -170,6 +172,8 @@ public class RealTimeMonitoring extends JFrame {
      */
     //TODO: 修改为自动刷新
     //标记时间：2019/11/20 15:43  预解决时间：
+    //TODO: 添加查看具体选项的按钮
+    //标记时间：2019/11/20 17:07  预解决时间：11.20
     private void updateTable2() {
         List<Machine_data> machine_data_BeansList = Table.getDataBeans(1); //获取机器数据
         int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
@@ -207,6 +211,24 @@ public class RealTimeMonitoring extends JFrame {
     //测试： JTable1
     private void button10ActionPerformed(ActionEvent e) {
         updateTable1();
+    }
+
+    /**
+     * 手动刷新 按钮： 刷新 表格2、折线图 的内容
+     * @param e
+     */
+    private void button8ActionPerformed(ActionEvent e) {
+        initChartPanel();
+        updateTable2();
+    }
+
+    /**
+     * 清空 按钮：清空 表格1 的内容
+     * @param e
+     */
+    private void button6ActionPerformed(ActionEvent e) {
+        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
+        table1Model.setRowCount(0);
     }
 
 
@@ -249,6 +271,10 @@ public class RealTimeMonitoring extends JFrame {
         label10 = new JLabel();
         label11 = new JLabel();
         button10 = new JButton();
+        label12 = new JLabel();
+        label13 = new JLabel();
+        faultNumberLabel3 = new JLabel();
+        faultNumberLabel4 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -259,13 +285,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
-            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder
-            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
-            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
-            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
-            ) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
-            ;
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new
+            javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax
+            . swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java
+            .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans.
+            PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .
+            equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -358,53 +384,63 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label4 ----
         label4.setText("\u5f53\u524d\u710a\u673a\uff1a");
+        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 2f));
         contentPane.add(label4);
-        label4.setBounds(55, 135, 65, 25);
+        label4.setBounds(55, 120, 90, 25);
 
         //---- label5 ----
         label5.setText("\u5de5\u4f5c\u72b6\u6001\uff1a");
+        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 2f));
         contentPane.add(label5);
-        label5.setBounds(55, 170, 65, 25);
+        label5.setBounds(55, 170, 80, 25);
 
         //---- label6 ----
         label6.setText("\u5df2\u5b8c\u6210\u5de5\u4ef6\uff1a");
+        label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 2f));
         contentPane.add(label6);
-        label6.setBounds(55, 205, 75, 25);
+        label6.setBounds(55, 270, 95, 25);
 
         //---- label7 ----
         label7.setText("\u6545\u969c\u5de5\u4ef6\uff1a");
+        label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 2f));
         contentPane.add(label7);
-        label7.setBounds(55, 240, 65, 25);
+        label7.setBounds(55, 220, 90, 25);
 
         //---- currentMachineLabel1 ----
         currentMachineLabel1.setText("\u710a\u673a1");
+        currentMachineLabel1.setFont(currentMachineLabel1.getFont().deriveFont(currentMachineLabel1.getFont().getSize() + 2f));
         contentPane.add(currentMachineLabel1);
-        currentMachineLabel1.setBounds(135, 135, 60, 25);
+        currentMachineLabel1.setBounds(155, 120, 60, 25);
 
         //---- currentStatuLabel1 ----
         currentStatuLabel1.setText("\u6b63\u5e38");
+        currentStatuLabel1.setFont(currentStatuLabel1.getFont().deriveFont(currentStatuLabel1.getFont().getSize() + 2f));
         contentPane.add(currentStatuLabel1);
-        currentStatuLabel1.setBounds(135, 170, 60, 25);
+        currentStatuLabel1.setBounds(155, 170, 60, 25);
 
         //---- completedNumberLabel1 ----
         completedNumberLabel1.setText("100");
+        completedNumberLabel1.setFont(completedNumberLabel1.getFont().deriveFont(completedNumberLabel1.getFont().getSize() + 2f));
         contentPane.add(completedNumberLabel1);
-        completedNumberLabel1.setBounds(135, 205, 60, 25);
+        completedNumberLabel1.setBounds(154, 270, 60, 25);
 
         //---- faultNumberLabel2 ----
         faultNumberLabel2.setText("1");
+        faultNumberLabel2.setFont(faultNumberLabel2.getFont().deriveFont(faultNumberLabel2.getFont().getSize() + 2f));
         contentPane.add(faultNumberLabel2);
-        faultNumberLabel2.setBounds(135, 240, 60, 25);
+        faultNumberLabel2.setBounds(155, 220, 60, 25);
 
         //---- label9 ----
         label9.setText("\u7535\u538b\u3001\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62\uff08\u70b9\u51fb\u653e\u5927\uff09");
+        label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 2f));
         contentPane.add(label9);
-        label9.setBounds(660, 120, 230, 25);
+        label9.setBounds(635, 98, 230, 25);
 
         //---- button6 ----
         button6.setText("\u6e05\u7a7a");
+        button6.addActionListener(e -> button6ActionPerformed(e));
         contentPane.add(button6);
-        button6.setBounds(425, 355, 60, 30);
+        button6.setBounds(425, 335, 60, 30);
 
         //======== scrollPane1 ========
         {
@@ -429,12 +465,13 @@ public class RealTimeMonitoring extends JFrame {
             scrollPane1.setViewportView(table1);
         }
         contentPane.add(scrollPane1);
-        scrollPane1.setBounds(0, 385, 485, 190);
+        scrollPane1.setBounds(0, 365, 485, 210);
 
         //---- button8 ----
         button8.setText("\u624b\u52a8\u5237\u65b0");
+        button8.addActionListener(e -> button8ActionPerformed(e));
         contentPane.add(button8);
-        button8.setBounds(885, 355, 90, 30);
+        button8.setBounds(885, 335, 90, 30);
 
         //======== scrollPane2 ========
         {
@@ -467,42 +504,66 @@ public class RealTimeMonitoring extends JFrame {
             scrollPane2.setViewportView(table2);
         }
         contentPane.add(scrollPane2);
-        scrollPane2.setBounds(500, 385, 475, 190);
+        scrollPane2.setBounds(500, 365, 475, 210);
 
         //---- label1 ----
         label1.setText("\u4ea7\u54c1\u7f16\u53f7\uff1a");
         label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD));
         contentPane.add(label1);
-        label1.setBounds(670, 355, 65, 30);
+        label1.setBounds(665, 335, 65, 30);
 
         //---- label8 ----
         label8.setText("1");
         label8.setFont(label8.getFont().deriveFont(label8.getFont().getStyle() | Font.BOLD));
         contentPane.add(label8);
-        label8.setBounds(736, 358, 50, 25);
+        label8.setBounds(735, 338, 41, 25);
 
         //---- label10 ----
         label10.setText("\u53c2\u6570\u76d1\u6d4b");
         label10.setBackground(new Color(204, 255, 204));
-        label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 3f));
+        label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 7f));
         label10.setLabelFor(table2);
         label10.setIcon(null);
         contentPane.add(label10);
-        label10.setBounds(500, 356, 65, 29);
+        label10.setBounds(500, 335, 85, 34);
 
         //---- label11 ----
         label11.setText("\u6545\u969c\u76d1\u6d4b");
         label11.setBackground(new Color(204, 255, 204));
-        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 3f));
+        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 7f));
         label11.setLabelFor(table1);
         contentPane.add(label11);
-        label11.setBounds(2, 356, 65, 29);
+        label11.setBounds(1, 335, 94, 34);
 
         //---- button10 ----
-        button10.setText("text");
+        button10.setText("\u6d4b\u8bd5\uff1a\u751f\u6210\u6545\u969c\u6570\u636e");
         button10.addActionListener(e -> button10ActionPerformed(e));
         contentPane.add(button10);
-        button10.setBounds(new Rectangle(new Point(280, 270), button10.getPreferredSize()));
+        button10.setBounds(250, 335, 155, button10.getPreferredSize().height);
+
+        //---- label12 ----
+        label12.setText("\u4ea7\u54c1\u7f16\u53f7\uff1a");
+        label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 2f));
+        contentPane.add(label12);
+        label12.setBounds(260, 120, 80, 25);
+
+        //---- label13 ----
+        label13.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
+        label13.setFont(label13.getFont().deriveFont(label13.getFont().getSize() + 2f));
+        contentPane.add(label13);
+        label13.setBounds(260, 170, 75, 25);
+
+        //---- faultNumberLabel3 ----
+        faultNumberLabel3.setText("1");
+        faultNumberLabel3.setFont(faultNumberLabel3.getFont().deriveFont(faultNumberLabel3.getFont().getSize() + 2f));
+        contentPane.add(faultNumberLabel3);
+        faultNumberLabel3.setBounds(345, 120, 60, 25);
+
+        //---- faultNumberLabel4 ----
+        faultNumberLabel4.setText("1");
+        faultNumberLabel4.setFont(faultNumberLabel4.getFont().deriveFont(faultNumberLabel4.getFont().getSize() + 2f));
+        contentPane.add(faultNumberLabel4);
+        faultNumberLabel4.setBounds(345, 170, 60, 25);
 
         {
             // compute preferred size
@@ -558,5 +619,9 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel label10;
     private JLabel label11;
     private JButton button10;
+    private JLabel label12;
+    private JLabel label13;
+    private JLabel faultNumberLabel3;
+    private JLabel faultNumberLabel4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
