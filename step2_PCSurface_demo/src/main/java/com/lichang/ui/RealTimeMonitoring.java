@@ -6,6 +6,7 @@ package com.lichang.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -46,6 +47,8 @@ public class RealTimeMonitoring extends JFrame {
     /**
      *  折线图： 用于生成 折线图 的 ChartPanel（包括刷新）
      */
+    //TODO: 修改为自动刷新
+    //标记时间：2019/11/20 15:42  预解决时间：
     private void initChartPanel() {
 
         realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
@@ -132,36 +135,41 @@ public class RealTimeMonitoring extends JFrame {
 //        String[] table2HeaderName = {"序号","电压 实时值", "电流 实时值", "送丝速度"};
 //        table2model.setColumnIdentifiers(table2HeaderName);
 
+        /*
+            修改表格内容居中
+         */
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table1.setDefaultRenderer(Object.class, r);
+        table2.setDefaultRenderer(Object.class, r);
+
     }
 
     /**
      * 表格1： 添加数据
      */
+    //TODO: 修改为自动刷新
+    //标记时间：2019/11/20 15:42  预解决时间：
     private void updateTable1() {
         List<Machine_fault_data> machine_fault_data_BeansList = Table.getFaultDataBeans(2); //获取机器数据
-        int size = machine_fault_data_BeansList.size(); // 获取一个过程的数据总数
         DefaultTableModel table1Model = (DefaultTableModel)table1.getModel(); //获取当前模型
 
-        /*
-            当数据多于模型所能容纳行数后，自动添加行数
-         */
-        String[] row = {"", "", ""}; // 定义空行 （row）
-        while (true) {
-            if (table1Model.getRowCount() < size) {
-                table1Model.addRow(row);
-            } else {
-                break;
-            }
-        }
+        // 向模型中添加数据
+        Timestamp time = machine_fault_data_BeansList.get(0).getTime();
+        int num = machine_fault_data_BeansList.get(0).getNum();
+        String fault_type = machine_fault_data_BeansList.get(0).getFault_type();
+        int fault_maxnum = machine_fault_data_BeansList.get(0).getFault_maxNum();
+        String result = machine_fault_data_BeansList.get(0).getResult();
 
-        /*
-            添加数据
-         */
+        Object[] newRow = {time, num, fault_type, fault_maxnum, result}; //定义行内容
+        table1Model.addRow(newRow); // 新增加一行
     }
 
     /**
      * 表格2： 添加数据
      */
+    //TODO: 修改为自动刷新
+    //标记时间：2019/11/20 15:43  预解决时间：
     private void updateTable2() {
         List<Machine_data> machine_data_BeansList = Table.getDataBeans(1); //获取机器数据
         int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
@@ -169,6 +177,9 @@ public class RealTimeMonitoring extends JFrame {
 
         /*
             当数据多于模型所能容纳行数后，自动添加行数
+            因为对于table2 ，每一次的添加数据，都是先清空原数据，再增加新数据
+            所以，使用setValueAt方法，相当于修改，与table1的直接添加新记录不同
+            因此需要有行数不够进行增加的一个步骤
          */
         String[] row = {"", "", "", ""}; // 定义空行 （row）
         while (true) {
@@ -191,6 +202,11 @@ public class RealTimeMonitoring extends JFrame {
             table2Model.setValueAt(current,i,2);
             table2Model.setValueAt(speed,i,3);
         }
+    }
+
+    //测试： JTable1
+    private void button10ActionPerformed(ActionEvent e) {
+        updateTable1();
     }
 
 
@@ -232,6 +248,7 @@ public class RealTimeMonitoring extends JFrame {
         label8 = new JLabel();
         label10 = new JLabel();
         label11 = new JLabel();
+        button10 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -242,11 +259,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
-            0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
-            . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
-            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
-            beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing
+            . border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder
+            . CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .
+            awt .Font .BOLD ,12 ), java. awt. Color. red) ,panel1. getBorder( )) )
+            ; panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+            ) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} )
+            ;
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -393,13 +412,6 @@ public class RealTimeMonitoring extends JFrame {
             //---- table1 ----
             table1.setModel(new DefaultTableModel(
                 new Object[][] {
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
                 },
                 new String[] {
                     "\u6545\u969c\u65f6\u95f4", "\u7f16\u53f7", "\u6545\u969c\u8868\u73b0", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a"
@@ -407,7 +419,7 @@ public class RealTimeMonitoring extends JFrame {
             ));
             {
                 TableColumnModel cm = table1.getColumnModel();
-                cm.getColumn(0).setPreferredWidth(100);
+                cm.getColumn(0).setPreferredWidth(110);
                 cm.getColumn(1).setPreferredWidth(40);
                 cm.getColumn(4).setPreferredWidth(40);
             }
@@ -486,6 +498,12 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(label11);
         label11.setBounds(2, 356, 65, 29);
 
+        //---- button10 ----
+        button10.setText("text");
+        button10.addActionListener(e -> button10ActionPerformed(e));
+        contentPane.add(button10);
+        button10.setBounds(new Rectangle(new Point(280, 270), button10.getPreferredSize()));
+
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -539,5 +557,6 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel label8;
     private JLabel label10;
     private JLabel label11;
+    private JButton button10;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

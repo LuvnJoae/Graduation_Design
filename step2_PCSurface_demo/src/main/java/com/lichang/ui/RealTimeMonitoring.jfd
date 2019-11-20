@@ -214,57 +214,7 @@ new FormModel {
 				name: "scrollPane1"
 				add( new FormComponent( "javax.swing.JTable" ) {
 					name: "table1"
-					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-						add( new java.util.Vector {
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-							add( null )
-						} )
-					}, new java.util.Vector {
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 						add( "故障时间" )
 						add( "编号" )
 						add( "故障表现" )
@@ -283,7 +233,7 @@ new FormModel {
 						add( null )
 						add( null )
 					}, new java.util.Vector {
-						add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 110, 0, 0, true ) )
 						add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
 						add( null )
 						add( null )
@@ -430,6 +380,14 @@ new FormModel {
 				"height": 29
 				"x": 2
 				"y": 356
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button10"
+				"text": "text"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button10ActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 280
+				"y": 270
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 55, 0 )

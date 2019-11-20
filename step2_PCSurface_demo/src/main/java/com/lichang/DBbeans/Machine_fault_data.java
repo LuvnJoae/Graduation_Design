@@ -7,30 +7,8 @@ public class Machine_fault_data {
     private int num;
     private Timestamp time;
     private String fault_type;
-    private int fault_performance;
-
-    public Machine_fault_data(int num, Timestamp time, String fault_type, int fault_performance, int result) {
-        this.num = num;
-        this.time = time;
-        this.fault_type = fault_type;
-        this.fault_performance = fault_performance;
-        this.result = result;
-    }
-
-    public Machine_fault_data() {
-    }
-
-    @Override
-    public String toString() {
-        return "Machine_fault_data{" +
-                "id=" + id +
-                ", num=" + num +
-                ", time=" + time +
-                ", fault_type='" + fault_type + '\'' +
-                ", fault_performance=" + fault_performance +
-                ", result=" + result +
-                '}';
-    }
+    private int fault_maxNum;
+    private String result;
 
     public int getId() {
         return id;
@@ -64,21 +42,30 @@ public class Machine_fault_data {
         this.fault_type = fault_type;
     }
 
-    public int getFault_performance() {
-        return fault_performance;
+    public int getFault_maxNum() {
+        return fault_maxNum;
     }
 
-    public void setFault_performance(int fault_performance) {
-        this.fault_performance = fault_performance;
+    public void setFault_maxNum(int fault_maxNum) {
+        this.fault_maxNum = fault_maxNum;
     }
 
-    public int getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
-    private int result;
+    public Machine_fault_data() {
+    }
+
+    public Machine_fault_data(int num, Timestamp time, String fault_type, int fault_maxNum, String result) {
+        this.num = num;
+        this.time = time;
+        this.fault_type = fault_type;
+        this.fault_maxNum = fault_maxNum;
+        this.result = result;
+    }
 }
