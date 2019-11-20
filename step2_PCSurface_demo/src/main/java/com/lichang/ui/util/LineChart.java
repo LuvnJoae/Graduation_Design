@@ -1,14 +1,10 @@
-package com.lichang.ui.chart;
+package com.lichang.ui.util;
 
 import com.lichang.DBbeans.Machine_data;
-import com.lichang.utils.LineChartUtil;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.dao.JdbcTemplateUtil;
-import javafx.scene.control.ComboBox;
-import jdk.jfr.StackTrace;
+import com.lichang.utils.QueryUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
@@ -16,7 +12,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.awt.*;
 import java.util.List;
@@ -73,7 +68,8 @@ public class LineChart {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        List<Machine_data> machine_data_BeansList = LineChartUtil.getDataBeans();
+        List<Machine_data> machine_data_BeansList =
+                (List<Machine_data>) QueryUtil.queryForNum("Machine_data", 1, Machine_data.class);
 
         log.debug(machine_data_BeansList);
 

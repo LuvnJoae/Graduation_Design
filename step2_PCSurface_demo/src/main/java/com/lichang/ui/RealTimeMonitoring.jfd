@@ -410,7 +410,7 @@ new FormModel {
 				name: "label10"
 				"text": "参数监测"
 				"background": &Color0 new java.awt.Color( 204, 255, 204, 255 )
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 1, 2, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 3, false )
 				"labelFor": new FormReference( "table2" )
 				"icon": sfield com.jformdesigner.model.FormObject NULL_VALUE
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -423,7 +423,8 @@ new FormModel {
 				name: "label11"
 				"text": "故障监测"
 				"background": #Color0
-				"font": #SwingDerivedFont0
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 3, false )
+				"labelFor": new FormReference( "table1" )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 65
 				"height": 29

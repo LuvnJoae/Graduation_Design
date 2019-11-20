@@ -7,14 +7,14 @@ package com.lichang.ui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.*;
 
 import com.lichang.DBbeans.Machine_data;
-import com.lichang.ui.chart.LineChart;
+import com.lichang.DBbeans.Machine_fault_data;
+import com.lichang.ui.util.LineChart;
+import com.lichang.ui.util.Table;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.TableUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -138,41 +138,32 @@ public class RealTimeMonitoring extends JFrame {
      * 表格1： 添加数据
      */
     private void updateTable1() {
-        List<Machine_data> machine_data_BeansList = TableUtil.getDataBeans(); //获取机器数据
-        int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
-        DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
+        List<Machine_fault_data> machine_fault_data_BeansList = Table.getFaultDataBeans(2); //获取机器数据
+        int size = machine_fault_data_BeansList.size(); // 获取一个过程的数据总数
+        DefaultTableModel table1Model = (DefaultTableModel)table1.getModel(); //获取当前模型
 
         /*
             当数据多于模型所能容纳行数后，自动添加行数
          */
         String[] row = {"", "", ""}; // 定义空行 （row）
         while (true) {
-            if (table2Model.getRowCount() < size) {
-                table2Model.addRow(row);
+            if (table1Model.getRowCount() < size) {
+                table1Model.addRow(row);
             } else {
                 break;
             }
         }
 
-        // 向模型中添加数据
-        for (int i = 0; i < size; i++) {
-            int seq = machine_data_BeansList.get(i).getSeq();
-            double voltage = machine_data_BeansList.get(i).getVoltage();
-            double current = machine_data_BeansList.get(i).getCurrent();
-            double speed = machine_data_BeansList.get(i).getSpeed();
-
-            table2Model.setValueAt(seq,i,0);
-            table2Model.setValueAt(voltage,i,1);
-            table2Model.setValueAt(current,i,2);
-            table2Model.setValueAt(speed,i,3);
-        }
+        /*
+            添加数据
+         */
     }
 
     /**
      * 表格2： 添加数据
      */
     private void updateTable2() {
-        List<Machine_data> machine_data_BeansList = TableUtil.getDataBeans(); //获取机器数据
+        List<Machine_data> machine_data_BeansList = Table.getDataBeans(1); //获取机器数据
         int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
         DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
 
@@ -202,48 +193,6 @@ public class RealTimeMonitoring extends JFrame {
         }
     }
 
-    /**
-     * 测试： 刷新 折线图
-     * @param e
-     */
-    private void button9ActionPerformed(ActionEvent e) throws NoSuchFieldException {
-        initChartPanel();
-    }
-
-    /**
-     * 测试：表格 添加数据
-     * @param e
-     */
-    private void button10MouseClicked(MouseEvent e) {
-        List<Machine_data> machine_data_BeansList = TableUtil.getDataBeans(); //获取机器数据
-        int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
-        DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
-
-        /*
-            当数据多于模型所能容纳行数后，自动添加行数
-         */
-        String[] row = {"", "", "", ""}; // 定义空行 （row）
-        while (true) {
-            if (table2Model.getRowCount() < size) {
-                table2Model.addRow(row);
-            } else {
-                break;
-            }
-        }
-
-        // 向模型中添加数据
-        for (int i = 0; i < size; i++) {
-            int seq = machine_data_BeansList.get(i).getSeq();
-            double voltage = machine_data_BeansList.get(i).getVoltage();
-            double current = machine_data_BeansList.get(i).getCurrent();
-            double speed = machine_data_BeansList.get(i).getSpeed();
-
-            table2Model.setValueAt(seq,i,0);
-            table2Model.setValueAt(voltage,i,1);
-            table2Model.setValueAt(current,i,2);
-            table2Model.setValueAt(speed,i,3);
-        }
-    }
 
     /**
      *  JFormDesigner自带，定义自生成
@@ -293,11 +242,11 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-            0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-            . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-            red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-            beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
+            0, 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
+            . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
+            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
+            beans. PropertyChangeEvent e) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -523,7 +472,7 @@ public class RealTimeMonitoring extends JFrame {
         //---- label10 ----
         label10.setText("\u53c2\u6570\u76d1\u6d4b");
         label10.setBackground(new Color(204, 255, 204));
-        label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 2f));
+        label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 3f));
         label10.setLabelFor(table2);
         label10.setIcon(null);
         contentPane.add(label10);
@@ -532,7 +481,8 @@ public class RealTimeMonitoring extends JFrame {
         //---- label11 ----
         label11.setText("\u6545\u969c\u76d1\u6d4b");
         label11.setBackground(new Color(204, 255, 204));
-        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 2f));
+        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 3f));
+        label11.setLabelFor(table1);
         contentPane.add(label11);
         label11.setBounds(2, 356, 65, 29);
 

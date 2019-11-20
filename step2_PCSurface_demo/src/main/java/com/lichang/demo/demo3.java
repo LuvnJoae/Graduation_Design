@@ -1,15 +1,8 @@
 package com.lichang.demo;
 
-import com.lichang.ui.chart.LineChart;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
+import com.lichang.ui.util.LineChart;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
