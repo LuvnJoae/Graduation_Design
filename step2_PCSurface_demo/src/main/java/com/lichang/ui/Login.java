@@ -78,8 +78,10 @@ public class Login extends JFrame {
         if (!loginResult.equals("登录成功！")) {
             JOptionPane.showMessageDialog(this, loginResult, "提示", JOptionPane.WARNING_MESSAGE);
         }else {
-            JOptionPane.showMessageDialog(this, loginResult, "提示", JOptionPane.WARNING_MESSAGE);
+            new RealTimeMonitoring(username);
+            this.dispose();
         }
+
     }
 
     /**

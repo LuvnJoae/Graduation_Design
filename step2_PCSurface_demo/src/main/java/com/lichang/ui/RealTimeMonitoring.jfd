@@ -68,7 +68,7 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 55
 					"y": 0
-					"width": 45
+					"width": 60
 					"height": 30
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
