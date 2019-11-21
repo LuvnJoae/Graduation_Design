@@ -23,6 +23,8 @@ public class Login extends JFrame {
 
     private static Logger log = LoggerUtil.getLogger(); // 加载日志管理类
 
+    private boolean adminFlag; // 区分用户身份，true：管理员  false：y员工
+
     public Login() {
         log.info("载入登录界面");
         initComponents();
@@ -63,8 +65,10 @@ public class Login extends JFrame {
 
         if (empRadioButton.isSelected()) {
             userInfo = new Employee(username, password);
+            adminFlag = false;
         } else if (admRadioButton.isSelected()) {
             userInfo = new Admin(username, password);
+            adminFlag = true;
         }
         /*
             账户信息认证
@@ -78,7 +82,7 @@ public class Login extends JFrame {
         if (!loginResult.equals("登录成功！")) {
             JOptionPane.showMessageDialog(this, loginResult, "提示", JOptionPane.WARNING_MESSAGE);
         }else {
-            new RealTimeMonitoring(username);
+            new RealTimeMonitoring(username, adminFlag);
             this.dispose();
         }
 

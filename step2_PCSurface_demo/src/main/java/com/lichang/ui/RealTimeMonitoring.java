@@ -26,11 +26,12 @@ import org.jfree.chart.JFreeChart;
 public class RealTimeMonitoring extends JFrame {
 
     //TODO: 整体待解决问题（低优先级）
-    //1. 用户信息的动态绑定(已完成)
+    ////1. 用户信息的动态绑定(已完成)
     //2. 产品编号、检测结果的动态绑定
     //3. 已完成工件、故障工件的动态绑定（低优先）
     //4. 当前焊机、工作状态的动态绑定（低优先）
-    //5. 不同用户通过传递一个flag进行区别
+    ////5. 不同用户通过传递一个flag进行区别（已完成）
+    //6. 更改密码、注销用户的设置
     //标记时间：2019/11/20 17:22  预解决时间:
 
     private static Logger log = LoggerUtil.getLogger(); // 日志
@@ -44,32 +45,31 @@ public class RealTimeMonitoring extends JFrame {
     public RealTimeMonitoring() {
         initComponents();
 
-        initChartPanel();
-
-        initTable();
-        updateTable2();
+        initChartPanel(); //加载折线图
+        initTable(); //加载表格设置
+        updateTable2(); //加载表格2（参数监测）
 
         setVisible(true);
     }
 
     //接收登录账户信息
-    public RealTimeMonitoring(String username) {
+    public RealTimeMonitoring(String username, Boolean adminFlag) {
         initComponents();
 
-        label3Bingdings(username);
-
-        initChartPanel();
-
-        initTable();
-        updateTable2();
+        label3Bind(username); //显示当前用户信息
+        initChartPanel(); //加载折线图
+        initTable(); //加载表格设置
+        updateTable2(); //加载表格2（参数监测）
 
         setVisible(true);
     }
 
 
-    //TEST: 用户信息 Label绑定数据源
-    //标记时间：2019/11/21 11:10  预解决时间：
-    private void label3Bingdings(String username) {
+    /**
+     * Lable3 账户信息: 显示当前登录用户
+     * @param username
+     */
+    private void label3Bind(String username) {
         label3.setText(username);
     }
 
@@ -237,7 +237,8 @@ public class RealTimeMonitoring extends JFrame {
         }
     }
 
-    //测试： JTable1
+    //TEST: 按钮：生成单条故障数据
+    //标记时间：2019/11/21 12:53  预解决时间：
     private void button10ActionPerformed(ActionEvent e) {
         updateTable1();
     }
@@ -258,6 +259,15 @@ public class RealTimeMonitoring extends JFrame {
     private void button6ActionPerformed(ActionEvent e) {
         DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
         table1Model.setRowCount(0);
+    }
+
+    /**
+     * MenuItem 用户设置:  切换用户
+     * @param e
+     */
+    private void menuItem1ActionPerformed(ActionEvent e) {
+        new Login();
+        this.dispose();
     }
 
 
@@ -314,11 +324,12 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
-            0, 0 ,0 , 0) ,  "JF\u006frmDesi\u0067ner Ev\u0061luatio\u006e" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
-            . BOTTOM, new java. awt .Font ( "Dialo\u0067", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
-            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
-            beans. PropertyChangeEvent e) { if( "borde\u0072" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+            . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
+            . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
+            12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans
+            . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
+            getPropertyName () )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -341,6 +352,7 @@ public class RealTimeMonitoring extends JFrame {
                     menuItem1.setPreferredSize(new Dimension(74, 25));
                     menuItem1.setHorizontalTextPosition(SwingConstants.LEFT);
                     menuItem1.setMargin(new Insets(2, 0, 2, 0));
+                    menuItem1.addActionListener(e -> menuItem1ActionPerformed(e));
                     menu1.add(menuItem1);
                     menu1.addSeparator();
 
