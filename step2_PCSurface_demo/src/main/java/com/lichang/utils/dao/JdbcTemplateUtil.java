@@ -68,10 +68,13 @@ public class JdbcTemplateUtil {
      * @param sqlStr
      * @return
      */
-    public static boolean insertSingle(String sqlStr, List<Object> paramsList) {
+    public static boolean update(String sqlStr, List<Object> paramsList) {
         log.info("插入、 修改、 删除");
-        int insertCount = template.update(sqlStr, paramsList.toArray());
-        if (insertCount > 0) {
+        int updateCount = template.update(sqlStr, paramsList.toArray());
+
+        log.debug(updateCount);
+
+        if (updateCount > 0) {
             return true;
         }else {
             return false;

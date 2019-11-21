@@ -1,4 +1,4 @@
-package com.lichang.ui.util;
+package com.lichang.utils.RealTimeMonitoringUtil;
 
 import com.lichang.DBbeans.Machine_data;
 import com.lichang.utils.LoggerUtil;

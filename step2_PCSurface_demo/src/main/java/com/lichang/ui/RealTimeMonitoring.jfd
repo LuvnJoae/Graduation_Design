@@ -9,6 +9,7 @@ new FormModel {
 			"title": "界面"
 			"alwaysOnTop": true
 			"$sizePolicy": 1
+			"$locationPolicy": 1
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -45,16 +46,10 @@ new FormModel {
 							"preferredSize": new java.awt.Dimension( 74, 25 )
 							"horizontalTextPosition": 2
 							"margin": new java.awt.Insets( 2, 0, 2, 0 )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem2ActionPerformed", true ) )
 						} )
 						add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 							name: "separator3"
-						} )
-						add( new FormComponent( "javax.swing.JMenuItem" ) {
-							name: "menuItem3"
-							"text": "注销用户"
-							"preferredSize": new java.awt.Dimension( 74, 25 )
-							"horizontalTextPosition": 2
-							"margin": new java.awt.Insets( 2, 0, 2, 0 )
 						} )
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {

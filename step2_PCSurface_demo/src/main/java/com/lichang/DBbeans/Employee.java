@@ -6,6 +6,9 @@ public class Employee {
     private String username;
     private String password;
 
+    public Employee() {
+    }
+
     public Employee(String username, String password) {
         this.username = username;
         this.password = password;

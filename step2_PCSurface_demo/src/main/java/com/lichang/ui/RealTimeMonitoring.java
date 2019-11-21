@@ -6,15 +6,15 @@ package com.lichang.ui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 
 import com.lichang.DBbeans.Machine_data;
 import com.lichang.DBbeans.Machine_fault_data;
-import com.lichang.ui.util.LineChart;
-import com.lichang.ui.util.Table;
+import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
+import com.lichang.utils.RealTimeMonitoringUtil.LineChart;
+import com.lichang.utils.RealTimeMonitoringUtil.Table;
 import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
@@ -31,20 +31,35 @@ public class RealTimeMonitoring extends JFrame {
     //3. 已完成工件、故障工件的动态绑定（低优先）
     //4. 当前焊机、工作状态的动态绑定（低优先）
     ////5. 不同用户通过传递一个flag进行区别（已完成）
-    //6. 更改密码、注销用户的设置
+    ////6. 更改密码的设置(已完成)
     //标记时间：2019/11/20 17:22  预解决时间:
 
     private static Logger log = LoggerUtil.getLogger(); // 日志
 
     // 自定义的变量
-    private JFreeChart realTimeLineChart;
-    private JPanel chartPanel;
-    private JPanel chartPanel2;
-    private JDialog jDialog;
+    private String username; // 当前用户名
+    private boolean adminFlag; // 用户类型
+    private JFreeChart realTimeLineChart; // 折线图模型
+    private JPanel chartPanel; // 折线图
+    private JPanel chartPanel2; // 折线图放大
+    private JDialog jDialog; // 折线图
+    private JDialog jDialog2; // 密码修改
+    private JPanel changePasswordPanel; // 密码修改
+    private JLabel oldValidationTip; // 旧密码 验证提示
+    private boolean oldChangeFlag; //判断旧密码是否通过验证
+
+
 
     public RealTimeMonitoring() {
-        initComponents();
+        log.info("无参构造");
 
+        //TEST: 测试用，直接打开该页面时，暂时给username和flag一个值
+        //标记时间：2019/11/21 15:56  预解决时间：
+        username = "admin";
+        adminFlag = true;
+        
+        initComponents();
+        
         initChartPanel(); //加载折线图
         initTable(); //加载表格设置
         updateTable2(); //加载表格2（参数监测）
@@ -54,6 +69,10 @@ public class RealTimeMonitoring extends JFrame {
 
     //接收登录账户信息
     public RealTimeMonitoring(String username, Boolean adminFlag) {
+        log.info("有参构造");
+        this.username = username;
+        this.adminFlag = adminFlag;
+
         initComponents();
 
         label3Bind(username); //显示当前用户信息
@@ -70,6 +89,7 @@ public class RealTimeMonitoring extends JFrame {
      * @param username
      */
     private void label3Bind(String username) {
+        log.info("Lable3 账户信息: 显示当前登录用户");
         label3.setText(username);
     }
 
@@ -79,6 +99,7 @@ public class RealTimeMonitoring extends JFrame {
     //TODO: 修改为自动刷新
     //标记时间：2019/11/20 15:42  预解决时间：
     private void initChartPanel() {
+        log.info("折线图： 用于生成 折线图 的 ChartPanel（包括刷新）");
 
         realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
         if (chartPanel != null) {
@@ -130,7 +151,7 @@ public class RealTimeMonitoring extends JFrame {
     //TODO: 放大后的图表添加具体信息，并标记错误信息
     //标记时间：2019/11/20 17:09  预解决时间：11.20/ 21
     private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
-        log.debug("放大操作");
+        log.info("事件（折线图）：用于点击 折线图后的 放大操作");
         // 新建 用于展示的JDialog
         jDialog = new JDialog(this, "",true);
 
@@ -139,9 +160,10 @@ public class RealTimeMonitoring extends JFrame {
 
         //添加并设置相应属性
         jDialog.add(chartPanel2);
-        jDialog.setBounds(200,100,800,600);
+        jDialog.setSize(800,600);
+        jDialog.setLocationRelativeTo(null);
         jDialog.setAlwaysOnTop(true);
-        jDialog.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        jDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         jDialog.setVisible(true);
     }
 
@@ -149,6 +171,7 @@ public class RealTimeMonitoring extends JFrame {
      * 表格1、2：设置表格格式、表头的内容与格式等
      */
     private void initTable() {
+        log.info("表格1、2：设置表格格式、表头的内容与格式等");
         /*
             修改表头1、2
          */
@@ -182,6 +205,7 @@ public class RealTimeMonitoring extends JFrame {
     //TODO: 修改为自动刷新
     //标记时间：2019/11/20 15:42  预解决时间：
     private void updateTable1() {
+        log.info("表格1： 添加数据");
         List<Machine_fault_data> machine_fault_data_BeansList = Table.getFaultDataBeans(2); //获取机器数据
         DefaultTableModel table1Model = (DefaultTableModel)table1.getModel(); //获取当前模型
 
@@ -204,6 +228,8 @@ public class RealTimeMonitoring extends JFrame {
     //TODO: 添加查看具体选项的按钮
     //标记时间：2019/11/20 17:07  预解决时间：11.20
     private void updateTable2() {
+        log.info("表格2： 添加数据");
+
         List<Machine_data> machine_data_BeansList = Table.getDataBeans(1); //获取机器数据
         int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
         DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
@@ -248,8 +274,10 @@ public class RealTimeMonitoring extends JFrame {
      * @param e
      */
     private void button8ActionPerformed(ActionEvent e) {
-        initChartPanel();
-        updateTable2();
+        log.info("手动刷新 按钮： 刷新 表格2、折线图 的内容");
+
+        initChartPanel(); //重新生成折线图
+        updateTable2(); //重新加载表格数据
     }
 
     /**
@@ -257,6 +285,8 @@ public class RealTimeMonitoring extends JFrame {
      * @param e
      */
     private void button6ActionPerformed(ActionEvent e) {
+        log.info("清空 按钮：清空 表格1 的内容");
+
         DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
         table1Model.setRowCount(0);
     }
@@ -266,10 +296,140 @@ public class RealTimeMonitoring extends JFrame {
      * @param e
      */
     private void menuItem1ActionPerformed(ActionEvent e) {
+        log.info("MenuItem 用户设置:  切换用户");
+
         new Login();
         this.dispose();
     }
 
+    /**
+     * MenuItem 用户设置： 更改密码
+     * @param e
+     */
+    private void menuItem2ActionPerformed(ActionEvent e) {
+        log.info("MenuItem 用户设置： 更改密码");
+
+        if (!adminFlag) {
+            JOptionPane.showMessageDialog(this, "您没有该权限！请用管理员身份登录！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        jDialog2 = new JDialog(this, "",true);
+        changePasswordPanel = new JPanel();
+        oldValidationTip = new JLabel();
+        oldChangeFlag = false;
+
+        changePasswordPanel.setLayout(null);
+
+        //提示
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、一般符号，需以字母开头");
+        changePasswordPanel.add(tip);
+        tip.setBounds(50, 20, 300, 40);
+        tip.setLineWrap(true); // 自动换行
+        tip.setWrapStyleWord(true);
+        tip.setEditable(false); // 不可编辑
+        tip.setBackground(new Color(240, 240, 240)); // 背景色统一
+
+
+        //旧密码提示
+        JLabel oldPasswordTip = new JLabel("请输入旧密码: ");
+        changePasswordPanel.add(oldPasswordTip);
+        oldPasswordTip.setBounds(40, 60, 110,30);
+        oldPasswordTip.setFont(new Font("",Font.BOLD, 15));
+
+
+        //新密码提示
+        JLabel newPasswordTip = new JLabel("请输入新密码: ");
+        changePasswordPanel.add(newPasswordTip);
+        newPasswordTip.setBounds(40, 120, 110,30);
+        newPasswordTip.setFont(new Font("",Font.BOLD, 15));
+
+
+        //旧密码
+        JTextField oldPasswordField = new JTextField();
+        changePasswordPanel.add(oldPasswordField);
+        oldPasswordField.setBounds(160, 60, 90, 30);
+        oldPasswordField.setColumns(10);
+        oldPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+
+        //焦点监听：旧密码验证
+        oldPasswordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                String password = oldPasswordField.getText();
+                String table;
+
+                if (adminFlag == true) {
+                    table = "admin";
+                } else {
+                    table = "emp";
+                }
+
+                if (ChangePassword.validate(table, username, password)) {
+                    oldValidationTip.setText("验证成功");
+                    oldValidationTip.setForeground(Color.red);
+                    oldChangeFlag = true;
+                } else {
+                    oldValidationTip.setText("验证失败");
+                    oldValidationTip.setForeground(Color.red);
+                    oldChangeFlag = false;
+                }
+
+                changePasswordPanel.add(oldValidationTip);
+                oldValidationTip.setBounds(260, 60, 60, 30);
+            }
+        });
+
+        //新密码
+        JTextField newPasswordField = new JTextField();
+        changePasswordPanel.add(newPasswordField);
+        newPasswordField.setBounds(160, 120, 90, 30);
+        newPasswordField.setColumns(10);
+        newPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+
+        newPasswordField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String newPassword = newPasswordField.getText();
+                if (newPassword.length() > 10
+                        || newPassword.length() < 5
+                        || (newPassword.charAt(0) < 'A' || newPassword.charAt(0) > 'z')
+                        || (newPassword.charAt(0) > 'Z' && newPassword.charAt(0) < 'a')) {
+                    JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                }else {
+                    if (oldChangeFlag) {
+                        String password = newPasswordField.getText();
+                        String table;
+
+                        if (adminFlag == true) {
+                            table = "admin";
+                        } else {
+                            table = "emp";
+                        }
+
+                        ChangePassword.newPassword(table, username, password);
+                        JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
+                        jDialog2.dispose();
+                    }else {
+                        JOptionPane.showMessageDialog(jDialog2, "请先验证旧密码！", "提示", JOptionPane.WARNING_MESSAGE);
+                    }
+
+                }
+            }
+        });
+
+        jDialog2.setSize(400,250);
+        jDialog2.setAlwaysOnTop(true);
+        jDialog2.setLocationRelativeTo(null);
+        jDialog2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        jDialog2.add(changePasswordPanel);
+        jDialog2.setVisible(true);
+    }
 
     /**
      *  JFormDesigner自带，定义自生成
@@ -283,7 +443,6 @@ public class RealTimeMonitoring extends JFrame {
         menu1 = new JMenu();
         menuItem1 = new JMenuItem();
         menuItem2 = new JMenuItem();
-        menuItem3 = new JMenuItem();
         label3 = new JLabel();
         button1 = new JButton();
         button2 = new JButton();
@@ -324,12 +483,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
-            . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
-            . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
-            12 ), java. awt. Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans
-            . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
-            getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+            . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
+            . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+            Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+            ) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+            public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
+            ) )) throw new RuntimeException( ); }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -361,15 +521,9 @@ public class RealTimeMonitoring extends JFrame {
                     menuItem2.setPreferredSize(new Dimension(74, 25));
                     menuItem2.setHorizontalTextPosition(SwingConstants.LEFT);
                     menuItem2.setMargin(new Insets(2, 0, 2, 0));
+                    menuItem2.addActionListener(e -> menuItem2ActionPerformed(e));
                     menu1.add(menuItem2);
                     menu1.addSeparator();
-
-                    //---- menuItem3 ----
-                    menuItem3.setText("\u6ce8\u9500\u7528\u6237");
-                    menuItem3.setPreferredSize(new Dimension(74, 25));
-                    menuItem3.setHorizontalTextPosition(SwingConstants.LEFT);
-                    menuItem3.setMargin(new Insets(2, 0, 2, 0));
-                    menu1.add(menuItem3);
                 }
                 menuBar1.add(menu1);
             }
@@ -619,7 +773,7 @@ public class RealTimeMonitoring extends JFrame {
             contentPane.setPreferredSize(preferredSize);
         }
         setSize(990, 625);
-        setLocationRelativeTo(getOwner());
+        setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -631,7 +785,6 @@ public class RealTimeMonitoring extends JFrame {
     private JMenu menu1;
     private JMenuItem menuItem1;
     private JMenuItem menuItem2;
-    private JMenuItem menuItem3;
     private JLabel label3;
     private JButton button1;
     private JButton button2;

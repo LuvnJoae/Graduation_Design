@@ -6,15 +6,13 @@ package com.lichang.ui;
 
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
+import com.lichang.utils.LoginUtil.Login_Logout;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.Login_LogoutUtils;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.jdesktop.beansbinding.*;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 /**
  * @author unknown
@@ -73,7 +71,7 @@ public class Login extends JFrame {
         /*
             账户信息认证
          */
-        String loginResult = Login_LogoutUtils.login(userInfo);
+        String loginResult = Login_Logout.login(userInfo);
         log.info(loginResult);
 
         /*

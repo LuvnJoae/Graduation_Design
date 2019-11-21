@@ -1,15 +1,17 @@
-package com.lichang.utils;
+package com.lichang.utils.LoginUtil;
 
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
+import com.lichang.utils.LoggerUtil;
+import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
 
-public class Login_LogoutUtils {
-    public Login_LogoutUtils() {
+public class Login_Logout {
+    public Login_Logout() {
 
     }
     private static Logger log = LoggerUtil.getLogger();

@@ -1,6 +1,6 @@
 package com.lichang.demo;
 
-import com.lichang.ui.util.LineChart;
+import com.lichang.utils.RealTimeMonitoringUtil.LineChart;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
