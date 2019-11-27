@@ -1,8 +1,9 @@
 package com.lichang.utils.RealTimeMonitoringUtil;
 
-import com.lichang.DBbeans.Machine_data;
+import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.QueryUtil;
+import com.lichang.utils.SqlStrUtil;
+import com.lichang.utils.dao.JdbcTemplateUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -68,24 +69,27 @@ public class LineChart {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        List<Machine_data> machine_data_BeansList =
-                (List<Machine_data>) QueryUtil.queryForNum("Machine_data", 1, Machine_data.class);
 
-        log.debug(machine_data_BeansList);
+        String sqlStr = SqlStrUtil.generateSql2("Machine_data_now"); //table 表名
+        List<Object> params = SqlStrUtil.generateList2(1); // num为 工件编号
+        List<Machine_data_now> machine_data_now_BeansList = (List<Machine_data_now>)
+                JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class, params);
+
+        log.debug(machine_data_now_BeansList);
 
         // 将List中的各行Bean对象中的信息添加到dataset中。
         if (para.equals("current")) {
-            for (Machine_data machine_data : machine_data_BeansList) {
-                dataset.addValue(machine_data.getCurrent(), "Current", String.valueOf(machine_data.getSeq()));
+            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
+                dataset.addValue(machine_dataSingle.getCurrent(), "Current", String.valueOf(machine_dataSingle.getSeq()));
             }
         } else if (para.equals("voltage")) {
-            for (Machine_data machine_data : machine_data_BeansList) {
-                dataset.addValue(machine_data.getVoltage(), "Voltage", String.valueOf(machine_data.getSeq()));
+            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
+                dataset.addValue(machine_dataSingle.getVoltage(), "Voltage", String.valueOf(machine_dataSingle.getSeq()));
             }
         } else if (para.equals("all")) {
-            for (Machine_data machine_data : machine_data_BeansList) {
-                dataset.addValue(machine_data.getCurrent(), "Current", String.valueOf(machine_data.getSeq()));
-                dataset.addValue(machine_data.getVoltage(), "Voltage", String.valueOf(machine_data.getSeq()));
+            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
+                dataset.addValue(machine_dataSingle.getCurrent(), "Current", String.valueOf(machine_dataSingle.getSeq()));
+                dataset.addValue(machine_dataSingle.getVoltage(), "Voltage", String.valueOf(machine_dataSingle.getSeq()));
             }
         }
         else {

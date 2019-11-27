@@ -1,5 +1,8 @@
 package com.lichang.DBbeans;
 
+/**
+ * 员工表 -> employee
+ */
 public class Employee {
 
     private int id;

@@ -1,20 +1,23 @@
 package com.lichang.DBbeans;
 
-public class Machine_data {
+/**
+ * 全部工件数据表（机器数据表） -> machine_data_all
+ */
+public class Machine_data_all {
     private int id;
     private int num;
     private int seq;
     private double voltage;
     private double current;
     private double speed;
-    private int result;
+    private String result;
 
-    public Machine_data() {
+    public Machine_data_all() {
     }
 
     @Override
     public String toString() {
-        return "Machine_data{" +
+        return "Machine_data_now{" +
                 "id=" + id +
                 ", num=" + num +
                 ", seq=" + seq +
@@ -25,7 +28,7 @@ public class Machine_data {
                 '}';
     }
 
-    public Machine_data(int num, int seq, double voltage, double current, double speed) {
+    public Machine_data_all(int num, int seq, double voltage, double current, double speed) {
         this.num = num;
         this.seq = seq;
         this.voltage = voltage;
@@ -33,7 +36,7 @@ public class Machine_data {
         this.speed = speed;
     }
 
-    public Machine_data(int num, int seq, double voltage, double current, double speed, int result) {
+    public Machine_data_all(int num, int seq, double voltage, double current, double speed, String result) {
         this.num = num;
         this.seq = seq;
         this.voltage = voltage;
@@ -90,11 +93,11 @@ public class Machine_data {
         this.speed = speed;
     }
 
-    public int getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(int result) {
+    public void setResult(String result) {
         this.result = result;
     }
 }

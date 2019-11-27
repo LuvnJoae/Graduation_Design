@@ -24,7 +24,7 @@ public class ChangePassword {
      * @return
      */
     public static boolean validate(String table, String username, String password) {
-        log.info("判断密码 是否 正确");
+        log.debug("判断密码 是否 正确");
 
         String sqlStr = SqlStrUtil.generateSql1(table); // sql语句
         List<Object> params = SqlStrUtil.generateList1(username, password); // 参数列表
@@ -55,7 +55,7 @@ public class ChangePassword {
      * @return
      */
     public static void newPassword(String table, String username, String password) {
-        log.info("数据库录入新密码");
+        log.debug("数据库录入新密码");
 
         String sqlStr = SqlStrUtil.generateSql3(table);
         List<Object> params = SqlStrUtil.generateList3(username, password);

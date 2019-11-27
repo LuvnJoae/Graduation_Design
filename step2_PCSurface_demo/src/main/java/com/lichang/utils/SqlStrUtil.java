@@ -86,4 +86,19 @@ public class SqlStrUtil {
         paramsList.add(username);
         return paramsList; // 占位符参数列表
     }
+
+    /**
+     * 合成Sql 语句4： 查询
+     *      查询 总记录数
+     *      查询表 table
+     *      查询参数 id
+     * @param table
+     * @return
+     */
+    public static String generateSql4(String table) {
+        log.debug("修改Sql合成3：" + table);
+        String sqlStr = "select count(id) from "
+                + table;
+        return sqlStr;
+    }
 }

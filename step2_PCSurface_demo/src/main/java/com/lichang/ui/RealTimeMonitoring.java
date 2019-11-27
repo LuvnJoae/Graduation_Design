@@ -7,18 +7,24 @@ package com.lichang.ui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import com.lichang.DBbeans.Machine_data;
+import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.DBbeans.Machine_fault_data;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
+import com.lichang.utils.RealTimeMonitoringUtil.LabelUpdateText;
 import com.lichang.utils.RealTimeMonitoringUtil.LineChart;
 import com.lichang.utils.RealTimeMonitoringUtil.Table;
 import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.springframework.asm.Label;
 
 /**
  * @author unknown
@@ -26,12 +32,9 @@ import org.jfree.chart.JFreeChart;
 public class RealTimeMonitoring extends JFrame {
 
     //TODO: 整体待解决问题（低优先级）
-    ////1. 用户信息的动态绑定(已完成)
-    //2. 产品编号、检测结果的动态绑定
-    //3. 已完成工件、故障工件的动态绑定（低优先）
-    //4. 当前焊机、工作状态的动态绑定（低优先）
-    ////5. 不同用户通过传递一个flag进行区别（已完成）
-    ////6. 更改密码的设置(已完成)
+    //4. 当前焊机、工作状态的动态绑定（暂不考虑）
+    //9. 刷新时，chartPanel的闪 问题（低优先级）
+    //10. 数据频率增加后，要改表格内容的判断标准（红、蓝字体）
     //标记时间：2019/11/20 17:22  预解决时间:
 
     private static Logger log = LoggerUtil.getLogger(); // 日志
@@ -47,11 +50,13 @@ public class RealTimeMonitoring extends JFrame {
     private JPanel changePasswordPanel; // 密码修改
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
+    private int faultNum = 0; //表格1，用来判断是否为新的故障记录
 
 
 
+    //无参（预设账户信息）
     public RealTimeMonitoring() {
-        log.info("无参构造");
+        log.debug("无参构造");
 
         //TEST: 测试用，直接打开该页面时，暂时给username和flag一个值
         //标记时间：2019/11/21 15:56  预解决时间：
@@ -59,47 +64,67 @@ public class RealTimeMonitoring extends JFrame {
         adminFlag = true;
         
         initComponents();
-        
-        initChartPanel(); //加载折线图
-        initTable(); //加载表格设置
-        updateTable2(); //加载表格2（参数监测）
 
+        initTable(); //加载表格设置
+        scheduledExecutor(); //定时执行数据刷新
+
+        this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
 
-    //接收登录账户信息
+    //有参（接收登录账户信息）
     public RealTimeMonitoring(String username, Boolean adminFlag) {
-        log.info("有参构造");
+        log.debug("有参构造");
         this.username = username;
         this.adminFlag = adminFlag;
 
         initComponents();
 
-        label3Bind(username); //显示当前用户信息
-        initChartPanel(); //加载折线图
         initTable(); //加载表格设置
-        updateTable2(); //加载表格2（参数监测）
+        scheduledExecutor(); //定时执行数据刷新
 
+        label3Bind(username); //显示当前用户信息
+
+        this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
 
-
+    //TODO: 当切换页面时，会触发多个定时器
+    //标记时间：2019/11/27 20:04  预解决时间：
     /**
-     * Lable3 账户信息: 显示当前登录用户
-     * @param username
+     * 定时器 1：用于自动更新部分需要连接数据库的组件的内容
+     *      table2：
+     *      chartPanel：
+     *      faultNumberLabel1:
      */
-    private void label3Bind(String username) {
-        log.info("Lable3 账户信息: 显示当前登录用户");
-        label3.setText(username);
+    private void scheduledExecutor() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                updateTable1(); //加载表格1（故障监测）
+                updateTable2(); //加载表格2（参数监测）
+                updateFaultNumberLabel1(); //更新故障工件内容
+                updateCompletedNumberLabel1(); //更新已完成工件内容
+                updateNumberLabel(); // 更新当前工件编号
+                updateResultLabel(); // 更新当前工件检测结果
+                updateChartPanel(); //加载折线图
+
+                chartPanel.revalidate();
+                chartPanel.repaint();
+                log.error("1");
+            }
+        };
+
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        ScheduledFuture<?> scheduledFuture = service.scheduleAtFixedRate(runnable, 1, 5, TimeUnit.SECONDS);
     }
 
     /**
-     *  折线图： 用于生成 折线图 的 ChartPanel（包括刷新）
+     * 折线图
      */
-    //TODO: 修改为自动刷新
-    //标记时间：2019/11/20 15:42  预解决时间：
-    private void initChartPanel() {
-        log.info("折线图： 用于生成 折线图 的 ChartPanel（包括刷新）");
+    //折线图： 用于生成 折线图 的 ChartPanel（包括刷新）
+    private void updateChartPanel() {
+        log.debug("折线图： 用于生成 折线图 的 ChartPanel（包括刷新）");
 
         realTimeLineChart = LineChart.getRealTimeLineChart(); // 获得充满数据的chart模型
         if (chartPanel != null) {
@@ -112,20 +137,7 @@ public class RealTimeMonitoring extends JFrame {
         }
 
         chartPanel.setLayout(null);
-        {
-            // compute preferred size（窗口大小属性）
-            Dimension preferredSize = new Dimension();
-            for(int i = 0; i < chartPanel.getComponentCount(); i++) {
-                Rectangle bounds = chartPanel.getComponent(i).getBounds();
-                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-            }
-            Insets insets = chartPanel.getInsets();
-            preferredSize.width += insets.right;
-            preferredSize.height += insets.bottom;
-            chartPanel.setMinimumSize(preferredSize);
-            chartPanel.setPreferredSize(preferredSize);
-        }
+
 
         chartPanel.setBounds(500, 124, 470, 200);
         getContentPane().add(chartPanel);
@@ -144,14 +156,9 @@ public class RealTimeMonitoring extends JFrame {
         });
     }
 
-    /**
-     * 事件（折线图）：用于点击 折线图后的 放大操作。
-     * @param e
-     */
-    //TODO: 放大后的图表添加具体信息，并标记错误信息
-    //标记时间：2019/11/20 17:09  预解决时间：11.20/ 21
+    //事件（折线图）：用于点击 折线图后的 放大操作。
     private void chartPanelMouseClicked(MouseEvent e, JFreeChart realTimeLineChart) {
-        log.info("事件（折线图）：用于点击 折线图后的 放大操作");
+        log.debug("事件（折线图）：用于点击 折线图后的 放大操作");
         // 新建 用于展示的JDialog
         jDialog = new JDialog(this, "",true);
 
@@ -168,10 +175,11 @@ public class RealTimeMonitoring extends JFrame {
     }
 
     /**
-     * 表格1、2：设置表格格式、表头的内容与格式等
+     * 表格
      */
+    //表格1、2：设置表格格式、表头的内容与格式等
     private void initTable() {
-        log.info("表格1、2：设置表格格式、表头的内容与格式等");
+        log.debug("表格1、2：设置表格格式、表头的内容与格式等");
         /*
             修改表头1、2
          */
@@ -199,39 +207,43 @@ public class RealTimeMonitoring extends JFrame {
 
     }
 
-    /**
-     * 表格1： 添加数据
-     */
-    //TODO: 修改为自动刷新
-    //标记时间：2019/11/20 15:42  预解决时间：
+    //TODO: 添加查看具体选项的按钮
+    //标记时间：2019/11/20 17:07  预解决时间：11.20
+    //表格1： 数据更新->  若有新的故障数据，则添加到表格中
     private void updateTable1() {
-        log.info("表格1： 添加数据");
-        List<Machine_fault_data> machine_fault_data_BeansList = Table.getFaultDataBeans(2); //获取机器数据
+        log.debug("表格1： 更新最后一条数据");
+        List<Machine_fault_data> last_machine_fault_data_BeansList = Table.getLastFaultDataBeans();
+
+        if (last_machine_fault_data_BeansList.get(0).getNum() != faultNum) {
+            faultNum = last_machine_fault_data_BeansList.get(0).getNum();
+            addTable1(last_machine_fault_data_BeansList);
+        } else {
+            return;
+        }
+    }
+
+    //表格1： 添加数据
+    private void addTable1(List<Machine_fault_data> last_machine_fault_data_BeansList) {
+        log.debug("表格1： 添加数据");
         DefaultTableModel table1Model = (DefaultTableModel)table1.getModel(); //获取当前模型
 
         // 向模型中添加数据
-        String time = machine_fault_data_BeansList.get(0).getTime().toString().split("\\.")[0]; // 去除timestamp后面的 .0
-        int num = machine_fault_data_BeansList.get(0).getNum();
-        String fault_type = machine_fault_data_BeansList.get(0).getFault_type();
-        int fault_maxnum = machine_fault_data_BeansList.get(0).getFault_maxNum();
-        String result = machine_fault_data_BeansList.get(0).getResult();
+        String time = last_machine_fault_data_BeansList.get(0).getTime().toString().split("\\.")[0]; // 去除timestamp后面的 .0
+        int num = last_machine_fault_data_BeansList.get(0).getNum();
+        String fault_type = last_machine_fault_data_BeansList.get(0).getFault_type();
+        int fault_maxnum = last_machine_fault_data_BeansList.get(0).getFault_maxNum();
+        String result = last_machine_fault_data_BeansList.get(0).getResult();
 
         Object[] newRow = {time, num, fault_type, fault_maxnum, result}; //定义行内容
         table1Model.addRow(newRow); // 新增加一行
     }
 
-    /**
-     * 表格2： 添加数据
-     */
-    //TODO: 修改为自动刷新
-    //标记时间：2019/11/20 15:43  预解决时间：
-    //TODO: 添加查看具体选项的按钮
-    //标记时间：2019/11/20 17:07  预解决时间：11.20
+    //表格2： 添加数据
     private void updateTable2() {
-        log.info("表格2： 添加数据");
+        log.debug("表格2： 添加数据");
 
-        List<Machine_data> machine_data_BeansList = Table.getDataBeans(1); //获取机器数据
-        int size = machine_data_BeansList.size(); // 获取一个过程的数据总数
+        List<Machine_data_now> machine_data_now_BeansList = Table.getDataBeans_now(); //获取当前工件数据
+        int size = machine_data_now_BeansList.size(); // 获取一个过程的数据总数
         DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
 
         /*
@@ -249,65 +261,87 @@ public class RealTimeMonitoring extends JFrame {
             }
         }
 
+        String voltageStr;
+        String currentStr;
+        String speedStr;
+
         // 向模型中添加数据
         for (int i = 0; i < size; i++) {
-            int seq = machine_data_BeansList.get(i).getSeq();
-            double voltage = machine_data_BeansList.get(i).getVoltage();
-            double current = machine_data_BeansList.get(i).getCurrent();
-            double speed = machine_data_BeansList.get(i).getSpeed();
+            int seq = machine_data_now_BeansList.get(i).getSeq();
+            double voltage = machine_data_now_BeansList.get(i).getVoltage();
+            double current = machine_data_now_BeansList.get(i).getCurrent();
+            double speed = machine_data_now_BeansList.get(i).getSpeed();
+
+            //判断 voltage 数据是否超限
+            if ( (seq == 1 && voltage > 28.0)
+                    || (seq == 2 && voltage > 24.0)
+                    || (seq == 3 && voltage > 22.0)
+                    || (seq > 3  && voltage > 21.6) ) {
+                voltageStr = "<html>" + "<font color='red'>" + voltage + "</font>" + "</html>";
+            } else if ( (seq == 1 && voltage < 27.0)
+                    || (seq == 2 && voltage < 22.0)
+                    || (seq == 3 && voltage < 21.5)
+                    || (seq > 3  && voltage < 21.0) ) {
+                voltageStr = "<html>" + "<font color='blue'>" + voltage + "</font>" + "</html>";
+            } else {
+                voltageStr = voltage + "";
+            }
+
+            //判断 current 数据是否超限
+            if ( (seq == 1 && current > 105.0)
+                    || (seq == 2 && current > 102.0)
+                    || (seq == 3 && current > 130.0)
+                    || (seq == 4 && current > 135.0)
+                    || (seq > 4  && current > 140.0) ) {
+                currentStr = "<html>" + "<font color='red'>" + current + "</font>" + "</html>";
+            } else if ( (seq == 1 && current < 100.0)
+                    || (seq == 2 && current < 96.0)
+                    || (seq == 3 && current < 124.0)
+                    || (seq == 4 && current < 130.0)
+                    || (seq > 4  && current < 135.0) ) {
+                currentStr = "<html>" + "<font color='blue'>" + current + "</font>" + "</html>";
+            } else {
+                currentStr = current + "";
+            }
+
+            //判断 speed 数据是否超限
+            if (speed > 3.5) {
+                speedStr = "<html>" + "<font color='red'>" + speed + "</font>" + "</html>";
+            } else if (speed < 3.45) {
+                speedStr = "<html>" + "<font color='blue'>" + speed + "</font>" + "</html>";
+            } else {
+                speedStr = speed + "";
+            }
 
             table2Model.setValueAt(seq,i,0);
-            table2Model.setValueAt(voltage,i,1);
-            table2Model.setValueAt(current,i,2);
-            table2Model.setValueAt(speed,i,3);
+            table2Model.setValueAt(voltageStr,i,1);
+            table2Model.setValueAt(currentStr,i,2);
+            table2Model.setValueAt(speedStr,i,3);
         }
     }
 
-    //TEST: 按钮：生成单条故障数据
-    //标记时间：2019/11/21 12:53  预解决时间：
-    private void button10ActionPerformed(ActionEvent e) {
-        updateTable1();
-    }
-
-    /**
-     * 手动刷新 按钮： 刷新 表格2、折线图 的内容
-     * @param e
-     */
-    private void button8ActionPerformed(ActionEvent e) {
-        log.info("手动刷新 按钮： 刷新 表格2、折线图 的内容");
-
-        initChartPanel(); //重新生成折线图
-        updateTable2(); //重新加载表格数据
-    }
-
-    /**
-     * 清空 按钮：清空 表格1 的内容
-     * @param e
-     */
+    //清空 按钮：清空 表格1 的内容
     private void button6ActionPerformed(ActionEvent e) {
-        log.info("清空 按钮：清空 表格1 的内容");
+        log.debug("清空 按钮：清空 表格1 的内容");
 
         DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
         table1Model.setRowCount(0);
     }
 
     /**
-     * MenuItem 用户设置:  切换用户
-     * @param e
+     * Menu 菜单
      */
+    //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
-        log.info("MenuItem 用户设置:  切换用户");
+        log.debug("MenuItem 用户设置:  切换用户");
 
         new Login();
         this.dispose();
     }
 
-    /**
-     * MenuItem 用户设置： 更改密码
-     * @param e
-     */
+    //MenuItem 用户设置： 更改密码
     private void menuItem2ActionPerformed(ActionEvent e) {
-        log.info("MenuItem 用户设置： 更改密码");
+        log.debug("MenuItem 用户设置： 更改密码");
 
         if (!adminFlag) {
             JOptionPane.showMessageDialog(this, "您没有该权限！请用管理员身份登录！", "提示", JOptionPane.WARNING_MESSAGE);
@@ -432,6 +466,84 @@ public class RealTimeMonitoring extends JFrame {
     }
 
     /**
+     * 跳转 按钮
+     */
+    //历史统计与查询 按钮： 点击跳转
+    private void button2ActionPerformed(ActionEvent e) {
+        new HistoricalStatistics(username, adminFlag);
+        this.dispose();
+    }
+
+    //故障校验 按钮： 点击跳转
+    private void button3ActionPerformed(ActionEvent e) {
+        new FaultCheck(username, adminFlag);
+        this.dispose();
+    }
+
+    /**
+     * Label 内容更新
+     */
+    //故障工件 FaultNumberLabel1: 内容刷新
+    private void updateFaultNumberLabel1() {
+        Long faultNumber = LabelUpdateText.faultNumberLabel1();
+        faultNumberLabel1.setText(String.valueOf(faultNumber));
+    }
+
+    //已完成工件 CompletedNumberLabel1: 内容刷新
+    private void updateCompletedNumberLabel1() {
+        Long completedNumber = LabelUpdateText.CompletedNumberLabel1();
+        completedNumberLabel1.setText(String.valueOf(completedNumber));
+    }
+
+    //当前工件编号 NumberLabel： 内容刷新
+    private void updateNumberLabel() {
+        int num = LabelUpdateText.numberLabel();
+        NumberLabel.setText(String.valueOf(num));
+    }
+
+    //当前工件检测结果  ResultLabel； 内容刷新
+    private void updateResultLabel() {
+        String result = LabelUpdateText.resultLabel();
+        resultLabel.setText(result);
+    }
+
+    //Lable3 账户信息: 显示当前登录用户
+    private void label3Bind(String username) {
+        log.debug("Lable3 账户信息: 显示当前登录用户");
+        label3.setText(username);
+    }
+
+    /**
+     * 其他按钮
+     */
+    //手动刷新 按钮： 刷新 表格2、折线图 的内容
+    private void button8ActionPerformed(ActionEvent e) {
+        log.debug("手动刷新 按钮： 刷新 表格2、折线图 的内容");
+
+        updateTable1(); //加载表格1（故障监测）
+        updateTable2(); //加载表格2（参数监测）
+        updateFaultNumberLabel1(); //更新故障工件内容
+        updateCompletedNumberLabel1(); //更新已完成工件内容
+        updateNumberLabel(); // 更新当前工件编号
+        updateResultLabel(); // 更新当前工件检测结果
+        updateChartPanel(); //加载折线图
+
+        chartPanel.revalidate();
+        chartPanel.repaint();
+    }
+
+    /**
+     * 测试按钮
+     * @param e
+     */
+    //TEST: 按钮：生成单条故障数据
+    //标记时间：2019/11/21 12:53  预解决时间：
+    private void button10ActionPerformed(ActionEvent e) {
+        List<Machine_fault_data> faultDataBeans = Table.getFaultDataBeans(3);
+        addTable1(faultDataBeans);
+    }
+
+    /**
      *  JFormDesigner自带，定义自生成
      */
     private void initComponents() {
@@ -456,7 +568,7 @@ public class RealTimeMonitoring extends JFrame {
         currentMachineLabel1 = new JLabel();
         currentStatuLabel1 = new JLabel();
         completedNumberLabel1 = new JLabel();
-        faultNumberLabel2 = new JLabel();
+        faultNumberLabel1 = new JLabel();
         label9 = new JLabel();
         button6 = new JButton();
         scrollPane1 = new JScrollPane();
@@ -464,15 +576,13 @@ public class RealTimeMonitoring extends JFrame {
         button8 = new JButton();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        label1 = new JLabel();
-        label8 = new JLabel();
         label10 = new JLabel();
         label11 = new JLabel();
         button10 = new JButton();
         label12 = new JLabel();
         label13 = new JLabel();
-        faultNumberLabel3 = new JLabel();
-        faultNumberLabel4 = new JLabel();
+        NumberLabel = new JLabel();
+        resultLabel = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -483,13 +593,12 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-            . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
-            . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-            Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-            ) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-            public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
-            ) )) throw new RuntimeException( ); }} );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
+            EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
+            . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
+            java . awt. Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
+            { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
+            throw new RuntimeException( ) ;} } );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -560,11 +669,13 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+        button2.addActionListener(e -> button2ActionPerformed(e));
         contentPane.add(button2);
         button2.setBounds(295, 60, 120, 30);
 
         //---- button3 ----
         button3.setText("\u6545\u969c\u6821\u9a8c");
+        button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
         button3.setBounds(525, 60, 120, 30);
 
@@ -582,7 +693,7 @@ public class RealTimeMonitoring extends JFrame {
         label4.setBounds(55, 120, 90, 25);
 
         //---- label5 ----
-        label5.setText("\u5de5\u4f5c\u72b6\u6001\uff1a");
+        label5.setText("\u710a\u673a\u72b6\u6001\uff1a");
         label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 2f));
         contentPane.add(label5);
         label5.setBounds(55, 170, 80, 25);
@@ -612,22 +723,22 @@ public class RealTimeMonitoring extends JFrame {
         currentStatuLabel1.setBounds(155, 170, 60, 25);
 
         //---- completedNumberLabel1 ----
-        completedNumberLabel1.setText("100");
+        completedNumberLabel1.setText("\u65e0\u6570\u636e");
         completedNumberLabel1.setFont(completedNumberLabel1.getFont().deriveFont(completedNumberLabel1.getFont().getSize() + 2f));
         contentPane.add(completedNumberLabel1);
         completedNumberLabel1.setBounds(154, 270, 60, 25);
 
-        //---- faultNumberLabel2 ----
-        faultNumberLabel2.setText("1");
-        faultNumberLabel2.setFont(faultNumberLabel2.getFont().deriveFont(faultNumberLabel2.getFont().getSize() + 2f));
-        contentPane.add(faultNumberLabel2);
-        faultNumberLabel2.setBounds(155, 220, 60, 25);
+        //---- faultNumberLabel1 ----
+        faultNumberLabel1.setText("\u65e0\u6570\u636e");
+        faultNumberLabel1.setFont(faultNumberLabel1.getFont().deriveFont(faultNumberLabel1.getFont().getSize() + 2f));
+        contentPane.add(faultNumberLabel1);
+        faultNumberLabel1.setBounds(155, 220, 60, 25);
 
         //---- label9 ----
-        label9.setText("\u7535\u538b\u3001\u7535\u6d41\u5b9e\u65f6\u6ce2\u5f62\uff08\u70b9\u51fb\u653e\u5927\uff09");
+        label9.setText("\u7535\u538b\uff08V\uff09\u3001\u7535\u6d41\uff08A\uff09\u5b9e\u65f6\u6ce2\u5f62\uff08\u70b9\u51fb\u653e\u5927\uff09");
         label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 2f));
         contentPane.add(label9);
-        label9.setBounds(635, 98, 230, 25);
+        label9.setBounds(590, 100, 335, 25);
 
         //---- button6 ----
         button6.setText("\u6e05\u7a7a");
@@ -699,18 +810,6 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(scrollPane2);
         scrollPane2.setBounds(500, 365, 475, 210);
 
-        //---- label1 ----
-        label1.setText("\u4ea7\u54c1\u7f16\u53f7\uff1a");
-        label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD));
-        contentPane.add(label1);
-        label1.setBounds(665, 335, 65, 30);
-
-        //---- label8 ----
-        label8.setText("1");
-        label8.setFont(label8.getFont().deriveFont(label8.getFont().getStyle() | Font.BOLD));
-        contentPane.add(label8);
-        label8.setBounds(735, 338, 41, 25);
-
         //---- label10 ----
         label10.setText("\u53c2\u6570\u76d1\u6d4b");
         label10.setBackground(new Color(204, 255, 204));
@@ -735,7 +834,7 @@ public class RealTimeMonitoring extends JFrame {
         button10.setBounds(250, 335, 155, button10.getPreferredSize().height);
 
         //---- label12 ----
-        label12.setText("\u4ea7\u54c1\u7f16\u53f7\uff1a");
+        label12.setText("\u5de5\u4ef6\u7f16\u53f7\uff1a");
         label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 2f));
         contentPane.add(label12);
         label12.setBounds(260, 120, 80, 25);
@@ -744,19 +843,19 @@ public class RealTimeMonitoring extends JFrame {
         label13.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
         label13.setFont(label13.getFont().deriveFont(label13.getFont().getSize() + 2f));
         contentPane.add(label13);
-        label13.setBounds(260, 170, 75, 25);
+        label13.setBounds(260, 170, 80, 25);
 
-        //---- faultNumberLabel3 ----
-        faultNumberLabel3.setText("1");
-        faultNumberLabel3.setFont(faultNumberLabel3.getFont().deriveFont(faultNumberLabel3.getFont().getSize() + 2f));
-        contentPane.add(faultNumberLabel3);
-        faultNumberLabel3.setBounds(345, 120, 60, 25);
+        //---- NumberLabel ----
+        NumberLabel.setText("0");
+        NumberLabel.setFont(NumberLabel.getFont().deriveFont(NumberLabel.getFont().getSize() + 2f));
+        contentPane.add(NumberLabel);
+        NumberLabel.setBounds(345, 120, 60, 25);
 
-        //---- faultNumberLabel4 ----
-        faultNumberLabel4.setText("1");
-        faultNumberLabel4.setFont(faultNumberLabel4.getFont().deriveFont(faultNumberLabel4.getFont().getSize() + 2f));
-        contentPane.add(faultNumberLabel4);
-        faultNumberLabel4.setBounds(345, 170, 60, 25);
+        //---- resultLabel ----
+        resultLabel.setText("\u6b63\u5728\u52a0\u8f7d");
+        resultLabel.setFont(resultLabel.getFont().deriveFont(resultLabel.getFont().getSize() + 2f));
+        contentPane.add(resultLabel);
+        resultLabel.setBounds(345, 170, 60, 25);
 
         {
             // compute preferred size
@@ -798,7 +897,7 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel currentMachineLabel1;
     private JLabel currentStatuLabel1;
     private JLabel completedNumberLabel1;
-    private JLabel faultNumberLabel2;
+    private JLabel faultNumberLabel1;
     private JLabel label9;
     private JButton button6;
     private JScrollPane scrollPane1;
@@ -806,14 +905,12 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button8;
     private JScrollPane scrollPane2;
     private JTable table2;
-    private JLabel label1;
-    private JLabel label8;
     private JLabel label10;
     private JLabel label11;
     private JButton button10;
     private JLabel label12;
     private JLabel label13;
-    private JLabel faultNumberLabel3;
-    private JLabel faultNumberLabel4;
+    private JLabel NumberLabel;
+    private JLabel resultLabel;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

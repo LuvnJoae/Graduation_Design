@@ -22,7 +22,7 @@ public class JdbcTemplateUtil {
      */
 
     public static Map<String, Object> querySingle(String sqlStr, List<Object> paramsList) {
-        log.info("查询 返回单条记录");
+        log.debug("查询 返回单条记录");
         try {
             Map<String, Object> map = template.queryForMap(sqlStr, paramsList.toArray());
             return map;
@@ -38,7 +38,7 @@ public class JdbcTemplateUtil {
      * @return list<Map>
      */
     public static List<Map<String, Object>> queryMult(String sqlStr, List<Object> paramsList) {
-        log.info("查询 返回多条记录");
+        log.debug("查询 返回多条记录");
         try {
             List<Map<String, Object>> maps = template.queryForList(sqlStr, paramsList.toArray());
             return maps;
@@ -53,7 +53,7 @@ public class JdbcTemplateUtil {
      * @return List<Bean>
      */
     public static List<?> queryMultForBean(String sqlStr, Class<?> cla, List<Object> paramsList) {
-        log.info("查询 多条记录， 返回 Admin 的 Bean对象");
+        log.debug("查询 多条记录， 返回 Admin 的 Bean对象");
         try {
             List<?> listBean = template.query(sqlStr, paramsList.toArray(), new BeanPropertyRowMapper<>(cla));
             return listBean;
@@ -64,12 +64,39 @@ public class JdbcTemplateUtil {
     }
 
     /**
+     * 查询 多条记录， 返回Bean对象List (无参复用)
+     * @return List<Bean>
+     */
+    public static List<?> queryMultForBean(String sqlStr, Class<?> cla) {
+        log.debug("查询 多条记录， 返回 Admin 的 Bean对象");
+        try {
+            List<?> listBean = template.query(sqlStr, new BeanPropertyRowMapper<>(cla));
+            return listBean;
+        } catch (DataAccessException e) {
+            log.error("查询不到该信息", e);
+            return null;
+        }
+    }
+
+
+    /**
+     * 查询 总记录数
+     * @return
+     */
+    public static Long queryCount(String sqlStr) {
+        log.debug("查询 总记录数");
+        Long numLong = template.queryForObject(sqlStr, Long.class);
+        return numLong;
+    }
+
+
+    /**
      * 插入、 修改、 删除
      * @param sqlStr
      * @return
      */
     public static boolean update(String sqlStr, List<Object> paramsList) {
-        log.info("插入、 修改、 删除");
+        log.debug("插入、 修改、 删除");
         int updateCount = template.update(sqlStr, paramsList.toArray());
 
         log.debug(updateCount);
@@ -80,5 +107,7 @@ public class JdbcTemplateUtil {
             return false;
         }
     }
+
+
 
 }

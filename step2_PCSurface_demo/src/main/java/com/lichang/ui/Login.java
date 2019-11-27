@@ -24,7 +24,7 @@ public class Login extends JFrame {
     private boolean adminFlag; // 区分用户身份，true：管理员  false：y员工
 
     public Login() {
-        log.info("载入登录界面");
+        log.debug("载入登录界面");
         initComponents();
         setVisible(true);
 
@@ -35,7 +35,7 @@ public class Login extends JFrame {
      * @param e
      */
     private void button1ActionPerformed(ActionEvent e) {
-        log.info("登录按钮事件监听");
+        log.debug("登录按钮事件监听");
         /*
             空用户名与密码 检测
          */
@@ -72,7 +72,7 @@ public class Login extends JFrame {
             账户信息认证
          */
         String loginResult = Login_Logout.login(userInfo);
-        log.info(loginResult);
+        log.debug(loginResult);
 
         /*
             账户认证后的界面跳转

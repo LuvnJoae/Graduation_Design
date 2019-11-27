@@ -2,6 +2,9 @@ package com.lichang.DBbeans;
 
 import java.sql.Timestamp;
 
+/**
+ * 故障数据表 -> machine_fault_data
+ */
 public class Machine_fault_data {
     private int id;
     private int num;

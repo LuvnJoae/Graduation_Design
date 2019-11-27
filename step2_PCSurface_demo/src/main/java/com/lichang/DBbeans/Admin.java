@@ -1,5 +1,8 @@
 package com.lichang.DBbeans;
 
+/**
+ * 管理员表 -> admin
+ */
 public class Admin {
 
     private int id;

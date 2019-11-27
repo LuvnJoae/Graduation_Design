@@ -22,7 +22,7 @@ public class JdbcUtil {
      * 加载 数据库连接池 配置
      */
     static {
-        log.info("加载数据库连接池配置");
+        log.debug("加载数据库连接池配置");
         try {
             //加载配置文件
             Properties dataSourceProperties = new Properties();
@@ -41,7 +41,7 @@ public class JdbcUtil {
      * 获取连接池对象
      */
     public static DataSource getDataSource(){
-        log.info("获取连接池对象");
+        log.debug("获取连接池对象");
         return ds;
     }
 
@@ -52,7 +52,7 @@ public class JdbcUtil {
      * @return Connection对象
      */
     public static Connection getConnection() {
-        log.info("获取数据库连接");
+        log.debug("获取数据库连接");
         try {
             connection = ds.getConnection();
         } catch (SQLException e) {
@@ -68,7 +68,7 @@ public class JdbcUtil {
      *      JDBCTemplate支持自动释放连接)
      */
     public static void closeConnection() {
-        log.info("释放数据库连接");
+        log.debug("释放数据库连接");
         if(resultSet != null){
             try{
                 resultSet.close();
