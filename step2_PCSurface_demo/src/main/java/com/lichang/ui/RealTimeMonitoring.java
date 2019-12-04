@@ -24,7 +24,6 @@ import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.springframework.asm.Label;
 
 /**
  * @author unknown
@@ -52,8 +51,6 @@ public class RealTimeMonitoring extends JFrame {
     private boolean oldChangeFlag; //判断旧密码是否通过验证
     private int faultNum = 0; //表格1，用来判断是否为新的故障记录
 
-
-
     //无参（预设账户信息）
     public RealTimeMonitoring() {
         log.debug("无参构造");
@@ -66,6 +63,7 @@ public class RealTimeMonitoring extends JFrame {
         initComponents();
 
         initTable(); //加载表格设置
+
         scheduledExecutor(); //定时执行数据刷新
 
         this.setBounds(273, 95, 990, 625);
@@ -81,6 +79,7 @@ public class RealTimeMonitoring extends JFrame {
         initComponents();
 
         initTable(); //加载表格设置
+
         scheduledExecutor(); //定时执行数据刷新
 
         label3Bind(username); //显示当前用户信息
@@ -89,8 +88,6 @@ public class RealTimeMonitoring extends JFrame {
         setVisible(true);
     }
 
-    //TODO: 当切换页面时，会触发多个定时器
-    //标记时间：2019/11/27 20:04  预解决时间：
     /**
      * 定时器 1：用于自动更新部分需要连接数据库的组件的内容
      *      table2：
@@ -471,13 +468,11 @@ public class RealTimeMonitoring extends JFrame {
     //历史统计与查询 按钮： 点击跳转
     private void button2ActionPerformed(ActionEvent e) {
         new HistoricalStatistics(username, adminFlag);
-        this.dispose();
     }
 
     //故障校验 按钮： 点击跳转
     private void button3ActionPerformed(ActionEvent e) {
-        new FaultCheck(username, adminFlag);
-        this.dispose();
+        new ExpertSystem(username, adminFlag);
     }
 
     /**
@@ -593,12 +588,12 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .
-            EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmDes\u0069gner \u0045valua\u0074ion" , javax. swing .border . TitledBorder. CENTER ,javax . swing
-            . border .TitledBorder . BOTTOM, new java. awt .Font ( "D\u0069alog", java .awt . Font. BOLD ,12 ) ,
-            java . awt. Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( )
-            { @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062order" .equals ( e. getPropertyName () ) )
-            throw new RuntimeException( ) ;} } );
+            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
+            ( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing. border
+            . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
+            . Color. red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
+            propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
+            ; }} );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -674,7 +669,7 @@ public class RealTimeMonitoring extends JFrame {
         button2.setBounds(295, 60, 120, 30);
 
         //---- button3 ----
-        button3.setText("\u6545\u969c\u6821\u9a8c");
+        button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
         button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
         button3.setBounds(525, 60, 120, 30);

@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.concurrent.ScheduledFuture;
 
 /**
  * @author unknown
@@ -64,7 +63,6 @@ public class HistoricalStatistics extends JFrame {
         this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
-
 
     /**
      * Lable3 账户信息: 显示当前登录用户
@@ -220,7 +218,6 @@ public class HistoricalStatistics extends JFrame {
      * @param e
      */
     private void button1ActionPerformed(ActionEvent e) {
-        new RealTimeMonitoring(username, adminFlag);
         this.dispose();
     }
 
@@ -229,7 +226,7 @@ public class HistoricalStatistics extends JFrame {
      * @param e
      */
     private void button3ActionPerformed(ActionEvent e) {
-        new FaultCheck(username, adminFlag);
+        new ExpertSystem(username, adminFlag);
         this.dispose();
     }
 
@@ -264,7 +261,7 @@ public class HistoricalStatistics extends JFrame {
         table2 = new JTable();
 
         //======== this ========
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
         Container contentPane = getContentPane();
@@ -272,11 +269,11 @@ public class HistoricalStatistics extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder(
-            0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder
-            . BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color.
-            red) ,panel1. getBorder( )) ); panel1. addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .
-            beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( ); }} );
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder (
+            0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder
+            . BOTTOM, new java. awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt. Color .
+            red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java .
+            beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
             panel1.setLayout(null);
 
             //---- label2 ----
@@ -352,7 +349,7 @@ public class HistoricalStatistics extends JFrame {
         button2.setBounds(295, 60, 120, 30);
 
         //---- button3 ----
-        button3.setText("\u6545\u969c\u6821\u9a8c");
+        button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
         button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
         button3.setBounds(525, 60, 120, 30);
