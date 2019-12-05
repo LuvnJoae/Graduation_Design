@@ -40,8 +40,24 @@ public class JdbcTemplateUtil {
     public static List<Map<String, Object>> queryMult(String sqlStr, List<Object> paramsList) {
         log.debug("查询 返回多条记录");
         try {
-            List<Map<String, Object>> maps = template.queryForList(sqlStr, paramsList.toArray());
-            return maps;
+            List<Map<String, Object>> mapsList = template.queryForList(sqlStr, paramsList.toArray());
+            return mapsList;
+        } catch (DataAccessException e) {
+            log.error("查询不到该信息", e);
+            return null;
+        }
+    }
+
+    /**
+     * 查询 返回多条记录 (无参复用)
+     * @param sqlStr
+     * @return list<Map>
+     */
+    public static List<Map<String, Object>> queryMult(String sqlStr) {
+        log.debug("查询 返回多条记录");
+        try {
+            List<Map<String, Object>> mapsList = template.queryForList(sqlStr);
+            return mapsList;
         } catch (DataAccessException e) {
             log.error("查询不到该信息", e);
             return null;

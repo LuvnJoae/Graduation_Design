@@ -96,8 +96,22 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql4(String table) {
-        log.debug("修改Sql合成3：" + table);
+        log.debug("修改Sql合成4：" + table);
         String sqlStr = "select count(id) from "
+                + table;
+        return sqlStr;
+    }
+
+    /**
+     * 合成Sql 语句5： 查询
+     *      查询 表内的所有记录
+     *      查询表 table
+     * @param table
+     * @return
+     */
+    public static String generateSql5(String table) {
+        log.debug("修改Sql合成5：" + table);
+        String sqlStr = "select * from "
                 + table;
         return sqlStr;
     }
