@@ -24,6 +24,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
 
 //TODO: 待解决问题
 //标记时间：2019/12/4 17:32  预解决时间：
@@ -477,22 +478,54 @@ public class ExpertSystem extends JFrame {
     private void comboBox1ItemStateChanged(ItemEvent e) {
         // 下拉框触发事件有两个，Selected 和 deSelected（即选中和未被选中）。 所以规定触发事件为Selected
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String item = (String) comboBox1.getSelectedItem();
+            String item = (String) comboBox1.getSelectedItem(); //所选内容
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+
             switch (item) {
                 case "母材1":
-
+                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*");
                     break;
                 case "母材2":
-                    System.out.println(2);
+                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*");
                     break;
                 case "母材3":
-                    System.out.println(3);
+                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*");
+                    break;
+                case "母材4":
+                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*");
                     break;
                 default:
+                    comboBox_items = searchForRule(comboBox2, ".*");
+                    break;
+            }
+            updateComboBoxModel(comboBox2, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //
+    private Object[] searchForRule(JComboBox comboBox, String regex) {
+        ArrayList<String> comboBox_items_list = new ArrayList<>();
+
+        ComboBoxModel model = comboBox.getModel();
+
+        //遍历原模型
+        for (int i = 0; i < model.getSize(); i++) {
+            String item = (String) model.getElementAt(i);
+            //规则（通过正则表达式匹配内容）
+            if (Pattern.matches(regex, item)){
+                comboBox_items_list.add(item);
             }
         }
 
+        Object[] comboBox_items = comboBox_items_list.toArray();
+        return comboBox_items;
+    }
 
+    //按照规则，更新下拉框模型
+    private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
+        DefaultComboBoxModel<Object> boxModel = new DefaultComboBoxModel<>(comboBox_items);
+        comboBox.setModel(boxModel);
+        comboBox.setSelectedIndex(-1);
     }
 
     /**

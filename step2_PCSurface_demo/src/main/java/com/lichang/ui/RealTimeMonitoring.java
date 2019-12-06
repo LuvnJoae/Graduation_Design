@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -354,7 +355,7 @@ public class RealTimeMonitoring extends JFrame {
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、一般符号，需以字母开头");
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线，需以字母开头");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
         tip.setLineWrap(true); // 自动换行
@@ -428,10 +429,8 @@ public class RealTimeMonitoring extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newPassword = newPasswordField.getText();
-                if (newPassword.length() > 10
-                        || newPassword.length() < 5
-                        || (newPassword.charAt(0) < 'A' || newPassword.charAt(0) > 'z')
-                        || (newPassword.charAt(0) > 'Z' && newPassword.charAt(0) < 'a')) {
+
+                if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                 }else {
                     if (oldChangeFlag) {
