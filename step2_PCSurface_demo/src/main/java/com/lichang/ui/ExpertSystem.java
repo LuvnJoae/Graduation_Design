@@ -22,9 +22,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 //TODO: 待解决问题
 //标记时间：2019/12/4 17:32  预解决时间：
@@ -50,7 +49,6 @@ public class ExpertSystem extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
-
     //无参构造
     public ExpertSystem() {
         log.debug("无参构造");
@@ -61,15 +59,8 @@ public class ExpertSystem extends JFrame {
         adminFlag = true;
 
         initComponents();
-        initComboBox1_2();
-        initComboBox3();
-        initComboBox4();
-        initComboBox5();
-        initComboBox6();
-        initComboBox7();
-        initComboBox8();
-        initComboBox9();
-        initComboBox10();
+        initComboBox_fromDB(); //初始化下拉框
+//        initComboBox_fromTest();
 
         setVisible(true);
     }
@@ -81,15 +72,8 @@ public class ExpertSystem extends JFrame {
         this.adminFlag = adminFlag;
 
         initComponents();
-        initComboBox1_2();
-        initComboBox3();
-        initComboBox4();
-        initComboBox5();
-        initComboBox6();
-        initComboBox7();
-        initComboBox8();
-        initComboBox9();
-        initComboBox10();
+        initComboBox_fromDB(); //初始化下拉框
+//        initComboBox_fromTest();
 
         label3Bind(username); //显示当前用户信息
 
@@ -265,61 +249,70 @@ public class ExpertSystem extends JFrame {
     /**
      * ComboBox 下拉框连接数据库
      */
-    //母材选取
-    private void initComboBox1_2() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("name");
-            comboBox1.addItem(name);
-            comboBox2.addItem(name);
-        }
+    //下拉框 获取并添加数据。（真实：数据库）
+    private void initComboBox_fromDB() {
+        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal"); // 母材选取
+        List<Map<String, Object>> expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method"); // 焊接方法
+        List<Map<String, Object>> expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal"); // 焊接材料
+        List<Map<String, Object>> expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials"); // 辅材
+        List<Map<String, Object>> expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness"); // 工件厚度
+        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        List<Map<String, Object>> expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process"); // 热工艺
 
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:45  预解决时间：
-//        String[] items = {
-//                "碳钢碳锰钢",
-//                "细晶粒钢",
-//                "高强细晶粒结构钢",
-//                "热强钢(非合金)",
-//                "热强钢(合金)",
-//                "不锈钢+耐热钢",
-//                "铸铁球墨铸铁",
-//                "铜和铜合金",
-//                "镍和镍合金",
-//                "铝材料",
-//                "钛和钛合金"
-//        };
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox1.setModel(boxModel);
-//        comboBox2.setModel(boxModel);
-
-        comboBox1.setSelectedIndex(-1);
-        comboBox2.setSelectedIndex(-1);
+        initComboBox_addData_fromDB(comboBox1, expert_base_metal_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox2, expert_base_metal_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox3, expert_weld_method_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox4, expert_weld_metal_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox5, expert_auxiliary_materials_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox6, expert_workpiece_thickness_mapsList, "name");
+        initComboBox_addData_fromDB(comboBox7, expert_weld_joint_mapsList, "welding_position");
+        initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "groove_form");
+        initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "joint_form");
+        initComboBox_addData_fromDB(comboBox10, expert_thermal_process_mapsList, "heat_treatment_type");
     }
 
-    //焊接方法
-    private void initComboBox3() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method");
-        for (Map<String, Object> expert_weld_method_map : expert_weld_method_mapsList) {
-            String name = (String) expert_weld_method_map.get("name");
-            comboBox3.addItem(name);
+    //下拉框 添加数据项（真）
+    private void initComboBox_addData_fromDB(JComboBox comboBox, List<Map<String, Object>> expert_comboBox_mapsList, String colName) {
+        for (Map<String, Object> expert_comboBox_map : expert_comboBox_mapsList) {
+            String col = (String) expert_comboBox_map.get(colName);
+            comboBox.addItem(col);
         }
+        comboBox.setSelectedIndex(-1);
+    }
 
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-        String[] items = {
+    //下拉框 获取并添加数据。（测试：自定义样例）
+    private void initComboBox_fromTest() {
+        // 自定义下拉框内容
+        // 母材选取 A & B
+        String[] comboBox1_items = {
+                "碳钢碳锰钢",
+                "细晶粒钢",
+                "高强细晶粒结构钢",
+                "热强钢(非合金)",
+                "热强钢(合金)",
+                "不锈钢+耐热钢",
+                "铸铁球墨铸铁",
+                "铜和铜合金",
+                "镍和镍合金",
+                "铝材料",
+                "钛和钛合金"
+        };
+        String[] comboBox2_items = {
+                "碳钢碳锰钢",
+                "细晶粒钢",
+                "高强细晶粒结构钢",
+                "热强钢(非合金)",
+                "热强钢(合金)",
+                "不锈钢+耐热钢",
+                "铸铁球墨铸铁",
+                "铜和铜合金",
+                "镍和镍合金",
+                "铝材料",
+                "钛和钛合金"
+        };
+
+        // 焊接方法
+        String[] comboBox3_items = {
                 "焊条电弧焊（手工电弧焊）",
                 "埋弧电弧焊",
                 "氩弧焊",
@@ -334,212 +327,88 @@ public class ExpertSystem extends JFrame {
                 "冷压焊",
                 "锻焊",
                 "其他"};
-        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-        comboBox3.setModel(boxModel);
 
-        comboBox3.setSelectedIndex(-1);
+        // 焊接材料
+        String[] comboBox4_items = {
+                "提示：焊丝用于气保焊",
+                "提示：焊条用于手工焊",
+                "焊丝：YM-80A",
+                "焊丝：SM-70",
+                "焊丝：ER50-6",
+                "焊条：L-80SN",
+                "焊条：J506",
+                "其他"};
+
+        // 辅材
+        String[] comboBox5_items = {
+                "CO2",
+                "其他"};
+        DefaultComboBoxModel<String> box5Model = new DefaultComboBoxModel<>(comboBox5_items);
+
+        // 工件厚度
+        String[] comboBox6_items = {
+                "车前架三角撑",
+                "其他"};
+
+        // 焊接位置
+        String[] comboBox7_items = {
+                "PA 平焊",
+                "PB 平角焊",
+                "PC 横焊",
+                "PD 仰角焊",
+                "PE 仰焊",
+                "PF 向上立焊",
+                "PG 向下立焊",
+                "其他"
+        };
+
+        // 坡口
+        String[] comboBox8_items = {
+                "I 形",
+                "V 形",
+                "V 形",
+                "U 形",
+                "J 形",
+                "组合",
+                "其他"
+        };
+
+        // 接头
+        String[] comboBox9_items = {
+                "对接",
+                "角接",
+                "T字",
+                "搭接",
+                "其他"
+        };
+
+        // 热工艺
+        String[] comboBox10_items = {
+                "其他"
+        };
+
+        initComboBox_addData_fromTest(comboBox1, comboBox1_items);
+        initComboBox_addData_fromTest(comboBox2, comboBox2_items);
+        initComboBox_addData_fromTest(comboBox3, comboBox3_items);
+        initComboBox_addData_fromTest(comboBox4, comboBox4_items);
+        initComboBox_addData_fromTest(comboBox5, comboBox5_items);
+        initComboBox_addData_fromTest(comboBox6, comboBox6_items);
+        initComboBox_addData_fromTest(comboBox7, comboBox7_items);
+        initComboBox_addData_fromTest(comboBox8, comboBox8_items);
+        initComboBox_addData_fromTest(comboBox9, comboBox9_items);
+        initComboBox_addData_fromTest(comboBox10, comboBox10_items);
     }
 
-    //焊接材料
-    private void initComboBox4() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal");
-        for (Map<String, Object> expert_weld_metal_map : expert_weld_metal_mapsList) {
-            String name = (String) expert_weld_metal_map.get("name");
-            comboBox4.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "提示：焊丝用于气保焊",
-//                "提示：焊条用于手工焊",
-//                "焊丝：YM-80A",
-//                "焊丝：SM-70",
-//                "焊丝：ER50-6",
-//                "焊条：L-80SN",
-//                "焊条：J506",
-//                "其他"};
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox4.setModel(boxModel);
-
-        comboBox4.setSelectedIndex(-1);
+    //下拉框 添加数据项（测）
+    private void initComboBox_addData_fromTest(JComboBox comboBox, String[] comboBox_items) {
+        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(comboBox_items);
+        comboBox.setModel(boxModel);
+        comboBox.setSelectedIndex(-1);
     }
 
-    //辅材
-    private void initComboBox5() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials");
-        for (Map<String, Object> expert_auxiliary_materials_map : expert_auxiliary_materials_mapsList) {
-            String name = (String) expert_auxiliary_materials_map.get("name");
-            comboBox5.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "CO2",
-//                "其他"};
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox5.setModel(boxModel);
-
-        comboBox5.setSelectedIndex(-1);
-    }
-
-    //工件厚度
-    private void initComboBox6() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness");
-        for (Map<String, Object> expert_workpiece_thickness_map : expert_workpiece_thickness_mapsList) {
-            String name = (String) expert_workpiece_thickness_map.get("name");
-            comboBox6.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "车前架三角撑",
-//                "其他"};
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox6.setModel(boxModel);
-
-        comboBox6.setSelectedIndex(-1);
-    }
-
-    //焊接位置
-    private void initComboBox7() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
-            String name = (String) expert_weld_joint_map.get("welding_position");
-            comboBox7.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "PA 平焊",
-//                "PB 平角焊",
-//                "PC 横焊",
-//                "PD 仰角焊",
-//                "PE 仰焊",
-//                "PF 向上立焊",
-//                "PG 向下立焊",
-//                "其他"
-//                };
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox7.setModel(boxModel);
-
-        comboBox7.setSelectedIndex(-1);
-    }
-
-    //坡口
-    private void initComboBox8() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
-            String name = (String) expert_weld_joint_map.get("groove_form");
-            comboBox8.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "I 形",
-//                "V 形",
-//                "V 形",
-//                "U 形",
-//                "J 形",
-//                "组合",
-//                "其他"
-//                };
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox8.setModel(boxModel);
-
-        comboBox8.setSelectedIndex(-1);
-    }
-
-    //接头
-    private void initComboBox9() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
-            String name = (String) expert_weld_joint_map.get("joint_form");
-            comboBox9.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "对接",
-//                "角接",
-//                "T字",
-//                "搭接",
-//                "其他"
-//                };
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox9.setModel(boxModel);
-
-        comboBox9.setSelectedIndex(-1);
-    }
-
-    //热工艺
-    private void initComboBox10() {
-        /*
-            调用数据库
-         */
-        List<Map<String, Object>> expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process");
-        for (Map<String, Object> expert_thermal_process_map : expert_thermal_process_mapsList) {
-            String name = (String) expert_thermal_process_map.get("heat_treatment_type");
-            comboBox10.addItem(name);
-        }
-
-        /*
-            自设
-         */
-        //TEST: 暂时用于自定义的内容
-        //标记时间：2019/12/5 15:40  预解决时间：
-//        String[] items = {
-//                "其他"
-//                };
-//        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>(items);
-//        comboBox10.setModel(boxModel);
-
-        comboBox10.setSelectedIndex(-1);
-    }
-
-
-    //TEST: 下拉框连接数据库 测试按钮
+    /**
+     * TEST: 下拉框连接数据库 测试按钮
+     */
     //标记时间：2019/12/5 14:29  预解决时间：
     private void button8ActionPerformed(ActionEvent e) {
 
@@ -625,13 +494,6 @@ public class ExpertSystem extends JFrame {
 
 
     }
-
-
-
-
-
-
-
 
     /**
      *  JFormDesigner自带，定义自生成
