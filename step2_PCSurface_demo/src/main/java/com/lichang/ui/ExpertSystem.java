@@ -4,6 +4,7 @@
 
 package com.lichang.ui;
 
+import java.awt.event.*;
 import javax.swing.border.*;
 import com.jgoodies.forms.factories.*;
 import com.lichang.utils.ExpertSystemUtil.ComboBoxUtil;
@@ -48,6 +49,7 @@ public class ExpertSystem extends JFrame {
     private JPanel changePasswordPanel; // 密码修改
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
+
 
     //无参构造
     public ExpertSystem() {
@@ -306,9 +308,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_weld_method");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("name");
+        List<Map<String, Object>> expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method");
+        for (Map<String, Object> expert_weld_method_map : expert_weld_method_mapsList) {
+            String name = (String) expert_weld_method_map.get("name");
             comboBox3.addItem(name);
         }
 
@@ -343,9 +345,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("name");
+        List<Map<String, Object>> expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal");
+        for (Map<String, Object> expert_weld_metal_map : expert_weld_metal_mapsList) {
+            String name = (String) expert_weld_metal_map.get("name");
             comboBox4.addItem(name);
         }
 
@@ -374,9 +376,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("name");
+        List<Map<String, Object>> expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials");
+        for (Map<String, Object> expert_auxiliary_materials_map : expert_auxiliary_materials_mapsList) {
+            String name = (String) expert_auxiliary_materials_map.get("name");
             comboBox5.addItem(name);
         }
 
@@ -399,9 +401,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("name");
+        List<Map<String, Object>> expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness");
+        for (Map<String, Object> expert_workpiece_thickness_map : expert_workpiece_thickness_mapsList) {
+            String name = (String) expert_workpiece_thickness_map.get("name");
             comboBox6.addItem(name);
         }
 
@@ -424,9 +426,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("welding_position");
+        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
+        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
+            String name = (String) expert_weld_joint_map.get("welding_position");
             comboBox7.addItem(name);
         }
 
@@ -456,9 +458,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("groove_form");
+        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
+        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
+            String name = (String) expert_weld_joint_map.get("groove_form");
             comboBox8.addItem(name);
         }
 
@@ -487,9 +489,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_weld_joint");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("joint_form");
+        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint");
+        for (Map<String, Object> expert_weld_joint_map : expert_weld_joint_mapsList) {
+            String name = (String) expert_weld_joint_map.get("joint_form");
             comboBox9.addItem(name);
         }
 
@@ -516,9 +518,9 @@ public class ExpertSystem extends JFrame {
         /*
             调用数据库
          */
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_thermal_process");
-        for (Map<String, Object> expert_base_metal_map : expert_base_metal_mapsList) {
-            String name = (String) expert_base_metal_map.get("heat_treatment_type");
+        List<Map<String, Object>> expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process");
+        for (Map<String, Object> expert_thermal_process_map : expert_thermal_process_mapsList) {
+            String name = (String) expert_thermal_process_map.get("heat_treatment_type");
             comboBox10.addItem(name);
         }
 
@@ -602,10 +604,29 @@ public class ExpertSystem extends JFrame {
     /**
      * 规则 触发： 修改下拉框可显示内容
      */
-    //母材选取
-    private void comboBox2ActionPerformed(ActionEvent e) {
-//        if (comboBox2)
+    //母材选取A
+    private void comboBox1ItemStateChanged(ItemEvent e) {
+        // 下拉框触发事件有两个，Selected 和 deSelected（即选中和未被选中）。 所以规定触发事件为Selected
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String item = (String) comboBox1.getSelectedItem();
+            switch (item) {
+                case "母材1":
+
+                    break;
+                case "母材2":
+                    System.out.println(2);
+                    break;
+                case "母材3":
+                    System.out.println(3);
+                    break;
+                default:
+            }
+        }
+
+
     }
+
+
 
 
 
@@ -892,12 +913,12 @@ public class ExpertSystem extends JFrame {
 
                 //---- comboBox1 ----
                 comboBox1.setSelectedIndex(-1);
+                comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
                 panel4.add(comboBox1);
                 comboBox1.setBounds(135, 30, 120, 30);
 
                 //---- comboBox2 ----
                 comboBox2.setSelectedIndex(-1);
-                comboBox2.addActionListener(e -> comboBox2ActionPerformed(e));
                 panel4.add(comboBox2);
                 comboBox2.setBounds(285, 30, 125, 30);
 
