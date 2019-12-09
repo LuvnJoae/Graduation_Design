@@ -51,6 +51,7 @@ public class ExpertSystem extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
+    // 下拉框模型
     private ComboBoxModel boxModel1;
     private ComboBoxModel boxModel2;
     private ComboBoxModel boxModel3;
@@ -62,18 +63,39 @@ public class ExpertSystem extends JFrame {
     private ComboBoxModel boxModel9;
     private ComboBoxModel boxModel10;
 
-    List<Map<String, Object>> expert_base_metal_mapsList;
-    List<Map<String, Object>> expert_weld_method_mapsList;
-    List<Map<String, Object>> expert_weld_metal_mapsList;
-    List<Map<String, Object>> expert_auxiliary_materials_mapsList;
-    List<Map<String, Object>> expert_workpiece_thickness_mapsList;
-    List<Map<String, Object>> expert_weld_joint_mapsList;
-    List<Map<String, Object>> expert_thermal_process_mapsList;
-    List<Map<String, Object>> expert_process_parameters_mapsList;
+    //专家系统 各表的内容
+    private List<Map<String, Object>> expert_base_metal_mapsList;
+    private List<Map<String, Object>> expert_weld_method_mapsList;
+    private List<Map<String, Object>> expert_weld_metal_mapsList;
+    private List<Map<String, Object>> expert_auxiliary_materials_mapsList;
+    private List<Map<String, Object>> expert_workpiece_thickness_mapsList;
+    private List<Map<String, Object>> expert_weld_joint_mapsList;
+    private List<Map<String, Object>> expert_thermal_process_mapsList;
+    private List<Map<String, Object>> expert_process_parameters_mapsList;
 
+    //下拉框内容的 seq。 用于规则推理
+    private String box1_seq;
+    private String box2_seq;
+    private String box3_seq;
+    private String box4_seq;
+    private String box5_seq;
+    private String box6_seq;
+    private String box7_seq;
+    private String box8_seq;
+    private String box9_seq;
+    private String box10_seq;
 
-
-
+    //下拉框的值
+    String comboBox1_item;
+    String comboBox2_item;
+    String comboBox3_item;
+    String comboBox4_item;
+    String comboBox5_item;
+    String comboBox6_item;
+    String comboBox7_item;
+    String comboBox8_item;
+    String comboBox9_item;
+    String comboBox10_item;
 
     //无参构造
     public ExpertSystem() {
@@ -273,6 +295,7 @@ public class ExpertSystem extends JFrame {
      */
     //下拉框 获取并添加数据。（真实：数据库）
     private void initComboBox_fromDB() {
+        //获取表数据
         expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal"); // 母材选取
         expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method"); // 焊接方法
         expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal"); // 焊接材料
@@ -281,6 +304,7 @@ public class ExpertSystem extends JFrame {
         expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
         expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process"); // 热工艺
 
+        //给下拉框添加内容
         initComboBox_addData_fromDB(comboBox1, expert_base_metal_mapsList, "name");
         initComboBox_addData_fromDB(comboBox2, expert_base_metal_mapsList, "name");
         initComboBox_addData_fromDB(comboBox3, expert_weld_method_mapsList, "name");
@@ -291,6 +315,8 @@ public class ExpertSystem extends JFrame {
         initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "groove_form");
         initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "joint_form");
         initComboBox_addData_fromDB(comboBox10, expert_thermal_process_mapsList, "heat_treatment_type");
+
+
     }
 
     //下拉框 添加数据项（真）
@@ -522,15 +548,22 @@ public class ExpertSystem extends JFrame {
     private void comboBox1ItemStateChanged(ItemEvent e) {
         // 下拉框触发事件有两个，Selected 和 deSelected（即选中和未被选中）。 所以规定触发事件为Selected
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String item = (String) comboBox1.getSelectedItem(); //所选内容
+            comboBox1_item = (String) comboBox1.getSelectedItem(); //所选内容
+
+//            for (Map<String, Object> map : expert_base_metal_mapsList) {
+//
+//            }
+
+
             Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
 
             //开始时会触发一下，非空处理
-            if (item == null) {
+            if (comboBox1_item == null) {
                 return;
             }
 
-            switch (item) {
+
+            switch (comboBox1_item) {
                 case "母材1":
                     comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*", boxModel2);
                     break;
@@ -750,10 +783,10 @@ public class ExpertSystem extends JFrame {
          */
 
         //其他表，获得对应seq
-        String comboBox1_item = (String) comboBox1.getSelectedItem();
-        String comboBox2_item = (String) comboBox2.getSelectedItem();
-        String comboBox3_item = (String) comboBox3.getSelectedItem();
-        String comboBox4_item = (String) comboBox4.getSelectedItem();
+        comboBox1_item = (String) comboBox1.getSelectedItem();
+        comboBox2_item = (String) comboBox2.getSelectedItem();
+        comboBox3_item = (String) comboBox3.getSelectedItem();
+        comboBox4_item = (String) comboBox4.getSelectedItem();
 
         StringBuilder processParametersStr = new StringBuilder(); //用来辅助生成焊接参数
 
