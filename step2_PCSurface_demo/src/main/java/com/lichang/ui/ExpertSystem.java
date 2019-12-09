@@ -28,12 +28,13 @@ import java.util.regex.Pattern;
 
 //TODO: 待解决问题
 //标记时间：2019/12/4 17:32  预解决时间：
-//1. 下拉框的数据库绑定
+////1. 下拉框的数据库绑定
 //2. 重设、保存 按钮功能的实现
 //3. 生成焊接参数的触发
 //4. 资料库
 //5. 制定焊接规则
 ////6. 自定义焊接参数的实现
+////7. 下拉框 更新，初始化时会触发事件，导致选择了空模型
 
 
 /**
@@ -50,6 +51,17 @@ public class ExpertSystem extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
+    private ComboBoxModel boxModel1;
+    private ComboBoxModel boxModel2;
+    private ComboBoxModel boxModel3;
+    private ComboBoxModel boxModel4;
+    private ComboBoxModel boxModel5;
+    private ComboBoxModel boxModel6;
+    private ComboBoxModel boxModel7;
+    private ComboBoxModel boxModel8;
+    private ComboBoxModel boxModel9;
+    private ComboBoxModel boxModel10;
+
     //无参构造
     public ExpertSystem() {
         log.debug("无参构造");
@@ -60,8 +72,6 @@ public class ExpertSystem extends JFrame {
         adminFlag = true;
 
         initComponents();
-        initComboBox_fromDB(); //初始化下拉框
-//        initComboBox_fromTest();
 
         setVisible(true);
     }
@@ -73,8 +83,6 @@ public class ExpertSystem extends JFrame {
         this.adminFlag = adminFlag;
 
         initComponents();
-        initComboBox_fromDB(); //初始化下拉框
-//        initComboBox_fromTest();
 
         label3Bind(username); //显示当前用户信息
 
@@ -407,6 +415,20 @@ public class ExpertSystem extends JFrame {
         comboBox.setSelectedIndex(-1);
     }
 
+    //下拉框 获取初始model（初始化后的）
+    private void getInitComboBoxModel() {
+        boxModel1 = comboBox1.getModel();
+        boxModel2 = comboBox2.getModel();
+        boxModel3 = comboBox3.getModel();
+        boxModel4 = comboBox4.getModel();
+        boxModel5 = comboBox5.getModel();
+        boxModel6 = comboBox6.getModel();
+        boxModel7 = comboBox7.getModel();
+        boxModel8 = comboBox8.getModel();
+        boxModel9 = comboBox9.getModel();
+        boxModel10 = comboBox10.getModel();
+    }
+
     /**
      * TEST: 下拉框连接数据库 测试按钮
      */
@@ -416,7 +438,7 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     *  按钮
+     *  按钮 事件触发
      */
     //自定义焊接参数
     private void button9ActionPerformed(ActionEvent e) {
@@ -471,49 +493,201 @@ public class ExpertSystem extends JFrame {
         textField5.setEditable(true);
     }
 
+    //重设
+    private void button6ActionPerformed(ActionEvent e) {
+        initComboBox_fromDB(); //初始化下拉框
+//        initComboBox_fromTest();
+        getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
+    }
+
     /**
-     * 规则 触发： 修改下拉框可显示内容
+     * 规则 触发与制定： 修改下拉框可显示内容
      */
-    //母材选取A
+    //母材选取A -> 母材选取B： 规则制定
     private void comboBox1ItemStateChanged(ItemEvent e) {
         // 下拉框触发事件有两个，Selected 和 deSelected（即选中和未被选中）。 所以规定触发事件为Selected
         if (e.getStateChange() == ItemEvent.SELECTED) {
             String item = (String) comboBox1.getSelectedItem(); //所选内容
             Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
 
+            //开始时会触发一下，非空处理
+            if (item == null) {
+                return;
+            }
+
             switch (item) {
                 case "母材1":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*");
+                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*", boxModel2);
                     break;
                 case "母材2":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*");
+                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*", boxModel2);
                     break;
                 case "母材3":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*");
+                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*", boxModel2);
                     break;
                 case "母材4":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*");
+                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*", boxModel2);
                     break;
                 default:
-                    comboBox_items = searchForRule(comboBox2, ".*");
+                    comboBox_items = searchForRule(comboBox2, "无可用母材", boxModel2, true);
                     break;
             }
             updateComboBoxModel(comboBox2, comboBox_items); //更新受影响的 下拉框内容
         }
     }
 
-    //
-    private Object[] searchForRule(JComboBox comboBox, String regex) {
+    //母材选取B + 母材选取A -> 焊接方法: 规则制定
+    private void comboBox2ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String comboBox1_item = (String) comboBox1.getSelectedItem();
+            String comboBox2_item = (String) comboBox2.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox3, "无可用方法", boxModel3, true); // 无可用数据 默认值
+
+            //非空处理
+            if (comboBox1_item == null || comboBox2_item == null) {
+                return;
+            }
+
+            if (comboBox1_item.equals(comboBox2_item)) {
+                if (comboBox1_item.equals("母材1") || comboBox1_item.equals("母材2")) {
+                    comboBox_items = searchForRule(comboBox3, ".*方法名称1.*", boxModel3);
+                } else if (comboBox1_item.equals("母材3") || comboBox1_item.equals("母材4")) {
+                    comboBox_items = searchForRule(comboBox3, ".*方法名称3.*", boxModel3);
+                }
+            } else if (!comboBox1_item.equals(comboBox2_item)) {
+                if (comboBox1_item.equals("母材1") || comboBox1_item.equals("母材2")) {
+                    comboBox_items = searchForRule(comboBox3, ".*方法名称2.*", boxModel3);
+                } else if (comboBox1_item.equals("母材3") || comboBox1_item.equals("母材4")) {
+                    comboBox_items = searchForRule(comboBox3, ".*方法名称4.*", boxModel3);
+                }
+            }
+            updateComboBoxModel(comboBox3, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //焊接方法 -> 焊接材料：规则制定
+    private void comboBox3ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String item = (String) comboBox3.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox4, "无可用焊材", boxModel4, true); // 无可用数据 默认值
+
+            //非空处理
+            if (item == null) {
+                return;
+            }
+
+            switch (item) {
+                case "方法名称1":
+                    comboBox_items = searchForRule(comboBox4, ".*(牌号1|牌号2).*", boxModel4);
+                    break;
+                case "方法名称2":
+                    comboBox_items = searchForRule(comboBox4, ".*(牌号1|牌号2).*", boxModel4);
+                    break;
+                case "方法名称3":
+                    comboBox_items = searchForRule(comboBox4, ".*(牌号3|牌号4).*", boxModel4);
+                    break;
+                case "方法名称4":
+                    comboBox_items = searchForRule(comboBox4, ".*(牌号3|牌号4).*", boxModel4);
+                    break;
+                default:
+                    break;
+            }
+            updateComboBoxModel(comboBox4, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //焊接材料 + 焊接方法 -> 辅材： 规则制定
+    private void comboBox4ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String comboBox3_item = (String) comboBox3.getSelectedItem();
+            String comboBox4_item = (String) comboBox4.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox5, "无可用辅材", boxModel5, true); // 无可用数据 默认值
+
+            //非空处理
+            if (comboBox3_item == null || comboBox4_item == null) {
+                return;
+            }
+
+            if (comboBox3_item.equals("方法名称1")) {
+                if (comboBox4_item.equals("焊材牌号1")) {
+                    comboBox_items = searchForRule(comboBox5, ".*辅材1.*", boxModel5);
+                } else {
+                    comboBox_items = searchForRule(comboBox5, ".*辅材2.*", boxModel5);
+                }
+            } else if (comboBox3_item.equals("方法名称2")) {
+                if (comboBox4_item.equals("焊材牌号1")) {
+                    comboBox_items = searchForRule(comboBox5, ".*辅材3.*", boxModel5);
+                } else {
+                    comboBox_items = searchForRule(comboBox5, ".*辅材4.*", boxModel5);
+                }
+            } else {
+                comboBox_items = searchForRule(comboBox5, "无", boxModel5, true);
+            }
+            updateComboBoxModel(comboBox5, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //焊接材料 + 焊接方法 -> 工件厚度： 规则制定
+    private void comboBox5ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String comboBox3_item = (String) comboBox3.getSelectedItem();
+            String comboBox4_item = (String) comboBox4.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox6, "无可用厚度", boxModel6, true); // 无可用数据 默认值
+
+            //非空处理
+            if (comboBox3_item == null || comboBox4_item == null) {
+                return;
+            }
+
+            if (comboBox3_item.equals("方法名称1")) {
+                if (comboBox4_item.equals("焊材牌号1")) {
+                    comboBox_items = searchForRule(comboBox6, ".*厚度1.*", boxModel6);
+                } else {
+                    comboBox_items = searchForRule(comboBox6, ".*厚度2.*", boxModel6);
+                }
+            } else if (comboBox3_item.equals("方法名称2")) {
+                if (comboBox4_item.equals("焊材牌号1")) {
+                    comboBox_items = searchForRule(comboBox6, ".*厚度3.*", boxModel6);
+                } else {
+                    comboBox_items = searchForRule(comboBox6, ".*厚度4.*", boxModel6);
+                }
+            } else {
+                comboBox_items = searchForRule(comboBox6, "无数据，请手动输入", boxModel6, true);
+            }
+            updateComboBoxModel(comboBox6, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //焊接位置： 规则制定（暂不设约束）
+    private void comboBox6ItemStateChanged(ItemEvent e) {
+
+    }
+
+    //规则推理：返回推理后的 model 内容
+    private Object[] searchForRule(JComboBox comboBox, String regex, ComboBoxModel model, boolean flag) {
         ArrayList<String> comboBox_items_list = new ArrayList<>();
 
-        ComboBoxModel model = comboBox.getModel();
+        if(model == null || model.getSize() == 0) {
+            return new Object[0];  //JComboBox加载时，会先触发一次事件，此时model还是null，所以要判断一下
+            //确切说， JComboBox的 addItem方法，也会触发 itemStateChanged 事件。
+        }
 
-        //遍历原模型
-        for (int i = 0; i < model.getSize(); i++) {
-            String item = (String) model.getElementAt(i);
-            //规则（通过正则表达式匹配内容）
-            if (Pattern.matches(regex, item)){
-                comboBox_items_list.add(item);
+        //flag 为真：用于给与model特定值。（特定值由regex给值），用于下拉框默认值 或 无值。
+        if (flag) {
+            comboBox_items_list.add(regex);
+        }
+        else {
+            //遍历原模型
+            for (int i = 0; i < model.getSize(); i++) {
+                String item = (String) model.getElementAt(i);
+                //规则（通过正则表达式匹配内容）
+                if (Pattern.matches(regex, item)){
+                    comboBox_items_list.add(item);
+                }
             }
         }
 
@@ -521,12 +695,30 @@ public class ExpertSystem extends JFrame {
         return comboBox_items;
     }
 
-    //按照规则，更新下拉框模型
+    //重载
+    private Object[] searchForRule(JComboBox comboBox, String regex, ComboBoxModel model) {
+        return searchForRule(comboBox, regex, model, false);
+    }
+
+    //规则推理：更新下拉框 model
     private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
         DefaultComboBoxModel<Object> boxModel = new DefaultComboBoxModel<>(comboBox_items);
         comboBox.setModel(boxModel);
         comboBox.setSelectedIndex(-1);
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      *  JFormDesigner自带，定义自生成
@@ -814,28 +1006,33 @@ public class ExpertSystem extends JFrame {
 
                 //---- comboBox2 ----
                 comboBox2.setSelectedIndex(-1);
+                comboBox2.addItemListener(e -> comboBox2ItemStateChanged(e));
                 panel4.add(comboBox2);
                 comboBox2.setBounds(285, 30, 125, 30);
 
                 //---- comboBox3 ----
                 comboBox3.setSelectedIndex(-1);
+                comboBox3.addItemListener(e -> comboBox3ItemStateChanged(e));
                 panel4.add(comboBox3);
                 comboBox3.setBounds(135, 75, 275, 30);
 
                 //---- comboBox4 ----
                 comboBox4.setSelectedIndex(-1);
+                comboBox4.addItemListener(e -> comboBox4ItemStateChanged(e));
                 panel4.add(comboBox4);
                 comboBox4.setBounds(135, 120, 275, 30);
 
                 //---- comboBox5 ----
                 comboBox5.setEditable(true);
                 comboBox5.setSelectedIndex(-1);
+                comboBox5.addItemListener(e -> comboBox5ItemStateChanged(e));
                 panel4.add(comboBox5);
                 comboBox5.setBounds(135, 165, 275, 30);
 
                 //---- comboBox6 ----
                 comboBox6.setEditable(true);
                 comboBox6.setSelectedIndex(-1);
+                comboBox6.addItemListener(e -> comboBox6ItemStateChanged(e));
                 panel4.add(comboBox6);
                 comboBox6.setBounds(135, 210, 275, 30);
 
@@ -969,6 +1166,7 @@ public class ExpertSystem extends JFrame {
 
                 //---- button6 ----
                 button6.setText("\u91cd\u8bbe");
+                button6.addActionListener(e -> button6ActionPerformed(e));
                 panel4.add(button6);
                 button6.setBounds(865, 355, 65, 30);
 

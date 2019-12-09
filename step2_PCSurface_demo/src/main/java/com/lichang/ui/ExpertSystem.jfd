@@ -288,6 +288,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "comboBox2"
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox2ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 125
 						"height": 30
@@ -297,6 +298,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "comboBox3"
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox3ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 275
 						"height": 30
@@ -306,6 +308,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "comboBox4"
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox4ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 275
 						"height": 30
@@ -316,6 +319,7 @@ new FormModel {
 						name: "comboBox5"
 						"editable": true
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox5ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 275
 						"height": 30
@@ -326,6 +330,7 @@ new FormModel {
 						name: "comboBox6"
 						"editable": true
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox6ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 275
 						"height": 30
@@ -531,6 +536,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button6"
 						"text": "重设"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 65
 						"height": 30
