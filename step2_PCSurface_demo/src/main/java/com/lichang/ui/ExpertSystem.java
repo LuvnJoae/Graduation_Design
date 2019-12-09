@@ -62,6 +62,19 @@ public class ExpertSystem extends JFrame {
     private ComboBoxModel boxModel9;
     private ComboBoxModel boxModel10;
 
+    List<Map<String, Object>> expert_base_metal_mapsList;
+    List<Map<String, Object>> expert_weld_method_mapsList;
+    List<Map<String, Object>> expert_weld_metal_mapsList;
+    List<Map<String, Object>> expert_auxiliary_materials_mapsList;
+    List<Map<String, Object>> expert_workpiece_thickness_mapsList;
+    List<Map<String, Object>> expert_weld_joint_mapsList;
+    List<Map<String, Object>> expert_thermal_process_mapsList;
+    List<Map<String, Object>> expert_process_parameters_mapsList;
+
+
+
+
+
     //无参构造
     public ExpertSystem() {
         log.debug("无参构造");
@@ -260,13 +273,13 @@ public class ExpertSystem extends JFrame {
      */
     //下拉框 获取并添加数据。（真实：数据库）
     private void initComboBox_fromDB() {
-        List<Map<String, Object>> expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal"); // 母材选取
-        List<Map<String, Object>> expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method"); // 焊接方法
-        List<Map<String, Object>> expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal"); // 焊接材料
-        List<Map<String, Object>> expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials"); // 辅材
-        List<Map<String, Object>> expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness"); // 工件厚度
-        List<Map<String, Object>> expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
-        List<Map<String, Object>> expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process"); // 热工艺
+        expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal"); // 母材选取
+        expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method"); // 焊接方法
+        expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal"); // 焊接材料
+        expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials"); // 辅材
+        expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness"); // 工件厚度
+        expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process"); // 热工艺
 
         initComboBox_addData_fromDB(comboBox1, expert_base_metal_mapsList, "name");
         initComboBox_addData_fromDB(comboBox2, expert_base_metal_mapsList, "name");
@@ -491,6 +504,8 @@ public class ExpertSystem extends JFrame {
         textField3.setEditable(true);
         textField4.setEditable(true);
         textField5.setEditable(true);
+
+        generateProcessParameters(); //按照规则生成焊接参数
     }
 
     //重设
@@ -663,8 +678,123 @@ public class ExpertSystem extends JFrame {
     }
 
     //焊接位置： 规则制定（暂不设约束）
-    private void comboBox6ItemStateChanged(ItemEvent e) {
 
+    //工件厚度 -> 接头： 规则制定
+    private void comboBox6ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String item = (String) comboBox6.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox9, "无可用接头", boxModel9, true); // 无可用数据 默认值
+
+            //非空处理
+            if (item == null) {
+                return;
+            }
+
+            if (item.equals("工件厚度1")) {
+                comboBox_items = searchForRule(comboBox9, ".*接头形式1.*", boxModel9);
+            } else if (item.equals("工件厚度2")) {
+                comboBox_items = searchForRule(comboBox9, ".*接头形式2.*", boxModel9);
+            } else if (item.equals("工件厚度3")) {
+                comboBox_items = searchForRule(comboBox9, ".*接头形式3.*", boxModel9);
+            } else if (item.equals("工件厚度4")) {
+                comboBox_items = searchForRule(comboBox9, ".*接头形式4.*", boxModel9);
+            }
+            updateComboBoxModel(comboBox9, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //工件厚度 -> 坡口： 规则制定
+    private void comboBox9ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String item = (String) comboBox6.getSelectedItem();
+            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
+            comboBox_items = searchForRule(comboBox8, "无可用坡口", boxModel8, true); // 无可用数据 默认值
+
+            //非空处理
+            if (item == null) {
+                return;
+            }
+
+            if (item.equals("工件厚度1")) {
+                comboBox_items = searchForRule(comboBox8, ".*坡口形式1.*", boxModel8);
+            } else if (item.equals("工件厚度2")) {
+                comboBox_items = searchForRule(comboBox8, ".*坡口形式2.*", boxModel8);
+            } else if (item.equals("工件厚度3")) {
+                comboBox_items = searchForRule(comboBox8, ".*坡口形式3.*", boxModel8);
+            } else if (item.equals("工件厚度4")) {
+                comboBox_items = searchForRule(comboBox8, ".*坡口形式4.*", boxModel8);
+            }
+            updateComboBoxModel(comboBox8, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
+    //热工艺： 规则制定（暂不设约束）
+
+    //焊接参数：规则生成
+    private void generateProcessParameters() {
+        /*
+            解释：
+            焊接参数的生成，是根据流程设计中的各种参数选择最终决定的。
+            所以，对于每一个流程项，给一个数字，作为选择的标志。
+            最终全部流程选择完成后，得出一个字符串，根据字符串，判断所采用的焊接参数
+            如：母材A项，选择了母材1，则为 1；
+            母材B项，选择了母材2，则为 2；
+            焊接方法，选择了焊接方法2，则为 2；
+            焊接材料，选择了 焊接材料2，则为 2；
+            ···（其他就不写了）
+            所以最终得到一个字符串， 1222。
+            则根据这个字符串，来查询所采用的焊接参数。
+            而这个字符串与焊接参数的对应关系，在数据库中已经体现出来。（焊接参数表，seq列）
+            具体的对应关系，则应焊接人员配合进行填写数据
+         */
+
+        //其他表，获得对应seq
+        String comboBox1_item = (String) comboBox1.getSelectedItem();
+        String comboBox2_item = (String) comboBox2.getSelectedItem();
+        String comboBox3_item = (String) comboBox3.getSelectedItem();
+        String comboBox4_item = (String) comboBox4.getSelectedItem();
+
+        StringBuilder processParametersStr = new StringBuilder(); //用来辅助生成焊接参数
+
+        for (Map<String, Object> map : expert_base_metal_mapsList) {
+            if (map.get("name").equals(comboBox1_item)) {
+                processParametersStr.append(map.get("seq"));
+            }
+        }
+
+
+        //焊接参数表
+        String seq = String.valueOf(processParametersStr);
+        expert_process_parameters_mapsList = ComboBoxUtil.getData("expert_process_parameters");
+
+        //存储符合规则的焊接参数
+        List<String> current_list = new ArrayList<>();
+        List<String> voltage_arc_list = new ArrayList<>();
+        List<String> speed_list = new ArrayList<>();
+        List<String> extension_list = new ArrayList<>();
+
+        for (Map<String, Object> expert_process_parameters_map : expert_process_parameters_mapsList) {
+            String seq_col = (String) expert_process_parameters_map.get("seq");
+
+            if (Pattern.matches(".*"+ seq +".*", seq_col)) {
+
+                String current_col = (String) expert_process_parameters_map.get("current");
+                String voltage_arc_col = (String) expert_process_parameters_map.get("voltage_arc");
+                String speed_col = (String) expert_process_parameters_map.get("speed");
+                String extension_col = (String) expert_process_parameters_map.get("extension");
+
+                current_list.add(current_col);
+                voltage_arc_list.add(voltage_arc_col);
+                speed_list.add(speed_col);
+                extension_list.add(extension_col);
+            }
+        }
+
+        updateComboBoxModel(comboBox12, current_list.toArray());
+        updateComboBoxModel(comboBox13, voltage_arc_list.toArray());
+        updateComboBoxModel(comboBox14, speed_list.toArray());
+        updateComboBoxModel(comboBox15, extension_list.toArray());
     }
 
     //规则推理：返回推理后的 model 内容
@@ -707,6 +837,7 @@ public class ExpertSystem extends JFrame {
         comboBox.setSelectedIndex(-1);
 
     }
+
 
 
 
@@ -1048,6 +1179,7 @@ public class ExpertSystem extends JFrame {
 
                 //---- comboBox9 ----
                 comboBox9.setSelectedIndex(-1);
+                comboBox9.addItemListener(e -> comboBox9ItemStateChanged(e));
                 panel4.add(comboBox9);
                 comboBox9.setBounds(135, 300, 125, 30);
 

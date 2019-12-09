@@ -358,6 +358,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "comboBox9"
 						"selectedIndex": -1
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox9ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 125
 						"height": 30
