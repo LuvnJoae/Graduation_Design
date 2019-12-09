@@ -32,10 +32,10 @@ import java.util.regex.Pattern;
 //2. 重设、保存 按钮功能的实现
 //3. 生成焊接参数的触发
 //4. 资料库
-//5. 制定焊接规则
+////5. 制定焊接规则
 ////6. 自定义焊接参数的实现
 ////7. 下拉框 更新，初始化时会触发事件，导致选择了空模型
-
+//8. 流程焊接规则的改变：根据seq进行处理
 
 /**
  * @author unknown
@@ -762,7 +762,21 @@ public class ExpertSystem extends JFrame {
                 processParametersStr.append(map.get("seq"));
             }
         }
-
+        for (Map<String, Object> map : expert_base_metal_mapsList) {
+            if (map.get("name").equals(comboBox2_item)) {
+                processParametersStr.append(map.get("seq"));
+            }
+        }
+        for (Map<String, Object> map : expert_weld_method_mapsList) {
+            if (map.get("name").equals(comboBox3_item)) {
+                processParametersStr.append(map.get("seq"));
+            }
+        }
+        for (Map<String, Object> map : expert_weld_metal_mapsList) {
+            if (map.get("name").equals(comboBox4_item)) {
+                processParametersStr.append(map.get("seq"));
+            }
+        }
 
         //焊接参数表
         String seq = String.valueOf(processParametersStr);
@@ -774,11 +788,12 @@ public class ExpertSystem extends JFrame {
         List<String> speed_list = new ArrayList<>();
         List<String> extension_list = new ArrayList<>();
 
+        boolean resultFlag = false;
+
         for (Map<String, Object> expert_process_parameters_map : expert_process_parameters_mapsList) {
             String seq_col = (String) expert_process_parameters_map.get("seq");
 
             if (Pattern.matches(".*"+ seq +".*", seq_col)) {
-
                 String current_col = (String) expert_process_parameters_map.get("current");
                 String voltage_arc_col = (String) expert_process_parameters_map.get("voltage_arc");
                 String speed_col = (String) expert_process_parameters_map.get("speed");
@@ -788,13 +803,23 @@ public class ExpertSystem extends JFrame {
                 voltage_arc_list.add(voltage_arc_col);
                 speed_list.add(speed_col);
                 extension_list.add(extension_col);
+
+                resultFlag = true;
+
+                log.debug("规则生成：" + processParametersStr);
+                log.debug("已有规则" + seq_col);
             }
         }
 
-        updateComboBoxModel(comboBox12, current_list.toArray());
-        updateComboBoxModel(comboBox13, voltage_arc_list.toArray());
-        updateComboBoxModel(comboBox14, speed_list.toArray());
-        updateComboBoxModel(comboBox15, extension_list.toArray());
+        if (!resultFlag) {
+            JOptionPane.showMessageDialog(this, "查询不到该对应规则！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        updateComboBoxModel(comboBox12, current_list.toArray(), false);
+        updateComboBoxModel(comboBox13, voltage_arc_list.toArray(), false);
+        updateComboBoxModel(comboBox14, speed_list.toArray(), false);
+        updateComboBoxModel(comboBox15, extension_list.toArray(), false);
     }
 
     //规则推理：返回推理后的 model 内容
@@ -831,12 +856,22 @@ public class ExpertSystem extends JFrame {
     }
 
     //规则推理：更新下拉框 model
-    private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
+    private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items, boolean flag) {
         DefaultComboBoxModel<Object> boxModel = new DefaultComboBoxModel<>(comboBox_items);
         comboBox.setModel(boxModel);
-        comboBox.setSelectedIndex(-1);
-
+        if (flag) {
+            comboBox.setSelectedIndex(-1);
+        }else {
+            comboBox.setSelectedIndex(0);
+        }
     }
+
+    //重载
+    private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
+        updateComboBoxModel(comboBox, comboBox_items, true);
+    }
+
+
 
 
 
