@@ -331,6 +331,8 @@ new FormModel {
 						"editable": true
 						"selectedIndex": -1
 						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox6ItemStateChanged", true ) )
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox6_2ItemStateChanged", true ) )
+						addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "comboBox6_3ItemStateChanged", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 275
 						"height": 30
@@ -352,7 +354,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 125
 						"height": 30
-						"x": 285
+						"x": 135
 						"y": 300
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -362,7 +364,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 125
 						"height": 30
-						"x": 135
+						"x": 285
 						"y": 300
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {

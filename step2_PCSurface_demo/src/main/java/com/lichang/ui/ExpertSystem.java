@@ -318,8 +318,8 @@ public class ExpertSystem extends JFrame {
         initComboBox_addData_fromDB(comboBox5, expert_auxiliary_materials_mapsList, "name");
         initComboBox_addData_fromDB(comboBox6, expert_workpiece_thickness_mapsList, "name");
         initComboBox_addData_fromDB(comboBox7, expert_weld_joint_mapsList, "welding_position");
-        initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "groove_form");
-        initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "joint_form");
+        initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "joint_form");
+        initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "groove_form");
         initComboBox_addData_fromDB(comboBox10, expert_thermal_process_mapsList, "heat_treatment_type");
 
 
@@ -416,23 +416,23 @@ public class ExpertSystem extends JFrame {
                 "其他"
         };
 
-        // 坡口
+        // 接头
         String[] comboBox8_items = {
+                "对接",
+                "角接",
+                "T字",
+                "搭接",
+                "其他"
+        };
+
+        // 坡口
+        String[] comboBox9_items = {
                 "I 形",
                 "V 形",
                 "V 形",
                 "U 形",
                 "J 形",
                 "组合",
-                "其他"
-        };
-
-        // 接头
-        String[] comboBox9_items = {
-                "对接",
-                "角接",
-                "T字",
-                "搭接",
                 "其他"
         };
 
@@ -576,14 +576,14 @@ public class ExpertSystem extends JFrame {
             comboBox2_item = (String) comboBox2.getSelectedItem();
 
             // 按照规则推理后的 受影响的下拉框 模型内容
+            //母材A
             Object[] comboBox_items_from1 = searchForRule2(
                     boxModel3,
                     comboBox1_item,
                     "app_weld_method",
                     "name",
                     expert_base_metal_mapsList);
-
-
+            //母材B
             Object[] comboBox_items_from2 = searchForRule2(
                     boxModel3,
                     comboBox2_item,
@@ -594,10 +594,10 @@ public class ExpertSystem extends JFrame {
             ArrayList<String> comboBox_items_list = new ArrayList<>(); //存储交集数据
 
             //寻找二者交集（母材A与母材B 的app_weld_method交集）
-            for (Object comboBox1Item : comboBox_items_from1) {
-                for (Object comboBox2Item : comboBox_items_from2) {
-                    if (comboBox1Item.equals(comboBox2Item)) {
-                        comboBox_items_list.add((String) comboBox1Item);
+            for (Object item1 : comboBox_items_from1) {
+                for (Object item2 : comboBox_items_from2) {
+                    if (item1.equals(item2)) {
+                        comboBox_items_list.add((String) item1);
                         break;
                     }
                 }
@@ -605,6 +605,7 @@ public class ExpertSystem extends JFrame {
 
             Object[] comboBox_items = comboBox_items_list.toArray();
 
+            //更新模型
             updateComboBoxModel(comboBox3, comboBox_items); //更新受影响的 下拉框内容
         }
     }
@@ -612,31 +613,17 @@ public class ExpertSystem extends JFrame {
     //焊接方法 -> 焊接材料：规则制定
     private void comboBox3ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String item = (String) comboBox3.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox4, "无可用焊材", boxModel4, true); // 无可用数据 默认值
+            comboBox3_item = (String) comboBox3.getSelectedItem();
 
-            //非空处理
-            if (item == null) {
-                return;
-            }
+            //按照规则推理后的 受影响的下拉框 模型内容
+            Object[] comboBox_items = searchForRule2(
+                    boxModel4,
+                    comboBox3_item,
+                    "app_weld_metal",
+                    "name",
+                    expert_weld_method_mapsList);
 
-            switch (item) {
-                case "方法名称1":
-                    comboBox_items = searchForRule(comboBox4, ".*(牌号1|牌号2).*", boxModel4);
-                    break;
-                case "方法名称2":
-                    comboBox_items = searchForRule(comboBox4, ".*(牌号1|牌号2).*", boxModel4);
-                    break;
-                case "方法名称3":
-                    comboBox_items = searchForRule(comboBox4, ".*(牌号3|牌号4).*", boxModel4);
-                    break;
-                case "方法名称4":
-                    comboBox_items = searchForRule(comboBox4, ".*(牌号3|牌号4).*", boxModel4);
-                    break;
-                default:
-                    break;
-            }
+            //更新模型
             updateComboBoxModel(comboBox4, comboBox_items); //更新受影响的 下拉框内容
         }
     }
@@ -644,120 +631,99 @@ public class ExpertSystem extends JFrame {
     //焊接材料 + 焊接方法 -> 辅材： 规则制定
     private void comboBox4ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String comboBox3_item = (String) comboBox3.getSelectedItem();
-            String comboBox4_item = (String) comboBox4.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox5, "无可用辅材", boxModel5, true); // 无可用数据 默认值
+            comboBox3_item = (String) comboBox3.getSelectedItem();
+            comboBox4_item = (String) comboBox4.getSelectedItem();
 
-            //非空处理
-            if (comboBox3_item == null || comboBox4_item == null) {
-                return;
+            //按照规则推理后的 受影响的下拉框 模型内容
+            //焊接方法
+            Object[] comboBox_items_from3 = searchForRule2(
+                    boxModel5,
+                    comboBox3_item,
+                    "app_auxiliary_materials",
+                    "name",
+                    expert_weld_method_mapsList);
+            //焊接材料
+            Object[] comboBox_items_from4 = searchForRule2(
+                    boxModel5,
+                    comboBox4_item,
+                    "app_auxiliary_materials",
+                    "name",
+                    expert_weld_metal_mapsList);
+
+            ArrayList<String> comboBox_items_list = new ArrayList<>(); //存储交集数据
+
+            //寻找二者交集
+            for (Object item3 : comboBox_items_from3) {
+                for (Object item4 : comboBox_items_from4) {
+                    if (item3.equals(item4)) {
+                        comboBox_items_list.add((String) item3);
+                        break;
+                    }
+                }
             }
 
-            if (comboBox3_item.equals("方法名称1")) {
-                if (comboBox4_item.equals("焊材牌号1")) {
-                    comboBox_items = searchForRule(comboBox5, ".*辅材1.*", boxModel5);
-                } else {
-                    comboBox_items = searchForRule(comboBox5, ".*辅材2.*", boxModel5);
-                }
-            } else if (comboBox3_item.equals("方法名称2")) {
-                if (comboBox4_item.equals("焊材牌号1")) {
-                    comboBox_items = searchForRule(comboBox5, ".*辅材3.*", boxModel5);
-                } else {
-                    comboBox_items = searchForRule(comboBox5, ".*辅材4.*", boxModel5);
-                }
-            } else {
-                comboBox_items = searchForRule(comboBox5, "无", boxModel5, true);
-            }
+            Object[] comboBox_items = comboBox_items_list.toArray();
+
             updateComboBoxModel(comboBox5, comboBox_items); //更新受影响的 下拉框内容
         }
     }
 
-    //焊接材料 + 焊接方法 -> 工件厚度： 规则制定
+    //-> 工件厚度： （暂不设约束）
     private void comboBox5ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String comboBox3_item = (String) comboBox3.getSelectedItem();
-            String comboBox4_item = (String) comboBox4.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox6, "无可用厚度", boxModel6, true); // 无可用数据 默认值
 
-            //非空处理
-            if (comboBox3_item == null || comboBox4_item == null) {
-                return;
-            }
-
-            if (comboBox3_item.equals("方法名称1")) {
-                if (comboBox4_item.equals("焊材牌号1")) {
-                    comboBox_items = searchForRule(comboBox6, ".*厚度1.*", boxModel6);
-                } else {
-                    comboBox_items = searchForRule(comboBox6, ".*厚度2.*", boxModel6);
-                }
-            } else if (comboBox3_item.equals("方法名称2")) {
-                if (comboBox4_item.equals("焊材牌号1")) {
-                    comboBox_items = searchForRule(comboBox6, ".*厚度3.*", boxModel6);
-                } else {
-                    comboBox_items = searchForRule(comboBox6, ".*厚度4.*", boxModel6);
-                }
-            } else {
-                comboBox_items = searchForRule(comboBox6, "无数据，请手动输入", boxModel6, true);
-            }
-            updateComboBoxModel(comboBox6, comboBox_items); //更新受影响的 下拉框内容
         }
     }
 
-    //焊接位置： 规则制定（暂不设约束）
-
-    //工件厚度 -> 接头： 规则制定
+    //-> 焊接位置： （暂不设约束）
     private void comboBox6ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String item = (String) comboBox6.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox9, "无可用接头", boxModel9, true); // 无可用数据 默认值
 
-            //非空处理
-            if (item == null) {
-                return;
-            }
-
-            if (item.equals("工件厚度1")) {
-                comboBox_items = searchForRule(comboBox9, ".*接头形式1.*", boxModel9);
-            } else if (item.equals("工件厚度2")) {
-                comboBox_items = searchForRule(comboBox9, ".*接头形式2.*", boxModel9);
-            } else if (item.equals("工件厚度3")) {
-                comboBox_items = searchForRule(comboBox9, ".*接头形式3.*", boxModel9);
-            } else if (item.equals("工件厚度4")) {
-                comboBox_items = searchForRule(comboBox9, ".*接头形式4.*", boxModel9);
-            }
-            updateComboBoxModel(comboBox9, comboBox_items); //更新受影响的 下拉框内容
         }
     }
 
-    //工件厚度 -> 坡口： 规则制定
-    private void comboBox9ItemStateChanged(ItemEvent e) {
+    //工件厚度 -> 接头： 规则制定
+    private void comboBox6_2ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String item = (String) comboBox6.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox8, "无可用坡口", boxModel8, true); // 无可用数据 默认值
+            comboBox6_item = (String) comboBox6.getSelectedItem();
 
-            //非空处理
-            if (item == null) {
-                return;
-            }
+            //按照规则推理后的 受影响的下拉框 模型内容
+            Object[] comboBox_items = searchForRule2(
+                    boxModel8,
+                    comboBox6_item,
+                    "app_weld_joint",
+                    "name",
+                    expert_workpiece_thickness_mapsList);
 
-            if (item.equals("工件厚度1")) {
-                comboBox_items = searchForRule(comboBox8, ".*坡口形式1.*", boxModel8);
-            } else if (item.equals("工件厚度2")) {
-                comboBox_items = searchForRule(comboBox8, ".*坡口形式2.*", boxModel8);
-            } else if (item.equals("工件厚度3")) {
-                comboBox_items = searchForRule(comboBox8, ".*坡口形式3.*", boxModel8);
-            } else if (item.equals("工件厚度4")) {
-                comboBox_items = searchForRule(comboBox8, ".*坡口形式4.*", boxModel8);
-            }
+            //更新模型
             updateComboBoxModel(comboBox8, comboBox_items); //更新受影响的 下拉框内容
         }
     }
 
+    //工件厚度 -> 坡口： 规则制定
+    private void comboBox6_3ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            comboBox6_item = (String) comboBox6.getSelectedItem();
+
+            //按照规则推理后的 受影响的下拉框 模型内容
+            Object[] comboBox_items = searchForRule2(
+                    boxModel9,
+                    comboBox6_item,
+                    "app_weld_joint",
+                    "name",
+                    expert_workpiece_thickness_mapsList);
+
+            //更新模型
+            updateComboBoxModel(comboBox9, comboBox_items); //更新受影响的 下拉框内容
+        }
+    }
+
     //热工艺： 规则制定（暂不设约束）
+    private void comboBox9ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+
+        }
+    }
 
     //焊接参数：规则生成
     private void generateProcessParameters() {
@@ -884,7 +850,7 @@ public class ExpertSystem extends JFrame {
         return searchForRule(comboBox, regex, model, false);
     }
 
-    //规则推理：返回推理后的 model 内容
+    //规则推理：具体规则 + 返回推理后的 model 内容数组
     private Object[] searchForRule2(ComboBoxModel model,
                                     String comboBox_item,
                                     String app,
@@ -916,7 +882,7 @@ public class ExpertSystem extends JFrame {
 
         //判断是否找到对应信息
         if (!flag) {
-            log.info("查询不到该应用信息");
+            log.info("查询不到该数据信息");
             return new Object[0];
         }
 
@@ -951,6 +917,12 @@ public class ExpertSystem extends JFrame {
     private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
         updateComboBoxModel(comboBox, comboBox_items, true);
     }
+
+
+
+
+
+
 
 
     /**
@@ -1076,7 +1048,7 @@ public class ExpertSystem extends JFrame {
             {
                 // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < panel1.getComponentCount(); i++) {
+                for(int i = 0; i < panel1.getComponentCount(); i++) {
                     Rectangle bounds = panel1.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1265,7 +1237,11 @@ public class ExpertSystem extends JFrame {
                 //---- comboBox6 ----
                 comboBox6.setEditable(true);
                 comboBox6.setSelectedIndex(-1);
-                comboBox6.addItemListener(e -> comboBox6ItemStateChanged(e));
+                comboBox6.addItemListener(e -> {
+			comboBox6ItemStateChanged(e);
+			comboBox6_2ItemStateChanged(e);
+			comboBox6_3ItemStateChanged(e);
+		});
                 panel4.add(comboBox6);
                 comboBox6.setBounds(135, 210, 275, 30);
 
@@ -1277,13 +1253,13 @@ public class ExpertSystem extends JFrame {
                 //---- comboBox8 ----
                 comboBox8.setSelectedIndex(-1);
                 panel4.add(comboBox8);
-                comboBox8.setBounds(285, 300, 125, 30);
+                comboBox8.setBounds(135, 300, 125, 30);
 
                 //---- comboBox9 ----
                 comboBox9.setSelectedIndex(-1);
                 comboBox9.addItemListener(e -> comboBox9ItemStateChanged(e));
                 panel4.add(comboBox9);
-                comboBox9.setBounds(135, 300, 125, 30);
+                comboBox9.setBounds(285, 300, 125, 30);
 
                 //---- comboBox10 ----
                 comboBox10.setEditable(true);
@@ -1472,7 +1448,7 @@ public class ExpertSystem extends JFrame {
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for (int i = 0; i < panel4.getComponentCount(); i++) {
+                    for(int i = 0; i < panel4.getComponentCount(); i++) {
                         Rectangle bounds = panel4.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1493,7 +1469,7 @@ public class ExpertSystem extends JFrame {
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for (int i = 0; i < panel2.getComponentCount(); i++) {
+                    for(int i = 0; i < panel2.getComponentCount(); i++) {
                         Rectangle bounds = panel2.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1513,7 +1489,7 @@ public class ExpertSystem extends JFrame {
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
-            for (int i = 0; i < contentPane.getComponentCount(); i++) {
+            for(int i = 0; i < contentPane.getComponentCount(); i++) {
                 Rectangle bounds = contentPane.getComponent(i).getBounds();
                 preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                 preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
