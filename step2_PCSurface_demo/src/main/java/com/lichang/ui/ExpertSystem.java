@@ -6,6 +6,7 @@ package com.lichang.ui;
 
 import java.awt.event.*;
 import javax.swing.border.*;
+
 import com.jgoodies.forms.factories.*;
 import com.lichang.utils.ExpertSystemUtil.ComboBoxUtil;
 import com.lichang.utils.LoggerUtil;
@@ -126,6 +127,7 @@ public class ExpertSystem extends JFrame {
 
     /**
      * Lable3 账户信息: 显示当前登录用户
+     *
      * @param username
      */
     private void label3Bind(String username) {
@@ -135,6 +137,7 @@ public class ExpertSystem extends JFrame {
 
     /**
      * MenuItem 用户设置:  切换用户
+     *
      * @param e
      */
     private void menuItem1ActionPerformed(ActionEvent e) {
@@ -146,6 +149,7 @@ public class ExpertSystem extends JFrame {
 
     /**
      * MenuItem 用户设置： 更改密码
+     *
      * @param e
      */
     private void menuItem2ActionPerformed(ActionEvent e) {
@@ -156,7 +160,7 @@ public class ExpertSystem extends JFrame {
             return;
         }
 
-        jDialog2 = new JDialog(this, "",true);
+        jDialog2 = new JDialog(this, "", true);
         changePasswordPanel = new JPanel();
         oldValidationTip = new JLabel();
         oldChangeFlag = false;
@@ -176,15 +180,15 @@ public class ExpertSystem extends JFrame {
         //旧密码提示
         JLabel oldPasswordTip = new JLabel("请输入旧密码: ");
         changePasswordPanel.add(oldPasswordTip);
-        oldPasswordTip.setBounds(40, 60, 110,30);
-        oldPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        oldPasswordTip.setBounds(40, 60, 110, 30);
+        oldPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //新密码提示
         JLabel newPasswordTip = new JLabel("请输入新密码: ");
         changePasswordPanel.add(newPasswordTip);
-        newPasswordTip.setBounds(40, 120, 110,30);
-        newPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        newPasswordTip.setBounds(40, 120, 110, 30);
+        newPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //旧密码
@@ -192,7 +196,7 @@ public class ExpertSystem extends JFrame {
         changePasswordPanel.add(oldPasswordField);
         oldPasswordField.setBounds(160, 60, 90, 30);
         oldPasswordField.setColumns(10);
-        oldPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        oldPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         //焦点监听：旧密码验证
         oldPasswordField.addFocusListener(new FocusListener() {
@@ -232,7 +236,7 @@ public class ExpertSystem extends JFrame {
         changePasswordPanel.add(newPasswordField);
         newPasswordField.setBounds(160, 120, 90, 30);
         newPasswordField.setColumns(10);
-        newPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        newPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         newPasswordField.addActionListener(new ActionListener() {
             @Override
@@ -243,7 +247,7 @@ public class ExpertSystem extends JFrame {
                         || (newPassword.charAt(0) < 'A' || newPassword.charAt(0) > 'z')
                         || (newPassword.charAt(0) > 'Z' && newPassword.charAt(0) < 'a')) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
-                }else {
+                } else {
                     if (oldChangeFlag) {
                         String password = newPasswordField.getText();
                         String table;
@@ -257,7 +261,7 @@ public class ExpertSystem extends JFrame {
                         ChangePassword.newPassword(table, username, password);
                         JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
                         jDialog2.dispose();
-                    }else {
+                    } else {
                         JOptionPane.showMessageDialog(jDialog2, "请先验证旧密码！", "提示", JOptionPane.WARNING_MESSAGE);
                     }
 
@@ -265,7 +269,7 @@ public class ExpertSystem extends JFrame {
             }
         });
 
-        jDialog2.setSize(400,250);
+        jDialog2.setSize(400, 250);
         jDialog2.setAlwaysOnTop(true);
         jDialog2.setLocationRelativeTo(null);
         jDialog2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -275,6 +279,7 @@ public class ExpertSystem extends JFrame {
 
     /**
      * 实时监测 按钮：点击跳转
+     *
      * @param e
      */
     private void button1ActionPerformed(ActionEvent e) {
@@ -283,6 +288,7 @@ public class ExpertSystem extends JFrame {
 
     /**
      * 历史统计与查询 按钮： 点击跳转
+     *
      * @param e
      */
     private void button2ActionPerformed(ActionEvent e) {
@@ -477,28 +483,13 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     *  按钮 事件触发
+     * 按钮 事件触发
      */
-    //自定义焊接参数
-    private void button9ActionPerformed(ActionEvent e) {
-        //使焊接参数的下拉框和文本域可选中并编辑
-        comboBox12.setEditable(true);
-        comboBox13.setEditable(true);
-        comboBox14.setEditable(true);
-        comboBox15.setEditable(true);
-        comboBox16.setEditable(true);
-
-        comboBox12.setEnabled(true);
-        comboBox13.setEnabled(true);
-        comboBox14.setEnabled(true);
-        comboBox15.setEnabled(true);
-        comboBox16.setEnabled(true);
-
-        textField1.setEditable(true);
-        textField2.setEditable(true);
-        textField3.setEditable(true);
-        textField4.setEditable(true);
-        textField5.setEditable(true);
+    //重设
+    private void button6ActionPerformed(ActionEvent e) {
+        initComboBox_fromDB(); //初始化下拉框
+//        initComboBox_fromTest();
+        getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
     }
 
     //生成焊接参数
@@ -534,11 +525,26 @@ public class ExpertSystem extends JFrame {
         generateProcessParameters(); //按照规则生成焊接参数
     }
 
-    //重设
-    private void button6ActionPerformed(ActionEvent e) {
-        initComboBox_fromDB(); //初始化下拉框
-//        initComboBox_fromTest();
-        getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
+    //自定义焊接参数
+    private void button9ActionPerformed(ActionEvent e) {
+        //使焊接参数的下拉框和文本域可选中并编辑
+        comboBox12.setEditable(true);
+        comboBox13.setEditable(true);
+        comboBox14.setEditable(true);
+        comboBox15.setEditable(true);
+        comboBox16.setEditable(true);
+
+        comboBox12.setEnabled(true);
+        comboBox13.setEnabled(true);
+        comboBox14.setEnabled(true);
+        comboBox15.setEnabled(true);
+        comboBox16.setEnabled(true);
+
+        textField1.setEditable(true);
+        textField2.setEditable(true);
+        textField3.setEditable(true);
+        textField4.setEditable(true);
+        textField5.setEditable(true);
     }
 
     /**
@@ -550,36 +556,15 @@ public class ExpertSystem extends JFrame {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             comboBox1_item = (String) comboBox1.getSelectedItem(); //所选内容
 
-//            for (Map<String, Object> map : expert_base_metal_mapsList) {
-//
-//            }
+            // 按照规则推理后的 受影响的下拉框 模型内容
+            Object[] comboBox_items = searchForRule2(
+                    boxModel2,
+                    comboBox1_item,
+                    "app_base_metal",
+                    "name",
+                    expert_base_metal_mapsList);
 
-
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-
-            //开始时会触发一下，非空处理
-            if (comboBox1_item == null) {
-                return;
-            }
-
-
-            switch (comboBox1_item) {
-                case "母材1":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*", boxModel2);
-                    break;
-                case "母材2":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材1|母材2).*", boxModel2);
-                    break;
-                case "母材3":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*", boxModel2);
-                    break;
-                case "母材4":
-                    comboBox_items = searchForRule(comboBox2, ".*(母材3|母材4).*", boxModel2);
-                    break;
-                default:
-                    comboBox_items = searchForRule(comboBox2, "无可用母材", boxModel2, true);
-                    break;
-            }
+            //更新模型
             updateComboBoxModel(comboBox2, comboBox_items); //更新受影响的 下拉框内容
         }
     }
@@ -587,29 +572,39 @@ public class ExpertSystem extends JFrame {
     //母材选取B + 母材选取A -> 焊接方法: 规则制定
     private void comboBox2ItemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-            String comboBox1_item = (String) comboBox1.getSelectedItem();
-            String comboBox2_item = (String) comboBox2.getSelectedItem();
-            Object[] comboBox_items; // 按照规则推理后的 受影响的下拉框 模型内容
-            comboBox_items = searchForRule(comboBox3, "无可用方法", boxModel3, true); // 无可用数据 默认值
+            comboBox1_item = (String) comboBox1.getSelectedItem();
+            comboBox2_item = (String) comboBox2.getSelectedItem();
 
-            //非空处理
-            if (comboBox1_item == null || comboBox2_item == null) {
-                return;
+            // 按照规则推理后的 受影响的下拉框 模型内容
+            Object[] comboBox_items_from1 = searchForRule2(
+                    boxModel3,
+                    comboBox1_item,
+                    "app_weld_method",
+                    "name",
+                    expert_base_metal_mapsList);
+
+
+            Object[] comboBox_items_from2 = searchForRule2(
+                    boxModel3,
+                    comboBox2_item,
+                    "app_weld_method",
+                    "name",
+                    expert_base_metal_mapsList);
+
+            ArrayList<String> comboBox_items_list = new ArrayList<>(); //存储交集数据
+
+            //寻找二者交集（母材A与母材B 的app_weld_method交集）
+            for (Object comboBox1Item : comboBox_items_from1) {
+                for (Object comboBox2Item : comboBox_items_from2) {
+                    if (comboBox1Item.equals(comboBox2Item)) {
+                        comboBox_items_list.add((String) comboBox1Item);
+                        break;
+                    }
+                }
             }
 
-            if (comboBox1_item.equals(comboBox2_item)) {
-                if (comboBox1_item.equals("母材1") || comboBox1_item.equals("母材2")) {
-                    comboBox_items = searchForRule(comboBox3, ".*方法名称1.*", boxModel3);
-                } else if (comboBox1_item.equals("母材3") || comboBox1_item.equals("母材4")) {
-                    comboBox_items = searchForRule(comboBox3, ".*方法名称3.*", boxModel3);
-                }
-            } else if (!comboBox1_item.equals(comboBox2_item)) {
-                if (comboBox1_item.equals("母材1") || comboBox1_item.equals("母材2")) {
-                    comboBox_items = searchForRule(comboBox3, ".*方法名称2.*", boxModel3);
-                } else if (comboBox1_item.equals("母材3") || comboBox1_item.equals("母材4")) {
-                    comboBox_items = searchForRule(comboBox3, ".*方法名称4.*", boxModel3);
-                }
-            }
+            Object[] comboBox_items = comboBox_items_list.toArray();
+
             updateComboBoxModel(comboBox3, comboBox_items); //更新受影响的 下拉框内容
         }
     }
@@ -826,7 +821,7 @@ public class ExpertSystem extends JFrame {
         for (Map<String, Object> expert_process_parameters_map : expert_process_parameters_mapsList) {
             String seq_col = (String) expert_process_parameters_map.get("seq");
 
-            if (Pattern.matches(".*"+ seq +".*", seq_col)) {
+            if (Pattern.matches(".*" + seq + ".*", seq_col)) {
                 String current_col = (String) expert_process_parameters_map.get("current");
                 String voltage_arc_col = (String) expert_process_parameters_map.get("voltage_arc");
                 String speed_col = (String) expert_process_parameters_map.get("speed");
@@ -856,10 +851,12 @@ public class ExpertSystem extends JFrame {
     }
 
     //规则推理：返回推理后的 model 内容
+    //TODO: 这个方法的comboBox是无效的，可以去掉
+    //标记时间：2019/12/9 22:23  预解决时间：
     private Object[] searchForRule(JComboBox comboBox, String regex, ComboBoxModel model, boolean flag) {
         ArrayList<String> comboBox_items_list = new ArrayList<>();
 
-        if(model == null || model.getSize() == 0) {
+        if (model == null || model.getSize() == 0) {
             return new Object[0];  //JComboBox加载时，会先触发一次事件，此时model还是null，所以要判断一下
             //确切说， JComboBox的 addItem方法，也会触发 itemStateChanged 事件。
         }
@@ -867,13 +864,12 @@ public class ExpertSystem extends JFrame {
         //flag 为真：用于给与model特定值。（特定值由regex给值），用于下拉框默认值 或 无值。
         if (flag) {
             comboBox_items_list.add(regex);
-        }
-        else {
+        } else {
             //遍历原模型
             for (int i = 0; i < model.getSize(); i++) {
                 String item = (String) model.getElementAt(i);
                 //规则（通过正则表达式匹配内容）
-                if (Pattern.matches(regex, item)){
+                if (Pattern.matches(regex, item)) {
                     comboBox_items_list.add(item);
                 }
             }
@@ -888,13 +884,65 @@ public class ExpertSystem extends JFrame {
         return searchForRule(comboBox, regex, model, false);
     }
 
+    //规则推理：返回推理后的 model 内容
+    private Object[] searchForRule2(ComboBoxModel model,
+                                    String comboBox_item,
+                                    String app,
+                                    String colName,
+                                    List<Map<String, Object>> expert_mapsList) {
+        /*
+            参数说明：
+                model： 受影响的下拉框原模型（即包含所有选项的初始模型）
+                comboBox_item：当前所选下拉框的选项
+                app：当前下拉框内容的 app列（即应用范围）
+                colName：当前下拉框内容的 识别标识列（即comboBox_item所在的列）。如name列
+                expert_mapsList：当前下拉框内容 的表名
+         */
+
+        //非空处理
+        if (model == null || model.getSize() == 0) {
+            return new Object[0];  //JComboBox加载时，会先触发一次事件，此时model还是null，所以要判断一下
+            //确切说， JComboBox的 addItem方法，也会触发 itemStateChanged 事件。
+        }
+
+        //找到app（应用范围）
+        boolean flag = false;
+        for (Map<String, Object> map : expert_mapsList) {
+            if (map.get(colName).equals(comboBox_item)) {
+                app = (String) map.get(app);
+                flag = true;
+            }
+        }
+
+        //判断是否找到对应信息
+        if (!flag) {
+            log.info("查询不到该应用信息");
+            return new Object[0];
+        }
+
+        ArrayList<String> comboBox_items_list = new ArrayList<>(); //存储已找到的数据
+
+        //遍历原模型
+        for (int i = 0; i < model.getSize(); i++) {
+            String item = (String) model.getElementAt(i);
+            //对受影响的原模型，依次遍历，通过正则表达式，将每个选项与app的内容进行匹配
+            if (Pattern.matches(".*" + item + ".*", app)) {
+                comboBox_items_list.add(item);
+            }
+        }
+
+        Object[] comboBox_items = comboBox_items_list.toArray();
+        return comboBox_items;
+    }
+
     //规则推理：更新下拉框 model
     private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items, boolean flag) {
         DefaultComboBoxModel<Object> boxModel = new DefaultComboBoxModel<>(comboBox_items);
         comboBox.setModel(boxModel);
+
         if (flag) {
             comboBox.setSelectedIndex(-1);
-        }else {
+        } else {
             comboBox.setSelectedIndex(0);
         }
     }
@@ -905,22 +953,8 @@ public class ExpertSystem extends JFrame {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     *  JFormDesigner自带，定义自生成
+     * JFormDesigner自带，定义自生成
      */
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -1042,7 +1076,7 @@ public class ExpertSystem extends JFrame {
             {
                 // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel1.getComponentCount(); i++) {
+                for (int i = 0; i < panel1.getComponentCount(); i++) {
                     Rectangle bounds = panel1.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1438,7 +1472,7 @@ public class ExpertSystem extends JFrame {
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel4.getComponentCount(); i++) {
+                    for (int i = 0; i < panel4.getComponentCount(); i++) {
                         Rectangle bounds = panel4.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1459,7 +1493,7 @@ public class ExpertSystem extends JFrame {
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel2.getComponentCount(); i++) {
+                    for (int i = 0; i < panel2.getComponentCount(); i++) {
                         Rectangle bounds = panel2.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1479,7 +1513,7 @@ public class ExpertSystem extends JFrame {
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
-            for(int i = 0; i < contentPane.getComponentCount(); i++) {
+            for (int i = 0; i < contentPane.getComponentCount(); i++) {
                 Rectangle bounds = contentPane.getComponent(i).getBounds();
                 preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                 preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
