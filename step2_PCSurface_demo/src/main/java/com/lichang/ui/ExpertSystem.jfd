@@ -479,9 +479,9 @@ new FormModel {
 						"selectedIndex": -1
 						"enabled": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 145
+						"width": 160
 						"height": 30
-						"x": 635
+						"x": 620
 						"y": 165
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -489,9 +489,9 @@ new FormModel {
 						"selectedIndex": -1
 						"enabled": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 145
+						"width": 160
 						"height": 30
-						"x": 635
+						"x": 620
 						"y": 210
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -499,9 +499,9 @@ new FormModel {
 						"selectedIndex": -1
 						"enabled": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 145
+						"width": 160
 						"height": 30
-						"x": 635
+						"x": 620
 						"y": 255
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -509,9 +509,9 @@ new FormModel {
 						"selectedIndex": -1
 						"enabled": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 145
+						"width": 160
 						"height": 30
-						"x": 635
+						"x": 620
 						"y": 300
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
@@ -519,9 +519,9 @@ new FormModel {
 						"selectedIndex": -1
 						"enabled": false
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 145
+						"width": 160
 						"height": 30
-						"x": 635
+						"x": 620
 						"y": 345
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -544,24 +544,9 @@ new FormModel {
 						"border": #SoftBevelBorder0
 						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 170
+						"width": 160
 						"height": 30
 						"x": 620
-						"y": 120
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label21"
-						"text": "调整后实际值"
-						"background": #Color0
-						"opaque": true
-						"horizontalTextPosition": 0
-						"horizontalAlignment": 0
-						"border": #SoftBevelBorder0
-						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 140
-						"height": 30
-						"x": 790
 						"y": 120
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
@@ -736,6 +721,16 @@ new FormModel {
 						"height": 30
 						"x": 850
 						"y": 390
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button16"
+						"text": "调整实际值"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"width": 145
+						"height": 30
+						"x": 785
+						"y": 120
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "工艺流程设计"

@@ -38,6 +38,8 @@ import java.util.regex.Pattern;
 ////7. 下拉框 更新，初始化时会触发事件，导致选择了空模型
 ////8. 流程焊接规则的改变：根据seq进行处理
 //9. 产品选择、添加产品 等  相关内容
+//10. 调整后实际值的选项，添加管理权限
+
 
 /**
  * @author unknown
@@ -883,13 +885,6 @@ public class ExpertSystem extends JFrame {
 
 
 
-
-
-
-
-
-
-
     /**
      * JFormDesigner自带，定义自生成
      */
@@ -944,7 +939,6 @@ public class ExpertSystem extends JFrame {
         comboBox16 = new JComboBox();
         button6 = new JButton();
         label20 = new JLabel();
-        label21 = new JLabel();
         textField1 = new JTextField();
         textField2 = new JTextField();
         textField3 = new JTextField();
@@ -962,6 +956,7 @@ public class ExpertSystem extends JFrame {
         button13 = new JButton();
         button14 = new JButton();
         button15 = new JButton();
+        button16 = new JButton();
         panel2 = new JPanel();
 
         //======== this ========
@@ -1313,31 +1308,31 @@ public class ExpertSystem extends JFrame {
                 comboBox12.setSelectedIndex(-1);
                 comboBox12.setEnabled(false);
                 panel4.add(comboBox12);
-                comboBox12.setBounds(635, 165, 145, 30);
+                comboBox12.setBounds(620, 165, 160, 30);
 
                 //---- comboBox13 ----
                 comboBox13.setSelectedIndex(-1);
                 comboBox13.setEnabled(false);
                 panel4.add(comboBox13);
-                comboBox13.setBounds(635, 210, 145, 30);
+                comboBox13.setBounds(620, 210, 160, 30);
 
                 //---- comboBox14 ----
                 comboBox14.setSelectedIndex(-1);
                 comboBox14.setEnabled(false);
                 panel4.add(comboBox14);
-                comboBox14.setBounds(635, 255, 145, 30);
+                comboBox14.setBounds(620, 255, 160, 30);
 
                 //---- comboBox15 ----
                 comboBox15.setSelectedIndex(-1);
                 comboBox15.setEnabled(false);
                 panel4.add(comboBox15);
-                comboBox15.setBounds(635, 300, 145, 30);
+                comboBox15.setBounds(620, 300, 160, 30);
 
                 //---- comboBox16 ----
                 comboBox16.setSelectedIndex(-1);
                 comboBox16.setEnabled(false);
                 panel4.add(comboBox16);
-                comboBox16.setBounds(635, 345, 145, 30);
+                comboBox16.setBounds(620, 345, 160, 30);
 
                 //---- button6 ----
                 button6.setText("\u91cd\u8bbe");
@@ -1354,18 +1349,7 @@ public class ExpertSystem extends JFrame {
                 label20.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label20.setFont(label20.getFont().deriveFont(label20.getFont().getSize() + 2f));
                 panel4.add(label20);
-                label20.setBounds(620, 120, 170, 30);
-
-                //---- label21 ----
-                label21.setText("\u8c03\u6574\u540e\u5b9e\u9645\u503c");
-                label21.setBackground(new Color(204, 204, 204));
-                label21.setOpaque(true);
-                label21.setHorizontalTextPosition(SwingConstants.CENTER);
-                label21.setHorizontalAlignment(SwingConstants.CENTER);
-                label21.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 2f));
-                panel4.add(label21);
-                label21.setBounds(790, 120, 140, 30);
+                label20.setBounds(620, 120, 160, 30);
 
                 //---- textField1 ----
                 textField1.setEditable(false);
@@ -1473,6 +1457,12 @@ public class ExpertSystem extends JFrame {
                 button15.addActionListener(e -> button15ActionPerformed(e));
                 panel4.add(button15);
                 button15.setBounds(850, 390, 80, 30);
+
+                //---- button16 ----
+                button16.setText("\u8c03\u6574\u5b9e\u9645\u503c");
+                button16.setFont(button16.getFont().deriveFont(button16.getFont().getSize() + 2f));
+                panel4.add(button16);
+                button16.setBounds(785, 120, 145, 30);
 
                 {
                     // compute preferred size
@@ -1584,7 +1574,6 @@ public class ExpertSystem extends JFrame {
     private JComboBox comboBox16;
     private JButton button6;
     private JLabel label20;
-    private JLabel label21;
     private JTextField textField1;
     private JTextField textField2;
     private JTextField textField3;
@@ -1602,6 +1591,7 @@ public class ExpertSystem extends JFrame {
     private JButton button13;
     private JButton button14;
     private JButton button15;
+    private JButton button16;
     private JPanel panel2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
