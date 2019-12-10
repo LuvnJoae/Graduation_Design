@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
 ////5. 制定焊接规则
 ////6. 自定义焊接参数的实现
 ////7. 下拉框 更新，初始化时会触发事件，导致选择了空模型
-//8. 流程焊接规则的改变：根据seq进行处理
+////8. 流程焊接规则的改变：根据seq进行处理
+//9. 添加工件编号，根据编号进行流程选择项的保存
 
 /**
  * @author unknown
@@ -816,40 +817,6 @@ public class ExpertSystem extends JFrame {
         updateComboBoxModel(comboBox15, extension_list.toArray(), false);
     }
 
-    //规则推理：返回推理后的 model 内容
-    //TODO: 这个方法的comboBox是无效的，可以去掉
-    //标记时间：2019/12/9 22:23  预解决时间：
-    private Object[] searchForRule(JComboBox comboBox, String regex, ComboBoxModel model, boolean flag) {
-        ArrayList<String> comboBox_items_list = new ArrayList<>();
-
-        if (model == null || model.getSize() == 0) {
-            return new Object[0];  //JComboBox加载时，会先触发一次事件，此时model还是null，所以要判断一下
-            //确切说， JComboBox的 addItem方法，也会触发 itemStateChanged 事件。
-        }
-
-        //flag 为真：用于给与model特定值。（特定值由regex给值），用于下拉框默认值 或 无值。
-        if (flag) {
-            comboBox_items_list.add(regex);
-        } else {
-            //遍历原模型
-            for (int i = 0; i < model.getSize(); i++) {
-                String item = (String) model.getElementAt(i);
-                //规则（通过正则表达式匹配内容）
-                if (Pattern.matches(regex, item)) {
-                    comboBox_items_list.add(item);
-                }
-            }
-        }
-
-        Object[] comboBox_items = comboBox_items_list.toArray();
-        return comboBox_items;
-    }
-
-    //重载
-    private Object[] searchForRule(JComboBox comboBox, String regex, ComboBoxModel model) {
-        return searchForRule(comboBox, regex, model, false);
-    }
-
     //规则推理：具体规则 + 返回推理后的 model 内容数组
     private Object[] searchForRule2(ComboBoxModel model,
                                     String comboBox_item,
@@ -989,6 +956,8 @@ public class ExpertSystem extends JFrame {
         button7 = new JButton();
         button8 = new JButton();
         button9 = new JButton();
+        label22 = new JLabel();
+        comboBox17 = new JComboBox();
         panel2 = new JPanel();
 
         //======== this ========
@@ -1228,14 +1197,12 @@ public class ExpertSystem extends JFrame {
                 comboBox4.setBounds(135, 120, 275, 30);
 
                 //---- comboBox5 ----
-                comboBox5.setEditable(true);
                 comboBox5.setSelectedIndex(-1);
                 comboBox5.addItemListener(e -> comboBox5ItemStateChanged(e));
                 panel4.add(comboBox5);
                 comboBox5.setBounds(135, 165, 275, 30);
 
                 //---- comboBox6 ----
-                comboBox6.setEditable(true);
                 comboBox6.setSelectedIndex(-1);
                 comboBox6.addItemListener(e -> {
 			comboBox6ItemStateChanged(e);
@@ -1262,7 +1229,6 @@ public class ExpertSystem extends JFrame {
                 comboBox9.setBounds(285, 300, 125, 30);
 
                 //---- comboBox10 ----
-                comboBox10.setEditable(true);
                 comboBox10.setSelectedIndex(-1);
                 panel4.add(comboBox10);
                 comboBox10.setBounds(135, 345, 275, 30);
@@ -1282,7 +1248,7 @@ public class ExpertSystem extends JFrame {
                 label14.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label14.setFont(label14.getFont().deriveFont(label14.getFont().getSize() + 1f));
                 panel4.add(label14);
-                label14.setBounds(520, 30, 410, 30);
+                label14.setBounds(520, 75, 410, 30);
 
                 //---- label15 ----
                 label15.setText("\u710a\u63a5\u7535\u6d41");
@@ -1293,7 +1259,7 @@ public class ExpertSystem extends JFrame {
                 label15.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label15.setFont(label15.getFont().deriveFont(label15.getFont().getSize() + 1f));
                 panel4.add(label15);
-                label15.setBounds(520, 120, 85, 30);
+                label15.setBounds(520, 165, 85, 30);
 
                 //---- label16 ----
                 label16.setText("\u710a\u63a5\u901f\u5ea6");
@@ -1304,7 +1270,7 @@ public class ExpertSystem extends JFrame {
                 label16.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label16.setFont(label16.getFont().deriveFont(label16.getFont().getSize() + 1f));
                 panel4.add(label16);
-                label16.setBounds(520, 210, 85, 30);
+                label16.setBounds(520, 255, 85, 30);
 
                 //---- label17 ----
                 label17.setText("\u710a\u63a5\u7535\u538b");
@@ -1315,7 +1281,7 @@ public class ExpertSystem extends JFrame {
                 label17.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label17.setFont(label17.getFont().deriveFont(label17.getFont().getSize() + 1f));
                 panel4.add(label17);
-                label17.setBounds(520, 165, 85, 30);
+                label17.setBounds(520, 210, 85, 30);
 
                 //---- label18 ----
                 label18.setText("\u5e72\u4f38\u51fa\u91cf");
@@ -1326,7 +1292,7 @@ public class ExpertSystem extends JFrame {
                 label18.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label18.setFont(label18.getFont().deriveFont(label18.getFont().getSize() + 1f));
                 panel4.add(label18);
-                label18.setBounds(520, 255, 85, 30);
+                label18.setBounds(520, 300, 85, 30);
 
                 //---- label19 ----
                 label19.setText("\u5176\u5b83");
@@ -1337,48 +1303,48 @@ public class ExpertSystem extends JFrame {
                 label19.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label19.setFont(label19.getFont().deriveFont(label19.getFont().getSize() + 1f));
                 panel4.add(label19);
-                label19.setBounds(520, 300, 85, 30);
+                label19.setBounds(520, 345, 85, 30);
 
                 //---- comboBox12 ----
                 comboBox12.setSelectedIndex(-1);
                 comboBox12.setEnabled(false);
                 panel4.add(comboBox12);
-                comboBox12.setBounds(635, 120, 140, 30);
+                comboBox12.setBounds(635, 165, 140, 30);
 
                 //---- comboBox13 ----
                 comboBox13.setSelectedIndex(-1);
                 comboBox13.setEnabled(false);
                 panel4.add(comboBox13);
-                comboBox13.setBounds(635, 165, 140, 30);
+                comboBox13.setBounds(635, 210, 140, 30);
 
                 //---- comboBox14 ----
                 comboBox14.setSelectedIndex(-1);
                 comboBox14.setEnabled(false);
                 panel4.add(comboBox14);
-                comboBox14.setBounds(635, 210, 140, 30);
+                comboBox14.setBounds(635, 255, 140, 30);
 
                 //---- comboBox15 ----
                 comboBox15.setSelectedIndex(-1);
                 comboBox15.setEnabled(false);
                 panel4.add(comboBox15);
-                comboBox15.setBounds(635, 255, 140, 30);
+                comboBox15.setBounds(635, 300, 140, 30);
 
                 //---- comboBox16 ----
                 comboBox16.setSelectedIndex(-1);
                 comboBox16.setEnabled(false);
                 panel4.add(comboBox16);
-                comboBox16.setBounds(635, 300, 140, 30);
+                comboBox16.setBounds(635, 345, 140, 30);
 
                 //---- button5 ----
                 button5.setText("\u4fdd\u5b58");
                 panel4.add(button5);
-                button5.setBounds(865, 390, 65, 30);
+                button5.setBounds(800, 30, 65, 30);
 
                 //---- button6 ----
                 button6.setText("\u91cd\u8bbe");
                 button6.addActionListener(e -> button6ActionPerformed(e));
                 panel4.add(button6);
-                button6.setBounds(865, 355, 65, 30);
+                button6.setBounds(870, 30, 65, 30);
 
                 //---- label20 ----
                 label20.setText("\u5efa\u8bae\u503c");
@@ -1389,7 +1355,7 @@ public class ExpertSystem extends JFrame {
                 label20.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label20.setFont(label20.getFont().deriveFont(label20.getFont().getSize() + 1f));
                 panel4.add(label20);
-                label20.setBounds(635, 75, 140, 30);
+                label20.setBounds(635, 120, 140, 30);
 
                 //---- label21 ----
                 label21.setText("\u8c03\u6574\u540e\u5b9e\u9645\u503c");
@@ -1400,32 +1366,32 @@ public class ExpertSystem extends JFrame {
                 label21.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
                 label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 1f));
                 panel4.add(label21);
-                label21.setBounds(800, 75, 130, 30);
+                label21.setBounds(800, 120, 130, 30);
 
                 //---- textField1 ----
                 textField1.setEditable(false);
                 panel4.add(textField1);
-                textField1.setBounds(800, 120, 130, 30);
+                textField1.setBounds(800, 165, 130, 30);
 
                 //---- textField2 ----
                 textField2.setEditable(false);
                 panel4.add(textField2);
-                textField2.setBounds(800, 165, 130, 30);
+                textField2.setBounds(800, 210, 130, 30);
 
                 //---- textField3 ----
                 textField3.setEditable(false);
                 panel4.add(textField3);
-                textField3.setBounds(800, 210, 130, 30);
+                textField3.setBounds(800, 255, 130, 30);
 
                 //---- textField4 ----
                 textField4.setEditable(false);
                 panel4.add(textField4);
-                textField4.setBounds(800, 255, 130, 30);
+                textField4.setBounds(800, 300, 130, 30);
 
                 //---- textField5 ----
                 textField5.setEditable(false);
                 panel4.add(textField5);
-                textField5.setBounds(800, 300, 130, 30);
+                textField5.setBounds(800, 345, 130, 30);
 
                 //---- button7 ----
                 button7.setText("\u751f\u6210\u710a\u63a5\u53c2\u6570");
@@ -1437,13 +1403,30 @@ public class ExpertSystem extends JFrame {
                 button8.setText("test");
                 button8.addActionListener(e -> button8ActionPerformed(e));
                 panel4.add(button8);
-                button8.setBounds(new Rectangle(new Point(435, 390), button8.getPreferredSize()));
+                button8.setBounds(new Rectangle(new Point(440, 395), button8.getPreferredSize()));
 
                 //---- button9 ----
                 button9.setText("\u81ea\u5b9a\u4e49\u710a\u63a5\u53c2\u6570");
                 button9.addActionListener(e -> button9ActionPerformed(e));
                 panel4.add(button9);
                 button9.setBounds(645, 390, 125, 30);
+
+                //---- label22 ----
+                label22.setText("\u4ea7\u54c1\u9009\u62e9");
+                label22.setBackground(new Color(204, 204, 204));
+                label22.setOpaque(true);
+                label22.setHorizontalTextPosition(SwingConstants.CENTER);
+                label22.setHorizontalAlignment(SwingConstants.CENTER);
+                label22.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 1f));
+                panel4.add(label22);
+                label22.setBounds(520, 30, 85, 30);
+
+                //---- comboBox17 ----
+                comboBox17.setSelectedIndex(-1);
+                comboBox17.setEnabled(false);
+                panel4.add(comboBox17);
+                comboBox17.setBounds(635, 30, 140, 30);
 
                 {
                     // compute preferred size
@@ -1565,6 +1548,8 @@ public class ExpertSystem extends JFrame {
     private JButton button7;
     private JButton button8;
     private JButton button9;
+    private JLabel label22;
+    private JComboBox comboBox17;
     private JPanel panel2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
