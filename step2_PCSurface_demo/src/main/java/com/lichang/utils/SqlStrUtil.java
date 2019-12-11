@@ -24,7 +24,7 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql1(String table) {
-        log.debug("查询Sql合成1：" + table);
+        log.debug("查询：Sql合成1：" + table);
         String sqlStr = "select * from "
                 + table
                 + " where username= ? and password= ?";
@@ -48,7 +48,7 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql2(String table) {
-        log.debug("查询Sql合成2：" + table);
+        log.debug("查询：Sql合成2：" + table);
         String sqlStr = "select * from "
                 + table
                 + " where num = ?";
@@ -71,7 +71,7 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql3(String table) {
-        log.debug("修改Sql合成3：" + table);
+        log.debug("修改：Sql合成3：" + table);
         String sqlStr = "update "
                 + table
                 + " set password = ?"
@@ -96,7 +96,7 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql4(String table) {
-        log.debug("修改Sql合成4：" + table);
+        log.debug("查询：Sql合成4：" + table);
         String sqlStr = "select count(id) from "
                 + table;
         return sqlStr;
@@ -110,9 +110,92 @@ public class SqlStrUtil {
      * @return
      */
     public static String generateSql5(String table) {
-        log.debug("修改Sql合成5：" + table);
+        log.debug("查询：Sql合成5：" + table);
         String sqlStr = "select * from "
                 + table;
         return sqlStr;
+    }
+
+    /**
+     *  合成Sql 语句6： 插入新记录
+     * @param table
+     * @return
+     */
+    public static String generateSql6(String table) {
+        log.debug("插入：Sql合成6：" + table);
+        String sqlStr = "insert into "
+                + table
+                + " (name, " +
+                "base_metal_a, " +
+                "base_metal_b, " +
+                "weld_method, " +
+                "weld_metal, " +
+                "auxiliary_materials, " +
+                "workpiece_thickness, " +
+                "weld_joint_joint, " +
+                "weld_joint_groove, " +
+                "weld_joint_weldposition, " +
+                "thermal_parameters, " +
+                "extra_1, " +
+                "current_advice, " +
+                "voltage_arc_advice, " +
+                "speed_advice, " +
+                "extension_advice, " +
+                "extra_2, " +
+                "current_practical, " +
+                "voltage_arc_practical, " +
+                "speed_practical, " +
+                "extension_practical) "
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return sqlStr;
+    }
+
+    public static List<Object> generateList6(String name,
+                                             String base_metal_a,
+                                             String base_metal_b,
+                                             String weld_method,
+                                             String weld_metal,
+                                             String auxiliary_materials,
+                                             String workpiece_thickness,
+                                             String weld_joint_joint,
+                                             String weld_joint_groove,
+                                             String weld_joint_weldposition,
+                                             String thermal_parameters,
+                                             String extra_1,
+                                             String current_advice,
+                                             String voltage_arc_advice,
+                                             String speed_advice,
+                                             String extension_advice,
+                                             String extra_2,
+                                             String current_practical,
+                                             String voltage_arc_practical,
+                                             String speed_practical,
+                                             String extension_practical
+                                             ) {
+        log.debug("插入Sql的params合成 ");
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(name);
+        paramsList.add(base_metal_a);
+        paramsList.add(base_metal_b);
+        paramsList.add(weld_method);
+        paramsList.add(weld_metal);
+        paramsList.add(auxiliary_materials);
+        paramsList.add(workpiece_thickness);
+        paramsList.add(weld_joint_joint);
+        paramsList.add(weld_joint_groove);
+        paramsList.add(weld_joint_weldposition);
+        paramsList.add(thermal_parameters);
+        paramsList.add(extra_1);
+        paramsList.add(current_advice);
+        paramsList.add(voltage_arc_advice);
+        paramsList.add(speed_advice);
+        paramsList.add(extension_advice);
+        paramsList.add(extra_2);
+        paramsList.add(current_practical);
+        paramsList.add(voltage_arc_practical);
+        paramsList.add(speed_practical);
+        paramsList.add(extension_practical);
+
+        return paramsList; // 占位符参数列表
     }
 }

@@ -113,9 +113,15 @@ public class JdbcTemplateUtil {
      */
     public static boolean update(String sqlStr, List<Object> paramsList) {
         log.debug("插入、 修改、 删除");
-        int updateCount = template.update(sqlStr, paramsList.toArray());
 
-        log.debug(updateCount);
+        int updateCount = 0;
+
+        try {
+            updateCount = template.update(sqlStr, paramsList.toArray());
+            log.debug(updateCount);
+        } catch (DataAccessException e) {
+            log.error("插入出错", e);
+        }
 
         if (updateCount > 0) {
             return true;

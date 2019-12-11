@@ -7,17 +7,12 @@ package com.lichang.ui;
 import java.awt.event.*;
 import javax.swing.border.*;
 
-import com.jgoodies.forms.factories.*;
-import com.lichang.utils.ExpertSystemUtil.ComboBoxUtil;
+import com.lichang.utils.ExpertSystemUtil.ProcessDesign;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
 import org.apache.log4j.Logger;
-import org.jfree.chart.JFreeChart;
-import org.junit.Test;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +34,8 @@ import java.util.regex.Pattern;
 ////8. 流程焊接规则的改变：根据seq进行处理
 //9. 产品选择、添加产品 等  相关内容
 //10. 调整后实际值的选项，添加管理权限
+//11. 取消按钮的实现（点击后，全部恢复不可选定状态）
+////12. 出参 对于 保存的点击约束
 
 
 /**
@@ -100,6 +97,20 @@ public class ExpertSystem extends JFrame {
     String comboBox8_item;
     String comboBox9_item;
     String comboBox10_item;
+    String comboBox11_item;
+    String comboBox12_item;
+    String comboBox13_item;
+    String comboBox14_item;
+    String comboBox15_item;
+    String comboBox16_item;
+
+    //实际值
+    String textField1_item;
+    String textField2_item;
+    String textField3_item;
+    String textField4_item;
+    String textField6_item;
+
 
     //无参构造
     public ExpertSystem() {
@@ -300,18 +311,91 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * ComboBox 下拉框连接数据库
+     * TextField 文本框 相关操作
      */
+    //文本框 清空数据
+    private void emptyTextField() {
+        textField1.removeAll();
+        textField2.removeAll();
+        textField3.removeAll();
+        textField4.removeAll();
+    }
+
+    //文本框 enableFalse
+    private void enableFalseTextField() {
+        textField1.setEnabled(false);
+        textField2.setEnabled(false);
+        textField3.setEnabled(false);
+        textField4.setEnabled(false);
+    }
+
+    /**
+     * ComboBox 下拉框 连接数据库
+     */
+    //下拉框 enable
+    private void enableComboBox() {
+        comboBox1.setEnabled(true);
+        comboBox2.setEnabled(true);
+        comboBox3.setEnabled(true);
+        comboBox4.setEnabled(true);
+        comboBox5.setEnabled(true);
+        comboBox6.setEnabled(true);
+        comboBox7.setEnabled(true);
+        comboBox8.setEnabled(true);
+        comboBox9.setEnabled(true);
+        comboBox10.setEnabled(true);
+    }
+
+    //下拉框 enableFalse
+    private void enableFalseComboBox() {
+        comboBox1.setEnabled(false);
+        comboBox2.setEnabled(false);
+        comboBox3.setEnabled(false);
+        comboBox4.setEnabled(false);
+        comboBox5.setEnabled(false);
+        comboBox6.setEnabled(false);
+        comboBox7.setEnabled(false);
+        comboBox8.setEnabled(false);
+        comboBox9.setEnabled(false);
+        comboBox10.setEnabled(false);
+        comboBox11.setEnabled(false);
+        comboBox12.setEnabled(false);
+        comboBox13.setEnabled(false);
+        comboBox14.setEnabled(false);
+        comboBox15.setEnabled(false);
+        comboBox16.setEnabled(false);
+    }
+
+    //下拉框 清空原模型数据
+    private void emptyComboBox() {
+        comboBox1.removeAllItems();
+        comboBox2.removeAllItems();
+        comboBox3.removeAllItems();
+        comboBox4.removeAllItems();
+        comboBox5.removeAllItems();
+        comboBox6.removeAllItems();
+        comboBox7.removeAllItems();
+        comboBox8.removeAllItems();
+        comboBox9.removeAllItems();
+        comboBox10.removeAllItems();
+        comboBox11.removeAllItems();
+        comboBox12.removeAllItems();
+        comboBox13.removeAllItems();
+        comboBox14.removeAllItems();
+        comboBox15.removeAllItems();
+        comboBox16.removeAllItems();
+    }
+
     //下拉框 获取并添加数据。（真实：数据库）
     private void initComboBox_fromDB() {
         //获取表数据
-        expert_base_metal_mapsList = ComboBoxUtil.getData("expert_base_metal"); // 母材选取
-        expert_weld_method_mapsList = ComboBoxUtil.getData("expert_weld_method"); // 焊接方法
-        expert_weld_metal_mapsList = ComboBoxUtil.getData("expert_weld_metal"); // 焊接材料
-        expert_auxiliary_materials_mapsList = ComboBoxUtil.getData("expert_auxiliary_materials"); // 辅材
-        expert_workpiece_thickness_mapsList = ComboBoxUtil.getData("expert_workpiece_thickness"); // 工件厚度
-        expert_weld_joint_mapsList = ComboBoxUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
-        expert_thermal_process_mapsList = ComboBoxUtil.getData("expert_thermal_process"); // 热工艺
+        expert_base_metal_mapsList = ProcessDesign.getData("expert_base_metal"); // 母材选取
+        expert_weld_method_mapsList = ProcessDesign.getData("expert_weld_method"); // 焊接方法
+        expert_weld_metal_mapsList = ProcessDesign.getData("expert_weld_metal"); // 焊接材料
+        expert_auxiliary_materials_mapsList = ProcessDesign.getData("expert_auxiliary_materials"); // 辅材
+        expert_workpiece_thickness_mapsList = ProcessDesign.getData("expert_workpiece_thickness"); // 工件厚度
+        expert_weld_joint_mapsList = ProcessDesign.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        expert_thermal_process_mapsList = ProcessDesign.getData("expert_thermal_process"); // 热工艺
 
         //给下拉框添加内容
         initComboBox_addData_fromDB(comboBox1, expert_base_metal_mapsList, "name");
@@ -320,7 +404,7 @@ public class ExpertSystem extends JFrame {
         initComboBox_addData_fromDB(comboBox4, expert_weld_metal_mapsList, "name");
         initComboBox_addData_fromDB(comboBox5, expert_auxiliary_materials_mapsList, "name");
         initComboBox_addData_fromDB(comboBox6, expert_workpiece_thickness_mapsList, "name");
-        initComboBox_addData_fromDB(comboBox7, expert_weld_joint_mapsList, "welding_position");
+        initComboBox_addData_fromDB(comboBox7, expert_weld_joint_mapsList, "weld_position");
         initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "joint_form");
         initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "groove_form");
         initComboBox_addData_fromDB(comboBox10, expert_thermal_process_mapsList, "heat_treatment_type");
@@ -482,22 +566,27 @@ public class ExpertSystem extends JFrame {
      */
     //标记时间：2019/12/5 14:29  预解决时间：
     private void button8ActionPerformed(ActionEvent e) {
-        System.out.println(expert_weld_method_mapsList);
+        comboBox1.removeAllItems();
     }
 
     /**
      * 按钮 事件触发
      */
-
     //自定义 按钮
     private void button7ActionPerformed(ActionEvent e) {
 //        initComboBox_fromTest();
+
+        emptyComboBox(); //清空下拉框
+        emptyTextField(); //清空文本域
         initComboBox_fromDB(); //初始化下拉框
         getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
+        enableComboBox(); //使能下拉框1-10
+        setTextFieldEditable(); //设置实际值可编辑
+
     }
 
-    //出参 按钮
-    private void button15ActionPerformed(ActionEvent e) {
+    //出参（右下） 按钮
+    private boolean button15ActionPerformed(ActionEvent e) {
         // 流程填写完整 提示
         if (comboBox1.getSelectedIndex() == -1
                 || comboBox2.getSelectedIndex() == -1
@@ -511,7 +600,7 @@ public class ExpertSystem extends JFrame {
                 || comboBox10.getSelectedIndex() == -1
         ) {
             JOptionPane.showMessageDialog(this, "请将流程填写完整！", "提示", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         comboBox12.setEnabled(true);
@@ -524,9 +613,114 @@ public class ExpertSystem extends JFrame {
         textField2.setEditable(true);
         textField3.setEditable(true);
         textField4.setEditable(true);
-        textField5.setEditable(true);
 
         generateProcessParameters(); //按照规则生成焊接参数
+        return true;
+    }
+
+    //设计 （添加产品）按钮
+    private void button10ActionPerformed(ActionEvent e) {
+        if (textField6.getText() != null && textField6.getText().length() > 0) {
+            button13.setEnabled(true);
+            button7ActionPerformed(e);
+        } else {
+            JOptionPane.showMessageDialog(this, "请先填写产品名称！", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+
+
+    }
+
+    //出参 （添加产品） 按钮
+    private void button13ActionPerformed(ActionEvent e) {
+
+        boolean flag = button15ActionPerformed(e);//主方法相同，直接调用
+        if (flag) {
+            button14.setEnabled(true); //设置只有先按下出参按钮，且成功了，才能点击保存
+        } else {
+          return;
+        }
+
+    }
+
+    //保存 （添加产品）按钮
+    private void button14ActionPerformed(ActionEvent e) {
+        addProduction();
+        button14.setEnabled(false); //当点击保存后，自动 保存按钮 无使能
+        button13.setEnabled(false); //当点击保存后，自动 出参按钮 无使能
+    }
+
+    //取消 按钮
+    private void button18ActionPerformed(ActionEvent e) {
+
+    }
+
+    /**
+     * 添加产品 相关
+     */
+    //保存记录 至 数据库
+    private void addProduction() {
+        comboBox1_item = (String) comboBox1.getSelectedItem();
+        comboBox2_item = (String) comboBox2.getSelectedItem();
+        comboBox3_item = (String) comboBox3.getSelectedItem();
+        comboBox4_item = (String) comboBox4.getSelectedItem();
+        comboBox5_item = (String) comboBox5.getSelectedItem();
+        comboBox6_item = (String) comboBox6.getSelectedItem();
+        comboBox7_item = (String) comboBox7.getSelectedItem();
+        comboBox8_item = (String) comboBox8.getSelectedItem();
+        comboBox9_item = (String) comboBox9.getSelectedItem();
+        comboBox10_item = (String) comboBox10.getSelectedItem();
+        comboBox11_item = (String) comboBox11.getSelectedItem();
+        comboBox12_item = (String) comboBox12.getSelectedItem();
+        comboBox13_item = (String) comboBox13.getSelectedItem();
+        comboBox14_item = (String) comboBox14.getSelectedItem();
+        comboBox15_item = (String) comboBox15.getSelectedItem();
+        comboBox16_item = (String) comboBox16.getSelectedItem();
+
+        textField1_item = textField1.getText();
+        textField2_item = textField2.getText();
+        textField3_item = textField3.getText();
+        textField4_item = textField4.getText();
+        textField6_item = textField6.getText();
+
+        boolean result = ProcessDesign.setData(
+                textField6_item,
+                comboBox1_item,
+                comboBox2_item,
+                comboBox3_item,
+                comboBox4_item,
+                comboBox5_item,
+                comboBox6_item,
+                comboBox7_item,
+                comboBox8_item,
+                comboBox9_item,
+                comboBox10_item,
+                comboBox11_item,
+                comboBox12_item,
+                comboBox13_item,
+                comboBox14_item,
+                comboBox15_item,
+                comboBox16_item,
+                textField1_item,
+                textField2_item,
+                textField3_item,
+                textField4_item
+        );
+
+        if (result) {
+            JOptionPane.showMessageDialog(this, "保存成功！", "提示", JOptionPane.WARNING_MESSAGE);
+            enableFalseComboBox(); //关闭下拉框使能
+            enableFalseTextField(); //关闭文本框使能
+        }else {
+            JOptionPane.showMessageDialog(this, "保存失败！请重试！", "提示", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    //实际值 textField可编辑
+    private void setTextFieldEditable() {
+        textField1.setEditable(true);
+        textField2.setEditable(true);
+        textField3.setEditable(true);
+        textField4.setEditable(true);
     }
 
     /**
@@ -665,16 +859,12 @@ public class ExpertSystem extends JFrame {
 
     //-> 工件厚度： （暂不设约束）
     private void comboBox5ItemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
 
-        }
     }
 
     //-> 焊接位置： （暂不设约束）
     private void comboBox6ItemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
 
-        }
     }
 
     //工件厚度 -> 接头： 规则制定
@@ -715,9 +905,7 @@ public class ExpertSystem extends JFrame {
 
     //热工艺： 规则制定（暂不设约束）
     private void comboBox9ItemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
 
-        }
     }
 
     //焊接参数：规则生成
@@ -769,7 +957,7 @@ public class ExpertSystem extends JFrame {
 
         //焊接参数表
         String seq = String.valueOf(processParametersStr);
-        expert_process_parameters_mapsList = ComboBoxUtil.getData("expert_process_parameters");
+        expert_process_parameters_mapsList = ProcessDesign.getData("expert_process_parameters");
 
         //存储符合规则的焊接参数
         List<String> current_list = new ArrayList<>();
@@ -885,6 +1073,14 @@ public class ExpertSystem extends JFrame {
 
 
 
+
+
+
+
+
+
+
+
     /**
      * JFormDesigner自带，定义自生成
      */
@@ -943,7 +1139,6 @@ public class ExpertSystem extends JFrame {
         textField2 = new JTextField();
         textField3 = new JTextField();
         textField4 = new JTextField();
-        textField5 = new JTextField();
         button7 = new JButton();
         button8 = new JButton();
         label22 = new JLabel();
@@ -957,6 +1152,9 @@ public class ExpertSystem extends JFrame {
         button14 = new JButton();
         button15 = new JButton();
         button16 = new JButton();
+        label21 = new JLabel();
+        button17 = new JButton();
+        button18 = new JButton();
         panel2 = new JPanel();
 
         //======== this ========
@@ -1173,36 +1371,42 @@ public class ExpertSystem extends JFrame {
 
                 //---- comboBox1 ----
                 comboBox1.setSelectedIndex(-1);
+                comboBox1.setEnabled(false);
                 comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
                 panel4.add(comboBox1);
                 comboBox1.setBounds(135, 30, 120, 30);
 
                 //---- comboBox2 ----
                 comboBox2.setSelectedIndex(-1);
+                comboBox2.setEnabled(false);
                 comboBox2.addItemListener(e -> comboBox2ItemStateChanged(e));
                 panel4.add(comboBox2);
                 comboBox2.setBounds(285, 30, 125, 30);
 
                 //---- comboBox3 ----
                 comboBox3.setSelectedIndex(-1);
+                comboBox3.setEnabled(false);
                 comboBox3.addItemListener(e -> comboBox3ItemStateChanged(e));
                 panel4.add(comboBox3);
                 comboBox3.setBounds(135, 75, 275, 30);
 
                 //---- comboBox4 ----
                 comboBox4.setSelectedIndex(-1);
+                comboBox4.setEnabled(false);
                 comboBox4.addItemListener(e -> comboBox4ItemStateChanged(e));
                 panel4.add(comboBox4);
                 comboBox4.setBounds(135, 120, 275, 30);
 
                 //---- comboBox5 ----
                 comboBox5.setSelectedIndex(-1);
+                comboBox5.setEnabled(false);
                 comboBox5.addItemListener(e -> comboBox5ItemStateChanged(e));
                 panel4.add(comboBox5);
                 comboBox5.setBounds(135, 165, 275, 30);
 
                 //---- comboBox6 ----
                 comboBox6.setSelectedIndex(-1);
+                comboBox6.setEnabled(false);
                 comboBox6.addItemListener(e -> {
 			comboBox6ItemStateChanged(e);
 			comboBox6_2ItemStateChanged(e);
@@ -1213,28 +1417,33 @@ public class ExpertSystem extends JFrame {
 
                 //---- comboBox7 ----
                 comboBox7.setSelectedIndex(-1);
+                comboBox7.setEnabled(false);
                 panel4.add(comboBox7);
                 comboBox7.setBounds(135, 255, 275, 30);
 
                 //---- comboBox8 ----
                 comboBox8.setSelectedIndex(-1);
+                comboBox8.setEnabled(false);
                 panel4.add(comboBox8);
                 comboBox8.setBounds(135, 300, 125, 30);
 
                 //---- comboBox9 ----
                 comboBox9.setSelectedIndex(-1);
+                comboBox9.setEnabled(false);
                 comboBox9.addItemListener(e -> comboBox9ItemStateChanged(e));
                 panel4.add(comboBox9);
                 comboBox9.setBounds(285, 300, 125, 30);
 
                 //---- comboBox10 ----
                 comboBox10.setSelectedIndex(-1);
+                comboBox10.setEnabled(false);
                 panel4.add(comboBox10);
                 comboBox10.setBounds(135, 345, 275, 30);
 
                 //---- comboBox11 ----
                 comboBox11.setEditable(true);
                 comboBox11.setSelectedIndex(-1);
+                comboBox11.setEnabled(false);
                 panel4.add(comboBox11);
                 comboBox11.setBounds(135, 390, 275, 30);
 
@@ -1331,6 +1540,7 @@ public class ExpertSystem extends JFrame {
                 //---- comboBox16 ----
                 comboBox16.setSelectedIndex(-1);
                 comboBox16.setEnabled(false);
+                comboBox16.setEditable(true);
                 panel4.add(comboBox16);
                 comboBox16.setBounds(620, 345, 160, 30);
 
@@ -1371,11 +1581,6 @@ public class ExpertSystem extends JFrame {
                 panel4.add(textField4);
                 textField4.setBounds(800, 300, 130, 30);
 
-                //---- textField5 ----
-                textField5.setEditable(false);
-                panel4.add(textField5);
-                textField5.setBounds(800, 345, 130, 30);
-
                 //---- button7 ----
                 button7.setText("\u81ea\u5b9a\u4e49");
                 button7.addActionListener(e -> button7ActionPerformed(e));
@@ -1386,7 +1591,7 @@ public class ExpertSystem extends JFrame {
                 button8.setText("test");
                 button8.addActionListener(e -> button8ActionPerformed(e));
                 panel4.add(button8);
-                button8.setBounds(new Rectangle(new Point(520, 390), button8.getPreferredSize()));
+                button8.setBounds(new Rectangle(new Point(445, 390), button8.getPreferredSize()));
 
                 //---- label22 ----
                 label22.setText("\u4ea7\u54c1\u9009\u62e9");
@@ -1415,15 +1620,13 @@ public class ExpertSystem extends JFrame {
                 label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() + 1f));
                 panel4.add(label23);
                 label23.setBounds(520, 75, 85, 30);
-
-                //---- textField6 ----
-                textField6.setEditable(false);
                 panel4.add(textField6);
                 textField6.setBounds(620, 75, 115, 30);
 
                 //---- button10 ----
                 button10.setText("\u8bbe\u8ba1");
                 button10.setFont(button10.getFont().deriveFont(button10.getFont().getSize() - 1f));
+                button10.addActionListener(e -> button10ActionPerformed(e));
                 panel4.add(button10);
                 button10.setBounds(740, 75, 60, 30);
 
@@ -1442,12 +1645,16 @@ public class ExpertSystem extends JFrame {
                 //---- button13 ----
                 button13.setText("\u51fa\u53c2");
                 button13.setFont(button13.getFont().deriveFont(button13.getFont().getSize() - 1f));
+                button13.setEnabled(false);
+                button13.addActionListener(e -> button13ActionPerformed(e));
                 panel4.add(button13);
                 button13.setBounds(805, 75, 60, 30);
 
                 //---- button14 ----
                 button14.setText("\u4fdd\u5b58");
                 button14.setFont(button14.getFont().deriveFont(button14.getFont().getSize() - 1f));
+                button14.setEnabled(false);
+                button14.addActionListener(e -> button14ActionPerformed(e));
                 panel4.add(button14);
                 button14.setBounds(870, 75, 60, 30);
 
@@ -1459,10 +1666,33 @@ public class ExpertSystem extends JFrame {
                 button15.setBounds(850, 390, 80, 30);
 
                 //---- button16 ----
-                button16.setText("\u8c03\u6574\u5b9e\u9645\u503c");
-                button16.setFont(button16.getFont().deriveFont(button16.getFont().getSize() + 2f));
+                button16.setText("\u4ec5\u8c03\u53c2");
+                button16.setFont(button16.getFont().deriveFont(button16.getFont().getSize() - 1f));
                 panel4.add(button16);
-                button16.setBounds(785, 120, 145, 30);
+                button16.setBounds(800, 345, 70, 30);
+
+                //---- label21 ----
+                label21.setText("\u5b9e\u9645\u503c");
+                label21.setBackground(new Color(204, 204, 204));
+                label21.setOpaque(true);
+                label21.setHorizontalTextPosition(SwingConstants.CENTER);
+                label21.setHorizontalAlignment(SwingConstants.CENTER);
+                label21.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 2f));
+                panel4.add(label21);
+                label21.setBounds(780, 120, 150, 30);
+
+                //---- button17 ----
+                button17.setText("\u4fdd\u5b58");
+                button17.setFont(button17.getFont().deriveFont(button17.getFont().getSize() - 1f));
+                panel4.add(button17);
+                button17.setBounds(870, 345, 60, 30);
+
+                //---- button18 ----
+                button18.setText("\u53d6\u6d88");
+                button18.addActionListener(e -> button18ActionPerformed(e));
+                panel4.add(button18);
+                button18.setBounds(520, 390, 85, 30);
 
                 {
                     // compute preferred size
@@ -1578,7 +1808,6 @@ public class ExpertSystem extends JFrame {
     private JTextField textField2;
     private JTextField textField3;
     private JTextField textField4;
-    private JTextField textField5;
     private JButton button7;
     private JButton button8;
     private JLabel label22;
@@ -1592,6 +1821,9 @@ public class ExpertSystem extends JFrame {
     private JButton button14;
     private JButton button15;
     private JButton button16;
+    private JLabel label21;
+    private JButton button17;
+    private JButton button18;
     private JPanel panel2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
