@@ -34,8 +34,9 @@ import java.util.regex.Pattern;
 ////8. 流程焊接规则的改变：根据seq进行处理
 //9. 产品选择、添加产品 等  相关内容
 //10. 调整后实际值的选项，添加管理权限
-//11. 取消按钮的实现（点击后，全部恢复不可选定状态）
+//11. 取消按钮的实现（点击后，全部恢复不可选定状态）(对于产品选择的按钮，还没有实现去使能的功能)
 ////12. 出参 对于 保存的点击约束
+//13. 保存完成后 的 去使能的显示状态，改成好看一点的
 
 
 /**
@@ -110,7 +111,6 @@ public class ExpertSystem extends JFrame {
     String textField3_item;
     String textField4_item;
     String textField6_item;
-
 
     //无参构造
     public ExpertSystem() {
@@ -311,18 +311,31 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * TextField 文本框 相关操作
+     * TextField 1-4文本框 相关操作
      */
-    //文本框 清空数据
-    private void emptyTextField() {
+    //文本框 1-4 清空数据
+    private void emptyTextField_1_to_4() {
+        textField1.setText("");
+        textField2.setText("");
+        textField3.setText("");
+        textField4.setText("");
+
         textField1.removeAll();
         textField2.removeAll();
         textField3.removeAll();
         textField4.removeAll();
     }
 
-    //文本框 enableFalse
-    private void enableFalseTextField() {
+    //文本框 1-4 enable
+    private void enableTextField_1_to_4() {
+        textField1.setEnabled(true);
+        textField2.setEnabled(true);
+        textField3.setEnabled(true);
+        textField4.setEnabled(true);
+    }
+
+    //文本框 1-4 enableFalse
+    private void enableFalseTextField_1_to_4() {
         textField1.setEnabled(false);
         textField2.setEnabled(false);
         textField3.setEnabled(false);
@@ -330,10 +343,10 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * ComboBox 下拉框 连接数据库
+     * ComboBox 1-16下拉框 连接数据库
      */
-    //下拉框 enable
-    private void enableComboBox() {
+    //下拉框 1-11 enable
+    private void enableComboBox_1_to_11() {
         comboBox1.setEnabled(true);
         comboBox2.setEnabled(true);
         comboBox3.setEnabled(true);
@@ -344,9 +357,19 @@ public class ExpertSystem extends JFrame {
         comboBox8.setEnabled(true);
         comboBox9.setEnabled(true);
         comboBox10.setEnabled(true);
+        comboBox11.setEnabled(true);
     }
 
-    //下拉框 enableFalse
+    //下拉框 12-16 enable
+    private void enableComboBox_12_to_16() {
+        comboBox12.setEnabled(true);
+        comboBox13.setEnabled(true);
+        comboBox14.setEnabled(true);
+        comboBox15.setEnabled(true);
+        comboBox16.setEnabled(true);
+    }
+
+    //下拉框 1-16 enableFalse
     private void enableFalseComboBox() {
         comboBox1.setEnabled(false);
         comboBox2.setEnabled(false);
@@ -366,7 +389,7 @@ public class ExpertSystem extends JFrame {
         comboBox16.setEnabled(false);
     }
 
-    //下拉框 清空原模型数据
+    //下拉框 1-16 清空原模型数据
     private void emptyComboBox() {
         comboBox1.removeAllItems();
         comboBox2.removeAllItems();
@@ -386,7 +409,7 @@ public class ExpertSystem extends JFrame {
         comboBox16.removeAllItems();
     }
 
-    //下拉框 获取并添加数据。（真实：数据库）
+    //下拉框 1-10 获取并添加数据。（真实：数据库）
     private void initComboBox_fromDB() {
         //获取表数据
         expert_base_metal_mapsList = ProcessDesign.getData("expert_base_metal"); // 母材选取
@@ -408,8 +431,6 @@ public class ExpertSystem extends JFrame {
         initComboBox_addData_fromDB(comboBox8, expert_weld_joint_mapsList, "joint_form");
         initComboBox_addData_fromDB(comboBox9, expert_weld_joint_mapsList, "groove_form");
         initComboBox_addData_fromDB(comboBox10, expert_thermal_process_mapsList, "heat_treatment_type");
-
-
     }
 
     //下拉框 添加数据项（真）
@@ -574,13 +595,13 @@ public class ExpertSystem extends JFrame {
      */
     //自定义 按钮
     private void button7ActionPerformed(ActionEvent e) {
-//        initComboBox_fromTest();
 
         emptyComboBox(); //清空下拉框
-        emptyTextField(); //清空文本域
+        emptyTextField_1_to_4(); //清空文本框
+        //initComboBox_fromTest();
         initComboBox_fromDB(); //初始化下拉框
         getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
-        enableComboBox(); //使能下拉框1-10
+        enableComboBox_1_to_11(); //使能下拉框1-11
         setTextFieldEditable(); //设置实际值可编辑
 
     }
@@ -603,16 +624,8 @@ public class ExpertSystem extends JFrame {
             return false;
         }
 
-        comboBox12.setEnabled(true);
-        comboBox13.setEnabled(true);
-        comboBox14.setEnabled(true);
-        comboBox15.setEnabled(true);
-        comboBox16.setEnabled(true);
-
-        textField1.setEditable(true);
-        textField2.setEditable(true);
-        textField3.setEditable(true);
-        textField4.setEditable(true);
+        enableComboBox_12_to_16(); //使能12-16的下拉框
+        enableTextField_1_to_4(); //使能1-4的文本框
 
         generateProcessParameters(); //按照规则生成焊接参数
         return true;
@@ -649,9 +662,23 @@ public class ExpertSystem extends JFrame {
         button13.setEnabled(false); //当点击保存后，自动 出参按钮 无使能
     }
 
+    //
+
     //取消 按钮
     private void button18ActionPerformed(ActionEvent e) {
-
+        //关闭下拉框使能
+        enableFalseComboBox();
+        //清空下拉框内容
+        emptyComboBox();
+        //关闭文本框使能
+        enableFalseTextField_1_to_4();
+        //清空文本框内容
+        emptyTextField_1_to_4();
+        textField6.setText("");
+        textField6.removeAll();
+        //关闭按钮使能
+        button13.setEnabled(false);
+        button14.setEnabled(false);
     }
 
     /**
@@ -709,7 +736,7 @@ public class ExpertSystem extends JFrame {
         if (result) {
             JOptionPane.showMessageDialog(this, "保存成功！", "提示", JOptionPane.WARNING_MESSAGE);
             enableFalseComboBox(); //关闭下拉框使能
-            enableFalseTextField(); //关闭文本框使能
+            enableFalseTextField_1_to_4(); //关闭文本框使能
         }else {
             JOptionPane.showMessageDialog(this, "保存失败！请重试！", "提示", JOptionPane.WARNING_MESSAGE);
         }
@@ -722,6 +749,15 @@ public class ExpertSystem extends JFrame {
         textField3.setEditable(true);
         textField4.setEditable(true);
     }
+
+    /**
+     *  产品选择 相关
+     */
+    //下拉框连接数据库，初始化内容
+    private void initSelectedProduction() {
+
+    }
+
 
     /**
      * 规则 触发与制定： 修改下拉框可显示内容
@@ -1562,22 +1598,22 @@ public class ExpertSystem extends JFrame {
                 label20.setBounds(620, 120, 160, 30);
 
                 //---- textField1 ----
-                textField1.setEditable(false);
+                textField1.setEnabled(false);
                 panel4.add(textField1);
                 textField1.setBounds(800, 165, 130, 30);
 
                 //---- textField2 ----
-                textField2.setEditable(false);
+                textField2.setEnabled(false);
                 panel4.add(textField2);
                 textField2.setBounds(800, 210, 130, 30);
 
                 //---- textField3 ----
-                textField3.setEditable(false);
+                textField3.setEnabled(false);
                 panel4.add(textField3);
                 textField3.setBounds(800, 255, 130, 30);
 
                 //---- textField4 ----
-                textField4.setEditable(false);
+                textField4.setEnabled(false);
                 panel4.add(textField4);
                 textField4.setBounds(800, 300, 130, 30);
 
