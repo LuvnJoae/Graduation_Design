@@ -669,10 +669,6 @@ public class ExpertSystem extends JFrame {
             //是否已有该产品名称检测
             updateComboBox17(); //更新产品下拉框内容
 
-            //TEST: productionFlag的问题
-            //标记时间：2019/12/12 16:43  预解决时间：
-            System.out.println("********"+productionSelectFlag+"*********");
-
             ComboBoxModel box17Model = comboBox17.getModel();
             for (int i = 0; i < box17Model.getSize(); i++) {
                 Object comboBox17_item = box17Model.getElementAt(i);
@@ -874,26 +870,14 @@ public class ExpertSystem extends JFrame {
         expert_production_mapsList = ProcessDesign.getData("expert_production"); //更新内容
         productionMaps = new HashMap<>(); //以name为键，其他信息的map为值，建立映射关系
 
-        //TEST: productionFlag的问题
-        //标记时间：2019/12/12 16:43  预解决时间：
-        System.out.println("2********"+productionSelectFlag+"*********");
-
+        //更新 产品选择 下拉框内容
         for (Map<String, Object> map : expert_production_mapsList) {
             String name = (String) map.get("name");
             productionMaps.put(name, map);
 
             comboBox17.addItem(name); //下拉框添加内容
         }
-
-        //TEST: productionFlag的问题
-        //标记时间：2019/12/12 16:43  预解决时间：
-        System.out.println("3********"+productionSelectFlag+"*********");
-
         comboBox17.setSelectedIndex(-1);
-
-        //TEST: productionFlag的问题
-        //标记时间：2019/12/12 16:43  预解决时间：
-        System.out.println("4********"+productionSelectFlag+"*********");
     }
 
     //刷新条件：当点击 产品选择下拉框时， 刷新该下拉框内容
@@ -903,7 +887,7 @@ public class ExpertSystem extends JFrame {
 
     //根据 产品选择下拉框 所选内容，加载其余参数
     private void loadProductionParams(String productionName) {
-        productionSelectFlag = true; //进入产品选择的功能
+        productionSelectFlag = true; //暂时忽略规则，进入产品选择的功能
 
         emptyComboBox(); //先清空原数据
         emptyTextField_1_to_4();
@@ -930,6 +914,8 @@ public class ExpertSystem extends JFrame {
         textField2.setText("voltage_arc_practical");
         textField3.setText("speed_practical");
         textField4.setText("extension_practical");
+
+        productionSelectFlag = false; //恢复规则
     }
 
     //选中相应产品时，触发相应参数加载动作
