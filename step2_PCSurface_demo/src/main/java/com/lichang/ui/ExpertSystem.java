@@ -639,7 +639,7 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * TEST: 下拉框连接数据库 测试按钮
+     * TEST: 测试按钮
      */
     //标记时间：2019/12/5 14:29  预解决时间：
     private void button8ActionPerformed(ActionEvent e) {
@@ -1431,23 +1431,6 @@ public class ExpertSystem extends JFrame {
     private void updateComboBoxModel(JComboBox comboBox, Object[] comboBox_items) {
         updateComboBoxModel(comboBox, comboBox_items, true);
     }
-
-    private void thisWindowClosing(WindowEvent e) {
-        // TODO add your code here
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
