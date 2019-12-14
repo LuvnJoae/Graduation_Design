@@ -32,12 +32,14 @@ import java.util.regex.Pattern;
 ////8. 流程焊接规则的改变：根据seq进行处理
 ////12. 出参 对于 保存的点击约束
 ////2. 产品选择：重设、出参、保存 按钮功能的实现
-
-//14. 右下，仅调参、保存 按钮功能的实现（并添加管理权限）
 ////11. 取消按钮的实现（点击后，全部恢复不可选定状态）(对于产品选择的按钮，还没有实现去使能的功能)
-//13. 保存完成后 的 去使能的显示状态，改成好看一点的
+////设计 按钮，按下后，会出现下拉框选项重复问题(问题在init上)
+////14. 右下，仅调参、保存 按钮功能的实现（
+//// 并添加管理权限）
+////13. 保存完成后 的 去使能的显示状态，改成好看一点的
+////通过添加一个数据库中的表，记录上一次留下的产品选择项，从而实现记忆功能。
+
 //4. 资料库
-//通过添加一个数据库中的表，记录上一次留下的产品选择项，从而实现记忆功能。
 
 
 
@@ -77,6 +79,7 @@ public class ExpertSystem extends JFrame {
     private List<Map<String, Object>> expert_thermal_process_mapsList;
     private List<Map<String, Object>> expert_process_parameters_mapsList;
     private List<Map<String, Object>> expert_production_mapsList;
+
     //下拉框内容的 seq。 用于规则推理
     private String box1_seq;
     private String box2_seq;
@@ -116,7 +119,7 @@ public class ExpertSystem extends JFrame {
 
     //用于产品选择下拉框
     private HashMap<String, Map<String, Object>> productionMaps; //存储production的name，与其他参数的映射信息
-    private boolean productionSelectFlag; //用于在使用产品选择功能时，暂时不遵循规则
+    private boolean productionSelectFlag = false; //用于在使用产品选择功能时，暂时不遵循规则
 
     //无参构造
     public ExpertSystem() {
@@ -127,9 +130,12 @@ public class ExpertSystem extends JFrame {
         username = "admin";
         adminFlag = true;
 
-        initComponents();
+        UIManager.put("ComboBox.disabledForeground", new Color(0,45,145)); //修改ComboBox不可选中时的字体颜色
+        UIManager.put("TextField.inactiveForeground", new Color(0,45,145)); //修改TextField不可选中时的字体颜色
 
+        initComponents();
         updateComboBox17(); //加载 产品选择
+
 
         setVisible(true);
     }
@@ -140,6 +146,9 @@ public class ExpertSystem extends JFrame {
         this.username = username;
         this.adminFlag = adminFlag;
 
+        UIManager.put("ComboBox.disabledForeground", new Color(0,45,145)); //修改ComboBox不可选中时的字体颜色
+        UIManager.put("TextField.inactiveForeground", new Color(0,45,145)); //修改TextField不可选中时的字体颜色
+
         initComponents();
 
         updateComboBox17(); //加载 产品选择
@@ -148,6 +157,29 @@ public class ExpertSystem extends JFrame {
 
         setVisible(true);
     }
+
+    /**
+     *  整体页面 事件监听
+     */
+    //打开该frame时，触发
+    private void thisWindowOpened(WindowEvent e) {
+        //非管理员用户，禁止使用重设 、设计、 仅调参等功能
+        if (!adminFlag) {
+            button6.setEnabled(false); //重设
+            button10.setEnabled(false); //设计
+            button16.setEnabled(false); //仅调参
+            textField6.setEnabled(false); //添加产品 文本框
+        }
+        String lastProductionIndex = ProcessDesign.getLastProductionIndex();//获取上次登录时选择的产品下标
+        comboBox17.setSelectedIndex(Integer.parseInt(lastProductionIndex));
+    }
+
+    //关闭该frame时，触发
+    private void thisWindowClosed(WindowEvent e) {
+        ProcessDesign.setLastProductionIndex(String.valueOf(comboBox17.getSelectedIndex()));
+        return;
+    }
+
 
     /**
      * Lable3 账户信息: 显示当前登录用户
@@ -401,6 +433,7 @@ public class ExpertSystem extends JFrame {
 
     //下拉框 1-16 清空原模型数据
     private void emptyComboBox() {
+        //内容清空
         comboBox1.removeAllItems();
         comboBox2.removeAllItems();
         comboBox3.removeAllItems();
@@ -417,6 +450,19 @@ public class ExpertSystem extends JFrame {
         comboBox14.removeAllItems();
         comboBox15.removeAllItems();
         comboBox16.removeAllItems();
+
+        //模型清空
+        boxModel1 = null;
+        boxModel2 = null;
+        boxModel3 = null;
+        boxModel4 = null;
+        boxModel5 = null;
+        boxModel6 = null;
+        boxModel7 = null;
+        boxModel8 = null;
+        boxModel9 = null;
+        boxModel10 = null;
+
     }
 
     //下拉框 1-10 获取并添加数据。（真实：数据库）
@@ -597,7 +643,7 @@ public class ExpertSystem extends JFrame {
      */
     //标记时间：2019/12/5 14:29  预解决时间：
     private void button8ActionPerformed(ActionEvent e) {
-        loadProductionParams("000212");
+
     }
 
     /**
@@ -607,9 +653,11 @@ public class ExpertSystem extends JFrame {
     private void setComboBox() {
         emptyComboBox(); //清空下拉框
         emptyTextField_1_to_4(); //清空文本框
+
         //initComboBox_fromTest();
         initComboBox_fromDB(); //初始化下拉框 加载内容
         getInitComboBoxModel(); //获取初始各下拉框model，用于规则推理重置model
+
         enableComboBox_1_to_11(); //使能下拉框1-11
     }
 
@@ -642,8 +690,6 @@ public class ExpertSystem extends JFrame {
 
     //自定义 按钮
     private void button7ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
-
         setComboBox(); //设定下拉框内容
 
         //关闭 其他按钮的使能
@@ -655,7 +701,6 @@ public class ExpertSystem extends JFrame {
 
     //出参（右下） 按钮
     private void button15ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
         setParams(); //调用出参 主方法
 
         //开启 其他按钮使能
@@ -665,10 +710,8 @@ public class ExpertSystem extends JFrame {
     //设计 （添加产品）按钮
     private void button10ActionPerformed(ActionEvent e) {
         if (textField6.getText() != null && textField6.getText().length() > 0) {
-            productionSelectFlag = false; //恢复规则
             //是否已有该产品名称检测
             updateComboBox17(); //更新产品下拉框内容
-
             ComboBoxModel box17Model = comboBox17.getModel();
             for (int i = 0; i < box17Model.getSize(); i++) {
                 Object comboBox17_item = box17Model.getElementAt(i);
@@ -677,9 +720,12 @@ public class ExpertSystem extends JFrame {
                     return;
                 }
             }
+
             setComboBox(); //调用 设定下拉框内容 主方法
+
             //开启 其他按钮使能
             button13.setEnabled(true);
+
             //关闭 其他按钮使能
             button6.setEnabled(false); //产品选择： 重设按钮
             button16.setEnabled(false); //右下：仅调参按钮
@@ -695,7 +741,6 @@ public class ExpertSystem extends JFrame {
 
     //出参 （添加产品） 按钮
     private void button13ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
         boolean flag = setParams();//调用 出参 主方法
         //开启 其他按钮使能
         if (flag) {
@@ -707,7 +752,6 @@ public class ExpertSystem extends JFrame {
 
     //保存 （添加产品）按钮
     private void button14ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
         addProduction();  //向数据库中添加该产品信息
 
         //关闭 其他按钮使能
@@ -725,7 +769,6 @@ public class ExpertSystem extends JFrame {
             JOptionPane.showMessageDialog(this, "请先选择产品！", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        productionSelectFlag = false; //恢复规则
         setComboBox(); //调用 设定下拉框内容 主方法
         //关闭 其他按钮的使能
         button10.setEnabled(false); //设计 按钮
@@ -740,7 +783,6 @@ public class ExpertSystem extends JFrame {
 
     //出参 （产品选择）按钮
     private void button12ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
         boolean flag = setParams(); //调用 出参 主方法
         //开启 其他按钮使能
         if (flag) {
@@ -753,7 +795,6 @@ public class ExpertSystem extends JFrame {
 
     //保存 （产品选择）按钮
     private void button11ActionPerformed(ActionEvent e) {
-        productionSelectFlag = false; //恢复规则
         updateProduction();  //向数据库中 更新该产品信息
         //关闭 其他按钮使能
         button11.setEnabled(false); //保存 按钮
@@ -763,29 +804,66 @@ public class ExpertSystem extends JFrame {
         enableFalseTextField_1_to_4(); //关闭文本框使能
     }
 
+    //仅调参 按钮
+    private void button16ActionPerformed(ActionEvent e) {
+        if(comboBox17.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "请先选择产品！", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        //开启 使能
+        enableTextField_1_to_4(); //开启 文本框使能
+        button17.setEnabled(true); //右下：保存按钮 开启使能
+        //关闭 使能
+        comboBox17.setEnabled(false); //产品选择 下拉框
+        button6.setEnabled(false); //重设 按钮
+        button10.setEnabled(false); //设计 按钮
+        button7.setEnabled(false); //自定义 按钮
+        button15.setEnabled(false); //出参 按钮
+    }
+
+    //保存 （右下） 按钮
+    private void button17ActionPerformed(ActionEvent e) {
+        updateProduction(); //更新值
+        //关闭 使能
+        enableFalseTextField_1_to_4(); //关闭 文本框使能
+        button17.setEnabled(false); //右下：保存按钮 关闭使能
+        //开启 使能
+        comboBox17.setEnabled(true); //产品选择 下拉框
+        button6.setEnabled(true); //重设 按钮
+        button10.setEnabled(true); //设计 按钮
+        button7.setEnabled(true); //自定义 按钮
+        button15.setEnabled(true); //出参 按钮
+    }
+
     //取消 按钮
     private void button18ActionPerformed(ActionEvent e) {
         productionSelectFlag = false; //恢复规则
-        //关闭下拉框使能
-        enableFalseComboBox();
         //清空下拉框内容
         emptyComboBox();
-        //关闭文本框使能
-        enableFalseTextField_1_to_4();
+        //关闭下拉框使能
+        enableFalseComboBox();
         //清空文本框内容
         emptyTextField_1_to_4();
+        //关闭文本框使能
+        enableFalseTextField_1_to_4();
         textField6.setText("");
         textField6.removeAll();
+        //关闭产品选择下拉框
+        comboBox17.setSelectedIndex(-1);
         //关闭按钮使能
-        button11.setEnabled(false);
-        button12.setEnabled(false);
-        button13.setEnabled(false);
-        button14.setEnabled(false);
+        button11.setEnabled(false); //产品选择： 保存
+        button12.setEnabled(false); //产品选择： 出参
+        button13.setEnabled(false); //添加产品： 保存
+        button14.setEnabled(false); //添加产品： 出参
+        button17.setEnabled(false); //右下：保存按钮
         //恢复按钮使能
-        button10.setEnabled(true); //添加产品：设计按钮
-        button6.setEnabled(true); //产品选择： 重设按钮
-        button16.setEnabled(true); //右下：仅调参按钮
-        button17.setEnabled(true); //右下：保存按钮
+        //权限管理
+        if (adminFlag) {
+            button10.setEnabled(true); //添加产品：设计按钮
+            button6.setEnabled(true); //产品选择： 重设按钮
+            button16.setEnabled(true); //右下：仅调参按钮
+        }
         button7.setEnabled(true); //右下：自定义按钮
         button15.setEnabled(true); //右下：出参按钮
         comboBox17.setEnabled(true);
@@ -850,21 +928,11 @@ public class ExpertSystem extends JFrame {
         }
     }
 
-    //实际值 textField可编辑
-    private void setTextFieldEditable() {
-        textField1.setEditable(true);
-        textField2.setEditable(true);
-        textField3.setEditable(true);
-        textField4.setEditable(true);
-    }
-
     /**
      *  产品选择 相关
      */
     //刷新 产品选择下拉框 内容
     private void updateComboBox17() {
-        productionSelectFlag = false; //恢复规则
-
         comboBox17.removeAllItems(); //先清空原数据
 
         expert_production_mapsList = ProcessDesign.getData("expert_production"); //更新内容
@@ -910,10 +978,10 @@ public class ExpertSystem extends JFrame {
         comboBox15.addItem(production_paramMap.get("extension_advice"));
         comboBox16.addItem(production_paramMap.get("extra_2"));
 
-        textField1.setText("current_practical");
-        textField2.setText("voltage_arc_practical");
-        textField3.setText("speed_practical");
-        textField4.setText("extension_practical");
+        textField1.setText((String) production_paramMap.get("current_practical"));
+        textField2.setText((String) production_paramMap.get("voltage_arc_practical"));
+        textField3.setText((String) production_paramMap.get("speed_practical"));
+        textField4.setText((String) production_paramMap.get("extension_practical"));
 
         productionSelectFlag = false; //恢复规则
     }
@@ -1364,6 +1432,15 @@ public class ExpertSystem extends JFrame {
         updateComboBoxModel(comboBox, comboBox_items, true);
     }
 
+    private void thisWindowClosing(WindowEvent e) {
+        // TODO add your code here
+    }
+
+
+
+
+
+
 
 
 
@@ -1453,6 +1530,16 @@ public class ExpertSystem extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                thisWindowClosed(e);
+            }
+            @Override
+            public void windowOpened(WindowEvent e) {
+                thisWindowOpened(e);
+            }
+        });
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -1971,6 +2058,7 @@ public class ExpertSystem extends JFrame {
                 //---- button16 ----
                 button16.setText("\u4ec5\u8c03\u53c2");
                 button16.setFont(button16.getFont().deriveFont(button16.getFont().getSize() - 1f));
+                button16.addActionListener(e -> button16ActionPerformed(e));
                 panel4.add(button16);
                 button16.setBounds(800, 345, 70, 30);
 
@@ -1988,6 +2076,8 @@ public class ExpertSystem extends JFrame {
                 //---- button17 ----
                 button17.setText("\u4fdd\u5b58");
                 button17.setFont(button17.getFont().deriveFont(button17.getFont().getSize() - 1f));
+                button17.setEnabled(false);
+                button17.addActionListener(e -> button17ActionPerformed(e));
                 panel4.add(button17);
                 button17.setBounds(870, 345, 60, 30);
 

@@ -33,6 +33,24 @@ public class JdbcTemplateUtil {
     }
 
     /**
+     * 查询 返回单条记录 (无参复用)
+     *      数据库相应表已做 唯一约束，确保不重名
+     * @param sqlStr
+     * @return Map
+     */
+
+    public static Map<String, Object> querySingle(String sqlStr) {
+        log.debug("查询 返回单条记录");
+        try {
+            Map<String, Object> map = template.queryForMap(sqlStr);
+            return map;
+        } catch (DataAccessException e) {
+            log.error("查询不到该信息",e);
+            return null;
+        }
+    }
+
+    /**
      * 查询 返回多条记录
      * @param sqlStr
      * @return list<Map>

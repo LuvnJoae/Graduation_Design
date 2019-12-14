@@ -10,6 +10,8 @@ new FormModel {
 			"alwaysOnTop": true
 			"$sizePolicy": 1
 			"$locationPolicy": 1
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowOpened", "thisWindowOpened", true ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosed", "thisWindowClosed", true ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel1"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -739,6 +741,7 @@ new FormModel {
 						name: "button16"
 						"text": "仅调参"
 						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button16ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 70
 						"height": 30
@@ -764,6 +767,8 @@ new FormModel {
 						name: "button17"
 						"text": "保存"
 						"font": #SwingDerivedFont4
+						"enabled": false
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button17ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 60
 						"height": 30
