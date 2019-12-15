@@ -122,6 +122,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane2"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "tabbedPane2MouseClicked", true ) )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel4"
 					add( new FormComponent( "javax.swing.JLabel" ) {
@@ -790,6 +791,857 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel2"
+					add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+						name: "tabbedPane1"
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel11"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label38"
+								"text": "按名称搜索"
+								"font": &SwingDerivedFont5 new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField13"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button38"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label39"
+								"text": "（请先跳转到所属子页）"
+								"font": &SwingDerivedFont6 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button39"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button40"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane9"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table8"
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "母材A" )
+										add( "母材B" )
+										add( "焊接方法" )
+										add( "焊接材料" )
+										add( "辅材" )
+										add( "工件厚度" )
+										add( "焊接接头" )
+										add( "焊接坡口" )
+										add( "焊接位置" )
+										add( "热工艺" )
+										add( "其他1" )
+										add( "电流（建议值）" )
+										add( "起弧电压（建议值）" )
+										add( "焊接速度（建议值）" )
+										add( "干伸出量（建议值）" )
+										add( "其他2" )
+										add( "电流（实际值）" )
+										add( "起弧电压（实际值）" )
+										add( "焊接速度（实际值）" )
+										add( "干伸出量（实际值）" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+									} )
+									"preferredSize": new java.awt.Dimension( 3000, 32 )
+									"autoResizeMode": 0
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 377
+								"x": 0
+								"y": 45
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "产品"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel3"
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane1"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table1"
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "匹配：母材" )
+										add( "匹配：焊接方法" )
+										add( "温度等级" )
+										add( "焊接性能" )
+										add( "机械性能" )
+										add( "规格" )
+										add( "化学成分" )
+										add( "工艺要点" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+									} )
+									"autoResizeMode": 0
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 0
+								"y": 43
+								"width": 960
+								"height": 380
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label24"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 5
+								"y": 10
+								"width": 75
+								"height": 23
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField5"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 75
+								"y": 10
+								"width": 120
+								"height": 25
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button5"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 200
+								"y": 10
+								"width": 65
+								"height": 25
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button19"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 815
+								"y": 10
+								"width": 68
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button9"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"x": 890
+								"y": 10
+								"width": 68
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label25"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "母材"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel5"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label26"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField7"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button20"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label27"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button21"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button22"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane2"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table2"
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+										add( new java.util.Vector {
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+											add( null )
+										} )
+									}, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "匹配：母材" )
+										add( "匹配：焊接方法" )
+										add( "温度等级" )
+										add( "焊接性能" )
+										add( "机械性能" )
+										add( "规格" )
+										add( "化学成分" )
+										add( "工艺要点" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+									} )
+									"enabled": false
+									"autoResizeMode": 0
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"height": 380
+								"x": 0
+								"y": 43
+								"width": 960
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "焊接方法"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel6"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label28"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField8"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button23"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label29"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button24"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button25"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane3"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table3"
+									"model": &SwingTableModel0 new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "匹配：母材" )
+										add( "匹配：焊接方法" )
+										add( "温度等级" )
+										add( "焊接性能" )
+										add( "机械性能" )
+										add( "规格" )
+										add( "化学成分" )
+										add( "工艺要点" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( #SwingTableColumn0 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 80, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 80, 0, 0, true ) )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									} )
+									"enabled": false
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 380
+								"x": 0
+								"y": 43
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "焊接材料"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel7"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label30"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField9"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button26"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label31"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button27"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button28"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane4"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table4"
+									"model": #SwingTableModel0
+									"enabled": false
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 380
+								"x": 0
+								"y": 43
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "辅材"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel8"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label32"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField10"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button29"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label33"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button30"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button31"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane5"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table5"
+									"model": #SwingTableModel0
+									"enabled": false
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 380
+								"x": 0
+								"y": 43
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "工件厚度"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel9"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label34"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField11"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button32"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label35"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button33"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button34"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane6"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table6"
+									"model": #SwingTableModel0
+									"enabled": false
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 380
+								"x": 0
+								"y": 43
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "焊接接头、位置、坡口"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel10"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label36"
+								"text": "按名称搜索"
+								"font": #SwingDerivedFont5
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 75
+								"height": 23
+								"x": 5
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JTextField" ) {
+								name: "textField12"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 120
+								"height": 25
+								"x": 75
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button35"
+								"text": "搜索"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 65
+								"height": 25
+								"x": 200
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label37"
+								"text": "（请先跳转到所属子页）"
+								"font": #SwingDerivedFont6
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 155
+								"height": 23
+								"x": 265
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button36"
+								"text": "添加"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 815
+								"y": 10
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "button37"
+								"text": "修改"
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 68
+								"height": 28
+								"x": 890
+								"y": 10
+							} )
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane7"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table7"
+									"model": #SwingTableModel0
+									"enabled": false
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 380
+								"x": 0
+								"y": 43
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "热工艺"
+						} )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 0
+						"y": 5
+						"width": 965
+						"height": 455
+					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "资料库"
 				} )

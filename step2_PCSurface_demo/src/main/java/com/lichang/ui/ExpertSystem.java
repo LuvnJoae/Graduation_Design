@@ -6,7 +6,9 @@ package com.lichang.ui;
 
 import java.awt.event.*;
 import javax.swing.border.*;
+import javax.swing.table.*;
 
+import com.lichang.utils.ExpertSystemUtil.KnowledgeBase;
 import com.lichang.utils.ExpertSystemUtil.ProcessDesign;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
@@ -39,8 +41,10 @@ import java.util.regex.Pattern;
 ////13. 保存完成后 的 去使能的显示状态，改成好看一点的
 ////通过添加一个数据库中的表，记录上一次留下的产品选择项，从而实现记忆功能。
 
-//4. 资料库
-
+// 资料库
+//1.表格的绑定
+//2. 查询、添加、修改的实现（通过一个额外的JDialog）
+//3. 问题：切换资料库页面后，数据出现混乱
 
 
 /**
@@ -650,7 +654,7 @@ public class ExpertSystem extends JFrame {
      * 按钮 事件触发
      */
     //设定下拉框内容 主方法
-    private void setComboBox() {
+    private void setComboBox_main() {
         emptyComboBox(); //清空下拉框
         emptyTextField_1_to_4(); //清空文本框
 
@@ -662,7 +666,7 @@ public class ExpertSystem extends JFrame {
     }
 
     //出参 主方法
-    private boolean setParams() {
+    private boolean setParams_main() {
         // 流程填写完整 提示
         if (comboBox1.getSelectedIndex() == -1
                 || comboBox2.getSelectedIndex() == -1
@@ -690,7 +694,7 @@ public class ExpertSystem extends JFrame {
 
     //自定义 按钮
     private void button7ActionPerformed(ActionEvent e) {
-        setComboBox(); //设定下拉框内容
+        setComboBox_main(); //设定下拉框内容
 
         //关闭 其他按钮的使能
         button6.setEnabled(false); //重设
@@ -701,7 +705,7 @@ public class ExpertSystem extends JFrame {
 
     //出参（右下） 按钮
     private void button15ActionPerformed(ActionEvent e) {
-        setParams(); //调用出参 主方法
+        setParams_main(); //调用出参 主方法
 
         //开启 其他按钮使能
         enableComboBox_12_to_16(); //使能12-16的下拉框
@@ -721,7 +725,7 @@ public class ExpertSystem extends JFrame {
                 }
             }
 
-            setComboBox(); //调用 设定下拉框内容 主方法
+            setComboBox_main(); //调用 设定下拉框内容 主方法
 
             //开启 其他按钮使能
             button13.setEnabled(true);
@@ -741,7 +745,7 @@ public class ExpertSystem extends JFrame {
 
     //出参 （添加产品） 按钮
     private void button13ActionPerformed(ActionEvent e) {
-        boolean flag = setParams();//调用 出参 主方法
+        boolean flag = setParams_main();//调用 出参 主方法
         //开启 其他按钮使能
         if (flag) {
             button14.setEnabled(true); //设置只有先按下出参按钮，且成功了，才能点击保存
@@ -769,7 +773,7 @@ public class ExpertSystem extends JFrame {
             JOptionPane.showMessageDialog(this, "请先选择产品！", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        setComboBox(); //调用 设定下拉框内容 主方法
+        setComboBox_main(); //调用 设定下拉框内容 主方法
         //关闭 其他按钮的使能
         button10.setEnabled(false); //设计 按钮
         button16.setEnabled(false); //仅调参 按钮
@@ -783,7 +787,7 @@ public class ExpertSystem extends JFrame {
 
     //出参 （产品选择）按钮
     private void button12ActionPerformed(ActionEvent e) {
-        boolean flag = setParams(); //调用 出参 主方法
+        boolean flag = setParams_main(); //调用 出参 主方法
         //开启 其他按钮使能
         if (flag) {
             button11.setEnabled(true); //设置只有先按下出参按钮，且成功了，才能点击保存
@@ -1432,6 +1436,161 @@ public class ExpertSystem extends JFrame {
         updateComboBoxModel(comboBox, comboBox_items, true);
     }
 
+    /**
+     * 资料库 表格
+     */
+    //表格: 载入内容 主方法
+    private void initTable_main(List<Map<String, Object>> expert_mapsList, JTable table, String[] colsName) {
+        DefaultTableModel tableModel = (DefaultTableModel)table.getModel(); //获取当前模型
+        List<Object> newRow_list = new ArrayList<>();
+
+        for (int i = 0; i < expert_base_metal_mapsList.size(); i++) {
+            for (String s : colsName) {
+                newRow_list.add(expert_mapsList.get(i).get(s)); //将每个col的内容加载进list
+            }
+            Object[] newRow = newRow_list.toArray();
+            tableModel.addRow(newRow);
+        }
+    }
+
+    //表格： 加载 各表格
+    private void initTable() {
+        //加载 母材 表格
+        String[] table1_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app_base_metal",
+                "app_weld_method",
+                "temperature_rating",
+                "weld_pro",
+                "mechanical_pro",
+                "standards",
+                "chemical_composition",
+                "technology _points"
+        };
+        initTable_main(expert_base_metal_mapsList, table1, table1_colsName);
+
+        //加载 焊接方法 表格
+        String[] table2_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app_weld_metal",
+                "app_auxiliary_materials",
+                "characteristic",
+                "device_type",
+                "device_parameters",
+                "scope"
+        };
+        initTable_main(expert_weld_method_mapsList, table2, table2_colsName);
+
+        //加载 焊接材料 表格
+        String[] table3_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app_auxiliary_materials",
+                "type",
+                "chemical_composition",
+                "mechanical_pro",
+                "application"
+        };
+        initTable_main(expert_weld_metal_mapsList, table3, table3_colsName);
+
+        //加载 辅材 表格
+        String[] table4_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app",
+                "parameter"
+        };
+        initTable_main(expert_auxiliary_materials_mapsList, table4, table4_colsName);
+
+        //加载 工件厚度 表格
+        String[] table5_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app_weld_joint",
+                "thickness"
+        };
+        initTable_main(expert_workpiece_thickness_mapsList, table5, table5_colsName);
+
+        //加载 焊接接头、坡口、位置 表格
+        String[] table6_colsName = {
+                "id",
+                "seq",
+                "app",
+                "joint_form",
+                "groove_form",
+                "groove_parameter",
+                "weld_position"
+        };
+        initTable_main(expert_weld_joint_mapsList, table6, table6_colsName);
+
+        //加载 热工艺 表格
+        String[] table7_colsName = {
+                "id",
+                "seq",
+                "app",
+                "heat_treatment_type",
+                "preheating_tem",
+                "preheating_time",
+                "interlayer_tem",
+                "heat_treatment_tem",
+                "heat_treatment_time"
+        };
+        initTable_main(expert_thermal_process_mapsList, table7, table7_colsName);
+
+        //加载 产品 表格
+        String[] table8_colsName = {
+                "id",
+                "name",
+                "base_metal_a",
+                "base_metal_b",
+                "weld_method",
+                "weld_metal",
+                "auxiliary_materials",
+                "workpiece_thickness",
+                "weld_joint_joint",
+                "weld_joint_groove",
+                "weld_joint_weldposition",
+                "thermal_parameters",
+                "extra_1",
+                "current_advice",
+                "voltage_arc_advice",
+                "speed_advice",
+                "extension_advice",
+                "extra_2",
+                "current_practical",
+                "voltage_arc_practical",
+                "speed_practical",
+                "extension_practical"
+        };
+        initTable_main(expert_production_mapsList, table8, table8_colsName);
+    }
+
+    //跳转事件：资料库 点击事件
+    private void tabbedPane2MouseClicked(MouseEvent e) {
+        //加载数据库信息
+        expert_base_metal_mapsList = KnowledgeBase.getData("expert_base_metal"); // 母材选取
+        expert_weld_method_mapsList = KnowledgeBase.getData("expert_weld_method"); // 焊接方法
+        expert_weld_metal_mapsList = KnowledgeBase.getData("expert_weld_metal"); // 焊接材料
+        expert_auxiliary_materials_mapsList = KnowledgeBase.getData("expert_auxiliary_materials"); // 辅材
+        expert_workpiece_thickness_mapsList = KnowledgeBase.getData("expert_workpiece_thickness"); // 工件厚度
+        expert_weld_joint_mapsList = KnowledgeBase.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        expert_thermal_process_mapsList = KnowledgeBase.getData("expert_thermal_process"); // 热工艺
+
+        initTable();
+    }
+
+    //搜索 按钮
+    private void button5ActionPerformed(ActionEvent e) {
+        initTable();
+    }
+
 
     /**
      * JFormDesigner自带，定义自生成
@@ -1508,6 +1667,79 @@ public class ExpertSystem extends JFrame {
         button17 = new JButton();
         button18 = new JButton();
         panel2 = new JPanel();
+        tabbedPane1 = new JTabbedPane();
+        panel11 = new JPanel();
+        label38 = new JLabel();
+        textField13 = new JTextField();
+        button38 = new JButton();
+        label39 = new JLabel();
+        button39 = new JButton();
+        button40 = new JButton();
+        scrollPane9 = new JScrollPane();
+        table8 = new JTable();
+        panel3 = new JPanel();
+        scrollPane1 = new JScrollPane();
+        table1 = new JTable();
+        label24 = new JLabel();
+        textField5 = new JTextField();
+        button5 = new JButton();
+        button19 = new JButton();
+        button9 = new JButton();
+        label25 = new JLabel();
+        panel5 = new JPanel();
+        label26 = new JLabel();
+        textField7 = new JTextField();
+        button20 = new JButton();
+        label27 = new JLabel();
+        button21 = new JButton();
+        button22 = new JButton();
+        scrollPane2 = new JScrollPane();
+        table2 = new JTable();
+        panel6 = new JPanel();
+        label28 = new JLabel();
+        textField8 = new JTextField();
+        button23 = new JButton();
+        label29 = new JLabel();
+        button24 = new JButton();
+        button25 = new JButton();
+        scrollPane3 = new JScrollPane();
+        table3 = new JTable();
+        panel7 = new JPanel();
+        label30 = new JLabel();
+        textField9 = new JTextField();
+        button26 = new JButton();
+        label31 = new JLabel();
+        button27 = new JButton();
+        button28 = new JButton();
+        scrollPane4 = new JScrollPane();
+        table4 = new JTable();
+        panel8 = new JPanel();
+        label32 = new JLabel();
+        textField10 = new JTextField();
+        button29 = new JButton();
+        label33 = new JLabel();
+        button30 = new JButton();
+        button31 = new JButton();
+        scrollPane5 = new JScrollPane();
+        table5 = new JTable();
+        panel9 = new JPanel();
+        label34 = new JLabel();
+        textField11 = new JTextField();
+        button32 = new JButton();
+        label35 = new JLabel();
+        button33 = new JButton();
+        button34 = new JButton();
+        scrollPane6 = new JScrollPane();
+        table6 = new JTable();
+        panel10 = new JPanel();
+        label36 = new JLabel();
+        textField12 = new JTextField();
+        button35 = new JButton();
+        label37 = new JLabel();
+        button36 = new JButton();
+        button37 = new JButton();
+        scrollPane7 = new JScrollPane();
+        table7 = new JTable();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -1617,6 +1849,12 @@ public class ExpertSystem extends JFrame {
 
         //======== tabbedPane2 ========
         {
+            tabbedPane2.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    tabbedPane2MouseClicked(e);
+                }
+            });
 
             //======== panel4 ========
             {
@@ -2091,6 +2329,669 @@ public class ExpertSystem extends JFrame {
             {
                 panel2.setLayout(null);
 
+                //======== tabbedPane1 ========
+                {
+
+                    //======== panel11 ========
+                    {
+                        panel11.setLayout(null);
+
+                        //---- label38 ----
+                        label38.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label38.setFont(label38.getFont().deriveFont(label38.getFont().getSize() + 1f));
+                        panel11.add(label38);
+                        label38.setBounds(5, 10, 75, 23);
+                        panel11.add(textField13);
+                        textField13.setBounds(75, 10, 120, 25);
+
+                        //---- button38 ----
+                        button38.setText("\u641c\u7d22");
+                        button38.addActionListener(e -> button5ActionPerformed(e));
+                        panel11.add(button38);
+                        button38.setBounds(200, 10, 65, 25);
+
+                        //---- label39 ----
+                        label39.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label39.setFont(label39.getFont().deriveFont(label39.getFont().getSize() - 2f));
+                        panel11.add(label39);
+                        label39.setBounds(265, 10, 155, 23);
+
+                        //---- button39 ----
+                        button39.setText("\u6dfb\u52a0");
+                        panel11.add(button39);
+                        button39.setBounds(815, 10, 68, 28);
+
+                        //---- button40 ----
+                        button40.setText("\u4fee\u6539");
+                        panel11.add(button40);
+                        button40.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane9 ========
+                        {
+
+                            //---- table8 ----
+                            table8.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u63a5\u6750\u6599", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u63a5\u5934", "\u710a\u63a5\u5761\u53e3", "\u710a\u63a5\u4f4d\u7f6e", "\u70ed\u5de5\u827a", "\u5176\u4ed61", "\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u8d77\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u5176\u4ed62", "\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u8d77\u5f27\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
+                                }
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
+                            {
+                                TableColumnModel cm = table8.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(50);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(180);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
+                                cm.getColumn(8).setPreferredWidth(180);
+                                cm.getColumn(9).setPreferredWidth(180);
+                                cm.getColumn(10).setPreferredWidth(180);
+                                cm.getColumn(11).setPreferredWidth(180);
+                                cm.getColumn(12).setPreferredWidth(180);
+                                cm.getColumn(13).setPreferredWidth(180);
+                                cm.getColumn(14).setPreferredWidth(180);
+                                cm.getColumn(15).setPreferredWidth(180);
+                                cm.getColumn(16).setPreferredWidth(180);
+                                cm.getColumn(17).setPreferredWidth(180);
+                                cm.getColumn(18).setPreferredWidth(180);
+                                cm.getColumn(19).setPreferredWidth(180);
+                                cm.getColumn(20).setPreferredWidth(180);
+                                cm.getColumn(21).setPreferredWidth(180);
+                            }
+                            table8.setPreferredSize(new Dimension(3000, 32));
+                            table8.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                            scrollPane9.setViewportView(table8);
+                        }
+                        panel11.add(scrollPane9);
+                        scrollPane9.setBounds(0, 45, 960, 377);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel11.getComponentCount(); i++) {
+                                Rectangle bounds = panel11.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel11.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel11.setMinimumSize(preferredSize);
+                            panel11.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u4ea7\u54c1", panel11);
+
+                    //======== panel3 ========
+                    {
+                        panel3.setFont(panel3.getFont().deriveFont(panel3.getFont().getSize() - 1f));
+                        panel3.setLayout(null);
+
+                        //======== scrollPane1 ========
+                        {
+
+                            //---- table1 ----
+                            table1.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
+                            {
+                                TableColumnModel cm = table1.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
+                                cm.getColumn(8).setPreferredWidth(180);
+                                cm.getColumn(9).setPreferredWidth(180);
+                                cm.getColumn(10).setPreferredWidth(180);
+                            }
+                            table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                            scrollPane1.setViewportView(table1);
+                        }
+                        panel3.add(scrollPane1);
+                        scrollPane1.setBounds(0, 43, 960, 380);
+
+                        //---- label24 ----
+                        label24.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() + 1f));
+                        panel3.add(label24);
+                        label24.setBounds(5, 10, 75, 23);
+                        panel3.add(textField5);
+                        textField5.setBounds(75, 10, 120, 25);
+
+                        //---- button5 ----
+                        button5.setText("\u641c\u7d22");
+                        button5.addActionListener(e -> button5ActionPerformed(e));
+                        panel3.add(button5);
+                        button5.setBounds(200, 10, 65, 25);
+
+                        //---- button19 ----
+                        button19.setText("\u6dfb\u52a0");
+                        panel3.add(button19);
+                        button19.setBounds(815, 10, 68, button19.getPreferredSize().height);
+
+                        //---- button9 ----
+                        button9.setText("\u4fee\u6539");
+                        panel3.add(button9);
+                        button9.setBounds(890, 10, 68, button9.getPreferredSize().height);
+
+                        //---- label25 ----
+                        label25.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label25.setFont(label25.getFont().deriveFont(label25.getFont().getSize() - 2f));
+                        panel3.add(label25);
+                        label25.setBounds(265, 10, 155, 23);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel3.getComponentCount(); i++) {
+                                Rectangle bounds = panel3.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel3.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel3.setMinimumSize(preferredSize);
+                            panel3.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u6bcd\u6750", panel3);
+
+                    //======== panel5 ========
+                    {
+                        panel5.setLayout(null);
+
+                        //---- label26 ----
+                        label26.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label26.setFont(label26.getFont().deriveFont(label26.getFont().getSize() + 1f));
+                        panel5.add(label26);
+                        label26.setBounds(5, 10, 75, 23);
+                        panel5.add(textField7);
+                        textField7.setBounds(75, 10, 120, 25);
+
+                        //---- button20 ----
+                        button20.setText("\u641c\u7d22");
+                        button20.addActionListener(e -> button5ActionPerformed(e));
+                        panel5.add(button20);
+                        button20.setBounds(200, 10, 65, 25);
+
+                        //---- label27 ----
+                        label27.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label27.setFont(label27.getFont().deriveFont(label27.getFont().getSize() - 2f));
+                        panel5.add(label27);
+                        label27.setBounds(265, 10, 155, 23);
+
+                        //---- button21 ----
+                        button21.setText("\u6dfb\u52a0");
+                        panel5.add(button21);
+                        button21.setBounds(815, 10, 68, 28);
+
+                        //---- button22 ----
+                        button22.setText("\u4fee\u6539");
+                        panel5.add(button22);
+                        button22.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane2 ========
+                        {
+
+                            //---- table2 ----
+                            table2.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                    {null, null, null, null, null, null, null, null, null, null, null},
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table2.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(100);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(100);
+                                cm.getColumn(4).setPreferredWidth(100);
+                                cm.getColumn(5).setPreferredWidth(100);
+                                cm.getColumn(6).setPreferredWidth(100);
+                                cm.getColumn(7).setPreferredWidth(100);
+                                cm.getColumn(8).setPreferredWidth(100);
+                                cm.getColumn(9).setPreferredWidth(100);
+                                cm.getColumn(10).setPreferredWidth(100);
+                            }
+                            table2.setEnabled(false);
+                            table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                            scrollPane2.setViewportView(table2);
+                        }
+                        panel5.add(scrollPane2);
+                        scrollPane2.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel5.getComponentCount(); i++) {
+                                Rectangle bounds = panel5.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel5.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel5.setMinimumSize(preferredSize);
+                            panel5.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u710a\u63a5\u65b9\u6cd5", panel5);
+
+                    //======== panel6 ========
+                    {
+                        panel6.setLayout(null);
+
+                        //---- label28 ----
+                        label28.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label28.setFont(label28.getFont().deriveFont(label28.getFont().getSize() + 1f));
+                        panel6.add(label28);
+                        label28.setBounds(5, 10, 75, 23);
+                        panel6.add(textField8);
+                        textField8.setBounds(75, 10, 120, 25);
+
+                        //---- button23 ----
+                        button23.setText("\u641c\u7d22");
+                        button23.addActionListener(e -> button5ActionPerformed(e));
+                        panel6.add(button23);
+                        button23.setBounds(200, 10, 65, 25);
+
+                        //---- label29 ----
+                        label29.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label29.setFont(label29.getFont().deriveFont(label29.getFont().getSize() - 2f));
+                        panel6.add(label29);
+                        label29.setBounds(265, 10, 155, 23);
+
+                        //---- button24 ----
+                        button24.setText("\u6dfb\u52a0");
+                        panel6.add(button24);
+                        button24.setBounds(815, 10, 68, 28);
+
+                        //---- button25 ----
+                        button25.setText("\u4fee\u6539");
+                        panel6.add(button25);
+                        button25.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane3 ========
+                        {
+
+                            //---- table3 ----
+                            table3.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table3.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(50);
+                                cm.getColumn(2).setPreferredWidth(40);
+                                cm.getColumn(3).setPreferredWidth(80);
+                                cm.getColumn(4).setPreferredWidth(80);
+                            }
+                            table3.setEnabled(false);
+                            scrollPane3.setViewportView(table3);
+                        }
+                        panel6.add(scrollPane3);
+                        scrollPane3.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel6.getComponentCount(); i++) {
+                                Rectangle bounds = panel6.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel6.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel6.setMinimumSize(preferredSize);
+                            panel6.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u710a\u63a5\u6750\u6599", panel6);
+
+                    //======== panel7 ========
+                    {
+                        panel7.setLayout(null);
+
+                        //---- label30 ----
+                        label30.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label30.setFont(label30.getFont().deriveFont(label30.getFont().getSize() + 1f));
+                        panel7.add(label30);
+                        label30.setBounds(5, 10, 75, 23);
+                        panel7.add(textField9);
+                        textField9.setBounds(75, 10, 120, 25);
+
+                        //---- button26 ----
+                        button26.setText("\u641c\u7d22");
+                        button26.addActionListener(e -> button5ActionPerformed(e));
+                        panel7.add(button26);
+                        button26.setBounds(200, 10, 65, 25);
+
+                        //---- label31 ----
+                        label31.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label31.setFont(label31.getFont().deriveFont(label31.getFont().getSize() - 2f));
+                        panel7.add(label31);
+                        label31.setBounds(265, 10, 155, 23);
+
+                        //---- button27 ----
+                        button27.setText("\u6dfb\u52a0");
+                        panel7.add(button27);
+                        button27.setBounds(815, 10, 68, 28);
+
+                        //---- button28 ----
+                        button28.setText("\u4fee\u6539");
+                        panel7.add(button28);
+                        button28.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane4 ========
+                        {
+
+                            //---- table4 ----
+                            table4.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table4.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(50);
+                                cm.getColumn(2).setPreferredWidth(40);
+                                cm.getColumn(3).setPreferredWidth(80);
+                                cm.getColumn(4).setPreferredWidth(80);
+                            }
+                            table4.setEnabled(false);
+                            scrollPane4.setViewportView(table4);
+                        }
+                        panel7.add(scrollPane4);
+                        scrollPane4.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel7.getComponentCount(); i++) {
+                                Rectangle bounds = panel7.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel7.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel7.setMinimumSize(preferredSize);
+                            panel7.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u8f85\u6750", panel7);
+
+                    //======== panel8 ========
+                    {
+                        panel8.setLayout(null);
+
+                        //---- label32 ----
+                        label32.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label32.setFont(label32.getFont().deriveFont(label32.getFont().getSize() + 1f));
+                        panel8.add(label32);
+                        label32.setBounds(5, 10, 75, 23);
+                        panel8.add(textField10);
+                        textField10.setBounds(75, 10, 120, 25);
+
+                        //---- button29 ----
+                        button29.setText("\u641c\u7d22");
+                        button29.addActionListener(e -> button5ActionPerformed(e));
+                        panel8.add(button29);
+                        button29.setBounds(200, 10, 65, 25);
+
+                        //---- label33 ----
+                        label33.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label33.setFont(label33.getFont().deriveFont(label33.getFont().getSize() - 2f));
+                        panel8.add(label33);
+                        label33.setBounds(265, 10, 155, 23);
+
+                        //---- button30 ----
+                        button30.setText("\u6dfb\u52a0");
+                        panel8.add(button30);
+                        button30.setBounds(815, 10, 68, 28);
+
+                        //---- button31 ----
+                        button31.setText("\u4fee\u6539");
+                        panel8.add(button31);
+                        button31.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane5 ========
+                        {
+
+                            //---- table5 ----
+                            table5.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table5.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(50);
+                                cm.getColumn(2).setPreferredWidth(40);
+                                cm.getColumn(3).setPreferredWidth(80);
+                                cm.getColumn(4).setPreferredWidth(80);
+                            }
+                            table5.setEnabled(false);
+                            scrollPane5.setViewportView(table5);
+                        }
+                        panel8.add(scrollPane5);
+                        scrollPane5.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel8.getComponentCount(); i++) {
+                                Rectangle bounds = panel8.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel8.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel8.setMinimumSize(preferredSize);
+                            panel8.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u5de5\u4ef6\u539a\u5ea6", panel8);
+
+                    //======== panel9 ========
+                    {
+                        panel9.setLayout(null);
+
+                        //---- label34 ----
+                        label34.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label34.setFont(label34.getFont().deriveFont(label34.getFont().getSize() + 1f));
+                        panel9.add(label34);
+                        label34.setBounds(5, 10, 75, 23);
+                        panel9.add(textField11);
+                        textField11.setBounds(75, 10, 120, 25);
+
+                        //---- button32 ----
+                        button32.setText("\u641c\u7d22");
+                        button32.addActionListener(e -> button5ActionPerformed(e));
+                        panel9.add(button32);
+                        button32.setBounds(200, 10, 65, 25);
+
+                        //---- label35 ----
+                        label35.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label35.setFont(label35.getFont().deriveFont(label35.getFont().getSize() - 2f));
+                        panel9.add(label35);
+                        label35.setBounds(265, 10, 155, 23);
+
+                        //---- button33 ----
+                        button33.setText("\u6dfb\u52a0");
+                        panel9.add(button33);
+                        button33.setBounds(815, 10, 68, 28);
+
+                        //---- button34 ----
+                        button34.setText("\u4fee\u6539");
+                        panel9.add(button34);
+                        button34.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane6 ========
+                        {
+
+                            //---- table6 ----
+                            table6.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table6.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(50);
+                                cm.getColumn(2).setPreferredWidth(40);
+                                cm.getColumn(3).setPreferredWidth(80);
+                                cm.getColumn(4).setPreferredWidth(80);
+                            }
+                            table6.setEnabled(false);
+                            scrollPane6.setViewportView(table6);
+                        }
+                        panel9.add(scrollPane6);
+                        scrollPane6.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel9.getComponentCount(); i++) {
+                                Rectangle bounds = panel9.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel9.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel9.setMinimumSize(preferredSize);
+                            panel9.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u710a\u63a5\u63a5\u5934\u3001\u4f4d\u7f6e\u3001\u5761\u53e3", panel9);
+
+                    //======== panel10 ========
+                    {
+                        panel10.setLayout(null);
+
+                        //---- label36 ----
+                        label36.setText("\u6309\u540d\u79f0\u641c\u7d22");
+                        label36.setFont(label36.getFont().deriveFont(label36.getFont().getSize() + 1f));
+                        panel10.add(label36);
+                        label36.setBounds(5, 10, 75, 23);
+                        panel10.add(textField12);
+                        textField12.setBounds(75, 10, 120, 25);
+
+                        //---- button35 ----
+                        button35.setText("\u641c\u7d22");
+                        button35.addActionListener(e -> button5ActionPerformed(e));
+                        panel10.add(button35);
+                        button35.setBounds(200, 10, 65, 25);
+
+                        //---- label37 ----
+                        label37.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                        label37.setFont(label37.getFont().deriveFont(label37.getFont().getSize() - 2f));
+                        panel10.add(label37);
+                        label37.setBounds(265, 10, 155, 23);
+
+                        //---- button36 ----
+                        button36.setText("\u6dfb\u52a0");
+                        panel10.add(button36);
+                        button36.setBounds(815, 10, 68, 28);
+
+                        //---- button37 ----
+                        button37.setText("\u4fee\u6539");
+                        panel10.add(button37);
+                        button37.setBounds(890, 10, 68, 28);
+
+                        //======== scrollPane7 ========
+                        {
+
+                            //---- table7 ----
+                            table7.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                }
+                            ));
+                            {
+                                TableColumnModel cm = table7.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(50);
+                                cm.getColumn(2).setPreferredWidth(40);
+                                cm.getColumn(3).setPreferredWidth(80);
+                                cm.getColumn(4).setPreferredWidth(80);
+                            }
+                            table7.setEnabled(false);
+                            scrollPane7.setViewportView(table7);
+                        }
+                        panel10.add(scrollPane7);
+                        scrollPane7.setBounds(0, 43, 960, 380);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel10.getComponentCount(); i++) {
+                                Rectangle bounds = panel10.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel10.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel10.setMinimumSize(preferredSize);
+                            panel10.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u70ed\u5de5\u827a", panel10);
+                }
+                panel2.add(tabbedPane1);
+                tabbedPane1.setBounds(0, 5, 965, 455);
+
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
@@ -2201,5 +3102,78 @@ public class ExpertSystem extends JFrame {
     private JButton button17;
     private JButton button18;
     private JPanel panel2;
+    private JTabbedPane tabbedPane1;
+    private JPanel panel11;
+    private JLabel label38;
+    private JTextField textField13;
+    private JButton button38;
+    private JLabel label39;
+    private JButton button39;
+    private JButton button40;
+    private JScrollPane scrollPane9;
+    private JTable table8;
+    private JPanel panel3;
+    private JScrollPane scrollPane1;
+    private JTable table1;
+    private JLabel label24;
+    private JTextField textField5;
+    private JButton button5;
+    private JButton button19;
+    private JButton button9;
+    private JLabel label25;
+    private JPanel panel5;
+    private JLabel label26;
+    private JTextField textField7;
+    private JButton button20;
+    private JLabel label27;
+    private JButton button21;
+    private JButton button22;
+    private JScrollPane scrollPane2;
+    private JTable table2;
+    private JPanel panel6;
+    private JLabel label28;
+    private JTextField textField8;
+    private JButton button23;
+    private JLabel label29;
+    private JButton button24;
+    private JButton button25;
+    private JScrollPane scrollPane3;
+    private JTable table3;
+    private JPanel panel7;
+    private JLabel label30;
+    private JTextField textField9;
+    private JButton button26;
+    private JLabel label31;
+    private JButton button27;
+    private JButton button28;
+    private JScrollPane scrollPane4;
+    private JTable table4;
+    private JPanel panel8;
+    private JLabel label32;
+    private JTextField textField10;
+    private JButton button29;
+    private JLabel label33;
+    private JButton button30;
+    private JButton button31;
+    private JScrollPane scrollPane5;
+    private JTable table5;
+    private JPanel panel9;
+    private JLabel label34;
+    private JTextField textField11;
+    private JButton button32;
+    private JLabel label35;
+    private JButton button33;
+    private JButton button34;
+    private JScrollPane scrollPane6;
+    private JTable table6;
+    private JPanel panel10;
+    private JLabel label36;
+    private JTextField textField12;
+    private JButton button35;
+    private JLabel label37;
+    private JButton button36;
+    private JButton button37;
+    private JScrollPane scrollPane7;
+    private JTable table7;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
