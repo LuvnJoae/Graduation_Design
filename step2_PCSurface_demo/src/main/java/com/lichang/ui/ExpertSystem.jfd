@@ -852,7 +852,7 @@ new FormModel {
 								"y": 10
 							} )
 							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-								name: "scrollPane9"
+								name: "scrollPane8"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table8"
 									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
@@ -861,21 +861,21 @@ new FormModel {
 										add( "母材A" )
 										add( "母材B" )
 										add( "焊接方法" )
-										add( "焊接材料" )
+										add( "焊材牌号" )
 										add( "辅材" )
 										add( "工件厚度" )
-										add( "焊接接头" )
-										add( "焊接坡口" )
 										add( "焊接位置" )
-										add( "热工艺" )
+										add( "焊接接头" )
+										add( "坡口形式" )
+										add( "热处理类型" )
 										add( "其他1" )
-										add( "电流（建议值）" )
-										add( "起弧电压（建议值）" )
+										add( "焊接电流（建议值）" )
+										add( "电弧电压（建议值）" )
 										add( "焊接速度（建议值）" )
 										add( "干伸出量（建议值）" )
 										add( "其他2" )
-										add( "电流（实际值）" )
-										add( "起弧电压（实际值）" )
+										add( "焊接电流（实际值）" )
+										add( "焊接电压（实际值）" )
 										add( "焊接速度（实际值）" )
 										add( "干伸出量（实际值）" )
 									}, new java.util.Vector {
@@ -925,16 +925,16 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
+										add( &SwingTableColumn1 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn2 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn3 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn4 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn5 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn6 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn7 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn8 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
@@ -948,14 +948,13 @@ new FormModel {
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 									} )
-									"preferredSize": new java.awt.Dimension( 3000, 32 )
 									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
-								"height": 377
+								"height": 380
 								"x": 0
-								"y": 45
+								"y": 43
 							} )
 						}, new FormLayoutConstraints( null ) {
 							"title": "产品"
@@ -1004,16 +1003,16 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn1 )
+										add( &SwingTableColumn9 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( #SwingTableColumn5 )
+										add( #SwingTableColumn6 )
+										add( #SwingTableColumn7 )
+										add( #SwingTableColumn8 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 									} )
 									"autoResizeMode": 0
@@ -1143,32 +1142,16 @@ new FormModel {
 								name: "scrollPane2"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table2"
-									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
-										add( new java.util.Vector {
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-											add( null )
-										} )
-									}, new java.util.Vector {
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 										add( "id" )
 										add( "name" )
 										add( "seq" )
-										add( "匹配：母材" )
-										add( "匹配：焊接方法" )
-										add( "温度等级" )
-										add( "焊接性能" )
-										add( "机械性能" )
-										add( "规格" )
-										add( "化学成分" )
-										add( "工艺要点" )
+										add( "匹配：焊接材料" )
+										add( "匹配：辅材" )
+										add( "方法特点" )
+										add( "设备型号" )
+										add( "设备参数" )
+										add( "应用范围" )
 									}, new java.util.Vector {
 										add( null )
 										add( null )
@@ -1179,41 +1162,34 @@ new FormModel {
 										add( null )
 										add( null )
 										add( null )
-										add( null )
-										add( null )
 									}, new java.util.Vector {
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
 									}, new java.util.Vector {
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn1 )
+										add( #SwingTableColumn9 )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( #SwingTableColumn5 )
+										add( #SwingTableColumn6 )
+										add( #SwingTableColumn7 )
 									} )
-									"enabled": false
 									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
 								"height": 380
 								"x": 0
 								"y": 43
-								"width": 960
 							} )
 						}, new FormLayoutConstraints( null ) {
 							"title": "焊接方法"
@@ -1280,18 +1256,15 @@ new FormModel {
 								name: "scrollPane3"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table3"
-									"model": &SwingTableModel0 new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 										add( "id" )
 										add( "name" )
 										add( "seq" )
-										add( "匹配：母材" )
-										add( "匹配：焊接方法" )
-										add( "温度等级" )
-										add( "焊接性能" )
-										add( "机械性能" )
-										add( "规格" )
+										add( "匹配：辅材" )
+										add( "焊材类型" )
 										add( "化学成分" )
-										add( "工艺要点" )
+										add( "力学性能" )
+										add( "主要用途" )
 									}, new java.util.Vector {
 										add( null )
 										add( null )
@@ -1301,35 +1274,26 @@ new FormModel {
 										add( null )
 										add( null )
 										add( null )
-										add( null )
-										add( null )
-										add( null )
 									}, new java.util.Vector {
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
 									}, new java.util.Vector {
 										add( #SwingTableColumn0 )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 80, 0, 0, true ) )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 80, 0, 0, true ) )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
-										add( null )
+										add( #SwingTableColumn1 )
+										add( #SwingTableColumn9 )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( #SwingTableColumn5 )
+										add( #SwingTableColumn6 )
 									} )
-									"enabled": false
+									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1402,8 +1366,32 @@ new FormModel {
 								name: "scrollPane4"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table4"
-									"model": #SwingTableModel0
-									"enabled": false
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "app" )
+										add( "参数" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
+										add( #SwingTableColumn1 )
+										add( #SwingTableColumn9 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 300, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 430, 0, 0, true ) )
+									} )
+									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1476,8 +1464,32 @@ new FormModel {
 								name: "scrollPane5"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table5"
-									"model": #SwingTableModel0
-									"enabled": false
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "匹配：接头形式、坡口形式、焊接位置" )
+										add( "参数" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn1 )
+										add( #SwingTableColumn9 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 370, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 350, 0, 0, true ) )
+									} )
+									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1550,8 +1562,40 @@ new FormModel {
 								name: "scrollPane6"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table6"
-									"model": #SwingTableModel0
-									"enabled": false
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "seq" )
+										add( "匹配：" )
+										add( "接头形式" )
+										add( "坡口形式" )
+										add( "坡口参数" )
+										add( "焊接位置" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn9 )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( #SwingTableColumn5 )
+									} )
+									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1624,8 +1668,48 @@ new FormModel {
 								name: "scrollPane7"
 								add( new FormComponent( "javax.swing.JTable" ) {
 									name: "table7"
-									"model": #SwingTableModel0
-									"enabled": false
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "seq" )
+										add( "匹配：" )
+										add( "热处理类型" )
+										add( "预热温度" )
+										add( "预热时间" )
+										add( "层间温度" )
+										add( "热处理温度" )
+										add( "热处理保温时间" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn9 )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( #SwingTableColumn5 )
+										add( #SwingTableColumn6 )
+										add( #SwingTableColumn7 )
+										add( #SwingTableColumn8 )
+									} )
+									"autoResizeMode": 0
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1650,6 +1734,14 @@ new FormModel {
 				"y": 95
 				"width": 970
 				"height": 490
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button41"
+				"text": "test"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button41ActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 100
+				"y": 20
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

@@ -1437,20 +1437,31 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
+     * 测试 按钮： 资料库
+     */
+    private void button41ActionPerformed(ActionEvent e) {
+        initTable();
+    }
+
+    /**
      * 资料库 表格
      */
     //表格: 载入内容 主方法
     private void initTable_main(List<Map<String, Object>> expert_mapsList, JTable table, String[] colsName) {
-        DefaultTableModel tableModel = (DefaultTableModel)table.getModel(); //获取当前模型
-        List<Object> newRow_list = new ArrayList<>();
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
 
-        for (int i = 0; i < expert_base_metal_mapsList.size(); i++) {
+
+        for (int i = 0; i < expert_mapsList.size(); i++) {
+            List<Object> newRow_list = new ArrayList<>();
             for (String s : colsName) {
                 newRow_list.add(expert_mapsList.get(i).get(s)); //将每个col的内容加载进list
             }
             Object[] newRow = newRow_list.toArray();
-            tableModel.addRow(newRow);
+
+            tableModel.addRow(newRow); //添加模型
+
         }
+
     }
 
     //表格： 加载 各表格
@@ -1582,14 +1593,14 @@ public class ExpertSystem extends JFrame {
         expert_workpiece_thickness_mapsList = KnowledgeBase.getData("expert_workpiece_thickness"); // 工件厚度
         expert_weld_joint_mapsList = KnowledgeBase.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
         expert_thermal_process_mapsList = KnowledgeBase.getData("expert_thermal_process"); // 热工艺
-
-        initTable();
     }
 
     //搜索 按钮
     private void button5ActionPerformed(ActionEvent e) {
-        initTable();
+
     }
+
+
 
 
     /**
@@ -1675,7 +1686,7 @@ public class ExpertSystem extends JFrame {
         label39 = new JLabel();
         button39 = new JButton();
         button40 = new JButton();
-        scrollPane9 = new JScrollPane();
+        scrollPane8 = new JScrollPane();
         table8 = new JTable();
         panel3 = new JPanel();
         scrollPane1 = new JScrollPane();
@@ -1740,6 +1751,7 @@ public class ExpertSystem extends JFrame {
         button37 = new JButton();
         scrollPane7 = new JScrollPane();
         table7 = new JTable();
+        button41 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -2366,7 +2378,7 @@ public class ExpertSystem extends JFrame {
                         panel11.add(button40);
                         button40.setBounds(890, 10, 68, 28);
 
-                        //======== scrollPane9 ========
+                        //======== scrollPane8 ========
                         {
 
                             //---- table8 ----
@@ -2374,7 +2386,7 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u63a5\u6750\u6599", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u63a5\u5934", "\u710a\u63a5\u5761\u53e3", "\u710a\u63a5\u4f4d\u7f6e", "\u70ed\u5de5\u827a", "\u5176\u4ed61", "\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u8d77\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u5176\u4ed62", "\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u8d77\u5f27\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
+                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u6750\u724c\u53f7", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u4f4d\u7f6e", "\u710a\u63a5\u63a5\u5934", "\u5761\u53e3\u5f62\u5f0f", "\u70ed\u5904\u7406\u7c7b\u578b", "\u5176\u4ed61", "\u710a\u63a5\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u7535\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u5176\u4ed62", "\u710a\u63a5\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
                                 }
                             ) {
                                 boolean[] columnEditable = new boolean[] {
@@ -2387,7 +2399,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table8.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
+                                cm.getColumn(0).setPreferredWidth(40);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(180);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -2410,12 +2422,11 @@ public class ExpertSystem extends JFrame {
                                 cm.getColumn(20).setPreferredWidth(180);
                                 cm.getColumn(21).setPreferredWidth(180);
                             }
-                            table8.setPreferredSize(new Dimension(3000, 32));
                             table8.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            scrollPane9.setViewportView(table8);
+                            scrollPane8.setViewportView(table8);
                         }
-                        panel11.add(scrollPane9);
-                        scrollPane9.setBounds(0, 45, 960, 377);
+                        panel11.add(scrollPane8);
+                        scrollPane8.setBounds(0, 43, 960, 380);
 
                         {
                             // compute preferred size
@@ -2565,27 +2576,31 @@ public class ExpertSystem extends JFrame {
                             //---- table2 ----
                             table2.setModel(new DefaultTableModel(
                                 new Object[][] {
-                                    {null, null, null, null, null, null, null, null, null, null, null},
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u710a\u63a5\u6750\u6599", "\u5339\u914d\uff1a\u8f85\u6750", "\u65b9\u6cd5\u7279\u70b9", "\u8bbe\u5907\u578b\u53f7", "\u8bbe\u5907\u53c2\u6570", "\u5e94\u7528\u8303\u56f4"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table2.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(100);
+                                cm.getColumn(0).setPreferredWidth(40);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(100);
-                                cm.getColumn(4).setPreferredWidth(100);
-                                cm.getColumn(5).setPreferredWidth(100);
-                                cm.getColumn(6).setPreferredWidth(100);
-                                cm.getColumn(7).setPreferredWidth(100);
-                                cm.getColumn(8).setPreferredWidth(100);
-                                cm.getColumn(9).setPreferredWidth(100);
-                                cm.getColumn(10).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
+                                cm.getColumn(8).setPreferredWidth(180);
                             }
-                            table2.setEnabled(false);
                             table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane2.setViewportView(table2);
                         }
@@ -2651,18 +2666,29 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u8f85\u6750", "\u710a\u6750\u7c7b\u578b", "\u5316\u5b66\u6210\u5206", "\u529b\u5b66\u6027\u80fd", "\u4e3b\u8981\u7528\u9014"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table3.getColumnModel();
                                 cm.getColumn(0).setPreferredWidth(40);
-                                cm.getColumn(1).setPreferredWidth(50);
-                                cm.getColumn(2).setPreferredWidth(40);
-                                cm.getColumn(3).setPreferredWidth(80);
-                                cm.getColumn(4).setPreferredWidth(80);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
                             }
-                            table3.setEnabled(false);
+                            table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane3.setViewportView(table3);
                         }
                         panel6.add(scrollPane3);
@@ -2727,18 +2753,26 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "name", "seq", "app", "\u53c2\u6570"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table4.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
-                                cm.getColumn(1).setPreferredWidth(50);
-                                cm.getColumn(2).setPreferredWidth(40);
-                                cm.getColumn(3).setPreferredWidth(80);
-                                cm.getColumn(4).setPreferredWidth(80);
+                                cm.getColumn(0).setPreferredWidth(50);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(300);
+                                cm.getColumn(4).setPreferredWidth(430);
                             }
-                            table4.setEnabled(false);
+                            table4.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane4.setViewportView(table4);
                         }
                         panel7.add(scrollPane4);
@@ -2803,18 +2837,26 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "name", "seq", "\u5339\u914d\uff1a\u63a5\u5934\u5f62\u5f0f\u3001\u5761\u53e3\u5f62\u5f0f\u3001\u710a\u63a5\u4f4d\u7f6e", "\u53c2\u6570"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table5.getColumnModel();
                                 cm.getColumn(0).setPreferredWidth(40);
-                                cm.getColumn(1).setPreferredWidth(50);
-                                cm.getColumn(2).setPreferredWidth(40);
-                                cm.getColumn(3).setPreferredWidth(80);
-                                cm.getColumn(4).setPreferredWidth(80);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(370);
+                                cm.getColumn(4).setPreferredWidth(350);
                             }
-                            table5.setEnabled(false);
+                            table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane5.setViewportView(table5);
                         }
                         panel8.add(scrollPane5);
@@ -2879,18 +2921,28 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "seq", "\u5339\u914d\uff1a", "\u63a5\u5934\u5f62\u5f0f", "\u5761\u53e3\u5f62\u5f0f", "\u5761\u53e3\u53c2\u6570", "\u710a\u63a5\u4f4d\u7f6e"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table6.getColumnModel();
                                 cm.getColumn(0).setPreferredWidth(40);
-                                cm.getColumn(1).setPreferredWidth(50);
-                                cm.getColumn(2).setPreferredWidth(40);
-                                cm.getColumn(3).setPreferredWidth(80);
-                                cm.getColumn(4).setPreferredWidth(80);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(180);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
                             }
-                            table6.setEnabled(false);
+                            table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane6.setViewportView(table6);
                         }
                         panel9.add(scrollPane6);
@@ -2955,18 +3007,30 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    "id", "seq", "\u5339\u914d\uff1a", "\u70ed\u5904\u7406\u7c7b\u578b", "\u9884\u70ed\u6e29\u5ea6", "\u9884\u70ed\u65f6\u95f4", "\u5c42\u95f4\u6e29\u5ea6", "\u70ed\u5904\u7406\u6e29\u5ea6", "\u70ed\u5904\u7406\u4fdd\u6e29\u65f6\u95f4"
                                 }
-                            ));
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
                             {
                                 TableColumnModel cm = table7.getColumnModel();
                                 cm.getColumn(0).setPreferredWidth(40);
-                                cm.getColumn(1).setPreferredWidth(50);
-                                cm.getColumn(2).setPreferredWidth(40);
-                                cm.getColumn(3).setPreferredWidth(80);
-                                cm.getColumn(4).setPreferredWidth(80);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(180);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
+                                cm.getColumn(8).setPreferredWidth(180);
                             }
-                            table7.setEnabled(false);
+                            table7.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             scrollPane7.setViewportView(table7);
                         }
                         panel10.add(scrollPane7);
@@ -3011,6 +3075,12 @@ public class ExpertSystem extends JFrame {
         }
         contentPane.add(tabbedPane2);
         tabbedPane2.setBounds(5, 95, 970, 490);
+
+        //---- button41 ----
+        button41.setText("test");
+        button41.addActionListener(e -> button41ActionPerformed(e));
+        contentPane.add(button41);
+        button41.setBounds(new Rectangle(new Point(100, 20), button41.getPreferredSize()));
 
         {
             // compute preferred size
@@ -3110,7 +3180,7 @@ public class ExpertSystem extends JFrame {
     private JLabel label39;
     private JButton button39;
     private JButton button40;
-    private JScrollPane scrollPane9;
+    private JScrollPane scrollPane8;
     private JTable table8;
     private JPanel panel3;
     private JScrollPane scrollPane1;
@@ -3175,5 +3245,6 @@ public class ExpertSystem extends JFrame {
     private JButton button37;
     private JScrollPane scrollPane7;
     private JTable table7;
+    private JButton button41;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
