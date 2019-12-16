@@ -1329,18 +1329,18 @@ new FormModel {
 						"text": "添加"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button20ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 68
+						"width": 60
 						"height": 28
-						"x": 815
+						"x": 750
 						"y": 5
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button22"
 						"text": "修改"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 68
+						"width": 60
 						"height": 28
-						"x": 890
+						"x": 820
 						"y": 5
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -1348,7 +1348,7 @@ new FormModel {
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button42ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 745
+						"x": 680
 						"y": 5
 						"width": 61
 						"height": 28
@@ -1372,6 +1372,16 @@ new FormModel {
 						"y": 5
 						"width": 58
 						"height": 23
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button5"
+						"text": "确定"
+						"enabled": false
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 890
+						"y": 5
+						"width": 60
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "资料库"

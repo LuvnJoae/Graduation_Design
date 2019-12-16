@@ -23,8 +23,6 @@ import java.awt.event.FocusListener;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.jdesktop.beansbinding.*;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 //TODO: 待解决问题
 //标记时间：2019/12/4 17:32  预解决时间：
@@ -44,9 +42,12 @@ import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 ////通过添加一个数据库中的表，记录上一次留下的产品选择项，从而实现记忆功能。
 
 // 资料库
-//1.表格的绑定
-//2. 查询、添加、修改的实现（通过一个额外的JDialog）
-//3. 问题：切换资料库页面后，数据出现混乱
+////1.表格的绑定
+////2. 添加时，切换tabbed，会导致选择错误tabbed下标，加载空模型
+//3. 添加时，信息要录入数据库
+//4. 添加成功后的弹窗提示
+//5. 修改按钮
+
 
 
 /**
@@ -132,6 +133,11 @@ public class ExpertSystem extends JFrame {
     private DefaultTableModel table7Model;
     private DefaultTableModel table8Model;
 
+    //作用确定按钮，辨别是添加还是修改
+    boolean addFlag; //添加：true， 修改：false
+
+    //当前tabbed下标
+    String tabbedPannel1_index;
 
     //无参构造
     public ExpertSystem() {
@@ -1448,23 +1454,7 @@ public class ExpertSystem extends JFrame {
      * 测试 按钮： 资料库
      */
     private void button41ActionPerformed(ActionEvent e) {
-        table1.setModel(table1Model);
-        {
-            TableColumnModel cm = table1.getColumnModel();
-            cm.getColumn(0).setPreferredWidth(40);
-            cm.getColumn(1).setPreferredWidth(100);
-            cm.getColumn(2).setPreferredWidth(100);
-            cm.getColumn(3).setPreferredWidth(180);
-            cm.getColumn(4).setPreferredWidth(180);
-            cm.getColumn(5).setPreferredWidth(180);
-            cm.getColumn(6).setPreferredWidth(180);
-            cm.getColumn(7).setPreferredWidth(180);
-            cm.getColumn(8).setPreferredWidth(180);
-            cm.getColumn(9).setPreferredWidth(180);
-            cm.getColumn(10).setPreferredWidth(180);
-        }
-        table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table1.setAutoCreateRowSorter(true);
+
     }
 
     /**
@@ -1621,6 +1611,30 @@ public class ExpertSystem extends JFrame {
         expert_thermal_process_mapsList = KnowledgeBase.getData("expert_thermal_process"); // 热工艺
     }
 
+    //表格： 设置表格列宽等格式
+    private void setTableForm(JTable table) {
+        TableColumnModel cm = table.getColumnModel();
+        if (table == table8){
+            cm.getColumn(0).setPreferredWidth(50);
+            cm.getColumn(1).setPreferredWidth(100);
+            for (int i = 2; i < cm.getColumnCount(); i++) {
+                cm.getColumn(i).setPreferredWidth(300);
+            }
+        }else {
+            cm.getColumn(0).setPreferredWidth(50);
+            cm.getColumn(1).setPreferredWidth(100);
+            cm.getColumn(2).setPreferredWidth(100);
+            if (cm.getColumnCount() < 7) {
+                for (int i = 3; i < cm.getColumnCount(); i++) {
+                    cm.getColumn(i).setPreferredWidth(300);
+                }
+            } else {
+                for (int i = 3; i < cm.getColumnCount(); i++) {
+                    cm.getColumn(i).setPreferredWidth(180);
+                }
+            }
+        }
+    }
 
     /**
      * 资料库 按钮
@@ -1718,43 +1732,144 @@ public class ExpertSystem extends JFrame {
 
     //添加 按钮
     private void button20ActionPerformed(ActionEvent e) {
-        table1Model = (DefaultTableModel) table1.getModel();
+        tabbedPannel1_index = String.valueOf(tabbedPane1.getSelectedIndex()); //获取当前所选tabbedPanel1的下标
+        addFlag = true; //标志位
+        //对于每个表格，检索不同
+        switch (tabbedPannel1_index) {
+            case "0":
+                table8Model = (DefaultTableModel) table8.getModel(); //保存原模型
+                addCount(table8);
+                break;
+            case "1":
+                table1Model = (DefaultTableModel) table1.getModel(); //保存原模型
+                addCount(table1);
+                break;
+            case "2":
+                table2Model = (DefaultTableModel) table2.getModel(); //保存原模型
+                addCount(table2);
+                break;
+            case "3":
+                table3Model = (DefaultTableModel) table3.getModel(); //保存原模型
+                addCount(table3);
+                break;
+            case "4":
+                table4Model = (DefaultTableModel) table4.getModel(); //保存原模型
+                addCount(table4);
+                break;
+            case "5":
+                table5Model = (DefaultTableModel) table5.getModel(); //保存原模型
+                addCount(table5);
+                break;
+            case "6":
+                table6Model = (DefaultTableModel) table6.getModel(); //保存原模型
+                addCount(table6);
+                break;
+            case "7":
+                table7Model = (DefaultTableModel) table7.getModel(); //保存原模型
+                addCount(table7);
+                break;
+            default:
+                break;
+        }
 
-        table1.setModel(new DefaultTableModel(
+        //去使能其他按钮
+        button23.setEnabled(false); //刷新
+        button20.setEnabled(false); //添加
+        button22.setEnabled(false); //修改
+        button21.setEnabled(false); //搜索
+        button24.setEnabled(false); //返回
+        //开使能
+        button5.setEnabled(true); //确定
+    }
+
+    //添加 主方法
+    private void addCount(JTable table) {
+        //获取 原列名
+        ArrayList<String> colsName_list = new ArrayList<>();
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            colsName_list.add(table.getColumnName(i));
+        }
+        Object[] colsName = colsName_list.toArray();
+
+        //获取，最后的id
+        int rowCount = table.getRowCount();
+        int lastId = (int) table.getValueAt(rowCount-1, 0);
+        String nextId = String.valueOf(lastId + 1);
+
+        //设置新model
+        table.setModel(new DefaultTableModel(
                 new Object[][] {
                 },
-                new String[] {
-                        "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
-                }
+                colsName
         ) {
-            boolean[] columnEditable = new boolean[] {
-                    false, false, false, false, false, false, false, false, false, false, false
-            };
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return true;
             }
         });
-        {
-            TableColumnModel cm = table1.getColumnModel();
-            cm.getColumn(0).setPreferredWidth(40);
-            cm.getColumn(1).setPreferredWidth(100);
-            cm.getColumn(2).setPreferredWidth(100);
-            cm.getColumn(3).setPreferredWidth(180);
-            cm.getColumn(4).setPreferredWidth(180);
-            cm.getColumn(5).setPreferredWidth(180);
-            cm.getColumn(6).setPreferredWidth(180);
-            cm.getColumn(7).setPreferredWidth(180);
-            cm.getColumn(8).setPreferredWidth(180);
-            cm.getColumn(9).setPreferredWidth(180);
-            cm.getColumn(10).setPreferredWidth(180);
-        }
-        table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table1.setAutoCreateRowSorter(true);
+        //设置新模型的列宽格式
+        setTableForm(table);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setAutoCreateRowSorter(true);
 
-
-
+        //加载空行(除了ID)
+        Object[] r = {nextId};
+        ((DefaultTableModel) table.getModel()).addRow(r);
     }
+
+    //确定 按钮
+    private void button5ActionPerformed(ActionEvent e) {
+        //对于每个表格，检索不同
+        switch (tabbedPannel1_index) {
+            case "0":
+                enter_main(table8, table8Model);
+                break;
+            case "1":
+                enter_main(table1, table1Model);
+                break;
+            case "2":
+                enter_main(table2, table2Model);
+                break;
+            case "3":
+                enter_main(table3, table3Model);
+                break;
+            case "4":
+                enter_main(table4, table4Model);
+                break;
+            case "5":
+                enter_main(table5, table5Model);
+                break;
+            case "6":
+                enter_main(table6, table6Model);
+                break;
+            case "7":
+                enter_main(table7, table7Model);
+                break;
+            default:
+                break;
+        }
+
+        //关闭 使能
+        button5.setEnabled(false); //确定
+        //开启 使能
+        button23.setEnabled(true); //刷新
+        button20.setEnabled(true); //添加
+        button22.setEnabled(true); //修改
+        button21.setEnabled(true); //搜索
+        button24.setEnabled(true); //返回
+    }
+
+    //确定 主方法
+    private void enter_main(JTable table, DefaultTableModel tableModel) {
+        if (addFlag) {
+            table.setModel(tableModel); //还原 原model
+            setTableForm(table);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            table.setAutoCreateRowSorter(true);
+        }
+    }
+
+
 
     //修改 按钮
 
@@ -1869,6 +1984,7 @@ public class ExpertSystem extends JFrame {
         button23 = new JButton();
         button24 = new JButton();
         label24 = new JLabel();
+        button5 = new JButton();
         button41 = new JButton();
 
         //======== this ========
@@ -2962,18 +3078,18 @@ public class ExpertSystem extends JFrame {
                 button20.setText("\u6dfb\u52a0");
                 button20.addActionListener(e -> button20ActionPerformed(e));
                 panel2.add(button20);
-                button20.setBounds(815, 5, 68, 28);
+                button20.setBounds(750, 5, 60, 28);
 
                 //---- button22 ----
                 button22.setText("\u4fee\u6539");
                 panel2.add(button22);
-                button22.setBounds(890, 5, 68, 28);
+                button22.setBounds(820, 5, 60, 28);
 
                 //---- button23 ----
                 button23.setText("\u5237\u65b0");
                 button23.addActionListener(e -> button42ActionPerformed(e));
                 panel2.add(button23);
-                button23.setBounds(745, 5, 61, 28);
+                button23.setBounds(680, 5, 61, 28);
 
                 //---- button24 ----
                 button24.setText("\u8fd4\u56de");
@@ -2986,6 +3102,13 @@ public class ExpertSystem extends JFrame {
                 label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() + 1f));
                 panel2.add(label24);
                 label24.setBounds(10, 5, 58, 23);
+
+                //---- button5 ----
+                button5.setText("\u786e\u5b9a");
+                button5.setEnabled(false);
+                button5.addActionListener(e -> button5ActionPerformed(e));
+                panel2.add(button5);
+                button5.setBounds(890, 5, 60, button5.getPreferredSize().height);
 
                 {
                     // compute preferred size
@@ -3136,6 +3259,7 @@ public class ExpertSystem extends JFrame {
     private JButton button23;
     private JButton button24;
     private JLabel label24;
+    private JButton button5;
     private JButton button41;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
