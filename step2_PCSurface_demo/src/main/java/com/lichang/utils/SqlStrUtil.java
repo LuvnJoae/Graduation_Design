@@ -275,4 +275,25 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
+    /**
+     * 语句9：更新  /说明：以id为条件，更新表内所有列（除了id）  条件：id， 其他：colsName为所有列值在内的数组
+     */
+    public static String generateSql9(String table, Object[] colsName) {
+        StringBuffer sb = new StringBuffer("");
+        for (int i = 1; i < colsName.length; i++) {
+            if (i == colsName.length - 1) {
+                sb.append(colsName[i] + " = ? ");
+            }else {
+                sb.append(colsName[i] + " = ?, ");
+            }
+        }
+
+        String sqlStr = "update "
+                + table
+                + " set "
+                + sb.toString()
+                + " where id = ?";
+        return sqlStr;
+    }
+
 }

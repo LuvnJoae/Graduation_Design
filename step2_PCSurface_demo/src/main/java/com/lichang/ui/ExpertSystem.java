@@ -6,6 +6,7 @@ package com.lichang.ui;
 
 import java.awt.event.*;
 import javax.swing.border.*;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.*;
 
 import com.lichang.utils.ExpertSystemUtil.KnowledgeBase;
@@ -47,7 +48,9 @@ import java.util.regex.Pattern;
 ////2. 添加时，切换tabbed，会导致选择错误tabbed下标，加载空模型
 ////3. 添加时，信息要录入数据库
 ////4. 添加成功后的弹窗提示
-//5. 修改按钮
+////5. 修改按钮
+//6. 部分按钮添加权限
+//7. 批量删除（低优先级）
 
 
 
@@ -136,7 +139,7 @@ public class ExpertSystem extends JFrame {
     private DefaultTableModel table9Model;
 
     //作用确定按钮，辨别是添加还是修改
-    String addFlag = "0"; //无状态：0，添加：1， 删除：2，修改：2
+    String addFlag = "0"; //无状态：0，添加：1， 删除：2，修改：3
 
     //当前tabbed下标
     String tabbedPannel1_index;
@@ -1456,16 +1459,66 @@ public class ExpertSystem extends JFrame {
      * 测试 按钮： 资料库
      */
     private void button41ActionPerformed(ActionEvent e) {
-
     }
 
     /**
      * 资料库 表格
      */
     //表格: 载入内容 主方法
-    private void initTable_main(List<Map<String, Object>> expert_mapsList, JTable table, String[] colsName) {
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        tableModel.setRowCount(0);
+    private void initTable_main(List<Map<String, Object>> expert_mapsList, JTable table, String[] colsName, boolean editable) {
+        DefaultTableModel tableModel; //模型
+        if (editable){
+            //用于当 修改 内容时，重新加载一个 格式相同，但可以编辑的表格
+            tableModel = new DefaultTableModel(colsName, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return true;
+                }
+            };
+
+            table.setModel(tableModel);
+
+            switch (tabbedPannel1_index) {
+                case "0":
+                    setTableForm(table8);
+                    break;
+                case "1":
+                    setTableForm(table1);
+                    break;
+                case "2":
+                    setTableForm(table2);
+                    break;
+                case "3":
+                    setTableForm(table3);
+                    break;
+                case "4":
+                    setTableForm(table4);
+                    break;
+                case "5":
+                    setTableForm(table5);
+                    break;
+                case "6":
+                    setTableForm(table6);
+                    break;
+                case "7":
+                    setTableForm(table7);
+                    break;
+                case "8":
+                    setTableForm(table8);
+                    break;
+                default:
+                    break;
+            }
+
+
+
+
+        } else {
+            tableModel = (DefaultTableModel) table.getModel();
+            tableModel.setRowCount(0);
+        }
+
+
 
         for (int i = 0; i < expert_mapsList.size(); i++) {
             List<Object> newRow_list = new ArrayList<>();
@@ -1481,7 +1534,7 @@ public class ExpertSystem extends JFrame {
     }
 
     //表格： 加载 各表格
-    private void initTable() {
+    private void initTable(String index, boolean editable) {
         //加载 母材 表格
         String[] table1_colsName = {
                 "id",
@@ -1496,7 +1549,6 @@ public class ExpertSystem extends JFrame {
                 "chemical_composition",
                 "technology _points"
         };
-        initTable_main(expert_base_metal_mapsList, table1, table1_colsName);
 
         //加载 焊接方法 表格
         String[] table2_colsName = {
@@ -1510,7 +1562,6 @@ public class ExpertSystem extends JFrame {
                 "device_parameters",
                 "scope"
         };
-        initTable_main(expert_weld_method_mapsList, table2, table2_colsName);
 
         //加载 焊接材料 表格
         String[] table3_colsName = {
@@ -1523,7 +1574,6 @@ public class ExpertSystem extends JFrame {
                 "mechanical_pro",
                 "application"
         };
-        initTable_main(expert_weld_metal_mapsList, table3, table3_colsName);
 
         //加载 辅材 表格
         String[] table4_colsName = {
@@ -1533,7 +1583,6 @@ public class ExpertSystem extends JFrame {
                 "app",
                 "parameter"
         };
-        initTable_main(expert_auxiliary_materials_mapsList, table4, table4_colsName);
 
         //加载 工件厚度 表格
         String[] table5_colsName = {
@@ -1543,7 +1592,6 @@ public class ExpertSystem extends JFrame {
                 "app_weld_joint",
                 "thickness"
         };
-        initTable_main(expert_workpiece_thickness_mapsList, table5, table5_colsName);
 
         //加载 焊接接头、坡口、位置 表格
         String[] table6_colsName = {
@@ -1556,7 +1604,6 @@ public class ExpertSystem extends JFrame {
                 "groove_parameter",
                 "weld_position"
         };
-        initTable_main(expert_weld_joint_mapsList, table6, table6_colsName);
 
         //加载 热工艺 表格
         String[] table7_colsName = {
@@ -1571,7 +1618,6 @@ public class ExpertSystem extends JFrame {
                 "heat_treatment_tem",
                 "heat_treatment_time"
         };
-        initTable_main(expert_thermal_process_mapsList, table7, table7_colsName);
 
         //加载 产品 表格
         String[] table8_colsName = {
@@ -1598,7 +1644,7 @@ public class ExpertSystem extends JFrame {
                 "speed_practical",
                 "extension_practical"
         };
-        initTable_main(expert_production_mapsList, table8, table8_colsName);
+
 
         //加载 焊接参数 表格
         String[] table9_colsName = {
@@ -1614,7 +1660,58 @@ public class ExpertSystem extends JFrame {
                 "speed",
                 "extension"
         };
-        initTable_main(expert_process_parameters_mapsList, table9, table9_colsName);
+
+        //index 为选择更新哪个表格，若为 空 ，则更新全部表格
+        switch (index){
+            case "0":
+                initTable_main(expert_production_mapsList, table8, table8_colsName, editable);
+                break;
+            case "1":
+                initTable_main(expert_base_metal_mapsList, table1, table1_colsName, editable);
+                break;
+            case "2":
+                initTable_main(expert_weld_method_mapsList, table2, table2_colsName, editable);
+                break;
+            case "3":
+                initTable_main(expert_weld_metal_mapsList, table3, table3_colsName, editable);
+                break;
+            case "4":
+                initTable_main(expert_auxiliary_materials_mapsList, table4, table4_colsName, editable);
+                break;
+            case "5":
+                initTable_main(expert_workpiece_thickness_mapsList, table5, table5_colsName, editable);
+                break;
+            case "6":
+                initTable_main(expert_weld_joint_mapsList, table6, table6_colsName, editable);
+                break;
+            case "7":
+                initTable_main(expert_thermal_process_mapsList, table7, table7_colsName, editable);
+                break;
+            case "8":
+                initTable_main(expert_process_parameters_mapsList, table9, table9_colsName, editable);
+                break;
+            default:
+                initTable_main(expert_production_mapsList, table8, table8_colsName, editable);
+                initTable_main(expert_base_metal_mapsList, table1, table1_colsName, editable);
+                initTable_main(expert_weld_method_mapsList, table2, table2_colsName, editable);
+                initTable_main(expert_weld_metal_mapsList, table3, table3_colsName, editable);
+                initTable_main(expert_auxiliary_materials_mapsList, table4, table4_colsName, editable);
+                initTable_main(expert_workpiece_thickness_mapsList, table5, table5_colsName, editable);
+                initTable_main(expert_weld_joint_mapsList, table6, table6_colsName, editable);
+                initTable_main(expert_thermal_process_mapsList, table7, table7_colsName, editable);
+                initTable_main(expert_process_parameters_mapsList, table9, table9_colsName, editable);
+                break;
+        }
+    }
+
+    //表格： 加载 各表格 重载1
+    private void initTable(String index){
+        initTable(index, false);
+    }
+
+    //表格： 加载 各表格 重载2
+    private void initTable(){
+        initTable("", false);
     }
 
     //表格： 刷新 数据 （重新获取数据）
@@ -1655,6 +1752,7 @@ public class ExpertSystem extends JFrame {
             }
         }
     }
+
 
     /**
      * 资料库 按钮
@@ -1811,7 +1909,7 @@ public class ExpertSystem extends JFrame {
         button24.setEnabled(false); //返回
         //开使能
         button5.setEnabled(true); //确定
-        button19.setEnabled(true); //确定
+        button19.setEnabled(true); //返回2
     }
 
     //添加 主方法
@@ -1914,36 +2012,147 @@ public class ExpertSystem extends JFrame {
         return true;
     }
 
+    //修改 按钮
+    private void button22ActionPerformed(ActionEvent e) {
+        tabbedPannel1_index = String.valueOf(tabbedPane1.getSelectedIndex()); //获取当前所选tabbedPanel1的下标
+        addFlag = "3"; //标志位
+        boolean changeFlag;
+        //对于每个表格，检索不同
+        switch (tabbedPannel1_index) {
+            case "0":
+                table8Model = (DefaultTableModel) table8.getModel(); //保存原模型
+                changeFlag = change(table8);
+                break;
+            case "1":
+                table1Model = (DefaultTableModel) table1.getModel(); //保存原模型
+                changeFlag = change(table1);
+                break;
+            case "2":
+                table2Model = (DefaultTableModel) table2.getModel(); //保存原模型
+                changeFlag = change(table2);
+                break;
+            case "3":
+                table3Model = (DefaultTableModel) table3.getModel(); //保存原模型
+                changeFlag = change(table3);
+                break;
+            case "4":
+                table4Model = (DefaultTableModel) table4.getModel(); //保存原模型
+                changeFlag = change(table4);
+                break;
+            case "5":
+                table5Model = (DefaultTableModel) table5.getModel(); //保存原模型
+                changeFlag = change(table5);
+                break;
+            case "6":
+                table6Model = (DefaultTableModel) table6.getModel(); //保存原模型
+                changeFlag = change(table6);
+                break;
+            case "7":
+                table7Model = (DefaultTableModel) table7.getModel(); //保存原模型
+                changeFlag = change(table7);
+                break;
+            case "8":
+                table9Model = (DefaultTableModel) table9.getModel(); //保存原模型
+                changeFlag = change(table9);
+                break;
+            default:
+                changeFlag = false;
+                break;
+        }
+
+        if (changeFlag) {
+            //去使能其他按钮
+            button23.setEnabled(false); //刷新
+            button20.setEnabled(false); //添加
+            button9.setEnabled(false); //删除
+            button22.setEnabled(false); //修改
+            button21.setEnabled(false); //搜索
+            button24.setEnabled(false); //返回1
+            //开使能
+            button5.setEnabled(true); //确定
+            button19.setEnabled(true); //返回2
+        }
+
+    }
+
+    //修改 主方法
+    private boolean change(JTable table) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "请先选中 所要修改的行！", "提示", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        JOptionPane.showMessageDialog(this, "您已可以 编辑 所选行！编辑完成后，请点击确认！");
+
+        //获取 原列名
+        ArrayList<String> colsName_list = new ArrayList<>();
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            colsName_list.add(table.getColumnName(i));
+        }
+        Object[] colsName = colsName_list.toArray();
+
+        //获取，所选行数，记录所选行数的id
+        Object id = table.getValueAt(selectedRow, 0);
+
+        //存储原数据（被选中的这一行）
+        ArrayList<Object> data_list = new ArrayList<>();
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            data_list.add(table.getValueAt(selectedRow, i));
+        }
+        Object[] data = data_list.toArray();
+
+        //通过新模型，加载这一行，并使其可编辑
+        //设置新model
+        table.setModel(new DefaultTableModel(
+                new Object[][] {
+                },
+                colsName
+        ) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return true;
+            }
+        });
+        //设置新模型的列宽格式
+        setTableForm(table);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setAutoCreateRowSorter(true);
+        //加载原数据
+        ((DefaultTableModel) table.getModel()).addRow(data);
+
+        return true;
+    }
+
     //确定 按钮
     private void button5ActionPerformed(ActionEvent e) {
         //对于每个表格，检索不同
         switch (tabbedPannel1_index) {
             case "0":
-                enter_main(table8, table8Model, "expert_production");
+                enter_main(table8, table8Model, "expert_production", expert_production_mapsList);
                 break;
             case "1":
-                enter_main(table1, table1Model, "expert_base_metal");
+                enter_main(table1, table1Model, "expert_base_metal", expert_base_metal_mapsList);
                 break;
             case "2":
-                enter_main(table2, table2Model, "expert_weld_method");
+                enter_main(table2, table2Model, "expert_weld_method", expert_weld_method_mapsList);
                 break;
             case "3":
-                enter_main(table3, table3Model, "expert_weld_metal");
+                enter_main(table3, table3Model, "expert_weld_metal", expert_weld_metal_mapsList);
                 break;
             case "4":
-                enter_main(table4, table4Model,"expert_auxiliary_materials");
+                enter_main(table4, table4Model,"expert_auxiliary_materials", expert_auxiliary_materials_mapsList);
                 break;
             case "5":
-                enter_main(table5, table5Model, "expert_workpiece_thickness");
+                enter_main(table5, table5Model, "expert_workpiece_thickness", expert_workpiece_thickness_mapsList);
                 break;
             case "6":
-                enter_main(table6, table6Model, "expert_weld_joint");
+                enter_main(table6, table6Model, "expert_weld_joint", expert_weld_joint_mapsList);
                 break;
             case "7":
-                enter_main(table7, table7Model, "expert_thermal_process");
+                enter_main(table7, table7Model, "expert_thermal_process", expert_thermal_process_mapsList);
                 break;
             case "8":
-                enter_main(table9, table9Model, "expert_process_parameters");
+                enter_main(table9, table9Model, "expert_process_parameters", expert_process_parameters_mapsList);
                 break;
             default:
                 break;
@@ -1962,7 +2171,7 @@ public class ExpertSystem extends JFrame {
     }
 
     //确定 主方法
-    private void enter_main(JTable table, DefaultTableModel tableModel, String DB_tableName) {
+    private void enter_main(JTable table, DefaultTableModel tableModel, String DB_tableName, List<Map<String, Object>> expert_mapsList) {
         if (addFlag.equals("1")) {
             //添加数据进数据库
             //对于不同的table，通过识别table中有多少列，确定有多少个参数，再通过for 字符串拼接的形式，添加？至sqlStr中
@@ -2000,6 +2209,42 @@ public class ExpertSystem extends JFrame {
             //刷新表格
             updateData(); //调用刷新主方法，更新表格数据来源
             initTable(); //更新表格
+        }else if (addFlag.equals("3")) {
+            int colCount = table.getColumnCount();
+            ArrayList<Object> data_list = new ArrayList<>(); //列值
+            ArrayList<Object> DB_colsName_list = new ArrayList<>(); //列名
+
+            //遍历 列，获得值
+            for (int i = 0; i < colCount; i++) {
+                data_list.add(table.getValueAt(0, i)); //添加列值
+            }
+
+            //通过原数据的mapsList中的第一个map，遍历获得列名
+            //如果没有数据，也就不能修改，所以避免了mapsList的空值问题
+            Map<String, Object> DB_cols_map = expert_mapsList.get(0);
+            Set<String> set = DB_cols_map.keySet();
+            for (Object s : set) {
+                DB_colsName_list.add(s);
+            }
+
+            boolean result = KnowledgeBase.changeData(DB_tableName, DB_colsName_list.toArray(), data_list.toArray());
+
+            if (result) {
+                JOptionPane.showMessageDialog(this, "修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
+            }else {
+                JOptionPane.showMessageDialog(this, "修改失败！", "提示", JOptionPane.WARNING_MESSAGE);
+            }
+
+            //还原 原model
+            table.setModel(tableModel);
+            //设置model格式
+            setTableForm(table);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            table.setAutoCreateRowSorter(true);
+
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
         }
     }
 
@@ -2008,31 +2253,31 @@ public class ExpertSystem extends JFrame {
         //对于每个表格，检索不同
         switch (tabbedPannel1_index) {
             case "0":
-                back_main(table8, table8Model, "expert_production");
+                back_main(table8, table8Model);
                 break;
             case "1":
-                back_main(table1, table1Model, "expert_base_metal");
+                back_main(table1, table1Model);
                 break;
             case "2":
-                back_main(table2, table2Model, "expert_weld_method");
+                back_main(table2, table2Model);
                 break;
             case "3":
-                back_main(table3, table3Model, "expert_weld_metal");
+                back_main(table3, table3Model);
                 break;
             case "4":
-                back_main(table4, table4Model,"expert_auxiliary_materials");
+                back_main(table4, table4Model);
                 break;
             case "5":
-                back_main(table5, table5Model, "expert_workpiece_thickness");
+                back_main(table5, table5Model);
                 break;
             case "6":
-                back_main(table6, table6Model, "expert_weld_joint");
+                back_main(table6, table6Model);
                 break;
             case "7":
-                back_main(table7, table7Model, "expert_thermal_process");
+                back_main(table7, table7Model);
                 break;
             case "8":
-                back_main(table9, table9Model, "expert_process_parameters");
+                back_main(table9, table9Model);
                 break;
             default:
                 break;
@@ -2051,7 +2296,7 @@ public class ExpertSystem extends JFrame {
     }
 
     //返回 主方法
-    private void back_main(JTable table, DefaultTableModel tableModel, String DB_tableName) {
+    private void back_main(JTable table, DefaultTableModel tableModel) {
         if (addFlag.equals("1")) {
             //还原 原model
             table.setModel(tableModel);
@@ -2068,14 +2313,20 @@ public class ExpertSystem extends JFrame {
             //刷新表格
             updateData(); //调用刷新主方法，更新表格数据来源
             initTable(); //更新表格
+        } else if (addFlag.equals("3")) {
+            //还原 原model
+            table.setModel(tableModel);
+
+            //设置model格式
+            setTableForm(table);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            table.setAutoCreateRowSorter(true);
+
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
         }
     }
-
-
-    //修改 按钮
-
-
-
 
     /**
      * JFormDesigner自带，定义自生成
@@ -2809,7 +3060,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table8.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(180);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -2882,7 +3133,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table1.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -2943,7 +3194,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table2.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -3002,7 +3253,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table3.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -3115,7 +3366,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table5.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(370);
@@ -3170,7 +3421,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table6.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -3228,7 +3479,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table7.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -3288,7 +3539,7 @@ public class ExpertSystem extends JFrame {
                             });
                             {
                                 TableColumnModel cm = table9.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(0).setPreferredWidth(50);
                                 cm.getColumn(1).setPreferredWidth(100);
                                 cm.getColumn(2).setPreferredWidth(100);
                                 cm.getColumn(3).setPreferredWidth(180);
@@ -3349,6 +3600,7 @@ public class ExpertSystem extends JFrame {
 
                 //---- button22 ----
                 button22.setText("\u4fee\u6539");
+                button22.addActionListener(e -> button22ActionPerformed(e));
                 panel2.add(button22);
                 button22.setBounds(755, 5, 60, 28);
 

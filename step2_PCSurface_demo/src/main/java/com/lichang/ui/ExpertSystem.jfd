@@ -869,16 +869,16 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
-										add( &SwingTableColumn1 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
+										add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( &SwingTableColumn1 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn2 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn3 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn4 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn5 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn6 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( &SwingTableColumn7 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( &SwingTableColumn8 new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
@@ -948,16 +948,16 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( #SwingTableColumn0 )
+										add( &SwingTableColumn8 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( #SwingTableColumn1 )
-										add( &SwingTableColumn9 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
 										add( #SwingTableColumn4 )
 										add( #SwingTableColumn5 )
 										add( #SwingTableColumn6 )
 										add( #SwingTableColumn7 )
-										add( #SwingTableColumn8 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
 									} )
 									"autoResizeMode": 0
@@ -1009,15 +1009,15 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( #SwingTableColumn0 )
+										add( #SwingTableColumn8 )
 										add( #SwingTableColumn1 )
-										add( #SwingTableColumn9 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
 										add( #SwingTableColumn4 )
 										add( #SwingTableColumn5 )
 										add( #SwingTableColumn6 )
-										add( #SwingTableColumn7 )
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
@@ -1065,14 +1065,14 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( #SwingTableColumn0 )
+										add( #SwingTableColumn8 )
 										add( #SwingTableColumn1 )
-										add( #SwingTableColumn9 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
 										add( #SwingTableColumn4 )
 										add( #SwingTableColumn5 )
-										add( #SwingTableColumn6 )
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
@@ -1112,8 +1112,8 @@ new FormModel {
 										add( false )
 									}, new java.util.Vector {
 										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
-										add( #SwingTableColumn1 )
-										add( #SwingTableColumn9 )
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn8 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 300, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 430, 0, 0, true ) )
 									} )
@@ -1154,9 +1154,9 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( #SwingTableColumn0 )
-										add( #SwingTableColumn1 )
-										add( #SwingTableColumn9 )
+										add( #SwingTableColumn8 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 370, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 350, 0, 0, true ) )
 									} )
@@ -1206,14 +1206,14 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( #SwingTableColumn0 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( #SwingTableColumn1 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
-										add( #SwingTableColumn4 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( #SwingTableColumn5 )
+										add( #SwingTableColumn4 )
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
@@ -1267,16 +1267,16 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( #SwingTableColumn0 )
-										add( &SwingTableColumn10 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
-										add( #SwingTableColumn9 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
+										add( &SwingTableColumn9 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( #SwingTableColumn8 )
+										add( #SwingTableColumn1 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
 										add( #SwingTableColumn4 )
 										add( #SwingTableColumn5 )
 										add( #SwingTableColumn6 )
 										add( #SwingTableColumn7 )
-										add( #SwingTableColumn8 )
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
@@ -1333,17 +1333,17 @@ new FormModel {
 										add( false )
 										add( false )
 									}, new java.util.Vector {
-										add( #SwingTableColumn0 )
-										add( #SwingTableColumn10 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 										add( #SwingTableColumn9 )
+										add( #SwingTableColumn8 )
+										add( #SwingTableColumn1 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
 										add( #SwingTableColumn4 )
 										add( #SwingTableColumn5 )
 										add( #SwingTableColumn6 )
-										add( #SwingTableColumn7 )
 										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
-										add( #SwingTableColumn8 )
+										add( #SwingTableColumn7 )
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
@@ -1404,6 +1404,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button22"
 						"text": "修改"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button22ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 60
 						"height": 28
