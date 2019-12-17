@@ -12,6 +12,7 @@ import com.lichang.utils.ExpertSystemUtil.KnowledgeBase;
 import com.lichang.utils.ExpertSystemUtil.ProcessDesign;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
+import com.lichang.utils.SqlStrUtil;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -44,8 +45,8 @@ import java.util.regex.Pattern;
 // 资料库
 ////1.表格的绑定
 ////2. 添加时，切换tabbed，会导致选择错误tabbed下标，加载空模型
-//3. 添加时，信息要录入数据库
-//4. 添加成功后的弹窗提示
+////3. 添加时，信息要录入数据库
+////4. 添加成功后的弹窗提示
 //5. 修改按钮
 
 
@@ -132,9 +133,10 @@ public class ExpertSystem extends JFrame {
     private DefaultTableModel table6Model;
     private DefaultTableModel table7Model;
     private DefaultTableModel table8Model;
+    private DefaultTableModel table9Model;
 
     //作用确定按钮，辨别是添加还是修改
-    boolean addFlag; //添加：true， 修改：false
+    String addFlag = "0"; //无状态：0，添加：1， 删除：2，修改：2
 
     //当前tabbed下标
     String tabbedPannel1_index;
@@ -1597,11 +1599,28 @@ public class ExpertSystem extends JFrame {
                 "extension_practical"
         };
         initTable_main(expert_production_mapsList, table8, table8_colsName);
+
+        //加载 焊接参数 表格
+        String[] table9_colsName = {
+                "id",
+                "name",
+                "seq",
+                "app",
+                "current",
+                "current_type",
+                "current_polarity",
+                "voltage_arc",
+                "line_energy",
+                "speed",
+                "extension"
+        };
+        initTable_main(expert_process_parameters_mapsList, table9, table9_colsName);
     }
 
     //表格： 刷新 数据 （重新获取数据）
     private void updateData() {
         //重新获取 数据库信息
+        expert_production_mapsList = KnowledgeBase.getData("expert_production"); //产品
         expert_base_metal_mapsList = KnowledgeBase.getData("expert_base_metal"); // 母材选取
         expert_weld_method_mapsList = KnowledgeBase.getData("expert_weld_method"); // 焊接方法
         expert_weld_metal_mapsList = KnowledgeBase.getData("expert_weld_metal"); // 焊接材料
@@ -1609,6 +1628,7 @@ public class ExpertSystem extends JFrame {
         expert_workpiece_thickness_mapsList = KnowledgeBase.getData("expert_workpiece_thickness"); // 工件厚度
         expert_weld_joint_mapsList = KnowledgeBase.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
         expert_thermal_process_mapsList = KnowledgeBase.getData("expert_thermal_process"); // 热工艺
+        expert_process_parameters_mapsList = KnowledgeBase.getData("expert_process_parameters"); //焊接参数
     }
 
     //表格： 设置表格列宽等格式
@@ -1676,6 +1696,9 @@ public class ExpertSystem extends JFrame {
             case "7":
                 findRegex(table7, findItem);
                 break;
+            case "8":
+                findRegex(table9, findItem);
+                break;
             default:
                 break;
         }
@@ -1712,6 +1735,9 @@ public class ExpertSystem extends JFrame {
             case "7":
                 findRegex(table7, findItem);
                 break;
+            case "8":
+                findRegex(table9, findItem);
+                break;
             default:
                 break;
         }
@@ -1733,7 +1759,7 @@ public class ExpertSystem extends JFrame {
     //添加 按钮
     private void button20ActionPerformed(ActionEvent e) {
         tabbedPannel1_index = String.valueOf(tabbedPane1.getSelectedIndex()); //获取当前所选tabbedPanel1的下标
-        addFlag = true; //标志位
+        addFlag = "1"; //标志位
         //对于每个表格，检索不同
         switch (tabbedPannel1_index) {
             case "0":
@@ -1768,6 +1794,10 @@ public class ExpertSystem extends JFrame {
                 table7Model = (DefaultTableModel) table7.getModel(); //保存原模型
                 addCount(table7);
                 break;
+            case "8":
+                table9Model = (DefaultTableModel) table9.getModel(); //保存原模型
+                addCount(table9);
+                break;
             default:
                 break;
         }
@@ -1775,11 +1805,13 @@ public class ExpertSystem extends JFrame {
         //去使能其他按钮
         button23.setEnabled(false); //刷新
         button20.setEnabled(false); //添加
+        button9.setEnabled(false); //删除
         button22.setEnabled(false); //修改
         button21.setEnabled(false); //搜索
         button24.setEnabled(false); //返回
         //开使能
         button5.setEnabled(true); //确定
+        button19.setEnabled(true); //确定
     }
 
     //添加 主方法
@@ -1817,33 +1849,101 @@ public class ExpertSystem extends JFrame {
         ((DefaultTableModel) table.getModel()).addRow(r);
     }
 
+    //删除 按钮
+    private void button9ActionPerformed(ActionEvent e) {
+        tabbedPannel1_index = String.valueOf(tabbedPane1.getSelectedIndex()); //获取当前所选tabbedPanel1的下标
+        addFlag = "2"; //标志位
+        boolean deleteFlag;
+        //对于每个表格，检索不同
+        switch (tabbedPannel1_index) {
+            case "0":
+                deleteFlag = delete(table8);
+                break;
+            case "1":
+                deleteFlag = delete(table1);
+                break;
+            case "2":
+                deleteFlag = delete(table2);
+                break;
+            case "3":
+                deleteFlag = delete(table3);
+                break;
+            case "4":
+                deleteFlag = delete(table4);
+                break;
+            case "5":
+                deleteFlag = delete(table5);
+                break;
+            case "6":
+                deleteFlag = delete(table6);
+                break;
+            case "7":
+                deleteFlag = delete(table7);
+                break;
+            case "8":
+                deleteFlag = delete(table9);
+                break;
+            default:
+                deleteFlag = false;
+                break;
+        }
+
+        if (deleteFlag) {
+            //去使能其他按钮
+            button23.setEnabled(false); //刷新
+            button20.setEnabled(false); //添加
+            button9.setEnabled(false); //删除
+            button22.setEnabled(false); //修改
+            button21.setEnabled(false); //搜索
+            button24.setEnabled(false); //返回1
+            //开使能
+            button5.setEnabled(true); //确定
+            button19.setEnabled(true); //返回2
+        }
+
+    }
+
+    //删除 主方法
+    private boolean delete(JTable table) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "请先选中 所删除的行！", "提示", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        JOptionPane.showMessageDialog(this, "再次确认！如确定删除，请点击确定键！", "提示", JOptionPane.WARNING_MESSAGE);
+        return true;
+    }
+
     //确定 按钮
     private void button5ActionPerformed(ActionEvent e) {
         //对于每个表格，检索不同
         switch (tabbedPannel1_index) {
             case "0":
-                enter_main(table8, table8Model);
+                enter_main(table8, table8Model, "expert_production");
                 break;
             case "1":
-                enter_main(table1, table1Model);
+                enter_main(table1, table1Model, "expert_base_metal");
                 break;
             case "2":
-                enter_main(table2, table2Model);
+                enter_main(table2, table2Model, "expert_weld_method");
                 break;
             case "3":
-                enter_main(table3, table3Model);
+                enter_main(table3, table3Model, "expert_weld_metal");
                 break;
             case "4":
-                enter_main(table4, table4Model);
+                enter_main(table4, table4Model,"expert_auxiliary_materials");
                 break;
             case "5":
-                enter_main(table5, table5Model);
+                enter_main(table5, table5Model, "expert_workpiece_thickness");
                 break;
             case "6":
-                enter_main(table6, table6Model);
+                enter_main(table6, table6Model, "expert_weld_joint");
                 break;
             case "7":
-                enter_main(table7, table7Model);
+                enter_main(table7, table7Model, "expert_thermal_process");
+                break;
+            case "8":
+                enter_main(table9, table9Model, "expert_process_parameters");
                 break;
             default:
                 break;
@@ -1851,24 +1951,125 @@ public class ExpertSystem extends JFrame {
 
         //关闭 使能
         button5.setEnabled(false); //确定
+        button19.setEnabled(false); //返回2
         //开启 使能
         button23.setEnabled(true); //刷新
         button20.setEnabled(true); //添加
+        button9.setEnabled(true); //删除
         button22.setEnabled(true); //修改
         button21.setEnabled(true); //搜索
-        button24.setEnabled(true); //返回
+        button24.setEnabled(true); //返回1
     }
 
     //确定 主方法
-    private void enter_main(JTable table, DefaultTableModel tableModel) {
-        if (addFlag) {
-            table.setModel(tableModel); //还原 原model
+    private void enter_main(JTable table, DefaultTableModel tableModel, String DB_tableName) {
+        if (addFlag.equals("1")) {
+            //添加数据进数据库
+            //对于不同的table，通过识别table中有多少列，确定有多少个参数，再通过for 字符串拼接的形式，添加？至sqlStr中
+            int colCount = table.getColumnCount();
+            List<Object> params = new ArrayList<>();
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                params.add(table.getValueAt(0, i));
+            }
+            boolean result = KnowledgeBase.addData(DB_tableName, colCount, params);
+            if (result) {
+                JOptionPane.showMessageDialog(this, "添加成功！", "提示", JOptionPane.WARNING_MESSAGE);
+            }else {
+                JOptionPane.showMessageDialog(this, "添加失败！", "提示", JOptionPane.WARNING_MESSAGE);
+            }
+
+            //还原 原model
+            table.setModel(tableModel);
+            //设置model格式
             setTableForm(table);
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             table.setAutoCreateRowSorter(true);
+
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
+        }else if (addFlag.equals("2")){
+            int selectedRow = table.getSelectedRow();
+            Object id = table.getValueAt(selectedRow, 0); //获得所选数据的id
+            boolean result = KnowledgeBase.deleteData(DB_tableName, id); //删除
+            if (result) {
+                JOptionPane.showMessageDialog(this, "删除成功！", "提示", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "删除失败！", "提示", JOptionPane.WARNING_MESSAGE);
+            }
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
         }
     }
 
+    //返回 按钮
+    private void button19ActionPerformed(ActionEvent e) {
+        //对于每个表格，检索不同
+        switch (tabbedPannel1_index) {
+            case "0":
+                back_main(table8, table8Model, "expert_production");
+                break;
+            case "1":
+                back_main(table1, table1Model, "expert_base_metal");
+                break;
+            case "2":
+                back_main(table2, table2Model, "expert_weld_method");
+                break;
+            case "3":
+                back_main(table3, table3Model, "expert_weld_metal");
+                break;
+            case "4":
+                back_main(table4, table4Model,"expert_auxiliary_materials");
+                break;
+            case "5":
+                back_main(table5, table5Model, "expert_workpiece_thickness");
+                break;
+            case "6":
+                back_main(table6, table6Model, "expert_weld_joint");
+                break;
+            case "7":
+                back_main(table7, table7Model, "expert_thermal_process");
+                break;
+            case "8":
+                back_main(table9, table9Model, "expert_process_parameters");
+                break;
+            default:
+                break;
+        }
+
+        //关闭 使能
+        button5.setEnabled(false); //确定
+        button19.setEnabled(false); //返回2
+        //开启 使能
+        button23.setEnabled(true); //刷新
+        button20.setEnabled(true); //添加
+        button9.setEnabled(true); //删除
+        button22.setEnabled(true); //修改
+        button21.setEnabled(true); //搜索
+        button24.setEnabled(true); //返回1
+    }
+
+    //返回 主方法
+    private void back_main(JTable table, DefaultTableModel tableModel, String DB_tableName) {
+        if (addFlag.equals("1")) {
+            //还原 原model
+            table.setModel(tableModel);
+
+            //设置model格式
+            setTableForm(table);
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            table.setAutoCreateRowSorter(true);
+
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
+        } else if (addFlag.equals("2")) {
+            //刷新表格
+            updateData(); //调用刷新主方法，更新表格数据来源
+            initTable(); //更新表格
+        }
+    }
 
 
     //修改 按钮
@@ -1976,6 +2177,9 @@ public class ExpertSystem extends JFrame {
         panel10 = new JPanel();
         scrollPane7 = new JScrollPane();
         table7 = new JTable();
+        panel12 = new JPanel();
+        scrollPane9 = new JScrollPane();
+        table9 = new JTable();
         textField11 = new JTextField();
         button21 = new JButton();
         label35 = new JLabel();
@@ -1985,6 +2189,8 @@ public class ExpertSystem extends JFrame {
         button24 = new JButton();
         label24 = new JLabel();
         button5 = new JButton();
+        button9 = new JButton();
+        button19 = new JButton();
         button41 = new JButton();
 
         //======== this ========
@@ -3056,6 +3262,67 @@ public class ExpertSystem extends JFrame {
                         }
                     }
                     tabbedPane1.addTab("\u70ed\u5de5\u827a", panel10);
+
+                    //======== panel12 ========
+                    {
+                        panel12.setLayout(null);
+
+                        //======== scrollPane9 ========
+                        {
+
+                            //---- table9 ----
+                            table9.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                    "id", "name", "seq", "\u5339\u914d\uff1a", "\u710a\u63a5\u7535\u6d41", "\u7535\u6d41\u79cd\u7c7b", "\u7535\u6d41\u6781\u6027", "\u7535\u5f27\u7535\u538b", "\u7ebf\u80fd\u91cf", "\u710a\u63a5\u901f\u5ea6", "\u5e72\u4f38\u51fa\u91cf"
+                                }
+                            ) {
+                                boolean[] columnEditable = new boolean[] {
+                                    false, false, false, false, false, false, false, false, false, false, false
+                                };
+                                @Override
+                                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                    return columnEditable[columnIndex];
+                                }
+                            });
+                            {
+                                TableColumnModel cm = table9.getColumnModel();
+                                cm.getColumn(0).setPreferredWidth(40);
+                                cm.getColumn(1).setPreferredWidth(100);
+                                cm.getColumn(2).setPreferredWidth(100);
+                                cm.getColumn(3).setPreferredWidth(180);
+                                cm.getColumn(4).setPreferredWidth(180);
+                                cm.getColumn(5).setPreferredWidth(180);
+                                cm.getColumn(6).setPreferredWidth(180);
+                                cm.getColumn(7).setPreferredWidth(180);
+                                cm.getColumn(8).setPreferredWidth(180);
+                                cm.getColumn(9).setPreferredWidth(180);
+                                cm.getColumn(10).setPreferredWidth(180);
+                            }
+                            table9.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                            table9.setAutoCreateRowSorter(true);
+                            scrollPane9.setViewportView(table9);
+                        }
+                        panel12.add(scrollPane9);
+                        scrollPane9.setBounds(0, 0, 960, 400);
+
+                        {
+                            // compute preferred size
+                            Dimension preferredSize = new Dimension();
+                            for(int i = 0; i < panel12.getComponentCount(); i++) {
+                                Rectangle bounds = panel12.getComponent(i).getBounds();
+                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                            }
+                            Insets insets = panel12.getInsets();
+                            preferredSize.width += insets.right;
+                            preferredSize.height += insets.bottom;
+                            panel12.setMinimumSize(preferredSize);
+                            panel12.setPreferredSize(preferredSize);
+                        }
+                    }
+                    tabbedPane1.addTab("\u710a\u63a5\u53c2\u6570", panel12);
                 }
                 panel2.add(tabbedPane1);
                 tabbedPane1.setBounds(0, 35, 965, 425);
@@ -3078,18 +3345,18 @@ public class ExpertSystem extends JFrame {
                 button20.setText("\u6dfb\u52a0");
                 button20.addActionListener(e -> button20ActionPerformed(e));
                 panel2.add(button20);
-                button20.setBounds(750, 5, 60, 28);
+                button20.setBounds(625, 5, 60, 28);
 
                 //---- button22 ----
                 button22.setText("\u4fee\u6539");
                 panel2.add(button22);
-                button22.setBounds(820, 5, 60, 28);
+                button22.setBounds(755, 5, 60, 28);
 
                 //---- button23 ----
                 button23.setText("\u5237\u65b0");
                 button23.addActionListener(e -> button42ActionPerformed(e));
                 panel2.add(button23);
-                button23.setBounds(680, 5, 61, 28);
+                button23.setBounds(550, 5, 61, 28);
 
                 //---- button24 ----
                 button24.setText("\u8fd4\u56de");
@@ -3108,7 +3375,20 @@ public class ExpertSystem extends JFrame {
                 button5.setEnabled(false);
                 button5.addActionListener(e -> button5ActionPerformed(e));
                 panel2.add(button5);
-                button5.setBounds(890, 5, 60, button5.getPreferredSize().height);
+                button5.setBounds(830, 5, 60, button5.getPreferredSize().height);
+
+                //---- button9 ----
+                button9.setText("\u5220\u9664");
+                button9.addActionListener(e -> button9ActionPerformed(e));
+                panel2.add(button9);
+                button9.setBounds(new Rectangle(new Point(690, 5), button9.getPreferredSize()));
+
+                //---- button19 ----
+                button19.setText("\u8fd4\u56de");
+                button19.setEnabled(false);
+                button19.addActionListener(e -> button19ActionPerformed(e));
+                panel2.add(button19);
+                button19.setBounds(895, 5, 60, button19.getPreferredSize().height);
 
                 {
                     // compute preferred size
@@ -3251,6 +3531,9 @@ public class ExpertSystem extends JFrame {
     private JPanel panel10;
     private JScrollPane scrollPane7;
     private JTable table7;
+    private JPanel panel12;
+    private JScrollPane scrollPane9;
+    private JTable table9;
     private JTextField textField11;
     private JButton button21;
     private JLabel label35;
@@ -3260,6 +3543,8 @@ public class ExpertSystem extends JFrame {
     private JButton button24;
     private JLabel label24;
     private JButton button5;
+    private JButton button9;
+    private JButton button19;
     private JButton button41;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

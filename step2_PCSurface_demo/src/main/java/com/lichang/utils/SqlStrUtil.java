@@ -176,7 +176,7 @@ public class SqlStrUtil {
     }
 
     /**
-     * 语句7： 更新
+     * 语句7： 更新  /说明：针对 产品表 expert_production 除id外所有列
      */
     public static String generateSql7(String table) {
         log.debug("语句7：sql");
@@ -252,6 +252,27 @@ public class SqlStrUtil {
         paramsList.add(extension_practical);
         paramsList.add(name);
         return paramsList; // 占位符参数列表
+    }
+
+    /**
+     * 语句8：插入  /说明：对所有列进行插入  条件：已知表内列数
+     */
+    public static String generateSql8(String table, int colCount) {
+        StringBuffer sb = new StringBuffer("");
+        for (int i = 0; i < colCount; i++) {
+            if (i == colCount - 1) {
+                sb.append("?");
+            } else {
+                sb.append("?, ");
+            }
+
+        }
+        String sqlStr = "insert into "
+                + table
+                + " values ("
+                + sb.toString()
+                +")";
+        return sqlStr;
     }
 
 }

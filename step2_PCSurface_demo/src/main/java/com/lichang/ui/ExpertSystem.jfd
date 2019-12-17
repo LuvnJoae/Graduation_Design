@@ -1268,7 +1268,7 @@ new FormModel {
 										add( false )
 									}, new java.util.Vector {
 										add( #SwingTableColumn0 )
-										add( new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
+										add( &SwingTableColumn10 new com.jformdesigner.model.SwingTableColumn( null, 100, 0, 0, true ) )
 										add( #SwingTableColumn9 )
 										add( #SwingTableColumn2 )
 										add( #SwingTableColumn3 )
@@ -1289,6 +1289,73 @@ new FormModel {
 							} )
 						}, new FormLayoutConstraints( null ) {
 							"title": "热工艺"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+							name: "panel12"
+							add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+								name: "scrollPane9"
+								add( new FormComponent( "javax.swing.JTable" ) {
+									name: "table9"
+									"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+										add( "id" )
+										add( "name" )
+										add( "seq" )
+										add( "匹配：" )
+										add( "焊接电流" )
+										add( "电流种类" )
+										add( "电流极性" )
+										add( "电弧电压" )
+										add( "线能量" )
+										add( "焊接速度" )
+										add( "干伸出量" )
+									}, new java.util.Vector {
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+										add( null )
+									}, new java.util.Vector {
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+										add( false )
+									}, new java.util.Vector {
+										add( #SwingTableColumn0 )
+										add( #SwingTableColumn10 )
+										add( #SwingTableColumn9 )
+										add( #SwingTableColumn2 )
+										add( #SwingTableColumn3 )
+										add( #SwingTableColumn4 )
+										add( #SwingTableColumn5 )
+										add( #SwingTableColumn6 )
+										add( #SwingTableColumn7 )
+										add( new com.jformdesigner.model.SwingTableColumn( null, 180, 0, 0, true ) )
+										add( #SwingTableColumn8 )
+									} )
+									"autoResizeMode": 0
+									"autoCreateRowSorter": true
+								} )
+							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+								"width": 960
+								"height": 400
+								"x": 0
+								"y": 0
+							} )
+						}, new FormLayoutConstraints( null ) {
+							"title": "焊接参数"
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 0
@@ -1331,7 +1398,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 60
 						"height": 28
-						"x": 750
+						"x": 625
 						"y": 5
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -1340,7 +1407,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 60
 						"height": 28
-						"x": 820
+						"x": 755
 						"y": 5
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -1348,7 +1415,7 @@ new FormModel {
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button42ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 680
+						"x": 550
 						"y": 5
 						"width": 61
 						"height": 28
@@ -1379,7 +1446,25 @@ new FormModel {
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 890
+						"x": 830
+						"y": 5
+						"width": 60
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button9"
+						"text": "删除"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button9ActionPerformed", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 690
+						"y": 5
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button19"
+						"text": "返回"
+						"enabled": false
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button19ActionPerformed", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 895
 						"y": 5
 						"width": 60
 					} )
