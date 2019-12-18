@@ -110,7 +110,6 @@ public class RealTimeMonitoring extends JFrame {
 
                 chartPanel.revalidate();
                 chartPanel.repaint();
-                log.error("1");
             }
         };
 
@@ -742,7 +741,7 @@ public class RealTimeMonitoring extends JFrame {
                 new Object[][] {
                 },
                 new String[] {
-                    "\u6545\u969c\u65f6\u95f4", "\u7f16\u53f7", "\u6545\u969c\u8868\u73b0", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a"
+                    "\u6545\u969c\u65f6\u95f4", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a"
                 }
             ));
             {

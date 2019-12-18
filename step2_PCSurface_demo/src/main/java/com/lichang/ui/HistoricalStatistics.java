@@ -4,6 +4,7 @@
 
 package com.lichang.ui;
 
+import com.lichang.utils.HistoricalStatisticsUtil.Table;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
 import org.apache.log4j.Logger;
@@ -12,8 +13,12 @@ import org.jfree.chart.JFreeChart;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author unknown
@@ -34,6 +39,8 @@ public class HistoricalStatistics extends JFrame {
     private JPanel changePasswordPanel; // 密码修改
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
+
+    List<Map<String, Object>> machine_fault_data_mapsList; //故障表
 
     //无参（预设账户信息）
     public HistoricalStatistics() {
@@ -231,6 +238,45 @@ public class HistoricalStatistics extends JFrame {
     }
 
     /**
+     * 整体页面  事件监听
+     */
+    //当激活此frame时，触发
+    private void thisWindowActivated(WindowEvent e) {
+        //加载表格 数据
+        machine_fault_data_mapsList = Table.getData_table4("machine_fault_data");
+    }
+
+    /**
+     * 故障查询 表格
+     */
+    private void initTable4() {
+        DefaultTableModel table4Model = (DefaultTableModel) table4.getModel();
+        ArrayList<Object> rowData_list = new ArrayList<>();
+
+        for (Map<String, Object> map : machine_fault_data_mapsList) {
+            rowData_list.add(map.get("id"));
+            rowData_list.add(map.get("time"));
+            rowData_list.add(map.get("num"));
+            rowData_list.add(map.get("fault_type"));
+            rowData_list.add(map.get("fault_maxnum"));
+            rowData_list.add(map.get("result"));
+
+            table4Model.addRow(rowData_list.toArray()); //添加行数据至model
+            rowData_list = null; //清空list
+        }
+    }
+
+    /**
+     * 按钮
+     */
+    //刷新 按钮
+    private void button7ActionPerformed(ActionEvent e) {
+        initTable4();
+    }
+
+
+
+    /**
      *  JFormDesigner自带，定义自生成
      */
     private void initComponents() {
@@ -247,22 +293,29 @@ public class HistoricalStatistics extends JFrame {
         button3 = new JButton();
         button4 = new JButton();
         separator4 = new JPopupMenu.Separator();
-        scrollPane1 = new JScrollPane();
-        table1 = new JTable();
-        label11 = new JLabel();
+        tabbedPane1 = new JTabbedPane();
+        panel2 = new JPanel();
+        scrollPane3 = new JScrollPane();
+        table3 = new JTable();
+        tabbedPane2 = new JTabbedPane();
+        panel3 = new JPanel();
+        scrollPane5 = new JScrollPane();
+        table4 = new JTable();
+        textField1 = new JTextField();
         button5 = new JButton();
         button6 = new JButton();
-        textField1 = new JTextField();
         button7 = new JButton();
-        label1 = new JLabel();
-        label12 = new JLabel();
-        scrollPane2 = new JScrollPane();
-        table2 = new JTable();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                thisWindowActivated(e);
+            }
+        });
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -355,97 +408,120 @@ public class HistoricalStatistics extends JFrame {
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 920, 10);
 
-        //======== scrollPane1 ========
+        //======== tabbedPane1 ========
         {
+            tabbedPane1.setFont(tabbedPane1.getFont().deriveFont(tabbedPane1.getFont().getSize() + 2f));
 
-            //---- table1 ----
-            table1.setModel(new DefaultTableModel(
-                new Object[][] {
-                    {"2019-01-01 16\uff1a00\uff1a00", "1", "v+", "11", "\u6b21\u54c1", "\u70b9\u51fb\u67e5\u770b"},
-                    {"2019-01-01 17\uff1a00\uff1a00", "2", "v+", "10", "\u6b21\u54c1", "\u70b9\u51fb\u67e5\u770b"},
-                    {"2019-01-01 18\uff1a00\uff1a00", "3", "v+", "12", "\u6b21\u54c1", "\u70b9\u51fb\u67e5\u770b"},
-                },
-                new String[] {
-                    "\u6545\u969c\u65f6\u95f4", "\u7f16\u53f7", "\u6545\u969c\u8868\u73b0", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
-                }
-            ));
+            //======== panel2 ========
             {
-                TableColumnModel cm = table1.getColumnModel();
-                cm.getColumn(0).setPreferredWidth(110);
-                cm.getColumn(1).setPreferredWidth(40);
-            }
-            table1.setEnabled(false);
-            table1.setRowHeight(30);
-            table1.setRowMargin(3);
-            scrollPane1.setViewportView(table1);
-        }
-        contentPane.add(scrollPane1);
-        scrollPane1.setBounds(0, 365, 985, 210);
+                panel2.setLayout(null);
 
-        //---- label11 ----
-        label11.setText("\u6545\u969c\u67e5\u8be2");
-        label11.setBackground(new Color(204, 255, 204));
-        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 7f));
-        label11.setLabelFor(table1);
-        contentPane.add(label11);
-        label11.setBounds(1, 335, 94, 34);
+                //======== scrollPane3 ========
+                {
 
-        //---- button5 ----
-        button5.setText("\u6309\u65f6\u95f4");
-        contentPane.add(button5);
-        button5.setBounds(585, 335, 85, 28);
-
-        //---- button6 ----
-        button6.setText("\u6309\u5224\u5b9a");
-        contentPane.add(button6);
-        button6.setBounds(680, 335, 85, 28);
-
-        //---- textField1 ----
-        textField1.setText("\u8bf7\u8f93\u5165\u65f6\u95f4/\u5224\u5b9a");
-        contentPane.add(textField1);
-        textField1.setBounds(770, 335, 145, 27);
-
-        //---- button7 ----
-        button7.setText("\u67e5\u8be2");
-        contentPane.add(button7);
-        button7.setBounds(920, 335, 65, 28);
-
-        //---- label1 ----
-        label1.setText("\u6545\u969c\u5206\u5e03\u7edf\u8ba1\u56fe");
-        contentPane.add(label1);
-        label1.setBounds(725, 110, 95, 25);
-
-        //---- label12 ----
-        label12.setText("\u6545\u969c\u7edf\u8ba1");
-        label12.setBackground(new Color(204, 255, 204));
-        label12.setFont(label12.getFont().deriveFont(label12.getFont().getStyle() | Font.BOLD, label12.getFont().getSize() + 7f));
-        label12.setLabelFor(table1);
-        contentPane.add(label12);
-        label12.setBounds(5, 105, 94, 34);
-
-        //======== scrollPane2 ========
-        {
-
-            //---- table2 ----
-            table2.setModel(new DefaultTableModel(
-                new Object[][] {
-                    {"\u6b21\u54c1", "v+", "10"},
-                    {"\u6b21\u54c1", "c+", "5"},
-                    {"\u9690\u60a3", "c+\uff0cp+", "2"},
-                    {"\u9690\u60a3", "v+\uff0cs+", "1"},
-                },
-                new String[] {
-                    "\u6545\u969c\u5224\u5b9a", "\u6545\u969c\u8868\u73b0", "\u603b\u6b21\u6570"
+                    //---- table3 ----
+                    table3.setRowHeight(20);
+                    table3.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, null, null},
+                        },
+                        new String[] {
+                            "\u6545\u969c\u5224\u5b9a", "\u6545\u969c\u8868\u73b0", "\u603b\u6b21\u6570"
+                        }
+                    ));
+                    scrollPane3.setViewportView(table3);
                 }
-            ));
-            table2.setPreferredSize(new Dimension(225, 150));
-            table2.setRowHeight(30);
-            table2.setRowMargin(3);
-            table2.setEnabled(false);
-            scrollPane2.setViewportView(table2);
+                panel2.add(scrollPane3);
+                scrollPane3.setBounds(0, 0, 480, 190);
+
+                {
+                    // compute preferred size
+                    Dimension preferredSize = new Dimension();
+                    for(int i = 0; i < panel2.getComponentCount(); i++) {
+                        Rectangle bounds = panel2.getComponent(i).getBounds();
+                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                    }
+                    Insets insets = panel2.getInsets();
+                    preferredSize.width += insets.right;
+                    preferredSize.height += insets.bottom;
+                    panel2.setMinimumSize(preferredSize);
+                    panel2.setPreferredSize(preferredSize);
+                }
+            }
+            tabbedPane1.addTab("\u6545\u969c\u7edf\u8ba1", panel2);
         }
-        contentPane.add(scrollPane2);
-        scrollPane2.setBounds(0, 145, 440, 180);
+        contentPane.add(tabbedPane1);
+        tabbedPane1.setBounds(5, 95, 485, 220);
+
+        //======== tabbedPane2 ========
+        {
+            tabbedPane2.setFont(tabbedPane2.getFont().deriveFont(tabbedPane2.getFont().getSize() + 2f));
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(null);
+
+                //======== scrollPane5 ========
+                {
+
+                    //---- table4 ----
+                    table4.setRowHeight(20);
+                    table4.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, "", null, null, null, null, null},
+                        },
+                        new String[] {
+                            "id", "\u6545\u969c\u65f6\u95f4", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
+                        }
+                    ));
+                    {
+                        TableColumnModel cm = table4.getColumnModel();
+                        cm.getColumn(0).setPreferredWidth(50);
+                        cm.getColumn(1).setPreferredWidth(120);
+                    }
+                    scrollPane5.setViewportView(table4);
+                }
+                panel3.add(scrollPane5);
+                scrollPane5.setBounds(0, 40, 995, 200);
+                panel3.add(textField1);
+                textField1.setBounds(0, 5, 120, 30);
+
+                //---- button5 ----
+                button5.setText("\u67e5\u8be2");
+                panel3.add(button5);
+                button5.setBounds(new Rectangle(new Point(125, 5), button5.getPreferredSize()));
+
+                //---- button6 ----
+                button6.setText("\u8fd4\u56de");
+                panel3.add(button6);
+                button6.setBounds(185, 5, 58, 28);
+
+                //---- button7 ----
+                button7.setText("\u5237\u65b0");
+                button7.addActionListener(e -> button7ActionPerformed(e));
+                panel3.add(button7);
+                button7.setBounds(930, 5, 58, 28);
+
+                {
+                    // compute preferred size
+                    Dimension preferredSize = new Dimension();
+                    for(int i = 0; i < panel3.getComponentCount(); i++) {
+                        Rectangle bounds = panel3.getComponent(i).getBounds();
+                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                    }
+                    Insets insets = panel3.getInsets();
+                    preferredSize.width += insets.right;
+                    preferredSize.height += insets.bottom;
+                    panel3.setMinimumSize(preferredSize);
+                    panel3.setPreferredSize(preferredSize);
+                }
+            }
+            tabbedPane2.addTab("\u6545\u969c\u67e5\u8be2", panel3);
+        }
+        contentPane.add(tabbedPane2);
+        tabbedPane2.setBounds(5, 320, 1000, 270);
 
         {
             // compute preferred size
@@ -479,16 +555,17 @@ public class HistoricalStatistics extends JFrame {
     private JButton button3;
     private JButton button4;
     private JPopupMenu.Separator separator4;
-    private JScrollPane scrollPane1;
-    private JTable table1;
-    private JLabel label11;
+    private JTabbedPane tabbedPane1;
+    private JPanel panel2;
+    private JScrollPane scrollPane3;
+    private JTable table3;
+    private JTabbedPane tabbedPane2;
+    private JPanel panel3;
+    private JScrollPane scrollPane5;
+    private JTable table4;
+    private JTextField textField1;
     private JButton button5;
     private JButton button6;
-    private JTextField textField1;
     private JButton button7;
-    private JLabel label1;
-    private JLabel label12;
-    private JScrollPane scrollPane2;
-    private JTable table2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

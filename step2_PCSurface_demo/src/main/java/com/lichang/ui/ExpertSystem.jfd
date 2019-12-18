@@ -894,6 +894,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -962,6 +963,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"x": 0
@@ -1021,6 +1023,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1076,6 +1079,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1119,6 +1123,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1162,6 +1167,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1217,6 +1223,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1280,6 +1287,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960
@@ -1347,6 +1355,7 @@ new FormModel {
 									} )
 									"autoResizeMode": 0
 									"autoCreateRowSorter": true
+									"rowHeight": 20
 								} )
 							}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 								"width": 960

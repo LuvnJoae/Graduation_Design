@@ -136,7 +136,6 @@ public class JdbcTemplateUtil {
 
         try {
             updateCount = template.update(sqlStr, paramsList.toArray());
-            log.debug(updateCount);
         } catch (DataAccessException e) {
             log.error("插入出错", e);
         }

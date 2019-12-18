@@ -1,6 +1,7 @@
 package com.lichang.demo;
 
 import com.lichang.ui.ExpertSystem;
+import com.lichang.ui.HistoricalStatistics;
 import com.lichang.ui.Login;
 import com.lichang.ui.RealTimeMonitoring;
 

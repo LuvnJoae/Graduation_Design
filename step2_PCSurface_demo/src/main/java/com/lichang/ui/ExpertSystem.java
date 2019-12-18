@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
 ////3. 添加时，信息要录入数据库
 ////4. 添加成功后的弹窗提示
 ////5. 修改按钮
-//6. 部分按钮添加权限
+////6. 部分按钮添加权限
 //7. 批量删除（低优先级）
 
 
@@ -193,8 +193,17 @@ public class ExpertSystem extends JFrame {
             button16.setEnabled(false); //仅调参
             textField6.setEnabled(false); //添加产品 文本框
         }
-        String lastProductionIndex = ProcessDesign.getLastProductionIndex();//获取上次登录时选择的产品下标
+
+        //获取并设置上次登录时选择的产品下标
+        String lastProductionIndex = ProcessDesign.getLastProductionIndex();
         comboBox17.setSelectedIndex(Integer.parseInt(lastProductionIndex));
+
+        //非管理员用户，禁止使用 资料库中：添加、删除、修改 功能
+        if (!adminFlag) {
+            button20.setEnabled(false); //添加
+            button9.setEnabled(false); //删除
+            button22.setEnabled(false); //修改
+        }
     }
 
     //关闭该frame时，触发
@@ -202,7 +211,6 @@ public class ExpertSystem extends JFrame {
         ProcessDesign.setLastProductionIndex(String.valueOf(comboBox17.getSelectedIndex()));
         return;
     }
-
 
     /**
      * Lable3 账户信息: 显示当前登录用户
@@ -1509,16 +1517,10 @@ public class ExpertSystem extends JFrame {
                 default:
                     break;
             }
-
-
-
-
         } else {
             tableModel = (DefaultTableModel) table.getModel();
             tableModel.setRowCount(0);
         }
-
-
 
         for (int i = 0; i < expert_mapsList.size(); i++) {
             List<Object> newRow_list = new ArrayList<>();
@@ -3085,6 +3087,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table8.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table8.setAutoCreateRowSorter(true);
+                            table8.setRowHeight(20);
                             scrollPane8.setViewportView(table8);
                         }
                         panel11.add(scrollPane8);
@@ -3147,6 +3150,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table1.setAutoCreateRowSorter(true);
+                            table1.setRowHeight(20);
                             scrollPane1.setViewportView(table1);
                         }
                         panel3.add(scrollPane1);
@@ -3206,6 +3210,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table2.setAutoCreateRowSorter(true);
+                            table2.setRowHeight(20);
                             scrollPane2.setViewportView(table2);
                         }
                         panel5.add(scrollPane2);
@@ -3264,6 +3269,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table3.setAutoCreateRowSorter(true);
+                            table3.setRowHeight(20);
                             scrollPane3.setViewportView(table3);
                         }
                         panel6.add(scrollPane3);
@@ -3319,6 +3325,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table4.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table4.setAutoCreateRowSorter(true);
+                            table4.setRowHeight(20);
                             scrollPane4.setViewportView(table4);
                         }
                         panel7.add(scrollPane4);
@@ -3374,6 +3381,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table5.setAutoCreateRowSorter(true);
+                            table5.setRowHeight(20);
                             scrollPane5.setViewportView(table5);
                         }
                         panel8.add(scrollPane5);
@@ -3432,6 +3440,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table6.setAutoCreateRowSorter(true);
+                            table6.setRowHeight(20);
                             scrollPane6.setViewportView(table6);
                         }
                         panel9.add(scrollPane6);
@@ -3492,6 +3501,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table7.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table7.setAutoCreateRowSorter(true);
+                            table7.setRowHeight(20);
                             scrollPane7.setViewportView(table7);
                         }
                         panel10.add(scrollPane7);
@@ -3553,6 +3563,7 @@ public class ExpertSystem extends JFrame {
                             }
                             table9.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                             table9.setAutoCreateRowSorter(true);
+                            table9.setRowHeight(20);
                             scrollPane9.setViewportView(table9);
                         }
                         panel12.add(scrollPane9);
