@@ -7,6 +7,7 @@ package com.lichang.ui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -27,17 +28,18 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
+
+//TODO: 整体待解决问题（低优先级）
+//标记时间：2019/11/20 17:22  预解决时间:
+//10. 改变chartPanel的刷新规则，改为定时查询最新产品的id，只有当id改变时，才刷新chartPanel（暂不考虑，调试需要在不改变num的前提下改变值）
+//4. 当前焊机、工作状态的动态绑定（暂不考虑）
+//9. 刷新时，chartPanel的闪 问题（低优先级）
+//10. 数据频率增加后，要改表格内容的判断标准（红、蓝字体）
+
 /**
  * @author unknown
  */
 public class RealTimeMonitoring extends JFrame {
-
-    //TODO: 整体待解决问题（低优先级）
-    //4. 当前焊机、工作状态的动态绑定（暂不考虑）
-    //9. 刷新时，chartPanel的闪 问题（低优先级）
-    //10. 数据频率增加后，要改表格内容的判断标准（红、蓝字体）
-    //标记时间：2019/11/20 17:22  预解决时间:
-
     private static Logger log = LoggerUtil.getLogger(); // 日志
 
     // 自定义的变量
@@ -52,6 +54,10 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
     private int faultNum = 0; //表格1，用来判断是否为新的故障记录
+
+    List<Map<String, Object>> machine_data_now_mapsList;
+    List<Machine_data_now> machine_data_now_BeansList;
+    int last_num; //上一次刷新时，machine_data_now中的产品编号num
 
     //无参（预设账户信息）
     public RealTimeMonitoring() {
@@ -135,8 +141,6 @@ public class RealTimeMonitoring extends JFrame {
         }
 
         chartPanel.setLayout(null);
-
-
         chartPanel.setBounds(500, 124, 470, 200);
         getContentPane().add(chartPanel);
 
@@ -239,8 +243,7 @@ public class RealTimeMonitoring extends JFrame {
     //表格2： 添加数据
     private void updateTable2() {
         log.debug("表格2： 添加数据");
-
-        List<Machine_data_now> machine_data_now_BeansList = Table.getDataBeans_now(); //获取当前工件数据
+        machine_data_now_BeansList = Table.getDataBeans_now(); //获取当前工件数据
         int size = machine_data_now_BeansList.size(); // 获取一个过程的数据总数
         DefaultTableModel table2Model = (DefaultTableModel)table2.getModel(); //获取当前模型
 
@@ -537,6 +540,11 @@ public class RealTimeMonitoring extends JFrame {
         addTable1(faultDataBeans);
     }
 
+    //测试
+    private void button5ActionPerformed(ActionEvent e) {
+
+    }
+
     /**
      *  JFormDesigner自带，定义自生成
      */
@@ -576,6 +584,7 @@ public class RealTimeMonitoring extends JFrame {
         label13 = new JLabel();
         NumberLabel = new JLabel();
         resultLabel = new JLabel();
+        button5 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -770,12 +779,6 @@ public class RealTimeMonitoring extends JFrame {
             //---- table2 ----
             table2.setModel(new DefaultTableModel(
                 new Object[][] {
-                    {"", "", "", ""},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
                     {null, null, null, null},
                 },
                 new String[] {
@@ -844,6 +847,12 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(resultLabel);
         resultLabel.setBounds(345, 170, 60, 25);
 
+        //---- button5 ----
+        button5.setText("text");
+        button5.addActionListener(e -> button5ActionPerformed(e));
+        contentPane.add(button5);
+        button5.setBounds(new Rectangle(new Point(425, 285), button5.getPreferredSize()));
+
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -898,5 +907,6 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel label13;
     private JLabel NumberLabel;
     private JLabel resultLabel;
+    private JButton button5;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

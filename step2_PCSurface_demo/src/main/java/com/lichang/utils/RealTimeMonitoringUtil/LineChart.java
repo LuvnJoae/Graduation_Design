@@ -13,9 +13,11 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
+import org.springframework.jdbc.object.SqlUpdate;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于生成一个折线图模型
@@ -98,5 +100,14 @@ public class LineChart {
         }
 
         return dataset;
+    }
+
+    /**
+     * 获得machine_data_now 的内容
+     */
+    public static List<Map<String, Object>> getData() {
+        String sqlStr = SqlStrUtil.generateSql5("machine_data_now");
+        List<Map<String, Object>> maps = JdbcTemplateUtil.queryMult(sqlStr);
+        return maps;
     }
 }

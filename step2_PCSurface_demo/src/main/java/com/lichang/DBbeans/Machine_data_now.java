@@ -5,12 +5,32 @@ package com.lichang.DBbeans;
  */
 public class Machine_data_now {
     private int id;
-    private int num;
+    private String production_name;
+    private int production_num;
     private int seq;
     private double voltage;
     private double current;
     private double speed;
     private String result;
+
+    public Machine_data_now(String production_name, int production_num, int seq, double voltage, double current, double speed, String result) {
+        this.production_name = production_name;
+        this.production_num = production_num;
+        this.seq = seq;
+        this.voltage = voltage;
+        this.current = current;
+        this.speed = speed;
+        this.result = result;
+    }
+
+    public Machine_data_now(String production_name, int production_num, int seq, double voltage, double current, double speed) {
+        this.production_name = production_name;
+        this.production_num = production_num;
+        this.seq = seq;
+        this.voltage = voltage;
+        this.current = current;
+        this.speed = speed;
+    }
 
     public Machine_data_now() {
     }
@@ -19,30 +39,22 @@ public class Machine_data_now {
     public String toString() {
         return "Machine_data_now{" +
                 "id=" + id +
-                ", num=" + num +
+                ", production_name='" + production_name + '\'' +
+                ", production_num=" + production_num +
                 ", seq=" + seq +
                 ", voltage=" + voltage +
                 ", current=" + current +
                 ", speed=" + speed +
-                ", result=" + result +
+                ", result='" + result + '\'' +
                 '}';
     }
 
-    public Machine_data_now(int num, int seq, double voltage, double current, double speed) {
-        this.num = num;
-        this.seq = seq;
-        this.voltage = voltage;
-        this.current = current;
-        this.speed = speed;
+    public String getProduction_name() {
+        return production_name;
     }
 
-    public Machine_data_now(int num, int seq, double voltage, double current, double speed, String result) {
-        this.num = num;
-        this.seq = seq;
-        this.voltage = voltage;
-        this.current = current;
-        this.speed = speed;
-        this.result = result;
+    public void setProduction_name(String production_name) {
+        this.production_name = production_name;
     }
 
     public int getId() {
@@ -54,11 +66,11 @@ public class Machine_data_now {
     }
 
     public int getNum() {
-        return num;
+        return production_num;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setNum(int production_num) {
+        this.production_num = production_num;
     }
 
     public int getSeq() {

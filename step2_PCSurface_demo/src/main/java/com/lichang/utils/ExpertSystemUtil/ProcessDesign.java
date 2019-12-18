@@ -136,14 +136,14 @@ public class ProcessDesign {
      * 获取上次登录时的 产品选择 的下标，用于第二次登录时直接展示界面
      *      当用于多机时，采用 主机名 + ip 地址作为身份验证
      */
-    public static String getLastProductionIndex() {
+    public static String getLastProductionName() {
 
-        String last_production_index = "-1"; //一旦出错，则默认为-1
+        String lastProductionName = "-1"; //一旦出错，则默认为-1
         try {
             String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 主机名 + ip地址
 
             //查询是否存在该主机名+ip
-            String sqlStr = "Select * from last_login_status where ip = ?";
+            String sqlStr = "Select * from expert_last_login_status where ip = ?";
             ArrayList<Object> params = new ArrayList<>();
             params.add(ip);
 
@@ -151,30 +151,30 @@ public class ProcessDesign {
 
             //不存在则返回默认值-1，存在则返回相应值
             if (map==null) {
-                return last_production_index;
+                return lastProductionName;
             }else {
-                last_production_index = (String) map.get("last_production_index");
+                lastProductionName = (String) map.get("last_production_name");
             }
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-        return last_production_index;
+        return lastProductionName;
     }
 
     /**
-     * 记录上次登录时的 产品选择 的下标，用于第二次登录时直接展示界面
+     * 记录上次登录时的 产品选择 的产品name，用于第二次登录时直接展示界面
      *      当用于多机时，采用 主机名 + ip 地址作为身份验证
      */
-    public static boolean setLastProductionIndex(String lastProductionIndex) {
+    public static boolean setLastProductionName(String lastProductionName) {
 
         boolean updateResult = false;
         try {
             String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 ip地址
 
             //查询是否存在该主机名+ip
-            String sqlStr = "select * from last_login_status where ip = ?";
+            String sqlStr = "select * from expert_last_login_status where ip = ?";
             ArrayList<Object> params = new ArrayList<>();
             params.add(ip);
 
@@ -185,13 +185,13 @@ public class ProcessDesign {
             params = new ArrayList<>();
             //无，则新添加
             if (map == null) {
-                sqlStr2 = "insert into last_login_status (ip, last_production_index) values (?, ?)";
+                sqlStr2 = "insert into expert_last_login_status (ip, last_production_name) values (?, ?)";
                 params.add(ip);
-                params.add(lastProductionIndex);
+                params.add(lastProductionName);
             } else {
                 //有，则对原数据进行更改
-                sqlStr2 = "update last_login_status set last_production_index = ? where ip = ?";
-                params.add(lastProductionIndex);
+                sqlStr2 = "update expert_last_login_status set last_production_name = ? where ip = ?";
+                params.add(lastProductionName);
                 params.add(ip);
             }
 

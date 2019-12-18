@@ -5,8 +5,27 @@ package com.lichang.DBbeans;
  */
 public class Machine_data_brief {
     private int id;
-    private int num;
+    private String production_name;
+    private int production_num;
     private String result;
+
+    @Override
+    public String toString() {
+        return "Machine_data_brief{" +
+                "id=" + id +
+                ", production_name='" + production_name + '\'' +
+                ", production_num=" + production_num +
+                ", result='" + result + '\'' +
+                '}';
+    }
+
+    public String getProduction_name() {
+        return production_name;
+    }
+
+    public void setProduction_name(String production_name) {
+        this.production_name = production_name;
+    }
 
     public int getId() {
         return id;
@@ -17,11 +36,11 @@ public class Machine_data_brief {
     }
 
     public int getNum() {
-        return num;
+        return production_num;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setNum(int production_num) {
+        this.production_num = production_num;
     }
 
     public String getResult() {
@@ -35,8 +54,9 @@ public class Machine_data_brief {
     public Machine_data_brief() {
     }
 
-    public Machine_data_brief(int num, String result) {
-        this.num = num;
+    public Machine_data_brief(String production_name, int production_num, String result) {
+        this.production_name = production_name;
+        this.production_num = production_num;
         this.result = result;
     }
 }

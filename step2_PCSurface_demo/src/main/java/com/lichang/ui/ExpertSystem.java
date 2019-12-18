@@ -6,14 +6,12 @@ package com.lichang.ui;
 
 import java.awt.event.*;
 import javax.swing.border.*;
-import javax.swing.event.CellEditorListener;
 import javax.swing.table.*;
 
 import com.lichang.utils.ExpertSystemUtil.KnowledgeBase;
 import com.lichang.utils.ExpertSystemUtil.ProcessDesign;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
-import com.lichang.utils.SqlStrUtil;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -195,8 +193,21 @@ public class ExpertSystem extends JFrame {
         }
 
         //获取并设置上次登录时选择的产品下标
-        String lastProductionIndex = ProcessDesign.getLastProductionIndex();
-        comboBox17.setSelectedIndex(Integer.parseInt(lastProductionIndex));
+        String lastProductionName = ProcessDesign.getLastProductionName();
+
+        //用于：当删除产品时，没有切换到 流程设计，导致存储的最后产品选择下标实际上已被删除，再次启动软件时找不到该下标。
+        boolean findFlag = false;
+        for (int i = 0; i < comboBox17.getModel().getSize(); i++) {
+            if (comboBox17.getItemAt(i).equals(lastProductionName)) {
+                comboBox17.setSelectedIndex(i);
+                findFlag = true;
+                break;
+            }
+        }
+        //没找到，则下标默认为-1
+        if (!findFlag) {
+            comboBox17.setSelectedIndex(-1);
+        }
 
         //非管理员用户，禁止使用 资料库中：添加、删除、修改 功能
         if (!adminFlag) {
@@ -208,7 +219,8 @@ public class ExpertSystem extends JFrame {
 
     //关闭该frame时，触发
     private void thisWindowClosed(WindowEvent e) {
-        ProcessDesign.setLastProductionIndex(String.valueOf(comboBox17.getSelectedIndex()));
+        String lastProductionName = (String) comboBox17.getSelectedItem();
+        ProcessDesign.setLastProductionName(lastProductionName);
         return;
     }
 
@@ -967,8 +979,14 @@ public class ExpertSystem extends JFrame {
         comboBox17.removeAllItems(); //先清空原数据
 
         expert_production_mapsList = ProcessDesign.getData("expert_production"); //更新内容
-        productionMaps = new HashMap<>(); //以name为键，其他信息的map为值，建立映射关系
 
+        //非空判断，如果为空，直接清空所有下拉框。用于所有产品被删除时的刷新
+        if (expert_production_mapsList == null || expert_production_mapsList.size() == 0) {
+            emptyComboBox();
+            return;
+        }
+
+        productionMaps = new HashMap<>(); //以name为键，其他信息的map为值，建立映射关系
         //更新 产品选择 下拉框内容
         for (Map<String, Object> map : expert_production_mapsList) {
             String name = (String) map.get("name");
@@ -992,6 +1010,7 @@ public class ExpertSystem extends JFrame {
         emptyTextField_1_to_4();
 
         Map<String, Object> production_paramMap = productionMaps.get(productionName);
+
         comboBox1.addItem(production_paramMap.get("base_metal_a"));
         comboBox2.addItem(production_paramMap.get("base_metal_b"));
         comboBox3.addItem(production_paramMap.get("weld_method"));
@@ -1925,7 +1944,12 @@ public class ExpertSystem extends JFrame {
 
         //获取，最后的id
         int rowCount = table.getRowCount();
-        int lastId = (int) table.getValueAt(rowCount-1, 0);
+        int lastId;
+        if (rowCount == 0) {
+            lastId = 0;
+        }else {
+            lastId = (int) table.getValueAt(rowCount-1, 0);
+        }
         String nextId = String.valueOf(lastId + 1);
 
         //设置新model
@@ -2127,56 +2151,67 @@ public class ExpertSystem extends JFrame {
 
     //确定 按钮
     private void button5ActionPerformed(ActionEvent e) {
+        boolean addResultFlag;
         //对于每个表格，检索不同
         switch (tabbedPannel1_index) {
             case "0":
-                enter_main(table8, table8Model, "expert_production", expert_production_mapsList);
+                addResultFlag = enter_main(table8, table8Model, "expert_production", expert_production_mapsList);
                 break;
             case "1":
-                enter_main(table1, table1Model, "expert_base_metal", expert_base_metal_mapsList);
+                addResultFlag = enter_main(table1, table1Model, "expert_base_metal", expert_base_metal_mapsList);
                 break;
             case "2":
-                enter_main(table2, table2Model, "expert_weld_method", expert_weld_method_mapsList);
+                addResultFlag = enter_main(table2, table2Model, "expert_weld_method", expert_weld_method_mapsList);
                 break;
             case "3":
-                enter_main(table3, table3Model, "expert_weld_metal", expert_weld_metal_mapsList);
+                addResultFlag = enter_main(table3, table3Model, "expert_weld_metal", expert_weld_metal_mapsList);
                 break;
             case "4":
-                enter_main(table4, table4Model,"expert_auxiliary_materials", expert_auxiliary_materials_mapsList);
+                addResultFlag = enter_main(table4, table4Model,"expert_auxiliary_materials", expert_auxiliary_materials_mapsList);
                 break;
             case "5":
-                enter_main(table5, table5Model, "expert_workpiece_thickness", expert_workpiece_thickness_mapsList);
+                addResultFlag = enter_main(table5, table5Model, "expert_workpiece_thickness", expert_workpiece_thickness_mapsList);
                 break;
             case "6":
-                enter_main(table6, table6Model, "expert_weld_joint", expert_weld_joint_mapsList);
+                addResultFlag = enter_main(table6, table6Model, "expert_weld_joint", expert_weld_joint_mapsList);
                 break;
             case "7":
-                enter_main(table7, table7Model, "expert_thermal_process", expert_thermal_process_mapsList);
+                addResultFlag = enter_main(table7, table7Model, "expert_thermal_process", expert_thermal_process_mapsList);
                 break;
             case "8":
-                enter_main(table9, table9Model, "expert_process_parameters", expert_process_parameters_mapsList);
+                addResultFlag = enter_main(table9, table9Model, "expert_process_parameters", expert_process_parameters_mapsList);
                 break;
             default:
+                addResultFlag = true;
                 break;
         }
 
-        //关闭 使能
-        button5.setEnabled(false); //确定
-        button19.setEnabled(false); //返回2
-        //开启 使能
-        button23.setEnabled(true); //刷新
-        button20.setEnabled(true); //添加
-        button9.setEnabled(true); //删除
-        button22.setEnabled(true); //修改
-        button21.setEnabled(true); //搜索
-        button24.setEnabled(true); //返回1
+        if (addResultFlag) {
+            //关闭 使能
+            button5.setEnabled(false); //确定
+            button19.setEnabled(false); //返回2
+            //开启 使能
+            button23.setEnabled(true); //刷新
+            button20.setEnabled(true); //添加
+            button9.setEnabled(true); //删除
+            button22.setEnabled(true); //修改
+            button21.setEnabled(true); //搜索
+            button24.setEnabled(true); //返回1
+        }
+
     }
 
     //确定 主方法
-    private void enter_main(JTable table, DefaultTableModel tableModel, String DB_tableName, List<Map<String, Object>> expert_mapsList) {
+    private boolean enter_main(JTable table, DefaultTableModel tableModel, String DB_tableName, List<Map<String, Object>> expert_mapsList) {
         if (addFlag.equals("1")) {
             //添加数据进数据库
             //对于不同的table，通过识别table中有多少列，确定有多少个参数，再通过for 字符串拼接的形式，添加？至sqlStr中
+            //name非空判断
+            if (table.getValueAt(0, 1) == null) {
+                JOptionPane.showMessageDialog(this, "name不能为空！请确认name或重新输入name！", "提示", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
             int colCount = table.getColumnCount();
             List<Object> params = new ArrayList<>();
             for (int i = 0; i < table.getColumnCount(); i++) {
@@ -2199,6 +2234,8 @@ public class ExpertSystem extends JFrame {
             //刷新表格
             updateData(); //调用刷新主方法，更新表格数据来源
             initTable(); //更新表格
+
+            return true;
         }else if (addFlag.equals("2")){
             int selectedRow = table.getSelectedRow();
             Object id = table.getValueAt(selectedRow, 0); //获得所选数据的id
@@ -2211,6 +2248,7 @@ public class ExpertSystem extends JFrame {
             //刷新表格
             updateData(); //调用刷新主方法，更新表格数据来源
             initTable(); //更新表格
+            return true;
         }else if (addFlag.equals("3")) {
             int colCount = table.getColumnCount();
             ArrayList<Object> data_list = new ArrayList<>(); //列值
@@ -2247,7 +2285,9 @@ public class ExpertSystem extends JFrame {
             //刷新表格
             updateData(); //调用刷新主方法，更新表格数据来源
             initTable(); //更新表格
+            return true;
         }
+        return true;
     }
 
     //返回 按钮

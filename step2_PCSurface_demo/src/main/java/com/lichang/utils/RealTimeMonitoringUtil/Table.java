@@ -38,7 +38,7 @@ public class Table {
     public static List<Machine_data_now> getDataBeans_now() {
         log.debug("获取 当前工件 的数据");
 
-        String sqlStr = "select * from machine_data_now";
+        String sqlStr = SqlStrUtil.generateSql5("machine_data_now");
 
         List<Machine_data_now> machine_data_now_BeanList = (List<Machine_data_now>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class);

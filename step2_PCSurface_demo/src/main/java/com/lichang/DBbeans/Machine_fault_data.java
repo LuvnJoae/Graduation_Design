@@ -7,7 +7,8 @@ import java.sql.Timestamp;
  */
 public class Machine_fault_data {
     private int id;
-    private int num;
+    private String production_name;
+    private int production_num;
     private Timestamp time;
     private String fault_type;
     private int fault_maxNum;
@@ -22,11 +23,11 @@ public class Machine_fault_data {
     }
 
     public int getNum() {
-        return num;
+        return production_num;
     }
 
-    public void setNum(int num) {
-        this.num = num;
+    public void setNum(int production_num) {
+        this.production_num = production_num;
     }
 
     public Timestamp getTime() {
@@ -64,8 +65,8 @@ public class Machine_fault_data {
     public Machine_fault_data() {
     }
 
-    public Machine_fault_data(int num, Timestamp time, String fault_type, int fault_maxNum, String result) {
-        this.num = num;
+    public Machine_fault_data(int production_num, Timestamp time, String fault_type, int fault_maxNum, String result) {
+        this.production_num = production_num;
         this.time = time;
         this.fault_type = fault_type;
         this.fault_maxNum = fault_maxNum;
