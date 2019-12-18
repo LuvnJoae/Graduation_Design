@@ -14,18 +14,25 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//TODO:
+//标记时间：2019/12/18 13:28  预解决时间：
+//1. 故障统计表格
+//2. 点击查看详情，新建一个JDialog来显示具体数据
+//3. 历史统计的折线图
+
+
+
 /**
  * @author unknown
  */
 public class HistoricalStatistics extends JFrame {
-
-
     private static Logger log = LoggerUtil.getLogger(); // 日志
 
     // 自定义的变量
@@ -244,13 +251,17 @@ public class HistoricalStatistics extends JFrame {
     private void thisWindowActivated(WindowEvent e) {
         //加载表格 数据
         machine_fault_data_mapsList = Table.getData_table4("machine_fault_data");
+        initTable4(); //当激活页面时，刷新该表格（故障查询）
     }
 
     /**
-     * 故障查询 表格
+     * 故障查询 表格相关
      */
+    //表格： 加载 表格
     private void initTable4() {
         DefaultTableModel table4Model = (DefaultTableModel) table4.getModel();
+        table4Model.setRowCount(0); //清空原数据
+        //刷新 新数据
         ArrayList<Object> rowData_list = new ArrayList<>();
 
         for (Map<String, Object> map : machine_fault_data_mapsList) {
@@ -260,10 +271,40 @@ public class HistoricalStatistics extends JFrame {
             rowData_list.add(map.get("fault_type"));
             rowData_list.add(map.get("fault_maxnum"));
             rowData_list.add(map.get("result"));
+            rowData_list.add("<html><font color = 'blue'><u>点击查看</u></font></html>"); //添加 点击查看 字符串
 
             table4Model.addRow(rowData_list.toArray()); //添加行数据至model
-            rowData_list = null; //清空list
+            rowData_list.clear(); //清空原内容
         }
+
+    }
+
+    //事件： 点击表格触发事件 （设定只有当点击 点击查看 这各单元格的内容时，才会真正触发点击事件的内容）
+    // 哈哈哈哈哈！我聪明吧！！！！o(*￣▽￣*)ブ
+    private void table4MouseClicked(MouseEvent e) {
+        if (table4.getSelectedColumn() == 6) {
+            System.out.println("事件");
+        } else {
+            return;
+        }
+    }
+
+    //查询 按钮
+    private void button5ActionPerformed(ActionEvent e) {
+        String findItem = textField1.getText(); //获取搜索条件
+        //通过TableRowSorter实现检索
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table4.getModel());
+        table4.setRowSorter(sorter);
+        sorter.setRowFilter(RowFilter.regexFilter(findItem)); //查询格式为 正则表达式，范围为整个table
+    }
+
+    //返回 按钮
+    private void button6ActionPerformed(ActionEvent e) {
+        //通过TableRowSorter实现检索
+        //通过检索 空字符串 返回原内容
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table4.getModel());
+        table4.setRowSorter(sorter);
+        sorter.setRowFilter(RowFilter.regexFilter("")); //查询格式为 正则表达式，范围为整个table
     }
 
     /**
@@ -273,6 +314,20 @@ public class HistoricalStatistics extends JFrame {
     private void button7ActionPerformed(ActionEvent e) {
         initTable4();
     }
+
+    /**
+     *  测试 按钮
+     */
+    private void button8ActionPerformed(ActionEvent e) {
+        System.out.println("***********");
+    }
+
+
+
+
+
+
+
 
 
 
@@ -305,6 +360,7 @@ public class HistoricalStatistics extends JFrame {
         button5 = new JButton();
         button6 = new JButton();
         button7 = new JButton();
+        button8 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -469,31 +525,47 @@ public class HistoricalStatistics extends JFrame {
                     table4.setRowHeight(20);
                     table4.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {null, "", null, null, null, null, null},
                         },
                         new String[] {
                             "id", "\u6545\u969c\u65f6\u95f4", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
                         }
-                    ));
+                    ) {
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false, false
+                        };
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
                     {
                         TableColumnModel cm = table4.getColumnModel();
                         cm.getColumn(0).setPreferredWidth(50);
                         cm.getColumn(1).setPreferredWidth(120);
                     }
+                    table4.setAutoCreateRowSorter(true);
+                    table4.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            table4MouseClicked(e);
+                        }
+                    });
                     scrollPane5.setViewportView(table4);
                 }
                 panel3.add(scrollPane5);
-                scrollPane5.setBounds(0, 40, 995, 200);
+                scrollPane5.setBounds(0, 40, 960, 200);
                 panel3.add(textField1);
                 textField1.setBounds(0, 5, 120, 30);
 
                 //---- button5 ----
                 button5.setText("\u67e5\u8be2");
+                button5.addActionListener(e -> button5ActionPerformed(e));
                 panel3.add(button5);
                 button5.setBounds(new Rectangle(new Point(125, 5), button5.getPreferredSize()));
 
                 //---- button6 ----
                 button6.setText("\u8fd4\u56de");
+                button6.addActionListener(e -> button6ActionPerformed(e));
                 panel3.add(button6);
                 button6.setBounds(185, 5, 58, 28);
 
@@ -501,7 +573,7 @@ public class HistoricalStatistics extends JFrame {
                 button7.setText("\u5237\u65b0");
                 button7.addActionListener(e -> button7ActionPerformed(e));
                 panel3.add(button7);
-                button7.setBounds(930, 5, 58, 28);
+                button7.setBounds(895, 5, 63, 28);
 
                 {
                     // compute preferred size
@@ -521,7 +593,13 @@ public class HistoricalStatistics extends JFrame {
             tabbedPane2.addTab("\u6545\u969c\u67e5\u8be2", panel3);
         }
         contentPane.add(tabbedPane2);
-        tabbedPane2.setBounds(5, 320, 1000, 270);
+        tabbedPane2.setBounds(5, 320, 970, 270);
+
+        //---- button8 ----
+        button8.setText("text");
+        button8.addActionListener(e -> button8ActionPerformed(e));
+        contentPane.add(button8);
+        button8.setBounds(new Rectangle(new Point(590, 225), button8.getPreferredSize()));
 
         {
             // compute preferred size
@@ -537,7 +615,7 @@ public class HistoricalStatistics extends JFrame {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
-        setSize(1010, 625);
+        pack();
         setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
@@ -567,5 +645,6 @@ public class HistoricalStatistics extends JFrame {
     private JButton button5;
     private JButton button6;
     private JButton button7;
+    private JButton button8;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -9,7 +9,6 @@ new FormModel {
 			"title": "界面"
 			"alwaysOnTop": true
 			"$locationPolicy": 1
-			"$sizePolicy": 1
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowActivated", "thisWindowActivated", true ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel1"
@@ -178,17 +177,7 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "table4"
 							"rowHeight": 20
-							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
-								add( new java.util.Vector {
-									add( null )
-									add( "" )
-									add( null )
-									add( null )
-									add( null )
-									add( null )
-									add( null )
-								} )
-							}, new java.util.Vector {
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 								add( "id" )
 								add( "故障时间" )
 								add( "工件编号" )
@@ -205,13 +194,13 @@ new FormModel {
 								add( null )
 								add( null )
 							}, new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+								add( false )
 							}, new java.util.Vector {
 								add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 								add( new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
@@ -221,11 +210,13 @@ new FormModel {
 								add( null )
 								add( null )
 							} )
+							"autoCreateRowSorter": true
+							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "table4MouseClicked", true ) )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 0
 						"y": 40
-						"width": 995
+						"width": 960
 						"height": 200
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
@@ -239,6 +230,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button5"
 						"text": "查询"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 125
 						"y": 5
@@ -246,6 +238,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button6"
 						"text": "返回"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 58
 						"height": 28
@@ -257,9 +250,9 @@ new FormModel {
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button7ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 58
+						"width": 63
 						"height": 28
-						"x": 930
+						"x": 895
 						"y": 5
 					} )
 				}, new FormLayoutConstraints( null ) {
@@ -268,12 +261,20 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 5
 				"y": 320
-				"width": 1000
+				"width": 970
 				"height": 270
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button8"
+				"text": "text"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button8ActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 590
+				"y": 225
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 5 )
-			"size": new java.awt.Dimension( 1010, 625 )
+			"size": new java.awt.Dimension( 1005, 625 )
 		} )
 	}
 }

@@ -8,7 +8,6 @@ new FormModel {
 			"defaultCloseOperation": 2
 			"title": "界面"
 			"alwaysOnTop": true
-			"$sizePolicy": 1
 			"$locationPolicy": 1
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowOpened", "thisWindowOpened", true ) )
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosed", "thisWindowClosed", true ) )

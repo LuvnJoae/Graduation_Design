@@ -9,8 +9,8 @@ public class Demo1 {
     public static void main(String[] args) {
 //        new Login();
 //        new RealTimeMonitoring();
-//        new HistoricalStatistics();
-        new ExpertSystem();
+        new HistoricalStatistics();
+//        new ExpertSystem();
     }
 
 
