@@ -1,8 +1,7 @@
-package com.lichang.utils.ExpertSystemUtil;
+package com.lichang.utils.ExpertSystemUtils;
 
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -13,7 +12,7 @@ import java.util.Map;
 /**
  * 用于工艺流程设计 内容与数据库的连接
  */
-public class ProcessDesign {
+public class ProcessDesignUtil {
     /**
      * 获取专家系统相应表中的全部数据 给 下拉框
      *
@@ -21,7 +20,7 @@ public class ProcessDesign {
      * @return
      */
     public static List<Map<String, Object>> getData(String table) {
-        String sqlStr = SqlStrUtil.generateSql5(table);
+        String sqlStr = SqlStrUtil.query_sql4(table);
         List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr);
         return mapsList;
     }
@@ -51,8 +50,8 @@ public class ProcessDesign {
                                   String speed_practical,
                                   String extension_practical
     ) {
-        String sqlStr = SqlStrUtil.generateSql6("expert_production");
-        List<Object> params = SqlStrUtil.generateList6(
+        String sqlStr = SqlStrUtil.insert_sql1();
+        List<Object> params = SqlStrUtil.insert_list1(
                 name,
                 base_metal_a,
                 base_metal_b,
@@ -104,8 +103,8 @@ public class ProcessDesign {
                                      String speed_practical,
                                      String extension_practical
     ) {
-        String sqlStr = SqlStrUtil.generateSql7("expert_production");
-        List<Object> params = SqlStrUtil.generateList7(
+        String sqlStr = SqlStrUtil.update_sql2();
+        List<Object> params = SqlStrUtil.update_list2(
                 name,
                 base_metal_a,
                 base_metal_b,

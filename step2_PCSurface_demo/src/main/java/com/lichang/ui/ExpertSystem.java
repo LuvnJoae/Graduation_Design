@@ -8,10 +8,10 @@ import java.awt.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import com.lichang.utils.ExpertSystemUtil.KnowledgeBase;
-import com.lichang.utils.ExpertSystemUtil.ProcessDesign;
+import com.lichang.utils.ExpertSystemUtils.KnowledgeBaseUtil;
+import com.lichang.utils.ExpertSystemUtils.ProcessDesignUtil;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
+import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -157,7 +157,7 @@ public class ExpertSystem extends JFrame {
         initComponents();
         updateComboBox17(); //加载 产品选择
 
-
+        this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
 
@@ -176,6 +176,7 @@ public class ExpertSystem extends JFrame {
 
         label3Bind(username); //显示当前用户信息
 
+        this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
 
@@ -193,7 +194,7 @@ public class ExpertSystem extends JFrame {
         }
 
         //获取并设置上次登录时选择的产品下标
-        String lastProductionName = ProcessDesign.getLastProductionName();
+        String lastProductionName = ProcessDesignUtil.getLastProductionName();
 
         //用于：当删除产品时，没有切换到 流程设计，导致存储的最后产品选择下标实际上已被删除，再次启动软件时找不到该下标。
         boolean findFlag = false;
@@ -220,7 +221,7 @@ public class ExpertSystem extends JFrame {
     //关闭该frame时，触发
     private void thisWindowClosed(WindowEvent e) {
         String lastProductionName = (String) comboBox17.getSelectedItem();
-        ProcessDesign.setLastProductionName(lastProductionName);
+        ProcessDesignUtil.setLastProductionName(lastProductionName);
         return;
     }
 
@@ -315,7 +316,7 @@ public class ExpertSystem extends JFrame {
                     table = "emp";
                 }
 
-                if (ChangePassword.validate(table, username, password)) {
+                if (ChangePasswordUtil.validate(table, username, password)) {
                     oldValidationTip.setText("验证成功");
                     oldValidationTip.setForeground(Color.red);
                     oldChangeFlag = true;
@@ -357,7 +358,7 @@ public class ExpertSystem extends JFrame {
                             table = "emp";
                         }
 
-                        ChangePassword.newPassword(table, username, password);
+                        ChangePasswordUtil.newPassword(table, username, password);
                         JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
                         jDialog2.dispose();
                     } else {
@@ -511,13 +512,13 @@ public class ExpertSystem extends JFrame {
     //下拉框 1-10 获取并添加数据。（真实：数据库）
     private void initComboBox_fromDB() {
         //获取表数据
-        expert_base_metal_mapsList = ProcessDesign.getData("expert_base_metal"); // 母材选取
-        expert_weld_method_mapsList = ProcessDesign.getData("expert_weld_method"); // 焊接方法
-        expert_weld_metal_mapsList = ProcessDesign.getData("expert_weld_metal"); // 焊接材料
-        expert_auxiliary_materials_mapsList = ProcessDesign.getData("expert_auxiliary_materials"); // 辅材
-        expert_workpiece_thickness_mapsList = ProcessDesign.getData("expert_workpiece_thickness"); // 工件厚度
-        expert_weld_joint_mapsList = ProcessDesign.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
-        expert_thermal_process_mapsList = ProcessDesign.getData("expert_thermal_process"); // 热工艺
+        expert_base_metal_mapsList = ProcessDesignUtil.getData("expert_base_metal"); // 母材选取
+        expert_weld_method_mapsList = ProcessDesignUtil.getData("expert_weld_method"); // 焊接方法
+        expert_weld_metal_mapsList = ProcessDesignUtil.getData("expert_weld_metal"); // 焊接材料
+        expert_auxiliary_materials_mapsList = ProcessDesignUtil.getData("expert_auxiliary_materials"); // 辅材
+        expert_workpiece_thickness_mapsList = ProcessDesignUtil.getData("expert_workpiece_thickness"); // 工件厚度
+        expert_weld_joint_mapsList = ProcessDesignUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        expert_thermal_process_mapsList = ProcessDesignUtil.getData("expert_thermal_process"); // 热工艺
 
         //给下拉框添加内容
         initComboBox_addData_fromDB(comboBox1, expert_base_metal_mapsList, "name");
@@ -940,7 +941,7 @@ public class ExpertSystem extends JFrame {
         textField4_item = textField4.getText();
         textField6_item = textField6.getText();
 
-        boolean result = ProcessDesign.setData(
+        boolean result = ProcessDesignUtil.setData(
                 textField6_item,
                 comboBox1_item,
                 comboBox2_item,
@@ -978,7 +979,7 @@ public class ExpertSystem extends JFrame {
     private void updateComboBox17() {
         comboBox17.removeAllItems(); //先清空原数据
 
-        expert_production_mapsList = ProcessDesign.getData("expert_production"); //更新内容
+        expert_production_mapsList = ProcessDesignUtil.getData("expert_production"); //更新内容
 
         //非空判断，如果为空，直接清空所有下拉框。用于所有产品被删除时的刷新
         if (expert_production_mapsList == null || expert_production_mapsList.size() == 0) {
@@ -1068,7 +1069,7 @@ public class ExpertSystem extends JFrame {
         textField4_item = textField4.getText();
         textField6_item = textField6.getText();
 
-        boolean result = ProcessDesign.updateData(
+        boolean result = ProcessDesignUtil.updateData(
                 (String) comboBox17.getSelectedItem(),
                 comboBox1_item,
                 comboBox2_item,
@@ -1368,7 +1369,7 @@ public class ExpertSystem extends JFrame {
 
         //焊接参数表
         String seq = String.valueOf(processParametersStr);
-        expert_process_parameters_mapsList = ProcessDesign.getData("expert_process_parameters");
+        expert_process_parameters_mapsList = ProcessDesignUtil.getData("expert_process_parameters");
 
         //存储符合规则的焊接参数
         List<String> current_list = new ArrayList<>();
@@ -1738,15 +1739,15 @@ public class ExpertSystem extends JFrame {
     //表格： 刷新 数据 （重新获取数据）
     private void updateData() {
         //重新获取 数据库信息
-        expert_production_mapsList = KnowledgeBase.getData("expert_production"); //产品
-        expert_base_metal_mapsList = KnowledgeBase.getData("expert_base_metal"); // 母材选取
-        expert_weld_method_mapsList = KnowledgeBase.getData("expert_weld_method"); // 焊接方法
-        expert_weld_metal_mapsList = KnowledgeBase.getData("expert_weld_metal"); // 焊接材料
-        expert_auxiliary_materials_mapsList = KnowledgeBase.getData("expert_auxiliary_materials"); // 辅材
-        expert_workpiece_thickness_mapsList = KnowledgeBase.getData("expert_workpiece_thickness"); // 工件厚度
-        expert_weld_joint_mapsList = KnowledgeBase.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
-        expert_thermal_process_mapsList = KnowledgeBase.getData("expert_thermal_process"); // 热工艺
-        expert_process_parameters_mapsList = KnowledgeBase.getData("expert_process_parameters"); //焊接参数
+        expert_production_mapsList = KnowledgeBaseUtil.getData("expert_production"); //产品
+        expert_base_metal_mapsList = KnowledgeBaseUtil.getData("expert_base_metal"); // 母材选取
+        expert_weld_method_mapsList = KnowledgeBaseUtil.getData("expert_weld_method"); // 焊接方法
+        expert_weld_metal_mapsList = KnowledgeBaseUtil.getData("expert_weld_metal"); // 焊接材料
+        expert_auxiliary_materials_mapsList = KnowledgeBaseUtil.getData("expert_auxiliary_materials"); // 辅材
+        expert_workpiece_thickness_mapsList = KnowledgeBaseUtil.getData("expert_workpiece_thickness"); // 工件厚度
+        expert_weld_joint_mapsList = KnowledgeBaseUtil.getData("expert_weld_joint"); // 焊接接头、坡口、焊接位置
+        expert_thermal_process_mapsList = KnowledgeBaseUtil.getData("expert_thermal_process"); // 热工艺
+        expert_process_parameters_mapsList = KnowledgeBaseUtil.getData("expert_process_parameters"); //焊接参数
     }
 
     //表格： 设置表格列宽等格式
@@ -2217,7 +2218,7 @@ public class ExpertSystem extends JFrame {
             for (int i = 0; i < table.getColumnCount(); i++) {
                 params.add(table.getValueAt(0, i));
             }
-            boolean result = KnowledgeBase.addData(DB_tableName, colCount, params);
+            boolean result = KnowledgeBaseUtil.addData(DB_tableName, colCount, params);
             if (result) {
                 JOptionPane.showMessageDialog(this, "添加成功！", "提示", JOptionPane.WARNING_MESSAGE);
             }else {
@@ -2239,7 +2240,7 @@ public class ExpertSystem extends JFrame {
         }else if (addFlag.equals("2")){
             int selectedRow = table.getSelectedRow();
             Object id = table.getValueAt(selectedRow, 0); //获得所选数据的id
-            boolean result = KnowledgeBase.deleteData(DB_tableName, id); //删除
+            boolean result = KnowledgeBaseUtil.deleteData(DB_tableName, id); //删除
             if (result) {
                 JOptionPane.showMessageDialog(this, "删除成功！", "提示", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -2267,7 +2268,7 @@ public class ExpertSystem extends JFrame {
                 DB_colsName_list.add(s);
             }
 
-            boolean result = KnowledgeBase.changeData(DB_tableName, DB_colsName_list.toArray(), data_list.toArray());
+            boolean result = KnowledgeBaseUtil.changeData(DB_tableName, DB_colsName_list.toArray(), data_list.toArray());
 
             if (result) {
                 JOptionPane.showMessageDialog(this, "修改成功！", "提示", JOptionPane.WARNING_MESSAGE);

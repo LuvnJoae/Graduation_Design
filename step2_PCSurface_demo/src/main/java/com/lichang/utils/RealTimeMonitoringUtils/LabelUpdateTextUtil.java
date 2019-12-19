@@ -1,18 +1,17 @@
-package com.lichang.utils.RealTimeMonitoringUtil;
+package com.lichang.utils.RealTimeMonitoringUtils;
 
 import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
 import org.apache.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
 /**
  * 用于对Label进行数据更新
  */
-public class LabelUpdateText {
+public class LabelUpdateTextUtil {
     private static Logger log = LoggerUtil.getLogger();
 
     /**
@@ -20,7 +19,7 @@ public class LabelUpdateText {
      * @return
      */
     public static Long faultNumberLabel1() {
-        String sql = SqlStrUtil.generateSql4("machine_fault_data");
+        String sql = SqlStrUtil.query_sql3("machine_fault_data");
         Long count = JdbcTemplateUtil.queryCount(sql);
         return count;
     }
@@ -29,7 +28,7 @@ public class LabelUpdateText {
      * completedNumberLabel1: 查询已完成工件总记录数
      */
     public static Long CompletedNumberLabel1() {
-        String sql = SqlStrUtil.generateSql4("machine_data_brief");
+        String sql = SqlStrUtil.query_sql3("machine_data_brief");
         Long count = JdbcTemplateUtil.queryCount(sql);
         return count;
     }

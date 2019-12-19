@@ -6,7 +6,7 @@ package com.lichang.ui;
 
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
-import com.lichang.utils.LoginUtil.Login_Logout;
+import com.lichang.utils.LoginUtils.Login_Logout;
 import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
 

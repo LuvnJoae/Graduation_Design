@@ -4,22 +4,21 @@
 
 package com.lichang.ui;
 
-import com.lichang.utils.HistoricalStatisticsUtil.Table;
+import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtil.ChangePassword;
+import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
 import org.apache.log4j.Logger;
-import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 //TODO:
 //标记时间：2019/12/18 13:28  预解决时间：
@@ -35,18 +34,18 @@ import java.util.Map;
 public class HistoricalStatistics extends JFrame {
     private static Logger log = LoggerUtil.getLogger(); // 日志
 
-    // 自定义的变量
+    /**
+     * 自定义变量
+     */
+    //用户设置
     private String username; // 当前用户名
     private boolean adminFlag; // 用户类型
-    private JFreeChart realTimeLineChart; // 折线图模型
-    private JPanel chartPanel; // 折线图
-    private JPanel chartPanel2; // 折线图放大
-    private JDialog jDialog; // 折线图
     private JDialog jDialog2; // 密码修改
     private JPanel changePasswordPanel; // 密码修改
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
+    //表格
     List<Map<String, Object>> machine_fault_data_mapsList; //故障表
 
     //无参（预设账户信息）
@@ -80,7 +79,6 @@ public class HistoricalStatistics extends JFrame {
 
     /**
      * Lable3 账户信息: 显示当前登录用户
-     * @param username
      */
     private void label3Bind(String username) {
         log.debug("Lable3 账户信息: 显示当前登录用户");
@@ -88,9 +86,9 @@ public class HistoricalStatistics extends JFrame {
     }
 
     /**
-     * MenuItem 用户设置:  切换用户
-     * @param e
+     * Menu 菜单
      */
+    //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
         log.debug("MenuItem 用户设置:  切换用户");
 
@@ -98,10 +96,7 @@ public class HistoricalStatistics extends JFrame {
         this.dispose();
     }
 
-    /**
-     * MenuItem 用户设置： 更改密码
-     * @param e
-     */
+    //MenuItem 用户设置： 更改密码
     private void menuItem2ActionPerformed(ActionEvent e) {
         log.debug("MenuItem 用户设置： 更改密码");
 
@@ -118,7 +113,7 @@ public class HistoricalStatistics extends JFrame {
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、一般符号，需以字母开头");
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线，需以字母开头");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
         tip.setLineWrap(true); // 自动换行
@@ -166,7 +161,7 @@ public class HistoricalStatistics extends JFrame {
                     table = "emp";
                 }
 
-                if (ChangePassword.validate(table, username, password)) {
+                if (ChangePasswordUtil.validate(table, username, password)) {
                     oldValidationTip.setText("验证成功");
                     oldValidationTip.setForeground(Color.red);
                     oldChangeFlag = true;
@@ -192,10 +187,8 @@ public class HistoricalStatistics extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newPassword = newPasswordField.getText();
-                if (newPassword.length() > 10
-                        || newPassword.length() < 5
-                        || (newPassword.charAt(0) < 'A' || newPassword.charAt(0) > 'z')
-                        || (newPassword.charAt(0) > 'Z' && newPassword.charAt(0) < 'a')) {
+
+                if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                 }else {
                     if (oldChangeFlag) {
@@ -208,7 +201,7 @@ public class HistoricalStatistics extends JFrame {
                             table = "emp";
                         }
 
-                        ChangePassword.newPassword(table, username, password);
+                        ChangePasswordUtil.newPassword(table, username, password);
                         JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
                         jDialog2.dispose();
                     }else {
@@ -228,17 +221,14 @@ public class HistoricalStatistics extends JFrame {
     }
 
     /**
-     * 实时监测 按钮：点击跳转
-     * @param e
+     * 界面跳转 按钮
      */
+    //历史统计与查询 按钮： 点击跳转
     private void button1ActionPerformed(ActionEvent e) {
         this.dispose();
     }
 
-    /**
-     * 故障校验 按钮： 点击跳转
-     * @param e
-     */
+    //故障校验 按钮： 点击跳转
     private void button3ActionPerformed(ActionEvent e) {
         new ExpertSystem(username, adminFlag);
         this.dispose();
@@ -250,7 +240,7 @@ public class HistoricalStatistics extends JFrame {
     //当激活此frame时，触发
     private void thisWindowActivated(WindowEvent e) {
         //加载表格 数据
-        machine_fault_data_mapsList = Table.getData_table4("machine_fault_data");
+        machine_fault_data_mapsList = TableUtil.getData_table4("machine_fault_data");
         initTable4(); //当激活页面时，刷新该表格（故障查询）
     }
 

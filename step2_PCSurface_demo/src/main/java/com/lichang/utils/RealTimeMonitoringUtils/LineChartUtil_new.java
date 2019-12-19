@@ -1,4 +1,4 @@
-package com.lichang.utils.RealTimeMonitoringUtil;
+package com.lichang.utils.RealTimeMonitoringUtils;
 
 import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.utils.LoggerUtil;
@@ -13,7 +13,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
-import org.springframework.jdbc.object.SqlUpdate;
 
 import java.awt.*;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Map;
 /**
  * 用于生成一个折线图模型
  */
-public class LineChart {
+public class LineChartUtil_new {
     private static Logger log = LoggerUtil.getLogger();
 
     /**
@@ -72,8 +71,8 @@ public class LineChart {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        String sqlStr = SqlStrUtil.generateSql2("Machine_data_now"); //table 表名
-        List<Object> params = SqlStrUtil.generateList2(1); // num为 工件编号
+        String sqlStr = SqlStrUtil.query_sql2("Machine_data_now"); //table 表名
+        List<Object> params = SqlStrUtil.query_list2(1); // num为 工件编号
         List<Machine_data_now> machine_data_now_BeansList = (List<Machine_data_now>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class, params);
 
@@ -106,7 +105,7 @@ public class LineChart {
      * 获得machine_data_now 的内容
      */
     public static List<Map<String, Object>> getData() {
-        String sqlStr = SqlStrUtil.generateSql5("machine_data_now");
+        String sqlStr = SqlStrUtil.query_sql4("machine_data_now");
         List<Map<String, Object>> maps = JdbcTemplateUtil.queryMult(sqlStr);
         return maps;
     }
