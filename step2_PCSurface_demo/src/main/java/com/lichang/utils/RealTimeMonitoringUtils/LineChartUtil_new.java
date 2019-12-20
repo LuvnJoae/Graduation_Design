@@ -65,7 +65,6 @@ public class LineChartUtil_new {
      * @param para 用于区分电压还是电流
      * @return
      */
-    @Test
     private static CategoryDataset getDataset(String para, String production_name) {
         log.debug("生成折线图所需 数据");
 

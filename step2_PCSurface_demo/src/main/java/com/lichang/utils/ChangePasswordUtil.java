@@ -1,4 +1,4 @@
-package com.lichang.utils.RealTimeMonitoringUtils;
+package com.lichang.utils;
 
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;

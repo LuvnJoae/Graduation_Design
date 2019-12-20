@@ -6,7 +6,7 @@ package com.lichang.ui;
 
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
+import com.lichang.utils.ChangePasswordUtil;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

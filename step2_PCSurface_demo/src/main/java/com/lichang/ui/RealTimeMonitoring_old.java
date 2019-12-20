@@ -7,7 +7,7 @@ package com.lichang.ui;
 import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.DBbeans.Machine_fault_data;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
+import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.LabelUpdateTextUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.LineChart;
 import com.lichang.utils.RealTimeMonitoringUtils.Table;

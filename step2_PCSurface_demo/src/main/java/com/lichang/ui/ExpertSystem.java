@@ -11,7 +11,7 @@ import javax.swing.table.*;
 import com.lichang.utils.ExpertSystemUtils.KnowledgeBaseUtil;
 import com.lichang.utils.ExpertSystemUtils.ProcessDesignUtil;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
+import com.lichang.utils.ChangePasswordUtil;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
