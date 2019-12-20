@@ -19,8 +19,8 @@ public class LabelUpdateTextUtil {
      * @return
      */
     public static Long faultNumberLabel1() {
-        String sql = SqlStrUtil.query_sql3("machine_fault_data");
-        Long count = JdbcTemplateUtil.queryCount(sql);
+        String sql = SqlStrUtil.query_sql2("machine_fault_data");
+        Long count = JdbcTemplateUtil.queryCount(sql, null);
         return count;
     }
 
@@ -28,7 +28,7 @@ public class LabelUpdateTextUtil {
      * completedNumberLabel1: 查询已完成工件总记录数
      */
     public static Long CompletedNumberLabel1() {
-        String sql = SqlStrUtil.query_sql3("machine_data_brief");
+        String sql = SqlStrUtil.query_sql2("machine_data_brief");
         Long count = JdbcTemplateUtil.queryCount(sql);
         return count;
     }
@@ -45,7 +45,6 @@ public class LabelUpdateTextUtil {
         try {
             num = machine_data_now_BeansList.get(0).getNum();
         } catch (Exception e) {
-            log.warn("产品编号 数据不存在！");
             return -1;
         }
 

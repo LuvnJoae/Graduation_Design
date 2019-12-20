@@ -23,8 +23,8 @@ public class Table {
     public static List<Machine_data_all> getDataBeans(int num) {
         log.debug("获取 机器表 指定 num 的 机器数据");
 
-        String sqlStr = SqlStrUtil.query_sql2("Machine_data_all"); //table 表名
-        List<Object> params = SqlStrUtil.query_list2(num); // num为 工件编号
+        String sqlStr = SqlStrUtil.query_sql1_2("Machine_data_all"); //table 表名
+        List<Object> params = SqlStrUtil.query_list1_2(num); // num为 工件编号
         List<Machine_data_all> machine_data_all_BeansList = (List<Machine_data_all>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_all.class, params);
 
@@ -38,7 +38,7 @@ public class Table {
     public static List<Machine_data_now> getDataBeans_now() {
         log.debug("获取 当前工件 的数据");
 
-        String sqlStr = SqlStrUtil.query_sql4("machine_data_now");
+        String sqlStr = SqlStrUtil.query_sql1("machine_data_now");
 
         List<Machine_data_now> machine_data_now_BeanList = (List<Machine_data_now>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class);
@@ -53,8 +53,8 @@ public class Table {
     public static List<Machine_fault_data> getFaultDataBeans(int num) {
         log.debug("获取 故障表 指定 num 的 故障数据");
 
-        String sqlStr = SqlStrUtil.query_sql2("Machine_fault_data"); //table 表名
-        List<Object> params = SqlStrUtil.query_list2(num); // num为 工件编号
+        String sqlStr = SqlStrUtil.query_sql1_2("Machine_fault_data"); //table 表名
+        List<Object> params = SqlStrUtil.query_list1_2(num); // num为 工件编号
         List<Machine_fault_data> machine_fault_data_BeansList = (List<Machine_fault_data>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_fault_data.class, params);
 
@@ -66,7 +66,7 @@ public class Table {
      * @return
      */
     public static List<Machine_fault_data> getLastRecord(String table) {
-        String sqlStr = SqlStrUtil.query_sql5(table);
+        String sqlStr = SqlStrUtil.query_sql3(table);
         List<Machine_fault_data> machine_fault_data_BeansList = (List<Machine_fault_data>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_fault_data.class);
         

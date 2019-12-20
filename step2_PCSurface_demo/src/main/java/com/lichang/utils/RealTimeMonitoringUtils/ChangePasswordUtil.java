@@ -25,8 +25,8 @@ public class ChangePasswordUtil {
     public static boolean validate(String table, String username, String password) {
         log.debug("判断密码 是否 正确");
 
-        String sqlStr = SqlStrUtil.query_sql1(table); // sql语句
-        List<Object> params = SqlStrUtil.query_list1(username, password); // 参数列表
+        String sqlStr = SqlStrUtil.query_sql1_1(table); // sql语句
+        List<Object> params = SqlStrUtil.query_list1_1(username, password); // 参数列表
 
         Object obj = null;
         if (table.equals("admin")) {

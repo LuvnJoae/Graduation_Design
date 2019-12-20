@@ -1,8 +1,5 @@
 package com.lichang.utils.RealTimeMonitoringUtils;
 
-import com.lichang.DBbeans.Machine_data_all;
-import com.lichang.DBbeans.Machine_data_now;
-import com.lichang.DBbeans.Machine_fault_data;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
@@ -22,8 +19,8 @@ public class TableUtil_new {
      * @return
      */
     public static Map<String, Object> getLastRecord(String table, String production_name) {
-        String sqlStr = SqlStrUtil.query_sql6(table);
-        List<Object> params = SqlStrUtil.query_list6(production_name);
+        String sqlStr = SqlStrUtil.query_sql3_1(table);
+        List<Object> params = SqlStrUtil.query_list3_1(production_name);
 
         Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr, params);
 
@@ -37,7 +34,7 @@ public class TableUtil_new {
      * @return
      */
     public static List<Map<String, Object>> getData(String table) {
-        String sqlStr = SqlStrUtil.query_sql4(table);
+        String sqlStr = SqlStrUtil.query_sql1(table);
         List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr);
         return mapsList;
     }
@@ -46,8 +43,8 @@ public class TableUtil_new {
      * 当前参数表： 获取表中 条件为production_name的全部数据
      */
     public static List<Map<String, Object>> getData(String table, String production_name) {
-        String sqlStr = SqlStrUtil.query_sql7(table);
-        List<Object> params = SqlStrUtil.query_list7(production_name);
+        String sqlStr = SqlStrUtil.query_sql1_3(table);
+        List<Object> params = SqlStrUtil.query_list1_3(production_name);
 
         List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
         return mapsList;

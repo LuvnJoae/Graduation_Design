@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class JdbcTemplateUtil {
 
@@ -115,14 +116,34 @@ public class JdbcTemplateUtil {
 
     /**
      * 查询 总记录数
+     * 注意，这里的传参只能用数组，而不能用list
+     * @return
+     */
+    public static Long queryCount(String sqlStr, Object[] params) {
+        log.debug("查询 总记录数");
+        Long numLong = null;
+        try {
+            numLong = template.queryForObject(sqlStr, params, Long.class);
+        } catch (DataAccessException e) {
+            log.error("查询总记录数 出错");
+        }
+        return numLong;
+    }
+
+    /**
+     * 查询 总记录数 无参重载
      * @return
      */
     public static Long queryCount(String sqlStr) {
         log.debug("查询 总记录数");
-        Long numLong = template.queryForObject(sqlStr, Long.class);
+        Long numLong = null;
+        try {
+            numLong = template.queryForObject(sqlStr, Long.class);
+        } catch (DataAccessException e) {
+            log.error("查询总记录数 出错");
+        }
         return numLong;
     }
-
 
     /**
      * 插入、 修改、 删除
@@ -137,7 +158,7 @@ public class JdbcTemplateUtil {
         try {
             updateCount = template.update(sqlStr, paramsList.toArray());
         } catch (DataAccessException e) {
-            log.error("插入出错", e);
+            log.error("插入、 修改、 删除出错", e);
         }
 
         if (updateCount > 0) {

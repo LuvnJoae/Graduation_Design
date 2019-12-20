@@ -18,8 +18,16 @@ public class SqlStrUtil {
     /**
      * 查询 语句
      */
-    ///语句1： 查询*  条件：username、password
+    //语句1： 查询*
     public static String query_sql1(String table) {
+        log.debug("查询：Sql合成5：" + table);
+        String sqlStr = "select * from "
+                + table;
+        return sqlStr;
+    }
+
+    //语句1_1： 查询*  条件：username、password
+    public static String query_sql1_1(String table) {
         log.debug("语句1：sql");
         String sqlStr = "select * from "
                 + table
@@ -28,7 +36,7 @@ public class SqlStrUtil {
         return sqlStr; // 注意，表名不能通过占位符，需要拼接字符串
     }
 
-    public static List<Object> query_list1(String username, String password) {
+    public static List<Object> query_list1_1(String username, String password) {
         log.debug("语句1: params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(username);
@@ -36,8 +44,8 @@ public class SqlStrUtil {
         return paramsList; // 占位符参数列表
     }
 
-    //语句2： 查询*   条件：production_num
-    public static String query_sql2(String table) {
+    //语句1_2： 查询*   条件：production_num
+    public static String query_sql1_2(String table) {
         log.debug("语句2：sql");
         String sqlStr = "select * from "
                 + table
@@ -45,31 +53,52 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
-    public static List<Object> query_list2(int production_num) {
+    public static List<Object> query_list1_2(int production_num) {
         log.debug("语句2：params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(production_num);
         return paramsList; // 占位符参数列表
     }
 
-    //语句3： 查询count（id）
-    public static String query_sql3(String table) {
+    //语句1_3： 查询*  条件：production_name
+    public static String query_sql1_3(String table) {
+        String sqlStr = "select * from "
+                + table +
+                " where production_name = ?";
+        return sqlStr;
+    }
+
+    public static List<Object> query_list1_3(String production_name) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(production_name);
+        return paramsList; // 占位符参数列表
+    }
+
+    //语句2： 查询count（id）
+    public static String query_sql2(String table) {
         log.debug("语句4：sql");
         String sqlStr = "select count(id) from "
                 + table;
         return sqlStr;
     }
 
-    //语句4： 查询*
-    public static String query_sql4(String table) {
-        log.debug("查询：Sql合成5：" + table);
-        String sqlStr = "select * from "
-                + table;
+    //语句2_1： 查询count（id） 条件：production_name
+    public static String query_sql2_1(String table) {
+        log.debug("语句4：sql");
+        String sqlStr = "select count(id) from "
+                + table +
+                " where production_name = ?";
         return sqlStr;
     }
 
-    //语句5： 查询 表中最后一条记录（通过id排序）
-    public static String query_sql5(String table) {
+    public static List<Object> query_list2_1(String production_name) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(production_name);
+        return paramsList; // 占位符参数列表
+    }
+
+    //语句3： 查询 表中最后一条记录（通过id排序）
+    public static String query_sql3(String table) {
         String sqlStr = "SELECT * FROM " +
                 table +
                 " ORDER BY id DESC LIMIT 1";
@@ -77,8 +106,8 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
-    //语句6： 查询 表中最后一条记录（通过id排序）  条件： production_name
-    public static String query_sql6(String table) {
+    //语句3_1： 查询 表中最后一条记录（通过id排序）  条件： production_name
+    public static String query_sql3_1(String table) {
         String sqlStr = "SELECT * FROM " +
                 table +
                 " where production_name = ?" +
@@ -87,26 +116,11 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
-    public static List<Object> query_list6(String production_name) {
+    public static List<Object> query_list3_1(String production_name) {
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(production_name);
         return paramsList; // 占位符参数列表
     }
-
-    //语句7： 查询*  条件：production_name
-    public static String query_sql7(String table) {
-        String sqlStr = "select * from "
-                + table +
-                " where production_name = ?";
-        return sqlStr;
-    }
-
-    public static List<Object> query_list7(String production_name) {
-        List<Object> paramsList = new ArrayList<Object>();
-        paramsList.add(production_name);
-        return paramsList; // 占位符参数列表
-    }
-
 
     /**
      * 更新 语句

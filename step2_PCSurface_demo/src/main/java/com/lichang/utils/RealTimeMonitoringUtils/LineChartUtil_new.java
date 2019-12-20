@@ -71,8 +71,8 @@ public class LineChartUtil_new {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        String sqlStr = SqlStrUtil.query_sql7("machine_data_now"); //table 表名
-        List<Object> params = SqlStrUtil.query_list7(production_name); //
+        String sqlStr = SqlStrUtil.query_sql1_3("machine_data_now"); //table 表名
+        List<Object> params = SqlStrUtil.query_list1_3(production_name); //
         List<Machine_data_now> machine_data_now_BeansList = (List<Machine_data_now>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class, params);
 
@@ -105,7 +105,7 @@ public class LineChartUtil_new {
      * 获得machine_data_now 的内容
      */
     public static List<Map<String, Object>> getData() {
-        String sqlStr = SqlStrUtil.query_sql4("machine_data_now");
+        String sqlStr = SqlStrUtil.query_sql1("machine_data_now");
         List<Map<String, Object>> maps = JdbcTemplateUtil.queryMult(sqlStr);
         return maps;
     }

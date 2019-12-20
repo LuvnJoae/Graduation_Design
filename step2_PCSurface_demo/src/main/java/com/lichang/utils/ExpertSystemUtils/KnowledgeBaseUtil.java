@@ -12,7 +12,7 @@ public class KnowledgeBaseUtil {
      * 用于获取资料库 表格内容
      */
     public static List<Map<String, Object>> getData(String table) {
-        String sqlStr = SqlStrUtil.query_sql4(table);
+        String sqlStr = SqlStrUtil.query_sql1(table);
         List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr);
         return mapsList;
     }

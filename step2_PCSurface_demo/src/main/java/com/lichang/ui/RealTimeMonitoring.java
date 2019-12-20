@@ -8,14 +8,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
+import com.lichang.utils.RealTimeMonitoringUtils.*;
 import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
-import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -23,8 +25,8 @@ import org.jfree.chart.JFreeChart;
 
 //TODO: 整体待解决问题（低优先级）
 //标记时间：2019/11/20 17:22  预解决时间:
-//1. 整体页面的更新
-//2. 多机下的数据库查询问题
+//1. 故障表中 的点击查看
+//2. 参数检测里的 阈值超限分析
 
 /**
  * @author unknown
@@ -52,6 +54,9 @@ public class RealTimeMonitoring extends JFrame {
     //折线图相关
     private JFreeChart lineChart; // 折线图模型
     JPanel chartPanel; //折线图Panel
+
+    //Label相关
+    private String prodution_name;
 
     //无参（预设账户信息）
     public RealTimeMonitoring() {
@@ -85,9 +90,10 @@ public class RealTimeMonitoring extends JFrame {
     /**
      * 页面监听
      */
-    //激活该页面时
-    private void thisWindowActivated(WindowEvent e) {
-        updateComboBox1(); //激活页面时，先更新一次下拉框
+    //第一次打开该页面时
+    private void thisWindowOpened(WindowEvent e) {
+        updateComboBox1(); //先更新一次下拉框
+        scheduledExecutor(); //开启定时器
     }
 
     /**
@@ -247,6 +253,29 @@ public class RealTimeMonitoring extends JFrame {
     }
 
     /**
+     * 定时器 定时刷新数据（表、Label、图）
+     */
+    private void scheduledExecutor() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                updateTable1(); //刷新表格1
+                updateTable2(); //刷新表格2
+
+                updateChartPanel(); //刷新折线图
+
+                updateLabel13(); //更新 完成工件
+                updateLabel14(); //更新 故障工件
+                updateLabel15(); //更新 产品编号
+                updateLabel16(); //更新 检测结果
+            }
+        };
+
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(runnable, 1, 5, TimeUnit.SECONDS);
+    }
+
+    /**
      * 故障监测表 table1
      */
     //设置表格格式
@@ -257,10 +286,10 @@ public class RealTimeMonitoring extends JFrame {
         table1.setDefaultRenderer(Object.class, r);
     }
 
-    //加载table1 数据
+    //加载table1 数据，  添加一行
     private void addTable1Data() {
         //获取所选产品名称
-        String prodution_name = (String) comboBox1.getSelectedItem();
+        prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
         Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data", prodution_name);
 
@@ -285,10 +314,10 @@ public class RealTimeMonitoring extends JFrame {
 
     }
 
-    //表格内容更新 条件：若有新的故障数据，则添加
+    //table1 主方法： 更新  条件：若有新的故障数据，则添加
     private void updateTable1() {
         //获取所选产品名称
-        String prodution_name = (String) comboBox1.getSelectedItem();
+        prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
         Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data", prodution_name);
         //非空处理
@@ -325,10 +354,10 @@ public class RealTimeMonitoring extends JFrame {
 //        table2.setDefaultRenderer(Object.class, r);
     }
 
-    //加载table2 数据
-    private void updateTable2Data() {
+    //table2 主方法 ： 加载数据 + 更新
+    private void updateTable2() {
         //获取所选产品名称
-        String prodution_name = (String) comboBox1.getSelectedItem();
+        prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
         machine_data_now_mapsList = TableUtil_new.getData("machine_data_now", prodution_name);
 
@@ -356,10 +385,9 @@ public class RealTimeMonitoring extends JFrame {
     /**
      * 参数 折线图
      */
-    //
     private void updateChartPanel() {
         //获取所选产品名称
-        String prodution_name = (String) comboBox1.getSelectedItem();
+        prodution_name = (String) comboBox1.getSelectedItem();
 
         lineChart = LineChartUtil_new.getLineChart(prodution_name); // 获得充满数据的chart模型
 
@@ -376,11 +404,44 @@ public class RealTimeMonitoring extends JFrame {
         panel4.repaint();
     }
 
-    //
-    private void initChartPanel() {
+    /**
+     * Label 数据绑定与更新
+     */
+    //更新 完成工件
+    private void updateLabel13() {
+        //获取所选产品名称
+        prodution_name = (String) comboBox1.getSelectedItem();
 
+        Long completedCount = LabelUpdateTextUtil_new.getCompletedCount(prodution_name); //获取已完成工件数
+        label13.setText(String.valueOf(completedCount));
     }
 
+    //更新 故障工件
+    private void updateLabel14() {
+        //获取所选产品名称
+        prodution_name = (String) comboBox1.getSelectedItem();
+
+        Long faultCount = LabelUpdateTextUtil_new.getFaultCount(prodution_name); //获取已完成工件数
+        label14.setText(String.valueOf(faultCount));
+    }
+
+    //更新 工件编号
+    private void updateLabel15() {
+        //获取所选产品名称
+        prodution_name = (String) comboBox1.getSelectedItem();
+
+        int prodution_num = LabelUpdateTextUtil_new.getProdutionNum(prodution_name); //获取已完成工件数
+        label15.setText(String.valueOf(prodution_num));
+    }
+
+    //更新 检测结果
+    private void updateLabel16() {
+        //获取所选产品名称
+        prodution_name = (String) comboBox1.getSelectedItem();
+
+        String result = LabelUpdateTextUtil_new.getResult(prodution_name); //获取已完成工件数
+        label16.setText(result);
+    }
 
     /**
      * 产品选择 下拉框
@@ -404,17 +465,33 @@ public class RealTimeMonitoring extends JFrame {
         updateComboBox1();
     }
 
+    /**
+     * 其他 按钮
+     */
+    //手动刷新 按钮
+    private void button5ActionPerformed(ActionEvent e) {
+        updateTable1(); //刷新表格1
+        updateTable2(); //刷新表格2
+
+        updateChartPanel(); //刷新折线图
+
+        updateLabel13(); //更新 完成工件
+        updateLabel14(); //更新 故障工件
+        updateLabel15(); //更新 产品编号
+        updateLabel16(); //更新 检测结果
+    }
+
     //TEST: 测试按钮
     //标记时间：2019/12/19 13:48  预解决时间：
-
     /**
      * 测试 按钮
      */
-    private void button5ActionPerformed(ActionEvent e) {
-        updateChartPanel();
+    //测试1： 手动刷新
+
+    //测试1： 添加故障记录
+    private void button7ActionPerformed(ActionEvent e) {
+        addTable1Data();
     }
-
-
 
 
     /**
@@ -448,15 +525,29 @@ public class RealTimeMonitoring extends JFrame {
         button6 = new JButton();
         panel4 = new JPanel();
         label4 = new JLabel();
+        label5 = new JLabel();
+        label6 = new JLabel();
+        label7 = new JLabel();
+        label8 = new JLabel();
+        label9 = new JLabel();
+        label10 = new JLabel();
+        label11 = new JLabel();
+        label12 = new JLabel();
+        label13 = new JLabel();
+        label14 = new JLabel();
+        label15 = new JLabel();
+        label16 = new JLabel();
+        button7 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        setFont(new Font(Font.DIALOG, Font.BOLD, 14));
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowActivated(WindowEvent e) {
-                thisWindowActivated(e);
+            public void windowOpened(WindowEvent e) {
+                thisWindowOpened(e);
             }
         });
         Container contentPane = getContentPane();
@@ -565,7 +656,6 @@ public class RealTimeMonitoring extends JFrame {
                     //---- table1 ----
                     table1.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {null, null, null, null, null, "", null},
                         },
                         new String[] {
                             "\u6545\u969c\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u67e5\u770b"
@@ -631,8 +721,6 @@ public class RealTimeMonitoring extends JFrame {
                     table2.setRowHeight(20);
                     table2.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {null, null, null, null},
-                            {null, null, null, null},
                         },
                         new String[] {
                             "\u5e8f\u53f7", "\u7535\u5f27\u7535\u538b", "\u7535\u6d41", "\u710a\u63a5\u901f\u5ea6"
@@ -648,11 +736,12 @@ public class RealTimeMonitoring extends JFrame {
                     });
                     {
                         TableColumnModel cm = table2.getColumnModel();
-                        cm.getColumn(0).setPreferredWidth(50);
-                        cm.getColumn(1).setPreferredWidth(120);
-                        cm.getColumn(2).setPreferredWidth(120);
-                        cm.getColumn(3).setPreferredWidth(120);
+                        cm.getColumn(0).setPreferredWidth(80);
+                        cm.getColumn(1).setPreferredWidth(130);
+                        cm.getColumn(2).setPreferredWidth(130);
+                        cm.getColumn(3).setPreferredWidth(130);
                     }
+                    table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                     scrollPane2.setViewportView(table2);
                 }
                 panel3.add(scrollPane2);
@@ -679,15 +768,16 @@ public class RealTimeMonitoring extends JFrame {
         tabbedPane2.setBounds(480, 300, 495, 290);
 
         //---- button5 ----
-        button5.setText("test");
+        button5.setText("\u624b\u52a8\u5237\u65b0");
         button5.addActionListener(e -> button5ActionPerformed(e));
         contentPane.add(button5);
-        button5.setBounds(new Rectangle(new Point(305, 180), button5.getPreferredSize()));
+        button5.setBounds(275, 275, 85, button5.getPreferredSize().height);
 
         //---- label1 ----
-        label1.setText("\u4ea7\u54c1\u9009\u62e9");
+        label1.setText("\u4ea7\u54c1\u9009\u62e9\uff1a");
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 2f));
         contentPane.add(label1);
-        label1.setBounds(20, 110, 60, label1.getPreferredSize().height);
+        label1.setBounds(220, 110, 80, label1.getPreferredSize().height);
 
         //---- comboBox1 ----
         comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -701,17 +791,17 @@ public class RealTimeMonitoring extends JFrame {
             }
         });
         contentPane.add(comboBox1);
-        comboBox1.setBounds(85, 110, 150, comboBox1.getPreferredSize().height);
+        comboBox1.setBounds(305, 107, 150, comboBox1.getPreferredSize().height);
 
         //---- button6 ----
-        button6.setText("\u6e05\u7a7a");
+        button6.setText("\u6e05\u7a7a\u6545\u969c\u8bb0\u5f55");
         button6.addActionListener(e -> button6ActionPerformed(e));
         contentPane.add(button6);
-        button6.setBounds(new Rectangle(new Point(420, 275), button6.getPreferredSize()));
+        button6.setBounds(new Rectangle(new Point(365, 275), button6.getPreferredSize()));
 
         //======== panel4 ========
         {
-            panel4.setBackground(new Color(51, 51, 255));
+            panel4.setBackground(new Color(153, 153, 153));
             panel4.setLayout(null);
 
             {
@@ -737,6 +827,96 @@ public class RealTimeMonitoring extends JFrame {
         label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 2f));
         contentPane.add(label4);
         label4.setBounds(485, 130, 20, label4.getPreferredSize().height);
+
+        //---- label5 ----
+        label5.setText("\u5f53\u524d\u710a\u673a\uff1a");
+        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 2f));
+        contentPane.add(label5);
+        label5.setBounds(new Rectangle(new Point(25, 110), label5.getPreferredSize()));
+
+        //---- label6 ----
+        label6.setText("\u710a\u673a\u72b6\u6001\uff1a");
+        label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 2f));
+        contentPane.add(label6);
+        label6.setBounds(new Rectangle(new Point(25, 155), label6.getPreferredSize()));
+
+        //---- label7 ----
+        label7.setText("\u5b8c\u6210\u5de5\u4ef6\uff1a");
+        label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 2f));
+        contentPane.add(label7);
+        label7.setBounds(new Rectangle(new Point(25, 200), label7.getPreferredSize()));
+
+        //---- label8 ----
+        label8.setText("\u6545\u969c\u5de5\u4ef6\uff1a");
+        label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 2f));
+        contentPane.add(label8);
+        label8.setBounds(new Rectangle(new Point(25, 245), label8.getPreferredSize()));
+
+        //---- label9 ----
+        label9.setText("\u5de5\u4ef6\u7f16\u53f7\uff1a");
+        label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 2f));
+        contentPane.add(label9);
+        label9.setBounds(new Rectangle(new Point(220, 155), label9.getPreferredSize()));
+
+        //---- label10 ----
+        label10.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
+        label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 2f));
+        contentPane.add(label10);
+        label10.setBounds(new Rectangle(new Point(220, 200), label10.getPreferredSize()));
+
+        //---- label11 ----
+        label11.setText("\u710a\u673a1");
+        label11.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label11.setBackground(Color.white);
+        label11.setForeground(new Color(0, 153, 204));
+        contentPane.add(label11);
+        label11.setBounds(100, 110, 60, 20);
+
+        //---- label12 ----
+        label12.setText("\u6b63\u5e38");
+        label12.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label12.setBackground(Color.white);
+        label12.setForeground(new Color(0, 153, 204));
+        contentPane.add(label12);
+        label12.setBounds(100, 155, 40, 20);
+
+        //---- label13 ----
+        label13.setText("0");
+        label13.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label13.setBackground(Color.white);
+        label13.setForeground(new Color(0, 153, 204));
+        contentPane.add(label13);
+        label13.setBounds(100, 200, 75, label13.getPreferredSize().height);
+
+        //---- label14 ----
+        label14.setText("0");
+        label14.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label14.setBackground(Color.white);
+        label14.setForeground(new Color(255, 51, 0));
+        contentPane.add(label14);
+        label14.setBounds(100, 245, 75, label14.getPreferredSize().height);
+
+        //---- label15 ----
+        label15.setText("-1");
+        label15.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label15.setBackground(Color.white);
+        label15.setForeground(new Color(0, 153, 204));
+        contentPane.add(label15);
+        label15.setBounds(305, 155, 85, label15.getPreferredSize().height);
+
+        //---- label16 ----
+        label16.setText("-1");
+        label16.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label16.setBackground(Color.white);
+        label16.setForeground(new Color(0, 153, 204));
+        contentPane.add(label16);
+        label16.setBounds(305, 200, 85, label16.getPreferredSize().height);
+
+        //---- button7 ----
+        button7.setText("\u6d4b\u8bd5\uff1a\u6dfb\u52a0\u6545\u969c\u8bb0\u5f55");
+        button7.addActionListener(e -> button7ActionPerformed(e));
+        contentPane.add(button7);
+        button7.setBounds(110, 275, 156, button7.getPreferredSize().height);
 
         {
             // compute preferred size
@@ -784,5 +964,18 @@ public class RealTimeMonitoring extends JFrame {
     private JButton button6;
     private JPanel panel4;
     private JLabel label4;
+    private JLabel label5;
+    private JLabel label6;
+    private JLabel label7;
+    private JLabel label8;
+    private JLabel label9;
+    private JLabel label10;
+    private JLabel label11;
+    private JLabel label12;
+    private JLabel label13;
+    private JLabel label14;
+    private JLabel label15;
+    private JLabel label16;
+    private JButton button7;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

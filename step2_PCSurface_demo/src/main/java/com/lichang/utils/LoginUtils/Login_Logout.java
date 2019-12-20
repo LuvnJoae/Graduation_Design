@@ -43,8 +43,8 @@ public class Login_Logout {
             password = admin.getPassword();
             table = "admin";
 
-            sqlStr = SqlStrUtil.query_sql1(table); // sql语句
-            List<Object> params = SqlStrUtil.query_list1(username, password); // 参数列表
+            sqlStr = SqlStrUtil.query_sql1_1(table); // sql语句
+            List<Object> params = SqlStrUtil.query_list1_1(username, password); // 参数列表
             Map<String, Object> DB_userInfoMap = JdbcTemplateUtil.querySingle(sqlStr, params); // 以map形式返回结果
 
             if (DB_userInfoMap != null) {
@@ -58,8 +58,8 @@ public class Login_Logout {
             password = emp.getPassword();
             table = "employee";
 
-            sqlStr = SqlStrUtil.query_sql1(table);
-            List<Object> params = SqlStrUtil.query_list1(username, password);
+            sqlStr = SqlStrUtil.query_sql1_1(table);
+            List<Object> params = SqlStrUtil.query_list1_1(username, password);
             Map<String, Object> DB_userInfoMap = JdbcTemplateUtil.querySingle(sqlStr, params);
 
             if (DB_userInfoMap != null) {
