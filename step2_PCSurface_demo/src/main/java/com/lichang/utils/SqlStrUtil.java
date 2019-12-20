@@ -36,19 +36,19 @@ public class SqlStrUtil {
         return paramsList; // 占位符参数列表
     }
 
-    //语句2： 查询*   条件：num
+    //语句2： 查询*   条件：production_num
     public static String query_sql2(String table) {
         log.debug("语句2：sql");
         String sqlStr = "select * from "
                 + table
-                + " where num = ?";
+                + " where production_num = ?";
         return sqlStr;
     }
 
-    public static List<Object> query_list2(int num) {
+    public static List<Object> query_list2(int production_num) {
         log.debug("语句2：params");
         List<Object> paramsList = new ArrayList<Object>();
-        paramsList.add(num);
+        paramsList.add(production_num);
         return paramsList; // 占位符参数列表
     }
 
@@ -68,7 +68,7 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
-    //语句5： 查询 表中最后一条记录（通过id）
+    //语句5： 查询 表中最后一条记录（通过id排序）
     public static String query_sql5(String table) {
         String sqlStr = "SELECT * FROM " +
                 table +
@@ -76,6 +76,38 @@ public class SqlStrUtil {
 
         return sqlStr;
     }
+
+    //语句6： 查询 表中最后一条记录（通过id排序）  条件： production_name
+    public static String query_sql6(String table) {
+        String sqlStr = "SELECT * FROM " +
+                table +
+                " where production_name = ?" +
+                " ORDER BY id DESC LIMIT 1";
+
+        return sqlStr;
+    }
+
+    public static List<Object> query_list6(String production_name) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(production_name);
+        return paramsList; // 占位符参数列表
+    }
+
+    //语句7： 查询*  条件：production_name
+    public static String query_sql7(String table) {
+        String sqlStr = "select * from "
+                + table +
+                " where production_name = ?";
+        return sqlStr;
+    }
+
+    public static List<Object> query_list7(String production_name) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(production_name);
+        return paramsList; // 占位符参数列表
+    }
+
+
     /**
      * 更新 语句
      */

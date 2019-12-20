@@ -99,7 +99,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 525
+				"x": 550
 				"y": 60
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
@@ -108,7 +108,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
 				"height": 30
-				"x": 765
+				"x": 805
 				"y": 60
 			} )
 			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
@@ -116,7 +116,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 5
 				"y": 90
-				"width": 920
+				"width": 965
 				"height": 10
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {

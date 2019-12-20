@@ -14,8 +14,11 @@ import javax.swing.table.*;
 
 import com.lichang.utils.RealTimeMonitoringUtils.ChangePasswordUtil;
 import com.lichang.utils.LoggerUtil;
+import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
 import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 
 
 //TODO: 整体待解决问题（低优先级）
@@ -41,10 +44,14 @@ public class RealTimeMonitoring extends JFrame {
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
     //表格相关
-    List<Map<String, Object>> machine_fault_data_mapsList; //故障表
-    List<Map<String, Object>> machine_data_now_mapsList; //当前工件数据表
+    private List<Map<String, Object>> machine_fault_data_mapsList; //故障表
+    private List<Map<String, Object>> machine_data_now_mapsList; //当前工件数据表
+    private List<Map<String, Object>> expert_production_mapsList; //产品表
     int machine_fault_data_lastRecordNum = 0; //故障表上一个最后一条记录的num
 
+    //折线图相关
+    private JFreeChart lineChart; // 折线图模型
+    JPanel chartPanel; //折线图Panel
 
     //无参（预设账户信息）
     public RealTimeMonitoring() {
@@ -54,7 +61,7 @@ public class RealTimeMonitoring extends JFrame {
         //标记时间：2019/11/21 15:56  预解决时间：
         username = "admin";
         adminFlag = true;
-        
+
         initComponents();
 
         this.setBounds(273, 95, 990, 625);
@@ -73,6 +80,14 @@ public class RealTimeMonitoring extends JFrame {
 
         this.setBounds(273, 95, 990, 625);
         setVisible(true);
+    }
+
+    /**
+     * 页面监听
+     */
+    //激活该页面时
+    private void thisWindowActivated(WindowEvent e) {
+        updateComboBox1(); //激活页面时，先更新一次下拉框
     }
 
     /**
@@ -103,7 +118,7 @@ public class RealTimeMonitoring extends JFrame {
             return;
         }
 
-        jDialog2 = new JDialog(this, "",true);
+        jDialog2 = new JDialog(this, "", true);
         changePasswordPanel = new JPanel();
         oldValidationTip = new JLabel();
         oldChangeFlag = false;
@@ -123,15 +138,15 @@ public class RealTimeMonitoring extends JFrame {
         //旧密码提示
         JLabel oldPasswordTip = new JLabel("请输入旧密码: ");
         changePasswordPanel.add(oldPasswordTip);
-        oldPasswordTip.setBounds(40, 60, 110,30);
-        oldPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        oldPasswordTip.setBounds(40, 60, 110, 30);
+        oldPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //新密码提示
         JLabel newPasswordTip = new JLabel("请输入新密码: ");
         changePasswordPanel.add(newPasswordTip);
-        newPasswordTip.setBounds(40, 120, 110,30);
-        newPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        newPasswordTip.setBounds(40, 120, 110, 30);
+        newPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //旧密码
@@ -139,7 +154,7 @@ public class RealTimeMonitoring extends JFrame {
         changePasswordPanel.add(oldPasswordField);
         oldPasswordField.setBounds(160, 60, 90, 30);
         oldPasswordField.setColumns(10);
-        oldPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        oldPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         //焦点监听：旧密码验证
         oldPasswordField.addFocusListener(new FocusListener() {
@@ -179,7 +194,7 @@ public class RealTimeMonitoring extends JFrame {
         changePasswordPanel.add(newPasswordField);
         newPasswordField.setBounds(160, 120, 90, 30);
         newPasswordField.setColumns(10);
-        newPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        newPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         newPasswordField.addActionListener(new ActionListener() {
             @Override
@@ -188,7 +203,7 @@ public class RealTimeMonitoring extends JFrame {
 
                 if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
-                }else {
+                } else {
                     if (oldChangeFlag) {
                         String password = newPasswordField.getText();
                         String table;
@@ -202,7 +217,7 @@ public class RealTimeMonitoring extends JFrame {
                         ChangePasswordUtil.newPassword(table, username, password);
                         JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
                         jDialog2.dispose();
-                    }else {
+                    } else {
                         JOptionPane.showMessageDialog(jDialog2, "请先验证旧密码！", "提示", JOptionPane.WARNING_MESSAGE);
                     }
 
@@ -210,7 +225,7 @@ public class RealTimeMonitoring extends JFrame {
             }
         });
 
-        jDialog2.setSize(400,250);
+        jDialog2.setSize(400, 250);
         jDialog2.setAlwaysOnTop(true);
         jDialog2.setLocationRelativeTo(null);
         jDialog2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -244,9 +259,17 @@ public class RealTimeMonitoring extends JFrame {
 
     //加载table1 数据
     private void addTable1Data() {
-        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel(); //获取model
+        //获取所选产品名称
+        String prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
-        Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data");
+        Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data", prodution_name);
+
+        //非空处理
+        if (machine_fault_data_map == null) {
+            return;
+        }
+
+        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel(); //获取model
         //加载行 内容
         Object[] newRowData = {
                 machine_fault_data_map.get("time").toString().split("\\.")[0], //去除timestamp后面的 .0
@@ -264,25 +287,138 @@ public class RealTimeMonitoring extends JFrame {
 
     //表格内容更新 条件：若有新的故障数据，则添加
     private void updateTable1() {
+        //获取所选产品名称
+        String prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
-        Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data");
-//        if (machine_fault_data_map.get("num") == machine_fault_data_lastRecordNum) {
-//
-//        }
+        Map<String, Object> machine_fault_data_map = TableUtil_new.getLastRecord("machine_fault_data", prodution_name);
+        //非空处理
+        if (machine_fault_data_map == null) {
+            return;
+        }
+
+        int machine_fault_data_nowRecordNum = (int) machine_fault_data_map.get("production_num");
+        //判断最后一条数据是否已经更新
+        if (machine_fault_data_nowRecordNum != machine_fault_data_lastRecordNum) {
+            //已更新，则添加新数据，并更新recordNum的值
+            machine_fault_data_lastRecordNum = machine_fault_data_nowRecordNum;
+            addTable1Data();
+        } else {
+            return;
+        }
+    }
+
+    //按钮： 清空故障表内容
+    private void button6ActionPerformed(ActionEvent e) {
+        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
+        table1Model.setRowCount(0);
+    }
+
+    /**
+     * 参数监测表 table2
+     */
+    //设置表格格式
+    private void initTable2Form() {
+        //设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table2.getColumnModel().getColumn(0).setCellRenderer(r); //设置仅第一列居中
+//        table2.setDefaultRenderer(Object.class, r);
+    }
+
+    //加载table2 数据
+    private void updateTable2Data() {
+        //获取所选产品名称
+        String prodution_name = (String) comboBox1.getSelectedItem();
+        //获得最后一条记录
+        machine_data_now_mapsList = TableUtil_new.getData("machine_data_now", prodution_name);
+
+        //非空处理
+        if (machine_data_now_mapsList == null || machine_data_now_mapsList.size() == 0) {
+            return;
+        }
+
+        DefaultTableModel table2Model = (DefaultTableModel) table2.getModel(); //获取model
+        table2Model.setRowCount(0); //先清空，再加载新数据
+
+        for (Map<String, Object> map : machine_data_now_mapsList) {
+            //加载行 内容
+            Object[] newRowData = {
+                    map.get("seq"),
+                    map.get("voltage"),
+                    map.get("current"),
+                    map.get("speed")
+            };
+
+            table2Model.addRow(newRowData); //添加行
+        }
+    }
+
+    /**
+     * 参数 折线图
+     */
+    //
+    private void updateChartPanel() {
+        //获取所选产品名称
+        String prodution_name = (String) comboBox1.getSelectedItem();
+
+        lineChart = LineChartUtil_new.getLineChart(prodution_name); // 获得充满数据的chart模型
+
+        //若chartPanel已存在，则删去重新创建
+        if (chartPanel != null) {
+            panel4.remove(chartPanel);
+        }
+        chartPanel = new ChartPanel(lineChart);
+
+        chartPanel.setLayout(null);
+        chartPanel.setBounds(0, 0, 460, 195);
+
+        panel4.add(chartPanel);
+        panel4.repaint();
+    }
+
+    //
+    private void initChartPanel() {
+
+    }
+
+
+    /**
+     * 产品选择 下拉框
+     */
+    //刷新 产品下拉框内容
+    private void updateComboBox1() {
+        comboBox1.removeAllItems(); //清空原数据
+        expert_production_mapsList = TableUtil_new.getData("expert_production"); //获取产品表内容，更新内容
+        if (expert_production_mapsList == null || expert_production_mapsList.size() == 0) {
+            return;
+        }
+        //更新 产品选择 下拉框内容
+        for (Map<String, Object> map : expert_production_mapsList) {
+            comboBox1.addItem((String) map.get("name")); //下拉框添加内容
+        }
+        comboBox1.setSelectedIndex(-1);
+    }
+
+    //点击事件 刷新条件：当点击 产品选择下拉框时， 刷新该下拉框内容
+    private void comboBox1MouseClicked(MouseEvent e) {
+        updateComboBox1();
     }
 
     //TEST: 测试按钮
     //标记时间：2019/12/19 13:48  预解决时间：
+
     /**
      * 测试 按钮
      */
     private void button5ActionPerformed(ActionEvent e) {
-        initTable1Form();
-        addTable1Data();
+        updateChartPanel();
     }
 
+
+
+
     /**
-     *  JFormDesigner自带，定义自生成
+     * JFormDesigner自带，定义自生成
      */
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -304,12 +440,25 @@ public class RealTimeMonitoring extends JFrame {
         table1 = new JTable();
         tabbedPane2 = new JTabbedPane();
         panel3 = new JPanel();
+        scrollPane2 = new JScrollPane();
+        table2 = new JTable();
         button5 = new JButton();
+        label1 = new JLabel();
+        comboBox1 = new JComboBox<>();
+        button6 = new JButton();
+        panel4 = new JPanel();
+        label4 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                thisWindowActivated(e);
+            }
+        });
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -393,14 +542,14 @@ public class RealTimeMonitoring extends JFrame {
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
         button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
-        button3.setBounds(525, 60, 120, 30);
+        button3.setBounds(550, 60, 120, 30);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
         contentPane.add(button4);
-        button4.setBounds(765, 60, 120, 30);
+        button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);
-        separator4.setBounds(5, 90, 920, 10);
+        separator4.setBounds(5, 90, 965, 10);
 
         //======== tabbedPane1 ========
         {
@@ -475,6 +624,40 @@ public class RealTimeMonitoring extends JFrame {
             {
                 panel3.setLayout(null);
 
+                //======== scrollPane2 ========
+                {
+
+                    //---- table2 ----
+                    table2.setRowHeight(20);
+                    table2.setModel(new DefaultTableModel(
+                        new Object[][] {
+                            {null, null, null, null},
+                            {null, null, null, null},
+                        },
+                        new String[] {
+                            "\u5e8f\u53f7", "\u7535\u5f27\u7535\u538b", "\u7535\u6d41", "\u710a\u63a5\u901f\u5ea6"
+                        }
+                    ) {
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false
+                        };
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    {
+                        TableColumnModel cm = table2.getColumnModel();
+                        cm.getColumn(0).setPreferredWidth(50);
+                        cm.getColumn(1).setPreferredWidth(120);
+                        cm.getColumn(2).setPreferredWidth(120);
+                        cm.getColumn(3).setPreferredWidth(120);
+                    }
+                    scrollPane2.setViewportView(table2);
+                }
+                panel3.add(scrollPane2);
+                scrollPane2.setBounds(0, 0, 490, 260);
+
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
@@ -499,7 +682,61 @@ public class RealTimeMonitoring extends JFrame {
         button5.setText("test");
         button5.addActionListener(e -> button5ActionPerformed(e));
         contentPane.add(button5);
-        button5.setBounds(new Rectangle(new Point(10, 265), button5.getPreferredSize()));
+        button5.setBounds(new Rectangle(new Point(305, 180), button5.getPreferredSize()));
+
+        //---- label1 ----
+        label1.setText("\u4ea7\u54c1\u9009\u62e9");
+        contentPane.add(label1);
+        label1.setBounds(20, 110, 60, label1.getPreferredSize().height);
+
+        //---- comboBox1 ----
+        comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+            "production_default"
+        }));
+        comboBox1.setSelectedIndex(-1);
+        comboBox1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                comboBox1MouseClicked(e);
+            }
+        });
+        contentPane.add(comboBox1);
+        comboBox1.setBounds(85, 110, 150, comboBox1.getPreferredSize().height);
+
+        //---- button6 ----
+        button6.setText("\u6e05\u7a7a");
+        button6.addActionListener(e -> button6ActionPerformed(e));
+        contentPane.add(button6);
+        button6.setBounds(new Rectangle(new Point(420, 275), button6.getPreferredSize()));
+
+        //======== panel4 ========
+        {
+            panel4.setBackground(new Color(51, 51, 255));
+            panel4.setLayout(null);
+
+            {
+                // compute preferred size
+                Dimension preferredSize = new Dimension();
+                for(int i = 0; i < panel4.getComponentCount(); i++) {
+                    Rectangle bounds = panel4.getComponent(i).getBounds();
+                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                }
+                Insets insets = panel4.getInsets();
+                preferredSize.width += insets.right;
+                preferredSize.height += insets.bottom;
+                panel4.setMinimumSize(preferredSize);
+                panel4.setPreferredSize(preferredSize);
+            }
+        }
+        contentPane.add(panel4);
+        panel4.setBounds(510, 100, 460, 195);
+
+        //---- label4 ----
+        label4.setText("<html>\u7535<br>\u538b<br>\u7535<br>\u6d41<br>\u5b9e<br>\u65f6<br>\u56fe</html>");
+        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 2f));
+        contentPane.add(label4);
+        label4.setBounds(485, 130, 20, label4.getPreferredSize().height);
 
         {
             // compute preferred size
@@ -539,6 +776,13 @@ public class RealTimeMonitoring extends JFrame {
     private JTable table1;
     private JTabbedPane tabbedPane2;
     private JPanel panel3;
+    private JScrollPane scrollPane2;
+    private JTable table2;
     private JButton button5;
+    private JLabel label1;
+    private JComboBox<String> comboBox1;
+    private JButton button6;
+    private JPanel panel4;
+    private JLabel label4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

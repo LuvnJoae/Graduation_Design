@@ -18,59 +18,39 @@ public class TableUtil_new {
     private static Logger log = LoggerUtil.getLogger();
 
     /**
-     * 获取 机器表 指定 num 的 机器数据
+     * 故障表： 获取 表的 最新一条记录
      * @return
      */
-    public static List<Machine_data_all> getDataBeans(int num) {
-        log.debug("获取 机器表 指定 num 的 机器数据");
+    public static Map<String, Object> getLastRecord(String table, String production_name) {
+        String sqlStr = SqlStrUtil.query_sql6(table);
+        List<Object> params = SqlStrUtil.query_list6(production_name);
 
-        String sqlStr = SqlStrUtil.query_sql2("Machine_data_all"); //table 表名
-        List<Object> params = SqlStrUtil.query_list2(num); // num为 工件编号
-        List<Machine_data_all> machine_data_all_BeansList = (List<Machine_data_all>)
-                JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_all.class, params);
-
-        return machine_data_all_BeansList;
-    }
-
-    /**
-     * 获取 当前工件 的数据
-     * @return
-     */
-    public static List<Machine_data_now> getDataBeans_now() {
-        log.debug("获取 当前工件 的数据");
-
-        String sqlStr = SqlStrUtil.query_sql4("machine_data_now");
-
-        List<Machine_data_now> machine_data_now_BeanList = (List<Machine_data_now>)
-                JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class);
-
-        return machine_data_now_BeanList;
-    }
-
-    /**
-     * 获取 故障表 指定 num 的 故障数据
-     * @return
-     */
-    public static List<Machine_fault_data> getFaultDataBeans(int num) {
-        log.debug("获取 故障表 指定 num 的 故障数据");
-
-        String sqlStr = SqlStrUtil.query_sql2("Machine_fault_data"); //table 表名
-        List<Object> params = SqlStrUtil.query_list2(num); // num为 工件编号
-        List<Machine_fault_data> machine_fault_data_BeansList = (List<Machine_fault_data>)
-                JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_fault_data.class, params);
-
-        return machine_fault_data_BeansList;
-    }
-
-    /**
-     * 获取 表的 最新一条记录
-     * @return
-     */
-    public static Map<String, Object> getLastRecord(String table) {
-        String sqlStr = SqlStrUtil.query_sql5(table);
-        Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr);
+        Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr, params);
 
         return map;
+    }
+
+    /**
+     * 故障表：获取表中的全部数据
+     *
+     * @param table
+     * @return
+     */
+    public static List<Map<String, Object>> getData(String table) {
+        String sqlStr = SqlStrUtil.query_sql4(table);
+        List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr);
+        return mapsList;
+    }
+
+    /**
+     * 当前参数表： 获取表中 条件为production_name的全部数据
+     */
+    public static List<Map<String, Object>> getData(String table, String production_name) {
+        String sqlStr = SqlStrUtil.query_sql7(table);
+        List<Object> params = SqlStrUtil.query_list7(production_name);
+
+        List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
+        return mapsList;
     }
 
 }

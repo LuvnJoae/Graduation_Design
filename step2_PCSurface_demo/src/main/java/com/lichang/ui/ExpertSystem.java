@@ -2584,14 +2584,14 @@ public class ExpertSystem extends JFrame {
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
         contentPane.add(button3);
-        button3.setBounds(525, 60, 120, 30);
+        button3.setBounds(550, 60, 120, 30);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
         contentPane.add(button4);
-        button4.setBounds(765, 60, 120, 30);
+        button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);
-        separator4.setBounds(5, 90, 920, 10);
+        separator4.setBounds(5, 90, 965, 10);
 
         //======== tabbedPane2 ========
         {

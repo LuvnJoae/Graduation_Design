@@ -27,7 +27,7 @@ public class JdbcTemplateUtil {
             Map<String, Object> map = template.queryForMap(sqlStr, paramsList.toArray());
             return map;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息",e);
+            log.error("查询不到该信息");
             return null;
         }
     }
@@ -45,7 +45,7 @@ public class JdbcTemplateUtil {
             Map<String, Object> map = template.queryForMap(sqlStr);
             return map;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息",e);
+            log.error("查询不到该信息");
             return null;
         }
     }
@@ -61,7 +61,7 @@ public class JdbcTemplateUtil {
             List<Map<String, Object>> mapsList = template.queryForList(sqlStr, paramsList.toArray());
             return mapsList;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息", e);
+            log.error("查询不到该信息");
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class JdbcTemplateUtil {
             List<Map<String, Object>> mapsList = template.queryForList(sqlStr);
             return mapsList;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息", e);
+            log.error("查询不到该信息");
             return null;
         }
     }
@@ -92,7 +92,7 @@ public class JdbcTemplateUtil {
             List<?> listBean = template.query(sqlStr, paramsList.toArray(), new BeanPropertyRowMapper<>(cla));
             return listBean;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息", e);
+            log.error("查询不到该信息");
             return null;
         }
     }
@@ -107,7 +107,7 @@ public class JdbcTemplateUtil {
             List<?> listBean = template.query(sqlStr, new BeanPropertyRowMapper<>(cla));
             return listBean;
         } catch (DataAccessException e) {
-            log.error("查询不到该信息", e);
+            log.error("查询不到该信息");
             return null;
         }
     }

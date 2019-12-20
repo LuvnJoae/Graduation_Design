@@ -28,9 +28,9 @@ public class LineChartUtil_new {
      * 生成折线模型 chart
      * @return
      */
-    public static JFreeChart getRealTimeLineChart(String title, String categoryAxisLable, String valueAxisLable) {
+    public static JFreeChart getLineChart(String production_name, String title, String categoryAxisLable, String valueAxisLable) {
         log.debug("生成折线图模型");
-        CategoryDataset dataset = getDataset("all");
+        CategoryDataset dataset = getDataset("all", production_name);
         JFreeChart chart = ChartFactory.createLineChart(
                 title,
                 categoryAxisLable,
@@ -56,8 +56,8 @@ public class LineChartUtil_new {
     }
 
     //无参 重载
-    public static JFreeChart getRealTimeLineChart() {
-        return getRealTimeLineChart("", "", "");
+    public static JFreeChart getLineChart(String production_name) {
+        return getLineChart(production_name,"", "", "");
     }
 
     /**
@@ -66,13 +66,13 @@ public class LineChartUtil_new {
      * @return
      */
     @Test
-    private static CategoryDataset getDataset(String para) {
+    private static CategoryDataset getDataset(String para, String production_name) {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        String sqlStr = SqlStrUtil.query_sql2("Machine_data_now"); //table 表名
-        List<Object> params = SqlStrUtil.query_list2(1); // num为 工件编号
+        String sqlStr = SqlStrUtil.query_sql7("machine_data_now"); //table 表名
+        List<Object> params = SqlStrUtil.query_list7(production_name); //
         List<Machine_data_now> machine_data_now_BeansList = (List<Machine_data_now>)
                 JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class, params);
 
@@ -94,7 +94,7 @@ public class LineChartUtil_new {
             }
         }
         else {
-            log.error("参数输入错误");
+            log.error("LineChart getDataset 参数输入错误");
             return null;
         }
 
