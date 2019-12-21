@@ -270,8 +270,8 @@ public class HistoricalStatistics extends JFrame {
     }
 
     //事件： 点击表格触发事件 （设定只有当点击 点击查看 这各单元格的内容时，才会真正触发点击事件的内容）
-    // 哈哈哈哈哈！我聪明吧！！！！o(*￣▽￣*)ブ
     private void table4MouseClicked(MouseEvent e) {
+        // 哈哈哈哈哈！我聪明吧！！！！o(*￣▽￣*)ブ
         if (table4.getSelectedColumn() == 6) {
             System.out.println("事件");
         } else {
@@ -495,7 +495,7 @@ public class HistoricalStatistics extends JFrame {
                     panel2.setPreferredSize(preferredSize);
                 }
             }
-            tabbedPane1.addTab("\u6545\u969c\u7edf\u8ba1", panel2);
+            tabbedPane1.addTab("\u5de5\u4ef6\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel2);
         }
         contentPane.add(tabbedPane1);
         tabbedPane1.setBounds(5, 95, 485, 220);
@@ -580,7 +580,7 @@ public class HistoricalStatistics extends JFrame {
                     panel3.setPreferredSize(preferredSize);
                 }
             }
-            tabbedPane2.addTab("\u6545\u969c\u67e5\u8be2", panel3);
+            tabbedPane2.addTab("\u6545\u969c\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel3);
         }
         contentPane.add(tabbedPane2);
         tabbedPane2.setBounds(5, 320, 970, 270);

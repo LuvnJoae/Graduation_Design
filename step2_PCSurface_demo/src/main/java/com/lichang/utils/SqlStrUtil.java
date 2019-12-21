@@ -74,6 +74,35 @@ public class SqlStrUtil {
         return paramsList; // 占位符参数列表
     }
 
+    //语句1_4： 查询*  条件：time
+    public static String query_sql1_4(String table) {
+        String sqlStr = "select * from "
+                + table +
+                " where time = ?";
+        return sqlStr;
+    }
+
+    public static List<Object> query_list1_4(String time) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(time);
+        return paramsList; // 占位符参数列表
+    }
+
+    //语句1_5：查询* 条件：production_name 和 production_name
+    public static String query_sql1_5(String table) {
+        String sqlStr = "select * from "
+                + table +
+                " where production_name = ? and production_num = ?";
+        return sqlStr;
+    }
+
+    public static List<Object> query_list1_5(String production_name, int production_num) {
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(production_name);
+        paramsList.add(production_num);
+        return paramsList; // 占位符参数列表
+    }
+
     //语句2： 查询count（id）
     public static String query_sql2(String table) {
         log.debug("语句4：sql");

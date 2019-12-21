@@ -25,8 +25,8 @@ import org.jfree.chart.JFreeChart;
 
 //TODO: 整体待解决问题（低优先级）
 //标记时间：2019/11/20 17:22  预解决时间:
-//1. 故障表中 的点击查看
 //2. 参数检测里的 阈值超限分析
+//3. 折线图的放大
 
 /**
  * @author unknown
@@ -49,11 +49,13 @@ public class RealTimeMonitoring extends JFrame {
     private List<Map<String, Object>> machine_fault_data_mapsList; //故障表
     private List<Map<String, Object>> machine_data_now_mapsList; //当前工件数据表
     private List<Map<String, Object>> expert_production_mapsList; //产品表
-    int machine_fault_data_lastRecordNum = 0; //故障表上一个最后一条记录的num
+    private int machine_fault_data_lastRecordNum = 0; //故障表上一个最后一条记录的num
+    private String machine_fault_data_timeCol; //故障信息的time列，用于作主键查看详情
+
 
     //折线图相关
     private JFreeChart lineChart; // 折线图模型
-    JPanel chartPanel; //折线图Panel
+    private JPanel chartPanel; //折线图Panel
 
     //Label相关
     private String prodution_name;
@@ -93,7 +95,7 @@ public class RealTimeMonitoring extends JFrame {
     //第一次打开该页面时
     private void thisWindowOpened(WindowEvent e) {
         updateComboBox1(); //先更新一次下拉框
-        scheduledExecutor(); //开启定时器
+//        scheduledExecutor(); //开启定时器
     }
 
     /**
@@ -309,7 +311,7 @@ public class RealTimeMonitoring extends JFrame {
                 machine_fault_data_map.get("result"),
                 "<html><font color = 'blue'><u>查看</u></font></html>"
         };
-
+        initTable1Form(); //设置表格格式
         table1Model.addRow(newRowData); //添加行
 
     }
@@ -340,6 +342,18 @@ public class RealTimeMonitoring extends JFrame {
     private void button6ActionPerformed(ActionEvent e) {
         DefaultTableModel table1Model = (DefaultTableModel) table1.getModel();
         table1Model.setRowCount(0);
+    }
+
+    //事件： 鼠标点击 table1中查看的一列 时
+    private void table1MouseClicked(MouseEvent e) {
+        //若点击的为 查看 这列，则进入事件，创建新窗口，展示详情
+        if (table1.getSelectedColumn() == 6) {
+            int selectedRow = table1.getSelectedRow();
+            machine_fault_data_timeCol = table1.getValueAt(selectedRow, 0).toString() + ".0"; //和timestamp格式相同
+            new Details(this, "故障信息详情", true, machine_fault_data_timeCol); //创建新窗口
+        } else {
+            return;
+        }
     }
 
     /**
@@ -380,6 +394,11 @@ public class RealTimeMonitoring extends JFrame {
 
             table2Model.addRow(newRowData); //添加行
         }
+    }
+
+    //阈值 提示（当超出设置阈值后，数据自动变色）
+    private void addLimit() {
+
     }
 
     /**
@@ -493,6 +512,12 @@ public class RealTimeMonitoring extends JFrame {
         addTable1Data();
     }
 
+    //test
+    private void button8ActionPerformed(ActionEvent e) {
+
+    }
+
+
 
     /**
      * JFormDesigner自带，定义自生成
@@ -538,6 +563,7 @@ public class RealTimeMonitoring extends JFrame {
         label15 = new JLabel();
         label16 = new JLabel();
         button7 = new JButton();
+        button8 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -658,7 +684,7 @@ public class RealTimeMonitoring extends JFrame {
                         new Object[][] {
                         },
                         new String[] {
-                            "\u6545\u969c\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u67e5\u770b"
+                            "\u6545\u969c\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
                         }
                     ) {
                         boolean[] columnEditable = new boolean[] {
@@ -681,6 +707,12 @@ public class RealTimeMonitoring extends JFrame {
                     }
                     table1.setRowHeight(20);
                     table1.setAutoCreateRowSorter(true);
+                    table1.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            table1MouseClicked(e);
+                        }
+                    });
                     scrollPane1.setViewportView(table1);
                 }
                 panel2.add(scrollPane1);
@@ -918,6 +950,12 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(button7);
         button7.setBounds(110, 275, 156, button7.getPreferredSize().height);
 
+        //---- button8 ----
+        button8.setText("test");
+        button8.addActionListener(e -> button8ActionPerformed(e));
+        contentPane.add(button8);
+        button8.setBounds(new Rectangle(new Point(0, 0), button8.getPreferredSize()));
+
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -977,5 +1015,6 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel label15;
     private JLabel label16;
     private JButton button7;
+    private JButton button8;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

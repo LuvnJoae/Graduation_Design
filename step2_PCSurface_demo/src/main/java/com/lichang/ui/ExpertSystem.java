@@ -507,6 +507,7 @@ public class ExpertSystem extends JFrame {
         boxModel9 = null;
         boxModel10 = null;
 
+
     }
 
     //下拉框 1-10 获取并添加数据。（真实：数据库）
@@ -995,6 +996,9 @@ public class ExpertSystem extends JFrame {
 
             comboBox17.addItem(name); //下拉框添加内容
         }
+
+        emptyComboBox(); //这里要再清空一下，因为addItem会触发一次comboBox的 change事件
+
         comboBox17.setSelectedIndex(-1);
     }
 

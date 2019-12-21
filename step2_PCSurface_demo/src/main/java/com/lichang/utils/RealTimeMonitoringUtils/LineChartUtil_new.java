@@ -13,6 +13,7 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.awt.*;
 import java.util.List;
@@ -28,9 +29,16 @@ public class LineChartUtil_new {
      * 生成折线模型 chart
      * @return
      */
-    public static JFreeChart getLineChart(String production_name, String title, String categoryAxisLable, String valueAxisLable) {
+    public static JFreeChart getLineChart(String production_name,
+                                          int production_num,
+                                          String title,
+                                          String categoryAxisLable,
+                                          String valueAxisLable) {
         log.debug("生成折线图模型");
-        CategoryDataset dataset = getDataset("all", production_name);
+
+        List<Map<String, Object>> mapsList = getData(production_name, production_num); //获取数据list
+        CategoryDataset dataset = getDataset(mapsList); //获取dataset
+
         JFreeChart chart = ChartFactory.createLineChart(
                 title,
                 categoryAxisLable,
@@ -56,56 +64,54 @@ public class LineChartUtil_new {
     }
 
     //无参 重载
+    public static JFreeChart getLineChart(String production_name, int production_num) {
+        return getLineChart(production_name, production_num,"", "", "");
+    }
+
+    //无参 重载
     public static JFreeChart getLineChart(String production_name) {
-        return getLineChart(production_name,"", "", "");
+        return getLineChart(production_name, -1,"", "", "");
     }
 
     /**
      * 将生成折线图 所需数据 添加到dataset中
-     * @param para 用于区分电压还是电流
      * @return
      */
-    private static CategoryDataset getDataset(String para, String production_name) {
+    private static CategoryDataset getDataset(List<Map<String, Object>> mapsList) {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        String sqlStr = SqlStrUtil.query_sql1_3("machine_data_now"); //table 表名
-        List<Object> params = SqlStrUtil.query_list1_3(production_name); //
-        List<Machine_data_now> machine_data_now_BeansList = (List<Machine_data_now>)
-                JdbcTemplateUtil.queryMultForBean(sqlStr, Machine_data_now.class, params);
-
-        log.debug(machine_data_now_BeansList);
-
-        // 将List中的各行Bean对象中的信息添加到dataset中。
-        if (para.equals("current")) {
-            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
-                dataset.addValue(machine_dataSingle.getCurrent(), "Current", String.valueOf(machine_dataSingle.getSeq()));
-            }
-        } else if (para.equals("voltage")) {
-            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
-                dataset.addValue(machine_dataSingle.getVoltage(), "Voltage", String.valueOf(machine_dataSingle.getSeq()));
-            }
-        } else if (para.equals("all")) {
-            for (Machine_data_now machine_dataSingle : machine_data_now_BeansList) {
-                dataset.addValue(machine_dataSingle.getCurrent(), "Current", String.valueOf(machine_dataSingle.getSeq()));
-                dataset.addValue(machine_dataSingle.getVoltage(), "Voltage", String.valueOf(machine_dataSingle.getSeq()));
-            }
-        }
-        else {
-            log.error("LineChart getDataset 参数输入错误");
-            return null;
+        // 将List中的信息添加到dataset中。
+        for (Map<String, Object> map : mapsList) {
+            dataset.addValue((double)map.get("current"), "Current", String.valueOf(map.get("seq")));
+            dataset.addValue((double)map.get("voltage"), "Voltage", String.valueOf(map.get("seq")));
         }
 
         return dataset;
     }
 
     /**
-     * 获得machine_data_now 的内容
+     * 获得 指定表 的内容
      */
-    public static List<Map<String, Object>> getData() {
-        String sqlStr = SqlStrUtil.query_sql1("machine_data_now");
-        List<Map<String, Object>> maps = JdbcTemplateUtil.queryMult(sqlStr);
-        return maps;
+    private static List<Map<String, Object>> getData(String production_name, int production_num) {
+        List<Map<String, Object>> mapsList;
+
+        //如果production_num == -1 ,则认为是取machine_data_now里的数据（这个表不需要num）
+        if (production_num == -1) {
+            String sqlStr = SqlStrUtil.query_sql1_3("machine_data_now"); //table 表名
+            List<Object> params = SqlStrUtil.query_list1_3(production_name);
+            List<Map<String, Object>> machine_data_now_mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
+
+            mapsList = machine_data_now_mapsList;
+        } else {
+            //如果production_num 不为-1 ,则认为是取machine_data_all里的数据（需要name和num共同选择）
+            String sqlStr = SqlStrUtil.query_sql1_5("machine_data_all");
+            List<Object> params = SqlStrUtil.query_list1_5(production_name, production_num);
+            List<Map<String, Object>> machine_data_all_mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
+
+            mapsList = machine_data_all_mapsList;
+        }
+        return mapsList;
     }
 }
