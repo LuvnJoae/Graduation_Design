@@ -474,7 +474,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label19"
-						"text": "其它"
+						"text": "阈值limit"
 						"background": #Color0
 						"opaque": true
 						"horizontalTextPosition": 0
@@ -816,7 +816,7 @@ new FormModel {
 										add( "电弧电压（建议值）" )
 										add( "焊接速度（建议值）" )
 										add( "干伸出量（建议值）" )
-										add( "其他2" )
+										add( "阈值limit" )
 										add( "焊接电流（实际值）" )
 										add( "焊接电压（实际值）" )
 										add( "焊接速度（实际值）" )

@@ -1031,7 +1031,7 @@ public class ExpertSystem extends JFrame {
         comboBox13.addItem(production_paramMap.get("voltage_arc_advice"));
         comboBox14.addItem(production_paramMap.get("speed_advice"));
         comboBox15.addItem(production_paramMap.get("extension_advice"));
-        comboBox16.addItem(production_paramMap.get("extra_2"));
+        comboBox16.addItem(production_paramMap.get("limit"));
 
         textField1.setText((String) production_paramMap.get("current_practical"));
         textField2.setText((String) production_paramMap.get("voltage_arc_practical"));
@@ -1664,7 +1664,7 @@ public class ExpertSystem extends JFrame {
                 "voltage_arc_advice",
                 "speed_advice",
                 "extension_advice",
-                "extra_2",
+                "limit",
                 "current_practical",
                 "voltage_arc_practical",
                 "speed_practical",
@@ -2853,7 +2853,7 @@ public class ExpertSystem extends JFrame {
                 label18.setBounds(520, 300, 85, 30);
 
                 //---- label19 ----
-                label19.setText("\u5176\u5b83");
+                label19.setText("\u9608\u503climit");
                 label19.setBackground(new Color(204, 204, 204));
                 label19.setOpaque(true);
                 label19.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -3094,7 +3094,7 @@ public class ExpertSystem extends JFrame {
                                 new Object[][] {
                                 },
                                 new String[] {
-                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u6750\u724c\u53f7", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u4f4d\u7f6e", "\u710a\u63a5\u63a5\u5934", "\u5761\u53e3\u5f62\u5f0f", "\u70ed\u5904\u7406\u7c7b\u578b", "\u5176\u4ed61", "\u710a\u63a5\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u7535\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u5176\u4ed62", "\u710a\u63a5\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
+                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u6750\u724c\u53f7", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u4f4d\u7f6e", "\u710a\u63a5\u63a5\u5934", "\u5761\u53e3\u5f62\u5f0f", "\u70ed\u5904\u7406\u7c7b\u578b", "\u5176\u4ed61", "\u710a\u63a5\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u7535\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u9608\u503climit", "\u710a\u63a5\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
                                 }
                             ) {
                                 boolean[] columnEditable = new boolean[] {

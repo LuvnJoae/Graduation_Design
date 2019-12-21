@@ -191,7 +191,7 @@ public class SqlStrUtil {
                 "voltage_arc_advice = ?, " +
                 "speed_advice = ?, " +
                 "extension_advice = ?, " +
-                "extra_2 = ?, " +
+                "limit = ?, " +
                 "current_practical = ?, " +
                 "voltage_arc_practical = ?, " +
                 "speed_practical = ?, " +
@@ -216,7 +216,7 @@ public class SqlStrUtil {
                                             String voltage_arc_advice,
                                             String speed_advice,
                                             String extension_advice,
-                                            String extra_2,
+                                            String limit,
                                             String current_practical,
                                             String voltage_arc_practical,
                                             String speed_practical,
@@ -239,7 +239,7 @@ public class SqlStrUtil {
         paramsList.add(voltage_arc_advice);
         paramsList.add(speed_advice);
         paramsList.add(extension_advice);
-        paramsList.add(extra_2);
+        paramsList.add(limit);
         paramsList.add(current_practical);
         paramsList.add(voltage_arc_practical);
         paramsList.add(speed_practical);
@@ -290,7 +290,7 @@ public class SqlStrUtil {
                 "voltage_arc_advice, " +
                 "speed_advice, " +
                 "extension_advice, " +
-                "extra_2, " +
+                "limit, " +
                 "current_practical, " +
                 "voltage_arc_practical, " +
                 "speed_practical, " +
@@ -315,7 +315,7 @@ public class SqlStrUtil {
                                             String voltage_arc_advice,
                                             String speed_advice,
                                             String extension_advice,
-                                            String extra_2,
+                                            String limit,
                                             String current_practical,
                                             String voltage_arc_practical,
                                             String speed_practical,
@@ -339,7 +339,7 @@ public class SqlStrUtil {
         paramsList.add(voltage_arc_advice);
         paramsList.add(speed_advice);
         paramsList.add(extension_advice);
-        paramsList.add(extra_2);
+        paramsList.add(limit);
         paramsList.add(current_practical);
         paramsList.add(voltage_arc_practical);
         paramsList.add(speed_practical);
