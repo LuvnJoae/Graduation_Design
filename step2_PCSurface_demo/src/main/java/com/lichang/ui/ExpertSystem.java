@@ -858,6 +858,7 @@ public class ExpertSystem extends JFrame {
 
         //开启 使能
         enableTextField_1_to_4(); //开启 文本框使能
+        comboBox16.setEnabled(true); //开启 阈值value_limit使能
         button17.setEnabled(true); //右下：保存按钮 开启使能
         //关闭 使能
         comboBox17.setEnabled(false); //产品选择 下拉框
@@ -872,6 +873,7 @@ public class ExpertSystem extends JFrame {
         updateProduction(); //更新值
         //关闭 使能
         enableFalseTextField_1_to_4(); //关闭 文本框使能
+        comboBox16.setEnabled(false); //关闭 阈值value_limit使能
         button17.setEnabled(false); //右下：保存按钮 关闭使能
         //开启 使能
         comboBox17.setEnabled(true); //产品选择 下拉框
@@ -1028,15 +1030,15 @@ public class ExpertSystem extends JFrame {
         comboBox10.addItem(production_paramMap.get("thermal_parameters"));
         comboBox11.addItem(production_paramMap.get("extra_1"));
         comboBox12.addItem(production_paramMap.get("current_advice"));
-        comboBox13.addItem(production_paramMap.get("voltage_arc_advice"));
+        comboBox13.addItem(production_paramMap.get("voltage_advice"));
         comboBox14.addItem(production_paramMap.get("speed_advice"));
         comboBox15.addItem(production_paramMap.get("extension_advice"));
-        comboBox16.addItem(production_paramMap.get("limit"));
+        comboBox16.addItem(production_paramMap.get("value_limit"));
 
-        textField1.setText((String) production_paramMap.get("current_practical"));
-        textField2.setText((String) production_paramMap.get("voltage_arc_practical"));
-        textField3.setText((String) production_paramMap.get("speed_practical"));
-        textField4.setText((String) production_paramMap.get("extension_practical"));
+        textField1.setText(String.valueOf(production_paramMap.get("current_practical")));
+        textField2.setText(String.valueOf(production_paramMap.get("voltage_practical")));
+        textField3.setText(String.valueOf(production_paramMap.get("speed_practical")));
+        textField4.setText(String.valueOf(production_paramMap.get("extension_practical")));
 
         productionSelectFlag = false; //恢复规则
     }
@@ -1061,11 +1063,11 @@ public class ExpertSystem extends JFrame {
         comboBox9_item = (String) comboBox9.getSelectedItem();
         comboBox10_item = (String) comboBox10.getSelectedItem();
         comboBox11_item = (String) comboBox11.getSelectedItem();
-        comboBox12_item = (String) comboBox12.getSelectedItem();
-        comboBox13_item = (String) comboBox13.getSelectedItem();
-        comboBox14_item = (String) comboBox14.getSelectedItem();
-        comboBox15_item = (String) comboBox15.getSelectedItem();
-        comboBox16_item = (String) comboBox16.getSelectedItem();
+        comboBox12_item = String.valueOf(comboBox12.getSelectedItem()) ;
+        comboBox13_item = String.valueOf(comboBox13.getSelectedItem());
+        comboBox14_item = String.valueOf(comboBox14.getSelectedItem());
+        comboBox15_item = String.valueOf(comboBox15.getSelectedItem());
+        comboBox16_item = String.valueOf(comboBox16.getSelectedItem());
 
         textField1_item = textField1.getText();
         textField2_item = textField2.getText();
@@ -1377,7 +1379,7 @@ public class ExpertSystem extends JFrame {
 
         //存储符合规则的焊接参数
         List<String> current_list = new ArrayList<>();
-        List<String> voltage_arc_list = new ArrayList<>();
+        List<String> voltage_list = new ArrayList<>();
         List<String> speed_list = new ArrayList<>();
         List<String> extension_list = new ArrayList<>();
 
@@ -1388,12 +1390,12 @@ public class ExpertSystem extends JFrame {
 
             if (Pattern.matches(".*" + seq + ".*", seq_col)) {
                 String current_col = (String) expert_process_parameters_map.get("current");
-                String voltage_arc_col = (String) expert_process_parameters_map.get("voltage_arc");
+                String voltage_col = (String) expert_process_parameters_map.get("voltage");
                 String speed_col = (String) expert_process_parameters_map.get("speed");
                 String extension_col = (String) expert_process_parameters_map.get("extension");
 
                 current_list.add(current_col);
-                voltage_arc_list.add(voltage_arc_col);
+                voltage_list.add(voltage_col);
                 speed_list.add(speed_col);
                 extension_list.add(extension_col);
 
@@ -1410,7 +1412,7 @@ public class ExpertSystem extends JFrame {
         }
 
         updateComboBoxModel(comboBox12, current_list.toArray(), false);
-        updateComboBoxModel(comboBox13, voltage_arc_list.toArray(), false);
+        updateComboBoxModel(comboBox13, voltage_list.toArray(), false);
         updateComboBoxModel(comboBox14, speed_list.toArray(), false);
         updateComboBoxModel(comboBox15, extension_list.toArray(), false);
     }
@@ -1661,12 +1663,12 @@ public class ExpertSystem extends JFrame {
                 "thermal_parameters",
                 "extra_1",
                 "current_advice",
-                "voltage_arc_advice",
+                "voltage_advice",
                 "speed_advice",
                 "extension_advice",
-                "limit",
+                "value_limit",
                 "current_practical",
-                "voltage_arc_practical",
+                "voltage_practical",
                 "speed_practical",
                 "extension_practical"
         };
@@ -1681,7 +1683,7 @@ public class ExpertSystem extends JFrame {
                 "current",
                 "current_type",
                 "current_polarity",
-                "voltage_arc",
+                "voltage",
                 "line_energy",
                 "speed",
                 "extension"

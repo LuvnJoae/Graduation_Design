@@ -18,14 +18,13 @@ import java.util.regex.Pattern;
 public class demo2 {
 
     public static void main(String[] args) throws UnknownHostException {
-        String sqlStr = "select count(id) from machine_data_brief WHERE production_name = ?";
-        Object[] objects = {"production_default"};
-        ArrayList<Object> list = new ArrayList<>();
-        list.add("prodution_default");
-        JdbcTemplate template = new JdbcTemplate(JdbcUtil.getDataSource()); // 获取JdbcTemplate对象
-        Long count = template.queryForObject(sqlStr, Long.class,objects);
-        System.out.println(count);
-
+        String limitRule = "s-2, 0.9-1.1;3-e,1.0-1.0;&0&0";
+//        for (String s : limitRule.split("&")) {
+//            System.out.println(s);
+//        }
+        String currentLimitRule = limitRule.split("&")[0]; //电压 value_limit字符串
+        String voltageLimitRule = limitRule.split("&")[1]; //电流 value_limit字符串
+        String speedLimitRule = limitRule.split("&")[2]; //电流 value_limit字符串
     }
 }
 

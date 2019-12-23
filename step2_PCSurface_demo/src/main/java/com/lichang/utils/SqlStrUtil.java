@@ -188,15 +188,15 @@ public class SqlStrUtil {
                 "thermal_parameters = ?, " +
                 "extra_1 = ?, " +
                 "current_advice = ?, " +
-                "voltage_arc_advice = ?, " +
+                "voltage_advice = ?, " +
                 "speed_advice = ?, " +
                 "extension_advice = ?, " +
-                "limit = ?, " +
+                "value_limit = ?, " +
                 "current_practical = ?, " +
-                "voltage_arc_practical = ?, " +
+                "voltage_practical = ?, " +
                 "speed_practical = ?, " +
-                "extension_practical = ? "
-                + " where name = ?";
+                "extension_practical = ? " +
+                "where name = ?";
         return sqlStr;
     }
 
@@ -213,12 +213,12 @@ public class SqlStrUtil {
                                             String thermal_parameters,
                                             String extra_1,
                                             String current_advice,
-                                            String voltage_arc_advice,
+                                            String voltage_advice,
                                             String speed_advice,
                                             String extension_advice,
-                                            String limit,
+                                            String value_limit,
                                             String current_practical,
-                                            String voltage_arc_practical,
+                                            String voltage_practical,
                                             String speed_practical,
                                             String extension_practical
     ) {
@@ -236,12 +236,12 @@ public class SqlStrUtil {
         paramsList.add(thermal_parameters);
         paramsList.add(extra_1);
         paramsList.add(current_advice);
-        paramsList.add(voltage_arc_advice);
+        paramsList.add(voltage_advice);
         paramsList.add(speed_advice);
         paramsList.add(extension_advice);
-        paramsList.add(limit);
+        paramsList.add(value_limit);
         paramsList.add(current_practical);
-        paramsList.add(voltage_arc_practical);
+        paramsList.add(voltage_practical);
         paramsList.add(speed_practical);
         paramsList.add(extension_practical);
         paramsList.add(name);
@@ -287,12 +287,12 @@ public class SqlStrUtil {
                 "thermal_parameters, " +
                 "extra_1, " +
                 "current_advice, " +
-                "voltage_arc_advice, " +
+                "voltage_advice, " +
                 "speed_advice, " +
                 "extension_advice, " +
-                "limit, " +
+                "value_limit, " +
                 "current_practical, " +
-                "voltage_arc_practical, " +
+                "voltage_practical, " +
                 "speed_practical, " +
                 "extension_practical) "
                 + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -312,12 +312,12 @@ public class SqlStrUtil {
                                             String thermal_parameters,
                                             String extra_1,
                                             String current_advice,
-                                            String voltage_arc_advice,
+                                            String voltage_advice,
                                             String speed_advice,
                                             String extension_advice,
-                                            String limit,
+                                            String value_limit,
                                             String current_practical,
-                                            String voltage_arc_practical,
+                                            String voltage_practical,
                                             String speed_practical,
                                             String extension_practical
     ) {
@@ -336,12 +336,12 @@ public class SqlStrUtil {
         paramsList.add(thermal_parameters);
         paramsList.add(extra_1);
         paramsList.add(current_advice);
-        paramsList.add(voltage_arc_advice);
+        paramsList.add(voltage_advice);
         paramsList.add(speed_advice);
         paramsList.add(extension_advice);
-        paramsList.add(limit);
+        paramsList.add(value_limit);
         paramsList.add(current_practical);
-        paramsList.add(voltage_arc_practical);
+        paramsList.add(voltage_practical);
         paramsList.add(speed_practical);
         paramsList.add(extension_practical);
 

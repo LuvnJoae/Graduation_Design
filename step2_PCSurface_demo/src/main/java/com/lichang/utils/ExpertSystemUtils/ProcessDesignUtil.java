@@ -41,12 +41,12 @@ public class ProcessDesignUtil {
                                   String thermal_parameters,
                                   String extra_1,
                                   String current_advice,
-                                  String voltage_arc_advice,
+                                  String voltage_advice,
                                   String speed_advice,
                                   String extension_advice,
-                                  String limit,
+                                  String value_limit,
                                   String current_practical,
-                                  String voltage_arc_practical,
+                                  String voltage_practical,
                                   String speed_practical,
                                   String extension_practical
     ) {
@@ -65,12 +65,12 @@ public class ProcessDesignUtil {
                 thermal_parameters,
                 extra_1,
                 current_advice,
-                voltage_arc_advice,
+                voltage_advice,
                 speed_advice,
                 extension_advice,
-                limit,
+                value_limit,
                 current_practical,
-                voltage_arc_practical,
+                voltage_practical,
                 speed_practical,
                 extension_practical
         );
@@ -94,12 +94,12 @@ public class ProcessDesignUtil {
                                      String thermal_parameters,
                                      String extra_1,
                                      String current_advice,
-                                     String voltage_arc_advice,
+                                     String voltage_advice,
                                      String speed_advice,
                                      String extension_advice,
-                                     String limit,
+                                     String value_limit,
                                      String current_practical,
-                                     String voltage_arc_practical,
+                                     String voltage_practical,
                                      String speed_practical,
                                      String extension_practical
     ) {
@@ -118,12 +118,12 @@ public class ProcessDesignUtil {
                 thermal_parameters,
                 extra_1,
                 current_advice,
-                voltage_arc_advice,
+                voltage_advice,
                 speed_advice,
                 extension_advice,
-                limit,
+                value_limit,
                 current_practical,
-                voltage_arc_practical,
+                voltage_practical,
                 speed_practical,
                 extension_practical
         );
