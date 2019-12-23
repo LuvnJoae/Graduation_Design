@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import com.lichang.utils.ChangePasswordUtil;
+import com.lichang.utils.LimitRuleUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.*;
 import com.lichang.utils.LoggerUtil;
 import org.apache.log4j.Logger;
@@ -96,7 +97,7 @@ public class RealTimeMonitoring extends JFrame {
     //第一次打开该页面时
     private void thisWindowOpened(WindowEvent e) {
         updateComboBox1(); //先更新一次下拉框
-//        scheduledExecutor(); //开启定时器
+        scheduledExecutor(); //开启定时器
     }
 
     /**
@@ -396,148 +397,15 @@ public class RealTimeMonitoring extends JFrame {
             table2Model.addRow(newRowData); //添加行
         }
 
-        addValueLimit();
+        addValueLimit(); //添加value_limit rule
     }
 
     //阈值 提示（当超出设置阈值后，数据自动变色）
     private void addValueLimit() {
-        Map<String, Object> productionMap = new HashMap<>();
-        for (Map<String, Object> map : expert_production_mapsList) {
-            if (map.get("name").equals(prodution_name)) {
-                productionMap = map;
-                break;
-            }
-        }
-        log.debug("****start***");
-        //如果该产品还未设定 焊接参数建议值，则不添加阈值limit，直接返回一个null
-        if (productionMap.get("voltage_advice") == null
-                || productionMap.get("voltage_advice").equals("0")
-                || productionMap.get("voltage_advice").equals("")) {
-            return;
-        } else if (productionMap.get("current_advice") == null
-                || productionMap.get("current_advice").equals("0")
-                || productionMap.get("current_advice").equals("")) {
-            return;
-        } else if (productionMap.get("speed_advice") == null
-                || productionMap.get("speed_advice").equals("0")
-                || productionMap.get("speed_advice").equals("")) {
-            return;
-        }
-        log.debug("****end***");
-
-        Object expert_production_voltageCol; //参考电压
-        Object expert_production_currentCol; //参考电流
-        Object expert_production_speedCol; //参考速度
-
-        //判断是否存在 实际值,若存在，以实际值为标准，若不存在，以建议值为标准
-        //电压
-        if (productionMap.get("voltage_practical") == null
-                || productionMap.get("voltage_practical").equals("0")
-                || productionMap.get("voltage_practical").equals("")) {
-            expert_production_voltageCol = productionMap.get("voltage_advice");
-        } else {
-            expert_production_voltageCol = productionMap.get("voltage_practical");
-        }
-        //电流
-        if (productionMap.get("current_practical") == null
-                || productionMap.get("current_practical").equals("0")
-                || productionMap.get("current_practical").equals("")) {
-            expert_production_currentCol = productionMap.get("current_advice");
-        } else {
-            expert_production_currentCol = productionMap.get("current_practical");
-        }
-        //速度
-        if (productionMap.get("speed_practical") == null
-                || productionMap.get("speed_practical").equals("0")
-                || productionMap.get("speed_practical").equals("")) {
-            expert_production_speedCol = productionMap.get("speed_advice");
-        } else {
-            expert_production_speedCol = productionMap.get("speed_practical");
-        }
-
-        //limit不存在时，直接返回
-        if (productionMap.get("value_limit") == null || productionMap.get("value_limit").equals("")) {
-            return;
-        }
-
-        String limitRule = (String) productionMap.get("value_limit"); //获得 value_limit字符串
-
-        if (limitRule.split("%").length == 1) {
-            String currentLimitRule = limitRule.split("%")[0]; //电压 value_limit字符串
-
-            limit_main(currentLimitRule, 1);
-        } else if (limitRule.split("%").length == 2) {
-            String currentLimitRule = limitRule.split("%")[0]; //电压 value_limit字符串
-            String voltageLimitRule = limitRule.split("%")[1]; //电流 value_limit字符串
-
-            limit_main(currentLimitRule,1);
-            limit_main(voltageLimitRule, 2);
-        } else if (limitRule.split("%").length == 3) {
-            String currentLimitRule = limitRule.split("%")[0]; //电压 value_limit字符串
-            String voltageLimitRule = limitRule.split("%")[1]; //电流 value_limit字符串
-            String speedLimitRule = limitRule.split("%")[2]; //电流 value_limit字符串
-
-            limit_main(currentLimitRule,  1);
-            limit_main(voltageLimitRule, 2);
-            limit_main(speedLimitRule, 3);
-        } else {
-            return;
-        }
-
+        LimitRuleUtil.addValueLimit(expert_production_mapsList, prodution_name, table2); //进入limitRule主方法
     }
 
-    //limit主方法
-    private void limit_main(String limitRule, int colSeq) {
-        log.debug("**********进入limit*********");
-        try {
-            String[] ruleArray = limitRule.replaceAll(" ", "").split(";"); //拆分成单个的rule
-            for (int i = 0; i < ruleArray.length; i++) {
-                String[] sinlgeRuleArray = ruleArray[i].split(",");
-                String seqRange = sinlgeRuleArray[0]; //rule中的seq范围
-                String valueRange = sinlgeRuleArray[1]; //rule中的值范围
 
-                //定义 序号范围
-                String seqMinStr = seqRange.split("-")[0];
-                String seqMaxSTr = seqRange.split("-")[1];
-                int seqMin;
-                int seqMax;
-                //判断是否 有 s 和 e （s为第一个序号, e为最后一个序号）
-                if (seqMinStr.equals("s")) {
-                    seqMin = 1;
-                } else {
-                    seqMin = Integer.valueOf(seqMinStr);
-                }
-                if (seqMaxSTr.equals("e")) {
-                    seqMax = table2.getRowCount();
-                } else {
-                    seqMax = Integer.parseInt(seqMaxSTr);
-                }
-                //如果给的seq超限，则默认为边界值。
-                if (seqMin < 1) {
-                    seqMin = 1;
-                }
-                if (seqMax > table2.getRowCount()) {
-                    seqMax = table2.getRowCount();
-                }
-
-                //定义 值的范围
-                double valueMin = Double.valueOf(valueRange.split("-")[0]);
-                double valueMax = Double.valueOf(valueRange.split("-")[1]);
-
-                for (int j = seqMin-1; j < seqMax; j++) {
-                    if ((double) table2.getValueAt(j, colSeq) > valueMax) {
-                        table2.setValueAt("<html>" + "<font color='red'>" + table2.getValueAt(j, colSeq) + "</font>" + "</html>", j, colSeq);
-                    } else if ((double) table2.getValueAt(j, colSeq) < valueMin) {
-                        table2.setValueAt("<html>" + "<font color='blue'>" + table2.getValueAt(j, colSeq) + "</font>" + "</html>", j, colSeq);
-                    }
-                }
-                log.debug("********执行完毕********");
-            }
-        } catch (Exception e) {
-            log.debug("出现错误");
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 参数 折线图

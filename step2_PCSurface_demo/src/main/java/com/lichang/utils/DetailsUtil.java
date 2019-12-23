@@ -28,4 +28,15 @@ public class DetailsUtil {
         List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
         return mapsList;
     }
+
+    /**
+     * 获取指定表中的所有数据
+     * @param table
+     * @return
+     */
+    public static List<Map<String, Object>> getData(String table) {
+        String sqlStr = SqlStrUtil.query_sql1(table);
+        List<Map<String, Object>> mapsList = JdbcTemplateUtil.queryMult(sqlStr);
+        return mapsList;
+    }
 }

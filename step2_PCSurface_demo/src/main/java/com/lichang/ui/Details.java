@@ -6,7 +6,9 @@ package com.lichang.ui;
 
 import java.awt.event.*;
 import com.lichang.utils.DetailsUtil;
+import com.lichang.utils.LimitRuleUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
+import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -34,6 +36,7 @@ public class Details extends JDialog {
     private int production_num; //工件编号
     private Map<String, Object> machine_fault_data_map; //故障表中根据time查询到的单条信息map。
     private List<Map<String, Object>> machine_data_all_mapsList; //参数数据详细表
+    private List<Map<String, Object>> expert_production_mapsList; //产品表
     //折线图相关
     private JFreeChart lineChart; // 折线图模型
     private JPanel chartPanel; //折线图Panel
@@ -66,9 +69,11 @@ public class Details extends JDialog {
      */
     //第一次打开该页面时
     private void thisWindowOpened(WindowEvent e) {
+        expert_production_mapsList = DetailsUtil.getData("expert_production"); //获取产品表内容，更新内容
         updateTable1(); //加载故障信息表
         updateTable2(); //加载参数信息表
         updateChartPanel(); //加载折线图
+
     }
 
     /**
@@ -155,18 +160,20 @@ public class Details extends JDialog {
             //加载行 内容
             Object[] newRowData = {
                     map.get("seq"),
-                    map.get("voltage"),
                     map.get("current"),
+                    map.get("voltage"),
                     map.get("speed")
             };
 
             table2Model.addRow(newRowData); //添加行
         }
+
+        addValueLimit(); //添加value_limit rule
     }
 
-    //阈值 提示（当超出设置阈值后，数据自动变色）
-    private void addLimit() {
-
+    //添加阈值 提示（当超出设置阈值后，数据自动变色）
+    private void addValueLimit() {
+        LimitRuleUtil.addValueLimit(expert_production_mapsList, production_name, table2);
     }
 
     /**
@@ -192,6 +199,7 @@ public class Details extends JDialog {
         panel1.add(chartPanel);
         panel1.repaint();
     }
+
     /**
      * 测试
      * @param e
@@ -201,10 +209,6 @@ public class Details extends JDialog {
 //        updateTable2();
 //        updateChartPanel();
     }
-
-
-
-
 
 
 
@@ -291,10 +295,9 @@ public class Details extends JDialog {
             //---- table2 ----
             table2.setModel(new DefaultTableModel(
                 new Object[][] {
-                    {null, null, null, null},
                 },
                 new String[] {
-                    "\u5e8f\u53f7", "\u7535\u5f27\u7535\u538b", "\u7535\u6d41", "\u710a\u63a5\u901f\u5ea6"
+                    "\u5e8f\u53f7", "\u7535\u6d41", "\u7535\u5f27\u7535\u538b", "\u710a\u63a5\u901f\u5ea6"
                 }
             ) {
                 boolean[] columnEditable = new boolean[] {
