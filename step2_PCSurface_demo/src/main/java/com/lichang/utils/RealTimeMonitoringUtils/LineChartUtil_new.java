@@ -1,6 +1,7 @@
 package com.lichang.utils.RealTimeMonitoringUtils;
 
 import com.lichang.DBbeans.Machine_data_now;
+import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
@@ -10,6 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.Test;
@@ -27,17 +29,33 @@ public class LineChartUtil_new {
 
     /**
      * 生成折线模型 chart
-     * @return
      */
     public static JFreeChart getLineChart(String production_name,
                                           int production_num,
                                           String title,
                                           String categoryAxisLable,
                                           String valueAxisLable) {
-        log.debug("生成折线图模型");
-
         List<Map<String, Object>> mapsList = getData(production_name, production_num); //获取数据list
         CategoryDataset dataset = getDataset(mapsList); //获取dataset
+        JFreeChart chart = LineChart_main(dataset, title, categoryAxisLable, valueAxisLable);//获得Chart模型
+        return chart;
+    }
+
+    //无参 重载
+    public static JFreeChart getLineChart(String production_name, int production_num) {
+        return getLineChart(production_name, production_num, "", "", "");
+    }
+
+    //无参 重载
+    public static JFreeChart getLineChart(String production_name) {
+        return getLineChart(production_name, -1, "", "", "");
+    }
+
+    /**
+     * 生成折线图 模型 主方法
+     */
+    private static JFreeChart LineChart_main(CategoryDataset dataset, String title, String categoryAxisLable, String valueAxisLable) {
+        log.debug("生成折线图模型");
 
         JFreeChart chart = ChartFactory.createLineChart(
                 title,
@@ -50,7 +68,7 @@ public class LineChartUtil_new {
                 false // 是否生成超链接
         );
 
-        CategoryPlot plot= (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
+        CategoryPlot plot = (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
 
         plot.setBackgroundPaint(Color.white);  // 背景颜色
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
@@ -60,22 +78,16 @@ public class LineChartUtil_new {
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer(); // 获取渲染器
         renderer.setBaseShapesVisible(true); // 显示数据点
 
+        //设置标识字体
+        Font legendFont = new Font("", Font.PLAIN, 16);
+        LegendTitle legend = chart.getLegend();
+        legend.setItemFont(legendFont);
+
         return chart;
     }
 
-    //无参 重载
-    public static JFreeChart getLineChart(String production_name, int production_num) {
-        return getLineChart(production_name, production_num,"", "", "");
-    }
-
-    //无参 重载
-    public static JFreeChart getLineChart(String production_name) {
-        return getLineChart(production_name, -1,"", "", "");
-    }
-
     /**
-     * 将生成折线图 所需数据 添加到dataset中
-     * @return
+     * 生成 chart所用的 dataset
      */
     private static CategoryDataset getDataset(List<Map<String, Object>> mapsList) {
         log.debug("生成折线图所需 数据");
@@ -84,15 +96,15 @@ public class LineChartUtil_new {
 
         // 将List中的信息添加到dataset中。
         for (Map<String, Object> map : mapsList) {
-            dataset.addValue((double)map.get("current"), "Current", String.valueOf(map.get("seq")));
-            dataset.addValue((double)map.get("voltage"), "Voltage", String.valueOf(map.get("seq")));
+            dataset.addValue((double) map.get("current"), "Current", String.valueOf(map.get("seq")));
+            dataset.addValue((double) map.get("voltage"), "Voltage", String.valueOf(map.get("seq")));
         }
 
         return dataset;
     }
 
     /**
-     * 获得 指定表 的内容
+     * 获得 指定表 的List( machine_data_now 或 machine_data_all)
      */
     private static List<Map<String, Object>> getData(String production_name, int production_num) {
         List<Map<String, Object>> mapsList;

@@ -6,9 +6,13 @@ import com.lichang.utils.dao.JdbcTemplateUtil;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -18,30 +22,37 @@ import java.util.List;
 
 //TODO: yaozuo
 //标记时间：2019/12/23 17:33  预解决时间：
-//1. 优化这个类结构
-//2. 字段名乱码不显示
-//3. 颜色重合不显眼
+////1. 优化这个类结构
+////2. 字段名乱码不显示
+////3. 颜色重合不显眼
+//4. 加上工件总数的曲线
 
 
 public class LineChartUtil {
     private static Logger log = LoggerUtil.getLogger();
 
     /**
-     * 生成折线模型 chart
-     * @return
+     * 生成模型 chart
      */
     public static JFreeChart getLineChart(String production_name,
-                                          int production_num,
                                           String title,
                                           String categoryAxisLable,
                                           String valueAxisLable) {
-        log.debug("生成折线图模型");
+        CategoryDataset dataset = getDataset(production_name);
+        JFreeChart chart = barChart_main(dataset, title, categoryAxisLable, valueAxisLable);//获得Chart模型
+        return chart;
+    }
 
-//        List<Map<String, Object>> mapsList = getData(production_name, production_num); //获取数据list
-//        CategoryDataset dataset = getDataset(mapsList); //获取dataset
-        CategoryDataset dataset = getDataset();
+    //无参 重载
+    public static JFreeChart getLineChart(String production_name) {
+        return getLineChart(production_name, "", "", "");
+    }
 
-                JFreeChart chart = ChartFactory.createLineChart(
+    /**
+     * 生成柱状图 模型 主方法
+     */
+    private static JFreeChart barChart_main(CategoryDataset dataset, String title, String categoryAxisLable, String valueAxisLable) {
+        JFreeChart chart = ChartFactory.createBarChart3D(
                 title,
                 categoryAxisLable,
                 valueAxisLable,
@@ -52,7 +63,47 @@ public class LineChartUtil {
                 false // 是否生成超链接
         );
 
-        CategoryPlot plot= (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
+        CategoryPlot plot = (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
+
+        plot.setBackgroundPaint(Color.white);  // 背景颜色
+        plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
+        plot.setOutlinePaint(Color.BLACK); // 轮廓颜色
+        plot.setNoDataMessage("数据加载失败");  // 错误提示
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer(); // 获取渲染器
+        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator()); //设置柱状图上显示值
+        renderer.setBaseItemLabelsVisible(true);
+        renderer.setSeriesPaint(0, new Color(116,228,121)); //设置颜色
+        renderer.setSeriesPaint(1, new Color(83,155,237));
+        renderer.setSeriesPaint(2, new Color(234,236,96));
+        renderer.setSeriesPaint(3, new Color(255,111,107));
+
+        CategoryAxis Xaxis = plot.getDomainAxis();
+        Xaxis.setTickLabelFont(new Font("sans-serif", Font.PLAIN, 13)); //设置x轴字体
+
+        chart.getLegend().setItemFont(new Font("宋体", Font.PLAIN, 16)); //设置legend 字体
+        return chart;
+    }
+
+
+    /**
+     * 生成折线图 模型 主方法
+     */
+    private static JFreeChart lineChart_main(CategoryDataset dataset, String title, String categoryAxisLable, String valueAxisLable) {
+        log.debug("生成折线图模型");
+
+        JFreeChart chart = ChartFactory.createLineChart(
+                title,
+                categoryAxisLable,
+                valueAxisLable,
+                dataset, // 数据集
+                PlotOrientation.VERTICAL,
+                true,  // 显示图例
+                true, // 采用标准生成器
+                false // 是否生成超链接
+        );
+
+        CategoryPlot plot = (CategoryPlot) chart.getPlot(); // 获取chart绘图对象plot
 
         plot.setBackgroundPaint(Color.white);  // 背景颜色
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
@@ -60,33 +111,32 @@ public class LineChartUtil {
         plot.setNoDataMessage("数据加载失败");  // 错误提示
 
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer(); // 获取渲染器
-        renderer.setBaseShapesVisible(true); // 显示数据点
+        renderer.setSeriesPaint(0, new Color(116,228,121)); //设置颜色
+        renderer.setSeriesPaint(1, new Color(83,155,237));
+        renderer.setSeriesPaint(2, new Color(234,236,96));
+        renderer.setSeriesPaint(3, new Color(255,111,107));
+
+        //设置标识字体
+        Font legendFont = new Font("楷体", Font.PLAIN, 18);
+        LegendTitle legend = chart.getLegend();
+        legend.setItemFont(legendFont);
+
 
         return chart;
     }
 
-    //无参 重载
-    public static JFreeChart getLineChart(String production_name, int production_num) {
-        return getLineChart(production_name, production_num,"", "", "");
-    }
-
-    //无参 重载
-    public static JFreeChart getLineChart(String production_name) {
-        return getLineChart(production_name, -1,"", "", "");
-    }
-
     /**
-     * 将生成折线图 所需数据 添加到dataset中
+     * 获得数据List（machine_data_brief） ->  生成dataset
      * @return
      */
-    private static CategoryDataset getDataset() {
+    private static CategoryDataset getDataset(String production_name) {
         log.debug("生成折线图所需 数据");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         //通过遍历mapsList，查询每天的统计量
         String sqlStr = SqlStrUtil.query_sql1_3("machine_data_brief");
-        List<Object> params = SqlStrUtil.query_list1_3("production_default");
+        List<Object> params = SqlStrUtil.query_list1_3(production_name);
         List<Map<String, Object>> machine_data_brief_mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
 
         //通过LinkedHashMap存储 日期：数量 ，保证折线图的有序性。

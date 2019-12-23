@@ -3616,6 +3616,9 @@ public class ExpertSystem extends JFrame {
                 }
                 panel2.add(tabbedPane1);
                 tabbedPane1.setBounds(0, 35, 965, 425);
+
+                //---- textField11 ----
+                textField11.setBackground(Color.white);
                 panel2.add(textField11);
                 textField11.setBounds(70, 5, 120, 25);
 
