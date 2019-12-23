@@ -4,12 +4,18 @@
 
 package com.lichang.ui;
 
+import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.ChangePasswordUtil;
+import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
+import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
@@ -25,7 +31,6 @@ import java.util.regex.Pattern;
 //1. 故障统计表格
 //2. 点击查看详情，新建一个JDialog来显示具体数据
 //3. 历史统计的折线图
-
 
 
 /**
@@ -45,8 +50,12 @@ public class HistoricalStatistics extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
-    //表格
-    List<Map<String, Object>> machine_fault_data_mapsList; //故障表
+    //工件统计与查询
+    private List<Map<String, Object>> machine_data_brief_mapsList;
+    private List<Map<String, Object>> expert_production_mapsList;
+    private String prodution_name;
+    private JFreeChart lineChart; // 折线图模型
+    private JPanel chartPanel; //折线图Panel
 
     //无参（预设账户信息）
     public HistoricalStatistics() {
@@ -105,7 +114,7 @@ public class HistoricalStatistics extends JFrame {
             return;
         }
 
-        jDialog2 = new JDialog(this, "",true);
+        jDialog2 = new JDialog(this, "", true);
         changePasswordPanel = new JPanel();
         oldValidationTip = new JLabel();
         oldChangeFlag = false;
@@ -125,15 +134,15 @@ public class HistoricalStatistics extends JFrame {
         //旧密码提示
         JLabel oldPasswordTip = new JLabel("请输入旧密码: ");
         changePasswordPanel.add(oldPasswordTip);
-        oldPasswordTip.setBounds(40, 60, 110,30);
-        oldPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        oldPasswordTip.setBounds(40, 60, 110, 30);
+        oldPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //新密码提示
         JLabel newPasswordTip = new JLabel("请输入新密码: ");
         changePasswordPanel.add(newPasswordTip);
-        newPasswordTip.setBounds(40, 120, 110,30);
-        newPasswordTip.setFont(new Font("",Font.BOLD, 15));
+        newPasswordTip.setBounds(40, 120, 110, 30);
+        newPasswordTip.setFont(new Font("", Font.BOLD, 15));
 
 
         //旧密码
@@ -141,7 +150,7 @@ public class HistoricalStatistics extends JFrame {
         changePasswordPanel.add(oldPasswordField);
         oldPasswordField.setBounds(160, 60, 90, 30);
         oldPasswordField.setColumns(10);
-        oldPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        oldPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         //焦点监听：旧密码验证
         oldPasswordField.addFocusListener(new FocusListener() {
@@ -181,7 +190,7 @@ public class HistoricalStatistics extends JFrame {
         changePasswordPanel.add(newPasswordField);
         newPasswordField.setBounds(160, 120, 90, 30);
         newPasswordField.setColumns(10);
-        newPasswordField.setFont(new Font("黑体", Font.PLAIN,15));
+        newPasswordField.setFont(new Font("黑体", Font.PLAIN, 15));
 
         newPasswordField.addActionListener(new ActionListener() {
             @Override
@@ -190,7 +199,7 @@ public class HistoricalStatistics extends JFrame {
 
                 if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
-                }else {
+                } else {
                     if (oldChangeFlag) {
                         String password = newPasswordField.getText();
                         String table;
@@ -204,7 +213,7 @@ public class HistoricalStatistics extends JFrame {
                         ChangePasswordUtil.newPassword(table, username, password);
                         JOptionPane.showMessageDialog(jDialog2, "新密码格式正确，修改成功！", "提示", JOptionPane.WARNING_MESSAGE);
                         jDialog2.dispose();
-                    }else {
+                    } else {
                         JOptionPane.showMessageDialog(jDialog2, "请先验证旧密码！", "提示", JOptionPane.WARNING_MESSAGE);
                     }
 
@@ -212,7 +221,7 @@ public class HistoricalStatistics extends JFrame {
             }
         });
 
-        jDialog2.setSize(400,250);
+        jDialog2.setSize(400, 250);
         jDialog2.setAlwaysOnTop(true);
         jDialog2.setLocationRelativeTo(null);
         jDialog2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -239,90 +248,128 @@ public class HistoricalStatistics extends JFrame {
      */
     //当激活此frame时，触发
     private void thisWindowActivated(WindowEvent e) {
-        //加载表格 数据
-        machine_fault_data_mapsList = TableUtil.getData_table4("machine_fault_data");
-        initTable4(); //当激活页面时，刷新该表格（故障查询）
+
     }
 
     /**
-     * 故障查询 表格相关
+     * 工件统计与查询： 工件表格 table1 相关
      */
-    //表格： 加载 表格
-    private void initTable4() {
-        DefaultTableModel table4Model = (DefaultTableModel) table4.getModel();
-        table4Model.setRowCount(0); //清空原数据
-        //刷新 新数据
-        ArrayList<Object> rowData_list = new ArrayList<>();
-
-        for (Map<String, Object> map : machine_fault_data_mapsList) {
-            rowData_list.add(map.get("id"));
-            rowData_list.add(map.get("time"));
-            rowData_list.add(map.get("num"));
-            rowData_list.add(map.get("fault_type"));
-            rowData_list.add(map.get("fault_maxnum"));
-            rowData_list.add(map.get("result"));
-            rowData_list.add("<html><font color = 'blue'><u>点击查看</u></font></html>"); //添加 点击查看 字符串
-
-            table4Model.addRow(rowData_list.toArray()); //添加行数据至model
-            rowData_list.clear(); //清空原内容
-        }
-
+    //table1: 设置表格格式
+    private void initTableForm() {
+        //设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table1.setDefaultRenderer(Object.class, r);
     }
 
-    //事件： 点击表格触发事件 （设定只有当点击 点击查看 这各单元格的内容时，才会真正触发点击事件的内容）
-    private void table4MouseClicked(MouseEvent e) {
-        // 哈哈哈哈哈！我聪明吧！！！！o(*￣▽￣*)ブ
-        if (table4.getSelectedColumn() == 6) {
-            System.out.println("事件");
-        } else {
+    //table1 主方法： 刷新table1
+    private void updateTable1() {
+        initTableForm(); //设置表格格式
+
+        machine_data_brief_mapsList = TableUtil.getData("machine_data_brief"); //获得工件简要表的内容
+
+        //非空判断
+        if (machine_data_brief_mapsList == null || machine_data_brief_mapsList.size() == 0) {
             return;
         }
+
+        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel(); //获取model
+        table1Model.setRowCount(0); //先清空，再加载新数据
+
+        for (Map<String, Object> map : machine_data_brief_mapsList) {
+            Object[] newRowData = {
+                    map.get("id"),
+                    map.get("time").toString().split("\\.")[0], //去除timestamp后面的 .0
+                    map.get("production_name"),
+                    map.get("production_num"),
+                    map.get("result"),
+                    "<html><font color = 'blue'><u>查看</u></font></html>"
+            };
+
+            table1Model.addRow(newRowData);
+        }
     }
 
+    /**
+     * 工件统计与查询： 查询相关
+     */
     //查询 按钮
     private void button5ActionPerformed(ActionEvent e) {
         String findItem = textField1.getText(); //获取搜索条件
-        //通过TableRowSorter实现检索
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table4.getModel());
-        table4.setRowSorter(sorter);
-        sorter.setRowFilter(RowFilter.regexFilter(findItem)); //查询格式为 正则表达式，范围为整个table
+        findRegex(findItem);
     }
 
     //返回 按钮
     private void button6ActionPerformed(ActionEvent e) {
-        //通过TableRowSorter实现检索
-        //通过检索 空字符串 返回原内容
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table4.getModel());
-        table4.setRowSorter(sorter);
-        sorter.setRowFilter(RowFilter.regexFilter("")); //查询格式为 正则表达式，范围为整个table
+        findRegex(""); //返回即查询空字符串（则查询到全部内容）
+        textField1.setText(""); //点击返回后，清空文本框
+    }
+
+    //查询、返回 主方法
+    private void findRegex(String findItem) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table1.getModel());
+        table1.setRowSorter(sorter);
+        sorter.setRowFilter(RowFilter.regexFilter(findItem)); //查询格式为 正则表达式，范围为整个table
     }
 
     /**
-     * 按钮
+     * 工件统计与查询： 工件统计图相关
+     */
+    //刷新 产品下拉框内容
+    private void updateComboBox1() {
+        comboBox1.removeAllItems(); //清空原数据
+        expert_production_mapsList = TableUtil.getData("expert_production"); //获取产品表内容，更新内容
+        if (expert_production_mapsList == null || expert_production_mapsList.size() == 0) {
+            return;
+        }
+        //更新 产品选择 下拉框内容
+        for (Map<String, Object> map : expert_production_mapsList) {
+            comboBox1.addItem((String) map.get("name")); //下拉框添加内容
+        }
+        comboBox1.setSelectedIndex(-1);
+    }
+
+    //点击事件 刷新条件：当点击 产品选择下拉框时， 刷新该下拉框内容
+    private void comboBox1MouseClicked(MouseEvent e) {
+        updateComboBox1();
+    }
+
+    //工件统计图
+    private void updateChartPanel() {
+        //获取所选产品名称
+        prodution_name = (String) comboBox1.getSelectedItem();
+
+        lineChart = LineChartUtil.getLineChart(prodution_name); // 获得充满数据的chart模型
+
+        //若chartPanel已存在，则删去重新创建
+        if (chartPanel != null) {
+            panel4.remove(chartPanel);
+        }
+        chartPanel = new ChartPanel(lineChart);
+
+        chartPanel.setLayout(null);
+        chartPanel.setBounds(0, 0, 445, 420);
+
+        panel4.add(chartPanel);
+        panel4.repaint();
+    }
+
+    /**
+     * 工件统计与查询： 其他
      */
     //刷新 按钮
     private void button7ActionPerformed(ActionEvent e) {
-        initTable4();
-    }
+        updateTable1(); //刷新表格
 
-    /**
-     *  测试 按钮
-     */
-    private void button8ActionPerformed(ActionEvent e) {
-        System.out.println("***********");
+        updateChartPanel();
     }
 
 
 
 
 
-
-
-
-
-
     /**
-     *  JFormDesigner自带，定义自生成
+     * JFormDesigner自带，定义自生成
      */
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -340,17 +387,17 @@ public class HistoricalStatistics extends JFrame {
         separator4 = new JPopupMenu.Separator();
         tabbedPane1 = new JTabbedPane();
         panel2 = new JPanel();
-        scrollPane3 = new JScrollPane();
-        table3 = new JTable();
-        tabbedPane2 = new JTabbedPane();
-        panel3 = new JPanel();
-        scrollPane5 = new JScrollPane();
-        table4 = new JTable();
+        scrollPane1 = new JScrollPane();
+        table1 = new JTable();
+        panel4 = new JPanel();
         textField1 = new JTextField();
         button5 = new JButton();
         button6 = new JButton();
         button7 = new JButton();
-        button8 = new JButton();
+        label4 = new JLabel();
+        comboBox1 = new JComboBox();
+        label1 = new JLabel();
+        panel3 = new JPanel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -439,7 +486,7 @@ public class HistoricalStatistics extends JFrame {
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
         contentPane.add(button2);
-        button2.setBounds(295, 60, 120, 30);
+        button2.setBounds(295, 60, 130, 30);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
@@ -456,29 +503,111 @@ public class HistoricalStatistics extends JFrame {
 
         //======== tabbedPane1 ========
         {
-            tabbedPane1.setFont(tabbedPane1.getFont().deriveFont(tabbedPane1.getFont().getSize() + 2f));
+            tabbedPane1.setFont(tabbedPane1.getFont().deriveFont(tabbedPane1.getFont().getSize() + 1f));
 
             //======== panel2 ========
             {
                 panel2.setLayout(null);
 
-                //======== scrollPane3 ========
+                //======== scrollPane1 ========
                 {
 
-                    //---- table3 ----
-                    table3.setRowHeight(20);
-                    table3.setModel(new DefaultTableModel(
+                    //---- table1 ----
+                    table1.setRowHeight(20);
+                    table1.setModel(new DefaultTableModel(
                         new Object[][] {
-                            {null, null, null},
                         },
                         new String[] {
-                            "\u6545\u969c\u5224\u5b9a", "\u6545\u969c\u8868\u73b0", "\u603b\u6b21\u6570"
+                            "id", "\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u68c0\u6d4b\u7ed3\u679c", "\u8be6\u60c5"
                         }
-                    ));
-                    scrollPane3.setViewportView(table3);
+                    ) {
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false
+                        };
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    {
+                        TableColumnModel cm = table1.getColumnModel();
+                        cm.getColumn(0).setPreferredWidth(50);
+                        cm.getColumn(1).setPreferredWidth(120);
+                        cm.getColumn(2).setPreferredWidth(120);
+                        cm.getColumn(3).setPreferredWidth(60);
+                        cm.getColumn(4).setPreferredWidth(60);
+                        cm.getColumn(5).setPreferredWidth(60);
+                    }
+                    table1.setAutoCreateRowSorter(true);
+                    scrollPane1.setViewportView(table1);
                 }
-                panel2.add(scrollPane3);
-                scrollPane3.setBounds(0, 0, 480, 190);
+                panel2.add(scrollPane1);
+                scrollPane1.setBounds(0, 40, 505, 425);
+
+                //======== panel4 ========
+                {
+                    panel4.setBackground(new Color(153, 153, 153));
+                    panel4.setLayout(null);
+
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel4.getComponentCount(); i++) {
+                            Rectangle bounds = panel4.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel4.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel4.setMinimumSize(preferredSize);
+                        panel4.setPreferredSize(preferredSize);
+                    }
+                }
+                panel2.add(panel4);
+                panel4.setBounds(510, 40, 445, 420);
+                panel2.add(textField1);
+                textField1.setBounds(5, 5, 135, 30);
+
+                //---- button5 ----
+                button5.setText("\u67e5\u8be2");
+                button5.addActionListener(e -> button5ActionPerformed(e));
+                panel2.add(button5);
+                button5.setBounds(155, 5, 65, button5.getPreferredSize().height);
+
+                //---- button6 ----
+                button6.setText("\u8fd4\u56de");
+                button6.addActionListener(e -> button6ActionPerformed(e));
+                panel2.add(button6);
+                button6.setBounds(225, 5, 65, button6.getPreferredSize().height);
+
+                //---- button7 ----
+                button7.setText("\u5237\u65b0");
+                button7.addActionListener(e -> button7ActionPerformed(e));
+                panel2.add(button7);
+                button7.setBounds(440, 5, 65, button7.getPreferredSize().height);
+
+                //---- label4 ----
+                label4.setText("\u4ea7\u54c1:");
+                label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 1f));
+                panel2.add(label4);
+                label4.setBounds(805, 10, 35, label4.getPreferredSize().height);
+
+                //---- comboBox1 ----
+                comboBox1.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        comboBox1MouseClicked(e);
+                    }
+                });
+                panel2.add(comboBox1);
+                comboBox1.setBounds(845, 7, 110, comboBox1.getPreferredSize().height);
+
+                //---- label1 ----
+                label1.setText("\u5de5\u4ef6\u7edf\u8ba1\u56fe");
+                label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 4f));
+                panel2.add(label1);
+                label1.setBounds(675, 7, 100, 25);
 
                 {
                     // compute preferred size
@@ -496,74 +625,10 @@ public class HistoricalStatistics extends JFrame {
                 }
             }
             tabbedPane1.addTab("\u5de5\u4ef6\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel2);
-        }
-        contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(5, 95, 485, 220);
-
-        //======== tabbedPane2 ========
-        {
-            tabbedPane2.setFont(tabbedPane2.getFont().deriveFont(tabbedPane2.getFont().getSize() + 2f));
 
             //======== panel3 ========
             {
                 panel3.setLayout(null);
-
-                //======== scrollPane5 ========
-                {
-
-                    //---- table4 ----
-                    table4.setRowHeight(20);
-                    table4.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "id", "\u6545\u969c\u65f6\u95f4", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
-                        }
-                    ) {
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false, false
-                        };
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    {
-                        TableColumnModel cm = table4.getColumnModel();
-                        cm.getColumn(0).setPreferredWidth(50);
-                        cm.getColumn(1).setPreferredWidth(120);
-                    }
-                    table4.setAutoCreateRowSorter(true);
-                    table4.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            table4MouseClicked(e);
-                        }
-                    });
-                    scrollPane5.setViewportView(table4);
-                }
-                panel3.add(scrollPane5);
-                scrollPane5.setBounds(0, 40, 960, 200);
-                panel3.add(textField1);
-                textField1.setBounds(0, 5, 120, 30);
-
-                //---- button5 ----
-                button5.setText("\u67e5\u8be2");
-                button5.addActionListener(e -> button5ActionPerformed(e));
-                panel3.add(button5);
-                button5.setBounds(new Rectangle(new Point(125, 5), button5.getPreferredSize()));
-
-                //---- button6 ----
-                button6.setText("\u8fd4\u56de");
-                button6.addActionListener(e -> button6ActionPerformed(e));
-                panel3.add(button6);
-                button6.setBounds(185, 5, 58, 28);
-
-                //---- button7 ----
-                button7.setText("\u5237\u65b0");
-                button7.addActionListener(e -> button7ActionPerformed(e));
-                panel3.add(button7);
-                button7.setBounds(895, 5, 63, 28);
 
                 {
                     // compute preferred size
@@ -580,16 +645,10 @@ public class HistoricalStatistics extends JFrame {
                     panel3.setPreferredSize(preferredSize);
                 }
             }
-            tabbedPane2.addTab("\u6545\u969c\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel3);
+            tabbedPane1.addTab("\u6545\u969c\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel3);
         }
-        contentPane.add(tabbedPane2);
-        tabbedPane2.setBounds(5, 320, 970, 270);
-
-        //---- button8 ----
-        button8.setText("text");
-        button8.addActionListener(e -> button8ActionPerformed(e));
-        contentPane.add(button8);
-        button8.setBounds(new Rectangle(new Point(590, 225), button8.getPreferredSize()));
+        contentPane.add(tabbedPane1);
+        tabbedPane1.setBounds(5, 95, 965, 495);
 
         {
             // compute preferred size
@@ -625,16 +684,16 @@ public class HistoricalStatistics extends JFrame {
     private JPopupMenu.Separator separator4;
     private JTabbedPane tabbedPane1;
     private JPanel panel2;
-    private JScrollPane scrollPane3;
-    private JTable table3;
-    private JTabbedPane tabbedPane2;
-    private JPanel panel3;
-    private JScrollPane scrollPane5;
-    private JTable table4;
+    private JScrollPane scrollPane1;
+    private JTable table1;
+    private JPanel panel4;
     private JTextField textField1;
     private JButton button5;
     private JButton button6;
     private JButton button7;
-    private JButton button8;
+    private JLabel label4;
+    private JComboBox comboBox1;
+    private JLabel label1;
+    private JPanel panel3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

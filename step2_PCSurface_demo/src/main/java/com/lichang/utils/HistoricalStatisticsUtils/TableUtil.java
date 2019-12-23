@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用于 历史统计与查询页面 的表格
+ * 用于 查询指定表 的全部内容
  */
 public class TableUtil {
-    public static List<Map<String, Object>> getData_table4(String table) {
+    public static List<Map<String, Object>> getData(String table) {
         String sqlStr = SqlStrUtil.query_sql1(table);
         List<Map<String, Object>> maps = JdbcTemplateUtil.queryMult(sqlStr);
         return maps;

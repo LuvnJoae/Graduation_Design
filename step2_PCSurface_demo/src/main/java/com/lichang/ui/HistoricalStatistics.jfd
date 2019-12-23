@@ -86,7 +86,7 @@ new FormModel {
 				name: "button2"
 				"text": "历史统计与查询"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
+				"width": 130
 				"height": 30
 				"x": 295
 				"y": 60
@@ -120,70 +120,20 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel2"
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "scrollPane3"
+						name: "scrollPane1"
 						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "table3"
-							"rowHeight": 20
-							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
-								add( new java.util.Vector {
-									add( null )
-									add( null )
-									add( null )
-								} )
-							}, new java.util.Vector {
-								add( "故障判定" )
-								add( "故障表现" )
-								add( "总次数" )
-							}, new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-							}, new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-							}, new java.util.Vector {
-								add( null )
-								add( null )
-								add( null )
-							} )
-						} )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 0
-						"y": 0
-						"width": 480
-						"height": 190
-					} )
-				}, new FormLayoutConstraints( null ) {
-					"title": "工件统计与查询"
-				} )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 5
-				"y": 95
-				"width": 485
-				"height": 220
-			} )
-			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
-				name: "tabbedPane2"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
-					name: "panel3"
-					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-						name: "scrollPane5"
-						add( new FormComponent( "javax.swing.JTable" ) {
-							name: "table4"
+							name: "table1"
 							"rowHeight": 20
 							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
 								add( "id" )
-								add( "故障时间" )
+								add( "时间" )
+								add( "产品名称" )
 								add( "工件编号" )
-								add( "故障类型" )
-								add( "最大频次" )
-								add( "判定" )
+								add( "检测结果" )
 								add( "详情" )
 							}, new java.util.Vector {
 								add( null )
@@ -192,9 +142,7 @@ new FormModel {
 								add( null )
 								add( null )
 								add( null )
-								add( null )
 							}, new java.util.Vector {
-								add( false )
 								add( false )
 								add( false )
 								add( false )
@@ -204,27 +152,34 @@ new FormModel {
 							}, new java.util.Vector {
 								add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
 								add( new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
-								add( null )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
 							} )
 							"autoCreateRowSorter": true
-							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "table4MouseClicked", true ) )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 0
 						"y": 40
-						"width": 960
-						"height": 200
+						"width": 505
+						"height": 425
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+						name: "panel4"
+						"background": new java.awt.Color( 153, 153, 153, 255 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 510
+						"y": 40
+						"height": 420
+						"width": 445
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
 						name: "textField1"
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 0
+						"x": 5
 						"y": 5
-						"width": 120
+						"width": 135
 						"height": 30
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -232,45 +187,68 @@ new FormModel {
 						"text": "查询"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button5ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 125
+						"x": 155
 						"y": 5
+						"width": 65
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button6"
 						"text": "返回"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 58
-						"height": 28
-						"x": 185
+						"x": 225
 						"y": 5
+						"width": 65
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button7"
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button7ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 63
-						"height": 28
-						"x": 895
+						"x": 440
 						"y": 5
+						"width": 65
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label4"
+						"text": "产品:"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 805
+						"y": 10
+						"width": 35
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "comboBox1"
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "comboBox1MouseClicked", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 845
+						"y": 7
+						"width": 110
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "工件统计图"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+						"x": 675
+						"y": 7
+						"width": 100
+						"height": 25
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "工件统计与查询"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+					name: "panel3"
 				}, new FormLayoutConstraints( null ) {
 					"title": "故障统计与查询"
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 5
-				"y": 320
-				"width": 970
-				"height": 270
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button8"
-				"text": "text"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button8ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 590
-				"y": 225
+				"y": 95
+				"width": 965
+				"height": 495
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 5 )

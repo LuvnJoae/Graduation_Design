@@ -27,8 +27,7 @@ import org.jfree.chart.JFreeChart;
 
 //TODO: 整体待解决问题（低优先级）
 //标记时间：2019/11/20 17:22  预解决时间:
-//2. 参数检测里的 阈值超限分析
-//3. 折线图的放大
+////1. 故障添加： 当limit监测出故障后，要添加（还是说直接读数据库）？直接读数据库
 
 /**
  * @author unknown
@@ -372,6 +371,8 @@ public class RealTimeMonitoring extends JFrame {
 
     //table2 主方法 ： 加载数据 + 更新
     private void updateTable2() {
+        initTable2Form(); //设置表格格式
+
         //获取所选产品名称
         prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
@@ -400,12 +401,10 @@ public class RealTimeMonitoring extends JFrame {
         addValueLimit(); //添加value_limit rule
     }
 
-    //阈值 提示（当超出设置阈值后，数据自动变色）
+    //阈值 （当超出设置阈值后，数据自动变色）
     private void addValueLimit() {
         LimitRuleUtil.addValueLimit(expert_production_mapsList, prodution_name, table2); //进入limitRule主方法
     }
-
-
 
     /**
      * 参数 折线图
@@ -509,22 +508,13 @@ public class RealTimeMonitoring extends JFrame {
 
     //TEST: 测试按钮
     //标记时间：2019/12/19 13:48  预解决时间：
-
     /**
      * 测试 按钮
      */
-    //测试1： 手动刷新
-
     //测试1： 添加故障记录
     private void button7ActionPerformed(ActionEvent e) {
         addTable1Data();
     }
-
-    //test
-    private void button8ActionPerformed(ActionEvent e) {
-
-    }
-
 
     /**
      * JFormDesigner自带，定义自生成
@@ -570,7 +560,6 @@ public class RealTimeMonitoring extends JFrame {
         label15 = new JLabel();
         label16 = new JLabel();
         button7 = new JButton();
-        button8 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -660,7 +649,7 @@ public class RealTimeMonitoring extends JFrame {
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
         button2.addActionListener(e -> button2ActionPerformed(e));
         contentPane.add(button2);
-        button2.setBounds(295, 60, 120, 30);
+        button2.setBounds(295, 60, 130, 30);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
@@ -957,12 +946,6 @@ public class RealTimeMonitoring extends JFrame {
         contentPane.add(button7);
         button7.setBounds(110, 275, 156, button7.getPreferredSize().height);
 
-        //---- button8 ----
-        button8.setText("test");
-        button8.addActionListener(e -> button8ActionPerformed(e));
-        contentPane.add(button8);
-        button8.setBounds(new Rectangle(new Point(0, 0), button8.getPreferredSize()));
-
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -1022,6 +1005,5 @@ public class RealTimeMonitoring extends JFrame {
     private JLabel label15;
     private JLabel label16;
     private JButton button7;
-    private JButton button8;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

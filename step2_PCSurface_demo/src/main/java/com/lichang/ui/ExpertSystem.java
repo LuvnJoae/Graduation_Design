@@ -684,14 +684,6 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * TEST: 测试按钮
-     */
-    //标记时间：2019/12/5 14:29  预解决时间：
-    private void button8ActionPerformed(ActionEvent e) {
-
-    }
-
-    /**
      * 按钮 事件触发
      */
     //设定下拉框内容 主方法
@@ -1490,12 +1482,6 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * 测试 按钮： 资料库
-     */
-    private void button41ActionPerformed(ActionEvent e) {
-    }
-
-    /**
      * 资料库 表格
      */
     //表格: 载入内容 主方法
@@ -1867,6 +1853,8 @@ public class ExpertSystem extends JFrame {
             default:
                 break;
         }
+
+        textField11.setText(""); //点击返回后，清空文本框
     }
 
     //搜索、返回 主方法
@@ -2436,7 +2424,6 @@ public class ExpertSystem extends JFrame {
         textField3 = new JTextField();
         textField4 = new JTextField();
         button7 = new JButton();
-        button8 = new JButton();
         label22 = new JLabel();
         comboBox17 = new JComboBox();
         label23 = new JLabel();
@@ -2491,7 +2478,6 @@ public class ExpertSystem extends JFrame {
         button5 = new JButton();
         button9 = new JButton();
         button19 = new JButton();
-        button41 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -2585,7 +2571,7 @@ public class ExpertSystem extends JFrame {
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
         button2.addActionListener(e -> button2ActionPerformed(e));
         contentPane.add(button2);
-        button2.setBounds(295, 60, 120, 30);
+        button2.setBounds(295, 60, 130, 30);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
@@ -2601,6 +2587,7 @@ public class ExpertSystem extends JFrame {
 
         //======== tabbedPane2 ========
         {
+            tabbedPane2.setFont(tabbedPane2.getFont().deriveFont(tabbedPane2.getFont().getSize() + 1f));
             tabbedPane2.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -2939,12 +2926,6 @@ public class ExpertSystem extends JFrame {
                 button7.addActionListener(e -> button7ActionPerformed(e));
                 panel4.add(button7);
                 button7.setBounds(750, 390, 85, 30);
-
-                //---- button8 ----
-                button8.setText("test");
-                button8.addActionListener(e -> button8ActionPerformed(e));
-                panel4.add(button8);
-                button8.setBounds(new Rectangle(new Point(445, 390), button8.getPreferredSize()));
 
                 //---- label22 ----
                 label22.setText("\u4ea7\u54c1\u9009\u62e9");
@@ -3720,12 +3701,6 @@ public class ExpertSystem extends JFrame {
         contentPane.add(tabbedPane2);
         tabbedPane2.setBounds(5, 95, 970, 490);
 
-        //---- button41 ----
-        button41.setText("test");
-        button41.addActionListener(e -> button41ActionPerformed(e));
-        contentPane.add(button41);
-        button41.setBounds(new Rectangle(new Point(100, 20), button41.getPreferredSize()));
-
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -3800,7 +3775,6 @@ public class ExpertSystem extends JFrame {
     private JTextField textField3;
     private JTextField textField4;
     private JButton button7;
-    private JButton button8;
     private JLabel label22;
     private JComboBox comboBox17;
     private JLabel label23;
@@ -3855,6 +3829,5 @@ public class ExpertSystem extends JFrame {
     private JButton button5;
     private JButton button9;
     private JButton button19;
-    private JButton button41;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

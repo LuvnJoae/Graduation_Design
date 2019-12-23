@@ -18,11 +18,6 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.*;
 
-//TODO: 内容
-//标记时间：2019/12/21 15:12  预解决时间：
-//1. 参数 折线图
-//2. 参数具体表
-//3. 故障信息表
 
 /**
  * 用于展示 故障 详细信息
@@ -136,6 +131,8 @@ public class Details extends JDialog {
 
     //table2 主方法 ： 加载数据 + 更新
     private void updateTable2() {
+        initTable2Form(); //设置表格格式
+
         //非空处理
         if (machine_fault_data_map == null) {
             return;
@@ -221,7 +218,6 @@ public class Details extends JDialog {
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
         label2 = new JLabel();
-        button1 = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -325,13 +321,7 @@ public class Details extends JDialog {
         label2.setText("\u5177\u4f53\u53c2\u6570\u4fe1\u606f");
         label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 3f));
         contentPane.add(label2);
-        label2.setBounds(610, 60, 105, 22);
-
-        //---- button1 ----
-        button1.setText("test");
-        button1.addActionListener(e -> button1ActionPerformed(e));
-        contentPane.add(button1);
-        button1.setBounds(new Rectangle(new Point(5, 55), button1.getPreferredSize()));
+        label2.setBounds(665, 60, 105, 22);
 
         {
             // compute preferred size
@@ -360,6 +350,5 @@ public class Details extends JDialog {
     private JScrollPane scrollPane2;
     private JTable table2;
     private JLabel label2;
-    private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

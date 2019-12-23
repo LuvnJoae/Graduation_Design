@@ -88,7 +88,7 @@ public class SqlStrUtil {
         return paramsList; // 占位符参数列表
     }
 
-    //语句1_5：查询* 条件：production_name 和 production_name
+    //语句1_5：查询* 条件：production_name 和 production_num
     public static String query_sql1_5(String table) {
         String sqlStr = "select * from "
                 + table +
