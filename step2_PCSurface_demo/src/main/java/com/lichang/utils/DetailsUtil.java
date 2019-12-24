@@ -20,6 +20,16 @@ public class DetailsUtil {
     }
 
     /**
+     *  根据time查询 machine_data_brief表，获得相应记录
+     */
+    public static Map<String, Object> getBriefRecordForTime(String time) {
+        String sqlStr = SqlStrUtil.query_sql1_4("machine_data_brief");
+        List<Object> params = SqlStrUtil.query_list1_4(time);
+        Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr, params);
+        return map;
+    }
+
+    /**
      * 根据production_name 和 production_num 查询 machine_data_all表，获得相应参数记录
      */
     public static List<Map<String, Object>> getDetailData(String production_name, int production_num) {

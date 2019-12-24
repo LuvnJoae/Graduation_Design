@@ -8,7 +8,6 @@ import java.awt.event.*;
 import com.lichang.utils.DetailsUtil;
 import com.lichang.utils.LimitRuleUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
-import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -22,7 +21,7 @@ import javax.swing.table.*;
 /**
  * 用于展示 故障 详细信息
  */
-public class Details extends JDialog {
+public class DetailsFault extends JDialog {
     /**
      * 自定义变量
      */
@@ -37,21 +36,21 @@ public class Details extends JDialog {
     private JPanel chartPanel; //折线图Panel
 
 
-    public Details(Window owner) {
+    public DetailsFault(Window owner) {
         super(owner);
         initComponents();
 
         setVisible(true);
     }
 
-    public Details(Frame owner, String title, boolean modal) {
+    public DetailsFault(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
         initComponents();
 
         setVisible(true);
     }
 
-    public Details(Frame owner, String title, boolean modal, String time) {
+    public DetailsFault(Frame owner, String title, boolean modal, String time) {
         super(owner, title, modal);
         initComponents();
 
@@ -196,18 +195,6 @@ public class Details extends JDialog {
         panel1.add(chartPanel);
         panel1.repaint();
     }
-
-    /**
-     * 测试
-     * @param e
-     */
-    private void button1ActionPerformed(ActionEvent e) {
-//        updateTable1();
-//        updateTable2();
-//        updateChartPanel();
-    }
-
-
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents

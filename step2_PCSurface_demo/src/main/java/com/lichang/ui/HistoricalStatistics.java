@@ -8,8 +8,6 @@ import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.ChangePasswordUtil;
-import com.lichang.utils.RealTimeMonitoringUtils.LineChartUtil_new;
-import com.lichang.utils.RealTimeMonitoringUtils.TableUtil_new;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,17 +19,9 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-//TODO:
-//标记时间：2019/12/18 13:28  预解决时间：
-//1. 故障统计表格
-//2. 点击查看详情，新建一个JDialog来显示具体数据
-//3. 历史统计的折线图
-
 
 /**
  * @author unknown
@@ -50,12 +40,13 @@ public class HistoricalStatistics extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
-    //工件统计与查询
     private List<Map<String, Object>> machine_data_brief_mapsList;
+    private List<Map<String, Object>> machine_fault_data_mapsList;
     private List<Map<String, Object>> expert_production_mapsList;
     private String prodution_name;
     private JFreeChart lineChart; // 折线图模型
     private JPanel chartPanel; //折线图Panel
+    private String machine_fault_data_timeCol; //工件或故障表的time列，用于作主键查看详情
 
     //无参（预设账户信息）
     public HistoricalStatistics() {
@@ -232,30 +223,39 @@ public class HistoricalStatistics extends JFrame {
     /**
      * 界面跳转 按钮
      */
-    //历史统计与查询 按钮： 点击跳转
+    //实时监测 按钮： 点击跳转
     private void button1ActionPerformed(ActionEvent e) {
         this.dispose();
     }
 
-    //故障校验 按钮： 点击跳转
+    //专家系统 按钮： 点击跳转
     private void button3ActionPerformed(ActionEvent e) {
         new ExpertSystem(username, adminFlag);
+        this.dispose();
+    }
+
+    //管理与设置 按钮： 点击跳转
+    private void button4ActionPerformed(ActionEvent e) {
+        new Setting(username, adminFlag);
         this.dispose();
     }
 
     /**
      * 整体页面  事件监听
      */
-    //当激活此frame时，触发
-    private void thisWindowActivated(WindowEvent e) {
-
+    //当打开此frame时，触发
+    private void thisWindowOpened(WindowEvent e) {
+        updateTable1();
+        updateTable2();
+        updateChartPanel();
+        updateComboBox1();
     }
 
     /**
-     * 工件统计与查询： 工件表格 table1 相关
+     * 工件统计与查询
      */
     //table1: 设置表格格式
-    private void initTableForm() {
+    private void initTable1Form() {
         //设置表格内容居中
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(SwingConstants.CENTER);
@@ -264,7 +264,7 @@ public class HistoricalStatistics extends JFrame {
 
     //table1 主方法： 刷新table1
     private void updateTable1() {
-        initTableForm(); //设置表格格式
+        initTable1Form(); //设置表格格式
 
         machine_data_brief_mapsList = TableUtil.getData("machine_data_brief"); //获得工件简要表的内容
 
@@ -290,30 +290,133 @@ public class HistoricalStatistics extends JFrame {
         }
     }
 
-    /**
-     * 工件统计与查询： 查询相关
-     */
     //查询 按钮
     private void button5ActionPerformed(ActionEvent e) {
         String findItem = textField1.getText(); //获取搜索条件
-        findRegex(findItem);
+        findRegexTable1(findItem);
     }
 
     //返回 按钮
     private void button6ActionPerformed(ActionEvent e) {
-        findRegex(""); //返回即查询空字符串（则查询到全部内容）
+        findRegexTable1(""); //返回即查询空字符串（则查询到全部内容）
         textField1.setText(""); //点击返回后，清空文本框
     }
 
     //查询、返回 主方法
-    private void findRegex(String findItem) {
+    private void findRegexTable1(String findItem) {
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table1.getModel());
         table1.setRowSorter(sorter);
         sorter.setRowFilter(RowFilter.regexFilter(findItem)); //查询格式为 正则表达式，范围为整个table
     }
 
+    //刷新 按钮
+    private void button7ActionPerformed(ActionEvent e) {
+        updateTable1(); //刷新表格
+
+        updateChartPanel();
+    }
+
+    //事件： 鼠标点击 table1中查看的一列 时
+    private void table1MouseClicked(MouseEvent e) {
+        //若点击的为 查看 这列，则进入事件，创建新窗口，展示详情
+        if (table1.getSelectedColumn() == 5) {
+            int selectedRow = table1.getSelectedRow();
+            machine_fault_data_timeCol = table1.getValueAt(selectedRow, 1).toString() + ".0"; //和timestamp格式相同
+            if (table1.getValueAt(selectedRow, 4).equals("优秀") || table1.getValueAt(selectedRow, 4).equals("合格")) {
+                new DetailsAll(this, "工件信息详情", true, machine_fault_data_timeCol); //创建新窗口
+            } else if (table1.getValueAt(selectedRow, 4).equals("隐患") || table1.getValueAt(selectedRow, 4).equals("次品")) {
+                new DetailsFault(this, "故障信息详情", true, machine_fault_data_timeCol); //创建新窗口
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    }
+
     /**
-     * 工件统计与查询： 工件统计图相关
+     * 故障统计与查询
+     */
+    //table2: 设置表格格式
+    private void initTable2Form() {
+        //设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table2.setDefaultRenderer(Object.class, r);
+    }
+
+    //table2 主方法： 刷新table1
+    private void updateTable2() {
+        initTable2Form(); //设置表格格式
+
+        machine_fault_data_mapsList = TableUtil.getData("machine_fault_data"); //获得工件简要表的内容
+
+        //非空判断
+        if (machine_fault_data_mapsList == null || machine_fault_data_mapsList.size() == 0) {
+
+            System.out.println("***************");
+            return;
+        }
+
+        DefaultTableModel table2Model = (DefaultTableModel) table2.getModel(); //获取model
+        table2Model.setRowCount(0); //先清空，再加载新数据
+
+        for (Map<String, Object> map : machine_fault_data_mapsList) {
+            Object[] newRowData = {
+                    map.get("id"),
+                    map.get("time").toString().split("\\.")[0], //去除timestamp后面的 .0
+                    map.get("production_name"),
+                    map.get("production_num"),
+                    map.get("fault_type"),
+                    map.get("fault_maxnum"),
+                    map.get("result"),
+                    "<html><font color = 'blue'><u>查看</u></font></html>"
+            };
+
+            table2Model.addRow(newRowData);
+        }
+    }
+
+    //查询 按钮
+    private void button8ActionPerformed(ActionEvent e) {
+        String findItem = textField2.getText(); //获取搜索条件
+        findRegexTable2(findItem);
+    }
+
+    //返回 按钮
+    private void button9ActionPerformed(ActionEvent e) {
+        findRegexTable2(""); //返回即查询空字符串（则查询到全部内容）
+        textField2.setText(""); //点击返回后，清空文本框
+    }
+
+    //查询、返回 主方法
+    private void findRegexTable2(String findItem) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>((DefaultTableModel) table2.getModel());
+        table2.setRowSorter(sorter);
+        sorter.setRowFilter(RowFilter.regexFilter(findItem)); //查询格式为 正则表达式，范围为整个table
+    }
+
+    //刷新 按钮
+    private void button10ActionPerformed(ActionEvent e) {
+        updateTable2(); //刷新表格
+
+        updateChartPanel(); //刷新柱状图
+    }
+
+    //事件： 鼠标点击 table1中查看的一列 时
+    private void table2MouseClicked(MouseEvent e) {
+        //若点击的为 查看 这列，则进入事件，创建新窗口，展示详情
+        if (table2.getSelectedColumn() == 7) {
+            int selectedRow = table2.getSelectedRow();
+            machine_fault_data_timeCol = table2.getValueAt(selectedRow, 1).toString() + ".0"; //和timestamp格式相同
+            new DetailsFault(this, "故障信息详情", true, machine_fault_data_timeCol); //创建新窗口
+        } else {
+            return;
+        }
+    }
+
+    /**
+     * 工件统计图相关
      */
     //刷新 产品下拉框内容
     private void updateComboBox1() {
@@ -348,23 +451,11 @@ public class HistoricalStatistics extends JFrame {
         chartPanel = new ChartPanel(lineChart);
 
         chartPanel.setLayout(null);
-        chartPanel.setBounds(0, 0, 445, 420);
+        chartPanel.setBounds(0, 0, 445, 465);
 
         panel4.add(chartPanel);
         panel4.repaint();
     }
-
-    /**
-     * 工件统计与查询： 其他
-     */
-    //刷新 按钮
-    private void button7ActionPerformed(ActionEvent e) {
-        updateTable1(); //刷新表格
-
-        updateChartPanel();
-    }
-
-
 
 
 
@@ -389,15 +480,21 @@ public class HistoricalStatistics extends JFrame {
         panel2 = new JPanel();
         scrollPane1 = new JScrollPane();
         table1 = new JTable();
-        panel4 = new JPanel();
         textField1 = new JTextField();
         button5 = new JButton();
         button6 = new JButton();
         button7 = new JButton();
-        label4 = new JLabel();
-        comboBox1 = new JComboBox();
-        label1 = new JLabel();
         panel3 = new JPanel();
+        scrollPane2 = new JScrollPane();
+        table2 = new JTable();
+        textField2 = new JTextField();
+        button8 = new JButton();
+        button9 = new JButton();
+        button10 = new JButton();
+        panel4 = new JPanel();
+        label1 = new JLabel();
+        comboBox1 = new JComboBox();
+        label4 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -405,8 +502,8 @@ public class HistoricalStatistics extends JFrame {
         setAlwaysOnTop(true);
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowActivated(WindowEvent e) {
-                thisWindowActivated(e);
+            public void windowOpened(WindowEvent e) {
+                thisWindowOpened(e);
             }
         });
         Container contentPane = getContentPane();
@@ -496,6 +593,7 @@ public class HistoricalStatistics extends JFrame {
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
         button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);
@@ -539,33 +637,16 @@ public class HistoricalStatistics extends JFrame {
                         cm.getColumn(5).setPreferredWidth(60);
                     }
                     table1.setAutoCreateRowSorter(true);
+                    table1.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            table1MouseClicked(e);
+                        }
+                    });
                     scrollPane1.setViewportView(table1);
                 }
                 panel2.add(scrollPane1);
                 scrollPane1.setBounds(0, 40, 505, 425);
-
-                //======== panel4 ========
-                {
-                    panel4.setBackground(new Color(153, 153, 153));
-                    panel4.setLayout(null);
-
-                    {
-                        // compute preferred size
-                        Dimension preferredSize = new Dimension();
-                        for(int i = 0; i < panel4.getComponentCount(); i++) {
-                            Rectangle bounds = panel4.getComponent(i).getBounds();
-                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                        }
-                        Insets insets = panel4.getInsets();
-                        preferredSize.width += insets.right;
-                        preferredSize.height += insets.bottom;
-                        panel4.setMinimumSize(preferredSize);
-                        panel4.setPreferredSize(preferredSize);
-                    }
-                }
-                panel2.add(panel4);
-                panel4.setBounds(510, 40, 445, 420);
                 panel2.add(textField1);
                 textField1.setBounds(5, 5, 135, 30);
 
@@ -573,41 +654,19 @@ public class HistoricalStatistics extends JFrame {
                 button5.setText("\u67e5\u8be2");
                 button5.addActionListener(e -> button5ActionPerformed(e));
                 panel2.add(button5);
-                button5.setBounds(155, 5, 65, button5.getPreferredSize().height);
+                button5.setBounds(155, 5, 65, 28);
 
                 //---- button6 ----
                 button6.setText("\u8fd4\u56de");
                 button6.addActionListener(e -> button6ActionPerformed(e));
                 panel2.add(button6);
-                button6.setBounds(225, 5, 65, button6.getPreferredSize().height);
+                button6.setBounds(225, 5, 65, 28);
 
                 //---- button7 ----
                 button7.setText("\u5237\u65b0");
                 button7.addActionListener(e -> button7ActionPerformed(e));
                 panel2.add(button7);
-                button7.setBounds(440, 5, 65, button7.getPreferredSize().height);
-
-                //---- label4 ----
-                label4.setText("\u4ea7\u54c1:");
-                label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 1f));
-                panel2.add(label4);
-                label4.setBounds(805, 10, 35, label4.getPreferredSize().height);
-
-                //---- comboBox1 ----
-                comboBox1.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        comboBox1MouseClicked(e);
-                    }
-                });
-                panel2.add(comboBox1);
-                comboBox1.setBounds(845, 7, 110, comboBox1.getPreferredSize().height);
-
-                //---- label1 ----
-                label1.setText("\u5de5\u4ef6\u7edf\u8ba1\u56fe");
-                label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 4f));
-                panel2.add(label1);
-                label1.setBounds(675, 7, 100, 25);
+                button7.setBounds(440, 5, 65, 28);
 
                 {
                     // compute preferred size
@@ -630,6 +689,69 @@ public class HistoricalStatistics extends JFrame {
             {
                 panel3.setLayout(null);
 
+                //======== scrollPane2 ========
+                {
+
+                    //---- table2 ----
+                    table2.setRowHeight(20);
+                    table2.setModel(new DefaultTableModel(
+                        new Object[][] {
+                        },
+                        new String[] {
+                            "id", "\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u68c0\u6d4b\u7ed3\u679c", "\u8be6\u60c5"
+                        }
+                    ) {
+                        boolean[] columnEditable = new boolean[] {
+                            false, false, false, false, false, false, false, false
+                        };
+                        @Override
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                            return columnEditable[columnIndex];
+                        }
+                    });
+                    {
+                        TableColumnModel cm = table2.getColumnModel();
+                        cm.getColumn(0).setPreferredWidth(40);
+                        cm.getColumn(1).setPreferredWidth(120);
+                        cm.getColumn(2).setPreferredWidth(120);
+                        cm.getColumn(3).setPreferredWidth(60);
+                        cm.getColumn(4).setPreferredWidth(60);
+                        cm.getColumn(5).setPreferredWidth(60);
+                        cm.getColumn(6).setPreferredWidth(60);
+                        cm.getColumn(7).setPreferredWidth(40);
+                    }
+                    table2.setAutoCreateRowSorter(true);
+                    table2.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            table2MouseClicked(e);
+                        }
+                    });
+                    scrollPane2.setViewportView(table2);
+                }
+                panel3.add(scrollPane2);
+                scrollPane2.setBounds(0, 40, 505, 425);
+                panel3.add(textField2);
+                textField2.setBounds(5, 5, 135, 30);
+
+                //---- button8 ----
+                button8.setText("\u67e5\u8be2");
+                button8.addActionListener(e -> button8ActionPerformed(e));
+                panel3.add(button8);
+                button8.setBounds(155, 5, 65, 28);
+
+                //---- button9 ----
+                button9.setText("\u8fd4\u56de");
+                button9.addActionListener(e -> button9ActionPerformed(e));
+                panel3.add(button9);
+                button9.setBounds(225, 5, 65, 28);
+
+                //---- button10 ----
+                button10.setText("\u5237\u65b0");
+                button10.addActionListener(e -> button10ActionPerformed(e));
+                panel3.add(button10);
+                button10.setBounds(440, 5, 65, 28);
+
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
@@ -648,7 +770,52 @@ public class HistoricalStatistics extends JFrame {
             tabbedPane1.addTab("\u6545\u969c\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel3);
         }
         contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(5, 95, 965, 495);
+        tabbedPane1.setBounds(5, 100, 510, 490);
+
+        //======== panel4 ========
+        {
+            panel4.setBackground(new Color(153, 153, 153));
+            panel4.setLayout(null);
+
+            {
+                // compute preferred size
+                Dimension preferredSize = new Dimension();
+                for(int i = 0; i < panel4.getComponentCount(); i++) {
+                    Rectangle bounds = panel4.getComponent(i).getBounds();
+                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                }
+                Insets insets = panel4.getInsets();
+                preferredSize.width += insets.right;
+                preferredSize.height += insets.bottom;
+                panel4.setMinimumSize(preferredSize);
+                panel4.setPreferredSize(preferredSize);
+            }
+        }
+        contentPane.add(panel4);
+        panel4.setBounds(525, 125, 445, 465);
+
+        //---- label1 ----
+        label1.setText("\u5de5\u4ef6\u7edf\u8ba1\u56fe");
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 4f));
+        contentPane.add(label1);
+        label1.setBounds(690, 95, 100, 25);
+
+        //---- comboBox1 ----
+        comboBox1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                comboBox1MouseClicked(e);
+            }
+        });
+        contentPane.add(comboBox1);
+        comboBox1.setBounds(850, 95, 120, 27);
+
+        //---- label4 ----
+        label4.setText("\u4ea7\u54c1:");
+        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 1f));
+        contentPane.add(label4);
+        label4.setBounds(815, 100, 35, 19);
 
         {
             // compute preferred size
@@ -686,14 +853,20 @@ public class HistoricalStatistics extends JFrame {
     private JPanel panel2;
     private JScrollPane scrollPane1;
     private JTable table1;
-    private JPanel panel4;
     private JTextField textField1;
     private JButton button5;
     private JButton button6;
     private JButton button7;
-    private JLabel label4;
-    private JComboBox comboBox1;
-    private JLabel label1;
     private JPanel panel3;
+    private JScrollPane scrollPane2;
+    private JTable table2;
+    private JTextField textField2;
+    private JButton button8;
+    private JButton button9;
+    private JButton button10;
+    private JPanel panel4;
+    private JLabel label1;
+    private JComboBox comboBox1;
+    private JLabel label4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -20,14 +20,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-//TODO: yaozuo
-//标记时间：2019/12/23 17:33  预解决时间：
-////1. 优化这个类结构
-////2. 字段名乱码不显示
-////3. 颜色重合不显眼
-//4. 加上工件总数的曲线
-
-
 public class LineChartUtil {
     private static Logger log = LoggerUtil.getLogger();
 
@@ -68,15 +60,16 @@ public class LineChartUtil {
         plot.setBackgroundPaint(Color.white);  // 背景颜色
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
         plot.setOutlinePaint(Color.BLACK); // 轮廓颜色
-        plot.setNoDataMessage("数据加载失败");  // 错误提示
+        plot.setNoDataMessage("数据加载失败，检查是否已选择产品;若已选择，请点击 刷新");  // 错误提示
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer(); // 获取渲染器
         renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator()); //设置柱状图上显示值
         renderer.setBaseItemLabelsVisible(true);
-        renderer.setSeriesPaint(0, new Color(116,228,121)); //设置颜色
-        renderer.setSeriesPaint(1, new Color(83,155,237));
-        renderer.setSeriesPaint(2, new Color(234,236,96));
-        renderer.setSeriesPaint(3, new Color(255,111,107));
+        renderer.setSeriesPaint(0, new Color(102,102,102)); //设置颜色
+        renderer.setSeriesPaint(1, new Color(116,228,121));
+        renderer.setSeriesPaint(2, new Color(83,155,237));
+        renderer.setSeriesPaint(3, new Color(234,236,96));
+        renderer.setSeriesPaint(4, new Color(255,111,107));
 
         CategoryAxis Xaxis = plot.getDomainAxis();
         Xaxis.setTickLabelFont(new Font("sans-serif", Font.PLAIN, 13)); //设置x轴字体
@@ -111,10 +104,11 @@ public class LineChartUtil {
         plot.setNoDataMessage("数据加载失败");  // 错误提示
 
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer(); // 获取渲染器
-        renderer.setSeriesPaint(0, new Color(116,228,121)); //设置颜色
-        renderer.setSeriesPaint(1, new Color(83,155,237));
-        renderer.setSeriesPaint(2, new Color(234,236,96));
-        renderer.setSeriesPaint(3, new Color(255,111,107));
+        renderer.setSeriesPaint(0, new Color(102,102,102)); //设置颜色
+        renderer.setSeriesPaint(1, new Color(116,228,121));
+        renderer.setSeriesPaint(2, new Color(83,155,237));
+        renderer.setSeriesPaint(3, new Color(234,236,96));
+        renderer.setSeriesPaint(4, new Color(255,111,107));
 
         //设置标识字体
         Font legendFont = new Font("楷体", Font.PLAIN, 18);
@@ -140,6 +134,7 @@ public class LineChartUtil {
         List<Map<String, Object>> machine_data_brief_mapsList = JdbcTemplateUtil.queryMult(sqlStr, params);
 
         //通过LinkedHashMap存储 日期：数量 ，保证折线图的有序性。
+        HashMap<String, Integer> time_map = new LinkedHashMap<>(); //时间-总数 map
         HashMap<String, Integer> timeA_map = new LinkedHashMap<>(); //时间-优秀 map
         HashMap<String, Integer> timeB_map = new LinkedHashMap<>(); //时间-合格 map
         HashMap<String, Integer> timeC_map = new LinkedHashMap<>(); //时间-隐患 map
@@ -152,6 +147,9 @@ public class LineChartUtil {
             nowTime = map.get("time").toString().split("\\.")[0].split(" ")[0];
 
             //初值判断
+            if (!time_map.containsKey(nowTime)) {
+                time_map.put(nowTime, 0);
+            }
             if (!timeA_map.containsKey(nowTime)) {
                 timeA_map.put(nowTime, 0);
             }
@@ -165,6 +163,8 @@ public class LineChartUtil {
                 timeD_map.put(nowTime, 0);
             }
             //有则加1
+            time_map.put(nowTime, time_map.get(nowTime) + 1); //总数加1
+
             if (map.get("result").equals("优秀")) {
                 timeA_map.put(nowTime, timeA_map.get(nowTime) + 1);
             } else if (map.get("result").equals("合格")) {
@@ -177,6 +177,9 @@ public class LineChartUtil {
         }
 
         // 将map中的信息添加到dataset中。
+        for (Map.Entry<String, Integer> entry : time_map.entrySet()) {
+            dataset.addValue(entry.getValue(), "工件总数", entry.getKey());
+        }
         for (Map.Entry<String, Integer> entry : timeA_map.entrySet()) {
             dataset.addValue(entry.getValue(), "优秀",entry.getKey());
         }

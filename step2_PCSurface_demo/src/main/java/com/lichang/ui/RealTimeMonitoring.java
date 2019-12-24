@@ -6,7 +6,6 @@ package com.lichang.ui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -250,9 +249,15 @@ public class RealTimeMonitoring extends JFrame {
         new HistoricalStatistics(username, adminFlag);
     }
 
-    //故障校验 按钮： 点击跳转
+    //专家系统 按钮： 点击跳转
     private void button3ActionPerformed(ActionEvent e) {
         new ExpertSystem(username, adminFlag);
+    }
+
+    //管理与设置 按钮： 点击跳转
+    private void button4ActionPerformed(ActionEvent e) {
+        new Setting(username, adminFlag);
+        this.dispose();
     }
 
     /**
@@ -351,7 +356,7 @@ public class RealTimeMonitoring extends JFrame {
         if (table1.getSelectedColumn() == 6) {
             int selectedRow = table1.getSelectedRow();
             machine_fault_data_timeCol = table1.getValueAt(selectedRow, 0).toString() + ".0"; //和timestamp格式相同
-            new Details(this, "故障信息详情", true, machine_fault_data_timeCol); //创建新窗口
+            new DetailsFault(this, "故障信息详情", true, machine_fault_data_timeCol); //创建新窗口
         } else {
             return;
         }
@@ -506,8 +511,6 @@ public class RealTimeMonitoring extends JFrame {
         updateLabel16(); //更新 检测结果
     }
 
-    //TEST: 测试按钮
-    //标记时间：2019/12/19 13:48  预解决时间：
     /**
      * 测试 按钮
      */
@@ -515,6 +518,7 @@ public class RealTimeMonitoring extends JFrame {
     private void button7ActionPerformed(ActionEvent e) {
         addTable1Data();
     }
+
 
     /**
      * JFormDesigner自带，定义自生成
@@ -659,6 +663,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
         button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);

@@ -24,34 +24,6 @@ import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//TODO: 待解决问题
-//标记时间：2019/12/4 17:32  预解决时间：
-////1. 下拉框的数据库绑定
-////3. 生成焊接参数的触发
-////5. 制定焊接规则
-////6. 自定义焊接参数的实现
-////7. 下拉框 更新，初始化时会触发事件，导致选择了空模型
-////8. 流程焊接规则的改变：根据seq进行处理
-////12. 出参 对于 保存的点击约束
-////2. 产品选择：重设、出参、保存 按钮功能的实现
-////11. 取消按钮的实现（点击后，全部恢复不可选定状态）(对于产品选择的按钮，还没有实现去使能的功能)
-////设计 按钮，按下后，会出现下拉框选项重复问题(问题在init上)
-////14. 右下，仅调参、保存 按钮功能的实现（
-//// 并添加管理权限）
-////13. 保存完成后 的 去使能的显示状态，改成好看一点的
-////通过添加一个数据库中的表，记录上一次留下的产品选择项，从而实现记忆功能。
-
-// 资料库
-////1.表格的绑定
-////2. 添加时，切换tabbed，会导致选择错误tabbed下标，加载空模型
-////3. 添加时，信息要录入数据库
-////4. 添加成功后的弹窗提示
-////5. 修改按钮
-////6. 部分按钮添加权限
-//7. 批量删除（低优先级）
-
-
-
 /**
  * @author unknown
  */
@@ -378,21 +350,22 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * 实时监测 按钮：点击跳转
-     *
-     * @param e
+     * 界面跳转 按钮
      */
+    //实时监测 按钮： 点击跳转
     private void button1ActionPerformed(ActionEvent e) {
         this.dispose();
     }
 
-    /**
-     * 历史统计与查询 按钮： 点击跳转
-     *
-     * @param e
-     */
+    //历史统计与查询 按钮： 点击跳转
     private void button2ActionPerformed(ActionEvent e) {
         new HistoricalStatistics(username, adminFlag);
+        this.dispose();
+    }
+
+    //管理与设置 按钮： 点击跳转
+    private void button4ActionPerformed(ActionEvent e) {
+        new Setting(username, adminFlag);
         this.dispose();
     }
 
@@ -2365,6 +2338,8 @@ public class ExpertSystem extends JFrame {
         }
     }
 
+
+
     /**
      * JFormDesigner自带，定义自生成
      */
@@ -2580,6 +2555,7 @@ public class ExpertSystem extends JFrame {
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
         button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);

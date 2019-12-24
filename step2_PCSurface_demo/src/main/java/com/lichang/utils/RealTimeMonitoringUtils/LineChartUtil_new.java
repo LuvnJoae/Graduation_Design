@@ -73,7 +73,7 @@ public class LineChartUtil_new {
         plot.setBackgroundPaint(Color.white);  // 背景颜色
         plot.setRangeGridlinePaint(Color.LIGHT_GRAY);  // 背景网格虚线
         plot.setOutlinePaint(Color.BLACK); // 轮廓颜色
-        plot.setNoDataMessage("数据加载失败");  // 错误提示
+        plot.setNoDataMessage("数据加载失败，检查是否已选择产品");  // 错误提示
 
         LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer(); // 获取渲染器
         renderer.setBaseShapesVisible(true); // 显示数据点
