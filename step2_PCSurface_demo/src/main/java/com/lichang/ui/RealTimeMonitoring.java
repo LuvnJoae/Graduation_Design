@@ -257,7 +257,6 @@ public class RealTimeMonitoring extends JFrame {
     //管理与设置 按钮： 点击跳转
     private void button4ActionPerformed(ActionEvent e) {
         new Setting(username, adminFlag);
-        this.dispose();
     }
 
     /**
@@ -272,10 +271,12 @@ public class RealTimeMonitoring extends JFrame {
 
                 updateChartPanel(); //刷新折线图
 
+                updateMachine(); //更新 当前焊机、状态
                 updateLabel13(); //更新 完成工件
                 updateLabel14(); //更新 故障工件
                 updateLabel15(); //更新 产品编号
                 updateLabel16(); //更新 检测结果
+
             }
         };
 
@@ -436,6 +437,21 @@ public class RealTimeMonitoring extends JFrame {
     /**
      * Label 数据绑定与更新
      */
+    //更新 当前焊机、状态
+    private void updateMachine() {
+        Map<String, Object> machine_map = LabelUpdateTextUtil_new.getMachine();
+        if (machine_map == null) {
+            label11.setText("-1");
+            label12.setText("-1");
+        } else {
+            String machine_name = (String) machine_map.get("machine_name");
+            String machine_status = (String) machine_map.get("machine_status");
+            label11.setText(machine_name);
+            label12.setText(machine_status);
+        }
+
+    }
+
     //更新 完成工件
     private void updateLabel13() {
         //获取所选产品名称
@@ -898,20 +914,20 @@ public class RealTimeMonitoring extends JFrame {
         label10.setBounds(new Rectangle(new Point(220, 200), label10.getPreferredSize()));
 
         //---- label11 ----
-        label11.setText("\u710a\u673a1");
+        label11.setText("-1");
         label11.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
         label11.setBackground(Color.white);
         label11.setForeground(new Color(0, 153, 204));
         contentPane.add(label11);
-        label11.setBounds(100, 110, 60, 20);
+        label11.setBounds(100, 110, 90, 20);
 
         //---- label12 ----
-        label12.setText("\u6b63\u5e38");
+        label12.setText("-1");
         label12.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
         label12.setBackground(Color.white);
         label12.setForeground(new Color(0, 153, 204));
         contentPane.add(label12);
-        label12.setBounds(100, 155, 40, 20);
+        label12.setBounds(100, 155, 90, 20);
 
         //---- label13 ----
         label13.setText("0");

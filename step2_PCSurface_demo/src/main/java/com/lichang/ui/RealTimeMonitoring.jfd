@@ -337,26 +337,26 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label11"
-				"text": "焊机1"
+				"text": "-1"
 				"font": #Font0
 				"background": &Color0 new java.awt.Color( 255, 255, 255, 255 )
 				"foreground": &Color1 new java.awt.Color( 0, 153, 204, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 100
 				"y": 110
-				"width": 60
+				"width": 90
 				"height": 20
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label12"
-				"text": "正常"
+				"text": "-1"
 				"font": #Font0
 				"background": #Color0
 				"foreground": #Color1
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 100
 				"y": 155
-				"width": 40
+				"width": 90
 				"height": 20
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {

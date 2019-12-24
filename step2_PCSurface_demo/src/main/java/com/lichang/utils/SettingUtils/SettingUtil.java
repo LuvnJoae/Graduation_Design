@@ -2,6 +2,7 @@ package com.lichang.utils.SettingUtils;
 
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -106,5 +107,43 @@ public class SettingUtil {
         boolean updateResult = JdbcTemplateUtil.update(sqlStr, params);
 
         return updateResult;
+    }
+
+    /**
+     * 更新 当前焊机表的 状态信息
+     */
+    public static boolean updateMachineStatus(String machine_name, String machine_status) {
+        try {
+            String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 ip地址
+
+            String sqlStr = "update machine_now set machine_status = ? where ip = ? and machine_name = ?";
+            ArrayList<Object> params = new ArrayList<>();
+            params.add(machine_status);
+            params.add(ip);
+            params.add(machine_name);
+
+            boolean updateResult = JdbcTemplateUtil.update(sqlStr, params);
+
+            return updateResult;
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
+
+    /**
+     * 添加焊机 插入新记录
+     */
+    public static boolean insertNewMachine(String machine_name, String machine_status) {
+        String sqlStr = "insert into machine_setting (machine_name, machine_status) values(?, ?)";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(machine_name);
+        params.add(machine_status);
+
+        boolean result = JdbcTemplateUtil.update(sqlStr, params);
+        return result;
     }
 }

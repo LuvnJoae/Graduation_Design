@@ -4,3 +4,6 @@
 1. 焊机名称、焊机状态的更改管理
 2. 管理员权限下的 员工信息更改管理
 3. 数据库url的更改
+
+1. 去除所有的log.debug
+2. 将所有的 e.printStackTrace() 替换为 log.error

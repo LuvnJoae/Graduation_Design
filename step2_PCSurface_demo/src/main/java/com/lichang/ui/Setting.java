@@ -352,11 +352,31 @@ public class Setting extends JFrame {
             if (result) {
                 JOptionPane.showMessageDialog(this, "修改成功！");
                 updateComboBox2(); //修改成功后，刷新一下 修改焊机
+                //修改完成后，更新当前表
+                SettingUtil.updateMachineStatus(machine_name, machine_status);
             } else {
                 JOptionPane.showMessageDialog(this, "修改失败!", "提示",JOptionPane.WARNING_MESSAGE);
             }
         }
     }
+
+    //添加焊机： 确定
+    private void button5ActionPerformed(ActionEvent e) {
+        String machine_name = textField1.getText();
+        String machine_status = textField2.getText();
+
+        boolean result = SettingUtil.insertNewMachine(machine_name, machine_status);
+        if (result) {
+            JOptionPane.showMessageDialog(this, "添加成功！");
+            updateComboBox2();//添加成功后，刷新一下 修改焊机
+            textField1.setText(""); //清空内容
+            textField2.setText(""); //清空内容
+        } else {
+            JOptionPane.showMessageDialog(this, "添加失败!", "提示",JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
 
 
     /**
@@ -401,38 +421,17 @@ public class Setting extends JFrame {
         comboBox2 = new JComboBox();
         panel3 = new JPanel();
         label8 = new JLabel();
-        label18 = new JLabel();
-        label19 = new JLabel();
-        label20 = new JLabel();
-        label21 = new JLabel();
-        label22 = new JLabel();
-        label23 = new JLabel();
-        label24 = new JLabel();
-        label25 = new JLabel();
-        textField4 = new JTextField();
-        label26 = new JLabel();
-        textField5 = new JTextField();
-        label27 = new JLabel();
-        label28 = new JLabel();
-        textField6 = new JTextField();
+        tabbedPane1 = new JTabbedPane();
+        panel5 = new JPanel();
+        scrollPane2 = new JScrollPane();
+        table2 = new JTable();
         button6 = new JButton();
-        panel4 = new JPanel();
-        label29 = new JLabel();
-        label30 = new JLabel();
-        label31 = new JLabel();
-        label32 = new JLabel();
-        label33 = new JLabel();
-        label34 = new JLabel();
-        label35 = new JLabel();
-        label36 = new JLabel();
-        label37 = new JLabel();
-        textField7 = new JTextField();
-        label38 = new JLabel();
-        textField8 = new JTextField();
-        label39 = new JLabel();
-        label40 = new JLabel();
-        textField9 = new JTextField();
         button7 = new JButton();
+        button10 = new JButton();
+        button11 = new JButton();
+        panel6 = new JPanel();
+        panel4 = new JPanel();
+        label40 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -635,6 +634,7 @@ public class Setting extends JFrame {
 
             //---- button5 ----
             button5.setText("\u786e\u5b9a");
+            button5.addActionListener(e -> button5ActionPerformed(e));
             panel2.add(button5);
             button5.setBounds(175, 425, 63, button5.getPreferredSize().height);
 
@@ -686,87 +686,98 @@ public class Setting extends JFrame {
             panel3.setLayout(null);
 
             //---- label8 ----
-            label8.setText("\u710a\u673a\u7ba1\u7406");
+            label8.setText("\u7528\u6237\u4fe1\u606f\u7ba1\u7406");
             label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 5f));
             panel3.add(label8);
             label8.setBounds(new Rectangle(new Point(100, 10), label8.getPreferredSize()));
 
-            //---- label18 ----
-            label18.setText("\u5f53\u524d\u710a\u673a");
-            label18.setFont(label18.getFont().deriveFont(label18.getFont().getSize() + 2f));
-            panel3.add(label18);
-            label18.setBounds(180, 55, 65, 18);
+            //======== tabbedPane1 ========
+            {
 
-            //---- label19 ----
-            label19.setText("\u5f53\u524d\u710a\u673a");
-            label19.setFont(label19.getFont().deriveFont(label19.getFont().getSize() + 2f));
-            panel3.add(label19);
-            label19.setBounds(115, 80, 125, 20);
+                //======== panel5 ========
+                {
+                    panel5.setLayout(null);
 
-            //---- label20 ----
-            label20.setText("\u710a\u673a\u540d\u79f0\uff1a");
-            label20.setFont(label20.getFont().deriveFont(label20.getFont().getSize() + 2f));
-            panel3.add(label20);
-            label20.setBounds(35, 80, 80, 20);
+                    //======== scrollPane2 ========
+                    {
 
-            //---- label21 ----
-            label21.setText("\u710a\u673a\u72b6\u6001\uff1a");
-            label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 2f));
-            panel3.add(label21);
-            label21.setBounds(35, 115, 85, 20);
+                        //---- table2 ----
+                        table2.setRowHeight(20);
+                        table2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                                {null, null},
+                                {null, null},
+                            },
+                            new String[] {
+                                "\u7528\u6237\u540d", "\u5bc6\u7801"
+                            }
+                        ));
+                        table2.setEnabled(false);
+                        scrollPane2.setViewportView(table2);
+                    }
+                    panel5.add(scrollPane2);
+                    scrollPane2.setBounds(0, 50, 290, 355);
 
-            //---- label22 ----
-            label22.setText("\u5f53\u524d\u72b6\u6001");
-            label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 2f));
-            panel3.add(label22);
-            label22.setBounds(115, 115, 125, 20);
+                    //---- button6 ----
+                    button6.setText("\u4fee\u6539");
+                    panel5.add(button6);
+                    button6.setBounds(5, 10, 65, button6.getPreferredSize().height);
 
-            //---- label23 ----
-            label23.setText("\u4fee\u6539\u5f53\u524d\u710a\u673a");
-            label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() + 2f));
-            panel3.add(label23);
-            label23.setBounds(150, 165, 90, 20);
+                    //---- button7 ----
+                    button7.setText("\u5220\u9664");
+                    panel5.add(button7);
+                    button7.setBounds(75, 10, 65, 28);
 
-            //---- label24 ----
-            label24.setText("\u710a\u673a\u540d\u79f0\uff1a");
-            label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() + 2f));
-            panel3.add(label24);
-            label24.setBounds(35, 200, 80, label24.getPreferredSize().height);
+                    //---- button10 ----
+                    button10.setText("\u6dfb\u52a0");
+                    panel5.add(button10);
+                    button10.setBounds(145, 10, 65, 28);
 
-            //---- label25 ----
-            label25.setText("\u710a\u673a\u72b6\u6001\uff1a");
-            label25.setFont(label25.getFont().deriveFont(label25.getFont().getSize() + 2f));
-            panel3.add(label25);
-            label25.setBounds(35, 240, 80, 20);
-            panel3.add(textField4);
-            textField4.setBounds(115, 235, 125, 30);
+                    //---- button11 ----
+                    button11.setText("\u786e\u5b9a");
+                    panel5.add(button11);
+                    button11.setBounds(220, 10, 65, 28);
 
-            //---- label26 ----
-            label26.setText("\u6dfb\u52a0\u710a\u673a");
-            label26.setFont(label26.getFont().deriveFont(label26.getFont().getSize() + 2f));
-            panel3.add(label26);
-            label26.setBounds(175, 290, 65, label26.getPreferredSize().height);
-            panel3.add(textField5);
-            textField5.setBounds(115, 325, 125, 30);
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel5.getComponentCount(); i++) {
+                            Rectangle bounds = panel5.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel5.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel5.setMinimumSize(preferredSize);
+                        panel5.setPreferredSize(preferredSize);
+                    }
+                }
+                tabbedPane1.addTab("\u666e\u901a\u7528\u6237", panel5);
 
-            //---- label27 ----
-            label27.setText("\u710a\u673a\u540d\u79f0:");
-            label27.setFont(label27.getFont().deriveFont(label27.getFont().getSize() + 2f));
-            panel3.add(label27);
-            label27.setBounds(35, 330, 75, 18);
+                //======== panel6 ========
+                {
+                    panel6.setLayout(null);
 
-            //---- label28 ----
-            label28.setText("\u710a\u673a\u72b6\u6001:");
-            label28.setFont(label28.getFont().deriveFont(label28.getFont().getSize() + 2f));
-            panel3.add(label28);
-            label28.setBounds(35, 370, 75, 18);
-            panel3.add(textField6);
-            textField6.setBounds(115, 365, 125, 30);
-
-            //---- button6 ----
-            button6.setText("\u786e\u5b9a");
-            panel3.add(button6);
-            button6.setBounds(new Rectangle(new Point(180, 440), button6.getPreferredSize()));
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel6.getComponentCount(); i++) {
+                            Rectangle bounds = panel6.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel6.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel6.setMinimumSize(preferredSize);
+                        panel6.setPreferredSize(preferredSize);
+                    }
+                }
+                tabbedPane1.addTab("\u7ba1\u7406\u5458\u7528\u6237", panel6);
+            }
+            panel3.add(tabbedPane1);
+            tabbedPane1.setBounds(0, 45, 295, 435);
 
             {
                 // compute preferred size
@@ -791,88 +802,10 @@ public class Setting extends JFrame {
             panel4.setBackground(new Color(204, 204, 204));
             panel4.setLayout(null);
 
-            //---- label29 ----
-            label29.setText("\u710a\u673a\u7ba1\u7406");
-            label29.setFont(label29.getFont().deriveFont(label29.getFont().getSize() + 5f));
-            panel4.add(label29);
-            label29.setBounds(new Rectangle(new Point(100, 10), label29.getPreferredSize()));
-
-            //---- label30 ----
-            label30.setText("\u5f53\u524d\u710a\u673a");
-            label30.setFont(label30.getFont().deriveFont(label30.getFont().getSize() + 2f));
-            panel4.add(label30);
-            label30.setBounds(180, 55, 65, 18);
-
-            //---- label31 ----
-            label31.setText("\u5f53\u524d\u710a\u673a");
-            label31.setFont(label31.getFont().deriveFont(label31.getFont().getSize() + 2f));
-            panel4.add(label31);
-            label31.setBounds(115, 80, 125, 20);
-
-            //---- label32 ----
-            label32.setText("\u710a\u673a\u540d\u79f0\uff1a");
-            label32.setFont(label32.getFont().deriveFont(label32.getFont().getSize() + 2f));
-            panel4.add(label32);
-            label32.setBounds(35, 80, 80, 20);
-
-            //---- label33 ----
-            label33.setText("\u710a\u673a\u72b6\u6001\uff1a");
-            label33.setFont(label33.getFont().deriveFont(label33.getFont().getSize() + 2f));
-            panel4.add(label33);
-            label33.setBounds(35, 115, 85, 20);
-
-            //---- label34 ----
-            label34.setText("\u5f53\u524d\u72b6\u6001");
-            label34.setFont(label34.getFont().deriveFont(label34.getFont().getSize() + 2f));
-            panel4.add(label34);
-            label34.setBounds(115, 115, 125, 20);
-
-            //---- label35 ----
-            label35.setText("\u4fee\u6539\u5f53\u524d\u710a\u673a");
-            label35.setFont(label35.getFont().deriveFont(label35.getFont().getSize() + 2f));
-            panel4.add(label35);
-            label35.setBounds(150, 165, 90, 20);
-
-            //---- label36 ----
-            label36.setText("\u710a\u673a\u540d\u79f0\uff1a");
-            label36.setFont(label36.getFont().deriveFont(label36.getFont().getSize() + 2f));
-            panel4.add(label36);
-            label36.setBounds(35, 200, 80, label36.getPreferredSize().height);
-
-            //---- label37 ----
-            label37.setText("\u710a\u673a\u72b6\u6001\uff1a");
-            label37.setFont(label37.getFont().deriveFont(label37.getFont().getSize() + 2f));
-            panel4.add(label37);
-            label37.setBounds(35, 240, 80, 20);
-            panel4.add(textField7);
-            textField7.setBounds(115, 235, 125, 30);
-
-            //---- label38 ----
-            label38.setText("\u6dfb\u52a0\u710a\u673a");
-            label38.setFont(label38.getFont().deriveFont(label38.getFont().getSize() + 2f));
-            panel4.add(label38);
-            label38.setBounds(175, 290, 65, label38.getPreferredSize().height);
-            panel4.add(textField8);
-            textField8.setBounds(115, 325, 125, 30);
-
-            //---- label39 ----
-            label39.setText("\u710a\u673a\u540d\u79f0:");
-            label39.setFont(label39.getFont().deriveFont(label39.getFont().getSize() + 2f));
-            panel4.add(label39);
-            label39.setBounds(35, 330, 75, 18);
-
             //---- label40 ----
-            label40.setText("\u710a\u673a\u72b6\u6001:");
             label40.setFont(label40.getFont().deriveFont(label40.getFont().getSize() + 2f));
             panel4.add(label40);
             label40.setBounds(35, 370, 75, 18);
-            panel4.add(textField9);
-            textField9.setBounds(115, 365, 125, 30);
-
-            //---- button7 ----
-            button7.setText("\u786e\u5b9a");
-            panel4.add(button7);
-            button7.setBounds(new Rectangle(new Point(180, 440), button7.getPreferredSize()));
 
             {
                 // compute preferred size
@@ -949,37 +882,16 @@ public class Setting extends JFrame {
     private JComboBox comboBox2;
     private JPanel panel3;
     private JLabel label8;
-    private JLabel label18;
-    private JLabel label19;
-    private JLabel label20;
-    private JLabel label21;
-    private JLabel label22;
-    private JLabel label23;
-    private JLabel label24;
-    private JLabel label25;
-    private JTextField textField4;
-    private JLabel label26;
-    private JTextField textField5;
-    private JLabel label27;
-    private JLabel label28;
-    private JTextField textField6;
+    private JTabbedPane tabbedPane1;
+    private JPanel panel5;
+    private JScrollPane scrollPane2;
+    private JTable table2;
     private JButton button6;
-    private JPanel panel4;
-    private JLabel label29;
-    private JLabel label30;
-    private JLabel label31;
-    private JLabel label32;
-    private JLabel label33;
-    private JLabel label34;
-    private JLabel label35;
-    private JLabel label36;
-    private JLabel label37;
-    private JTextField textField7;
-    private JLabel label38;
-    private JTextField textField8;
-    private JLabel label39;
-    private JLabel label40;
-    private JTextField textField9;
     private JButton button7;
+    private JButton button10;
+    private JButton button11;
+    private JPanel panel6;
+    private JPanel panel4;
+    private JLabel label40;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -4,8 +4,11 @@ import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
+import com.lichang.utils.dao.JdbcUtil;
 import org.apache.log4j.Logger;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +18,29 @@ import java.util.Map;
  */
 public class LabelUpdateTextUtil_new {
     private static Logger log = LoggerUtil.getLogger();
+
+    /**
+     * 查询 当前焊机 名称与状态
+     */
+    public static Map<String, Object> getMachine() {
+        try {
+            String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 ip地址
+
+            String sqlStr = "select * from machine_now where ip = ?";
+            ArrayList<Object> params = new ArrayList<>();
+            params.add(ip);
+
+            Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr, params);
+            return map;
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+
+    }
 
     /**
      * 查询 已完成工件 总记录数
