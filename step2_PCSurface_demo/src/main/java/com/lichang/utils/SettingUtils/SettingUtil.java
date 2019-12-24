@@ -31,7 +31,7 @@ public class SettingUtil {
             String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 主机名 + ip地址
 
             //查询是否存在该主机名+ip
-            String sqlStr = "Select * from machine_setting where ip = ?";
+            String sqlStr = "Select * from machine_now where ip = ?";
             ArrayList<Object> params = new ArrayList<>();
             params.add(ip);
 
@@ -52,5 +52,59 @@ public class SettingUtil {
         String[] machineStrs = {machineName, machineStatus};
 
         return machineStrs;
+    }
+
+    /**
+     * 更换 当前焊机
+     */
+    public static boolean changeNowMachine(String machine_name, String machine_status) {
+        boolean updateResult = false;
+        try {
+            String ip = String.valueOf(InetAddress.getLocalHost()); //查询当前 ip地址
+
+            //查询是否存在该主机名+ip
+            String sqlStr = "select * from machine_now where ip = ?";
+            ArrayList<Object> params = new ArrayList<>();
+            params.add(ip);
+
+            Map<String, Object> map = JdbcTemplateUtil.querySingle(sqlStr, params);
+
+            //判断数据库是否已有此主机名+ip信息
+            String sqlStr2;
+            params = new ArrayList<>();
+            //无，则新添加
+            if (map == null) {
+                sqlStr2 = "insert into machine_now (ip, machine_name, machine_status) values (?, ?, ?)";
+                params.add(ip);
+                params.add(machine_name);
+                params.add(machine_status);
+            } else {
+                //有，则对原数据进行更改
+                sqlStr2 = "update machine_now set machine_name = ?, machine_status = ? where ip = ?";
+                params.add(machine_name);
+                params.add(machine_status);
+                params.add(ip);
+            }
+
+            updateResult = JdbcTemplateUtil.update(sqlStr2, params);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return updateResult;
+    }
+
+    /**
+     * 修改 焊机信息
+     */
+    public static boolean updateMachine(String machine_name, String machine_status) {
+        String sqlStr = "update machine_setting set machine_status = ? where machine_name = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(machine_status);
+        params.add(machine_name);
+
+        boolean updateResult = JdbcTemplateUtil.update(sqlStr, params);
+
+        return updateResult;
     }
 }

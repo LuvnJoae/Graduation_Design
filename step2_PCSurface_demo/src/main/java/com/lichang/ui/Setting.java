@@ -4,6 +4,10 @@
 
 package com.lichang.ui;
 
+//TODO:
+//标记时间：2019/12/24 17:38  预解决时间：
+//1. 两个表之间，修改后的联动效果
+
 import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
@@ -41,6 +45,7 @@ public class Setting extends JFrame {
     private JLabel oldValidationTip; // 旧密码 验证提示
     private boolean oldChangeFlag; //判断旧密码是否通过验证
 
+    private List<Map<String, Object>> machine_now_mapsList; //当前焊机表
     private List<Map<String, Object>> machine_setting_mapsList; //焊机表
 
     //无参（预设账户信息）
@@ -240,34 +245,117 @@ public class Setting extends JFrame {
      */
     //当打开此frame时，触发
     private void thisWindowOpened(WindowEvent e) {
-        nowMachine();
         updateComboBox1();
+        displayNowMachine();
+        updateComboBox2();
     }
 
     /**
      * 焊机管理
      */
-    //当前焊机： 焊机名称与状态
-    private void nowMachine() {
-        String[] nowMachine = SettingUtil.getNowMachine();
-        String machineName = nowMachine[0];
-        String machineStatus = nowMachine[1];
-        label14.setText(machineName);
-        label15.setText(machineStatus);
-    }
-
-    //修改当前焊机： 焊机下拉框内容
+    //当前焊机： 获得焊机下拉框内容
     private void updateComboBox1() {
         comboBox1.removeAllItems(); //清空原数据
-        machine_setting_mapsList = SettingUtil.getData("machine_setting"); //获取产品表内容，更新内容
+        machine_setting_mapsList = SettingUtil.getData("machine_setting"); //获取焊机表内容，更新内容
         if (machine_setting_mapsList == null || machine_setting_mapsList.size() == 0) {
             return;
         }
         //更新 产品选择 下拉框内容
         for (Map<String, Object> map : machine_setting_mapsList) {
-            comboBox1.addItem((String) map.get("machine_name")); //下拉框添加内容
+            comboBox1.addItem(map.get("machine_name")); //下拉框添加内容
         }
         comboBox1.setSelectedIndex(-1);
+        label15.setText(""); //清空焊机状态（因为addItem会触发一个change事件）
+    }
+
+    //当前焊机： 显示焊机名称与状态
+    private void displayNowMachine() {
+        String[] nowMachine = SettingUtil.getNowMachine();
+        String machineName = nowMachine[0];
+        String machineStatus = nowMachine[1];
+
+        for (int i = 0; i < comboBox1.getModel().getSize(); i++) {
+            if (comboBox1.getModel().getElementAt(i).equals(machineName)) {
+                comboBox1.setSelectedIndex(i);
+                break;
+            }
+        }
+        label15.setText(machineStatus);
+    }
+
+    //当前焊机： 焊机状态跟随焊机名称变化
+    private void comboBox1ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String machine_status = "出错"; //初始值
+
+            for (Map<String, Object> map : machine_setting_mapsList) {
+                if (map.get("machine_name").equals(comboBox1.getSelectedItem())) {
+                    machine_status = (String) map.get("machine_status"); //找到对应的状态的，修改值
+                }
+            }
+            label15.setText(machine_status);
+        }
+    }
+
+    //当前焊机： 确定
+    private void button9ActionPerformed(ActionEvent e) {
+        String machine_name = (String) comboBox1.getSelectedItem();
+        String machine_status = label15.getText();
+        boolean result = SettingUtil.changeNowMachine(machine_name, machine_status); //向machine_now表中提交更新信息
+        if (result) {
+            JOptionPane.showMessageDialog(this, "修改成功！");
+        } else {
+            JOptionPane.showMessageDialog(this, "修改失败!", "提示",JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    //修改焊机： 获得焊机下拉框内容
+    private void updateComboBox2() {
+        comboBox2.removeAllItems(); //清空原数据
+        machine_setting_mapsList = SettingUtil.getData("machine_setting"); //获取焊机表内容，更新内容
+        if (machine_setting_mapsList == null || machine_setting_mapsList.size() == 0) {
+            return;
+        }
+        //更新 产品选择 下拉框内容
+        for (Map<String, Object> map : machine_setting_mapsList) {
+            comboBox2.addItem((String) map.get("machine_name")); //下拉框添加内容
+        }
+        comboBox2.setSelectedIndex(-1);
+
+        textField3.setText("");// 清空焊机状态（因为addItem会触发一个change事件）
+    }
+
+    //修改焊机：焊机状态跟随焊机名称变化
+    private void comboBox2ItemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            String machine_status = "出错"; //初始值
+
+            for (Map<String, Object> map : machine_setting_mapsList) {
+                if (map.get("machine_name").equals(comboBox2.getSelectedItem())) {
+                    machine_status = (String) map.get("machine_status"); //找到对应的状态的，修改值
+                }
+            }
+            textField3.setText(machine_status);
+        }
+    }
+
+    //修改焊机： 确定
+    private void button8ActionPerformed(ActionEvent e) {
+        if (textField3.getText().equals("") || textField3.getText() == null) {
+            JOptionPane.showMessageDialog(this, "请输入焊机状态!", "提示",JOptionPane.WARNING_MESSAGE);
+        } else if (comboBox2.getSelectedIndex() == -1){
+            JOptionPane.showMessageDialog(this, "请选择焊机名称!", "提示",JOptionPane.WARNING_MESSAGE);
+        } else {
+            String machine_name = (String) comboBox2.getSelectedItem();
+            String machine_status = textField3.getText();
+            boolean result = SettingUtil.updateMachine(machine_name, machine_status);
+            if (result) {
+                JOptionPane.showMessageDialog(this, "修改成功！");
+                updateComboBox2(); //修改成功后，刷新一下 修改焊机
+            } else {
+                JOptionPane.showMessageDialog(this, "修改失败!", "提示",JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 
 
@@ -293,7 +381,6 @@ public class Setting extends JFrame {
         panel2 = new JPanel();
         label1 = new JLabel();
         label17 = new JLabel();
-        label14 = new JLabel();
         label12 = new JLabel();
         label13 = new JLabel();
         label15 = new JLabel();
@@ -310,6 +397,8 @@ public class Setting extends JFrame {
         button5 = new JButton();
         label41 = new JLabel();
         button8 = new JButton();
+        button9 = new JButton();
+        comboBox2 = new JComboBox();
         panel3 = new JPanel();
         label8 = new JLabel();
         label18 = new JLabel();
@@ -318,7 +407,6 @@ public class Setting extends JFrame {
         label21 = new JLabel();
         label22 = new JLabel();
         label23 = new JLabel();
-        comboBox2 = new JComboBox();
         label24 = new JLabel();
         label25 = new JLabel();
         textField4 = new JTextField();
@@ -336,7 +424,6 @@ public class Setting extends JFrame {
         label33 = new JLabel();
         label34 = new JLabel();
         label35 = new JLabel();
-        comboBox3 = new JComboBox();
         label36 = new JLabel();
         label37 = new JLabel();
         textField7 = new JTextField();
@@ -471,50 +558,44 @@ public class Setting extends JFrame {
             label1.setText("\u710a\u673a\u7ba1\u7406");
             label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 5f));
             panel2.add(label1);
-            label1.setBounds(new Rectangle(new Point(100, 10), label1.getPreferredSize()));
+            label1.setBounds(new Rectangle(new Point(105, 5), label1.getPreferredSize()));
 
             //---- label17 ----
             label17.setText("\u5f53\u524d\u710a\u673a");
             label17.setFont(label17.getFont().deriveFont(label17.getFont().getSize() + 2f));
             panel2.add(label17);
-            label17.setBounds(180, 55, 65, 18);
-
-            //---- label14 ----
-            label14.setText("\u5f53\u524d\u710a\u673a");
-            label14.setFont(label14.getFont().deriveFont(label14.getFont().getSize() + 2f));
-            label14.setForeground(new Color(0, 153, 204));
-            panel2.add(label14);
-            label14.setBounds(115, 80, 125, 20);
+            label17.setBounds(180, 35, 65, 18);
 
             //---- label12 ----
             label12.setText("\u710a\u673a\u540d\u79f0\uff1a");
             label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 2f));
             panel2.add(label12);
-            label12.setBounds(35, 80, 80, 20);
+            label12.setBounds(35, 60, 80, 20);
 
             //---- label13 ----
             label13.setText("\u710a\u673a\u72b6\u6001\uff1a");
             label13.setFont(label13.getFont().deriveFont(label13.getFont().getSize() + 2f));
             panel2.add(label13);
-            label13.setBounds(35, 115, 85, 20);
+            label13.setBounds(35, 95, 85, 20);
 
             //---- label15 ----
             label15.setText("\u5f53\u524d\u72b6\u6001");
             label15.setFont(label15.getFont().deriveFont(label15.getFont().getSize() + 2f));
             label15.setForeground(new Color(0, 153, 204));
             panel2.add(label15);
-            label15.setBounds(115, 115, 125, 20);
+            label15.setBounds(115, 95, 125, 20);
 
             //---- label16 ----
-            label16.setText("\u4fee\u6539\u5f53\u524d\u710a\u673a");
+            label16.setText("\u4fee\u6539\u710a\u673a");
             label16.setFont(label16.getFont().deriveFont(label16.getFont().getSize() + 2f));
             panel2.add(label16);
-            label16.setBounds(150, 165, 90, 20);
+            label16.setBounds(180, 170, 65, 20);
 
             //---- comboBox1 ----
             comboBox1.setSelectedIndex(-1);
+            comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
             panel2.add(comboBox1);
-            comboBox1.setBounds(115, 195, 125, comboBox1.getPreferredSize().height);
+            comboBox1.setBounds(115, 60, 125, comboBox1.getPreferredSize().height);
 
             //---- label6 ----
             label6.setText("\u710a\u673a\u540d\u79f0\uff1a");
@@ -555,7 +636,7 @@ public class Setting extends JFrame {
             //---- button5 ----
             button5.setText("\u786e\u5b9a");
             panel2.add(button5);
-            button5.setBounds(new Rectangle(new Point(180, 425), button5.getPreferredSize()));
+            button5.setBounds(175, 425, 63, button5.getPreferredSize().height);
 
             //---- label41 ----
             label41.setText("Tips: \u4fee\u6539\u540e\uff0c\u5207\u6362\u4e00\u4e0b\u9875\u9762\u5373\u53ef\u6b63\u5e38\u663e\u793a");
@@ -565,8 +646,21 @@ public class Setting extends JFrame {
 
             //---- button8 ----
             button8.setText("\u786e\u5b9a");
+            button8.addActionListener(e -> button8ActionPerformed(e));
             panel2.add(button8);
-            button8.setBounds(180, 270, 58, 28);
+            button8.setBounds(175, 270, 63, 28);
+
+            //---- button9 ----
+            button9.setText("\u786e\u5b9a");
+            button9.addActionListener(e -> button9ActionPerformed(e));
+            panel2.add(button9);
+            button9.setBounds(175, 120, 63, 28);
+
+            //---- comboBox2 ----
+            comboBox2.setSelectedIndex(-1);
+            comboBox2.addItemListener(e -> comboBox2ItemStateChanged(e));
+            panel2.add(comboBox2);
+            comboBox2.setBounds(115, 200, 125, 27);
 
             {
                 // compute preferred size
@@ -632,8 +726,6 @@ public class Setting extends JFrame {
             label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() + 2f));
             panel3.add(label23);
             label23.setBounds(150, 165, 90, 20);
-            panel3.add(comboBox2);
-            comboBox2.setBounds(115, 195, 125, comboBox2.getPreferredSize().height);
 
             //---- label24 ----
             label24.setText("\u710a\u673a\u540d\u79f0\uff1a");
@@ -740,8 +832,6 @@ public class Setting extends JFrame {
             label35.setFont(label35.getFont().deriveFont(label35.getFont().getSize() + 2f));
             panel4.add(label35);
             label35.setBounds(150, 165, 90, 20);
-            panel4.add(comboBox3);
-            comboBox3.setBounds(115, 195, 125, comboBox3.getPreferredSize().height);
 
             //---- label36 ----
             label36.setText("\u710a\u673a\u540d\u79f0\uff1a");
@@ -839,7 +929,6 @@ public class Setting extends JFrame {
     private JPanel panel2;
     private JLabel label1;
     private JLabel label17;
-    private JLabel label14;
     private JLabel label12;
     private JLabel label13;
     private JLabel label15;
@@ -856,6 +945,8 @@ public class Setting extends JFrame {
     private JButton button5;
     private JLabel label41;
     private JButton button8;
+    private JButton button9;
+    private JComboBox comboBox2;
     private JPanel panel3;
     private JLabel label8;
     private JLabel label18;
@@ -864,7 +955,6 @@ public class Setting extends JFrame {
     private JLabel label21;
     private JLabel label22;
     private JLabel label23;
-    private JComboBox comboBox2;
     private JLabel label24;
     private JLabel label25;
     private JTextField textField4;
@@ -882,7 +972,6 @@ public class Setting extends JFrame {
     private JLabel label33;
     private JLabel label34;
     private JLabel label35;
-    private JComboBox comboBox3;
     private JLabel label36;
     private JLabel label37;
     private JTextField textField7;
