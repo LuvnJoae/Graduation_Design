@@ -199,8 +199,6 @@ public class ExpertSystem extends JFrame {
 
     /**
      * Lable3 账户信息: 显示当前登录用户
-     *
-     * @param username
      */
     private void label3Bind(String username) {
         log.debug("Lable3 账户信息: 显示当前登录用户");
@@ -208,10 +206,9 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
-     * MenuItem 用户设置:  切换用户
-     *
-     * @param e
+     * Menu 菜单
      */
+    //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
         log.debug("MenuItem 用户设置:  切换用户");
 
@@ -219,11 +216,7 @@ public class ExpertSystem extends JFrame {
         this.dispose();
     }
 
-    /**
-     * MenuItem 用户设置： 更改密码
-     *
-     * @param e
-     */
+    //MenuItem 用户设置： 更改密码
     private void menuItem2ActionPerformed(ActionEvent e) {
         log.debug("MenuItem 用户设置： 更改密码");
 
@@ -240,7 +233,7 @@ public class ExpertSystem extends JFrame {
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、一般符号，需以字母开头");
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
         tip.setLineWrap(true); // 自动换行
@@ -314,10 +307,8 @@ public class ExpertSystem extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String newPassword = newPasswordField.getText();
-                if (newPassword.length() > 10
-                        || newPassword.length() < 5
-                        || (newPassword.charAt(0) < 'A' || newPassword.charAt(0) > 'z')
-                        || (newPassword.charAt(0) > 'Z' && newPassword.charAt(0) < 'a')) {
+
+                if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                 } else {
                     if (oldChangeFlag) {

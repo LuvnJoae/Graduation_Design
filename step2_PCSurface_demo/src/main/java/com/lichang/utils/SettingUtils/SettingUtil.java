@@ -146,4 +146,32 @@ public class SettingUtil {
         boolean result = JdbcTemplateUtil.update(sqlStr, params);
         return result;
     }
+
+    /**
+     *  用户信息管理 更新用户信息
+     */
+    public static boolean updateUser(String table, int id, String username, String password) {
+        String sqlStr = "update " + table + " set username = ? , password = ? where id = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(password);
+        params.add(id);
+
+        boolean result = JdbcTemplateUtil.update(sqlStr, params);
+
+        return result;
+    }
+
+    /**
+     * 用户信息管理 添加新用户
+     */
+    public static boolean insertNewUser(String table, String username, String password) {
+        String sqlStr = "insert into " + table + " (username, password) values(?, ?)";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+        params.add(password);
+
+        boolean result = JdbcTemplateUtil.update(sqlStr, params);
+        return result;
+    }
 }

@@ -113,7 +113,7 @@ public class HistoricalStatistics extends JFrame {
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线，需以字母开头");
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
         tip.setLineWrap(true); // 自动换行
@@ -188,7 +188,7 @@ public class HistoricalStatistics extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String newPassword = newPasswordField.getText();
 
-                if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
+                if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                 } else {
                     if (oldChangeFlag) {

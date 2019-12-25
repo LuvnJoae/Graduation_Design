@@ -119,33 +119,13 @@ new FormModel {
 				"width": 965
 				"height": 10
 			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label4"
-				"text": "用户信息管理"
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 125
-				"height": 25
-				"x": 530
-				"y": 25
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label5"
-				"text": "数据库设置"
-				"font": #SwingDerivedFont0
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 115
-				"height": 25
-				"x": 440
-				"y": 30
-			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel2"
 				"background": &Color0 new java.awt.Color( 204, 204, 204, 255 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label1"
 					"text": "焊机管理"
-					"font": #SwingDerivedFont0
+					"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 105
 					"y": 5
@@ -355,27 +335,33 @@ new FormModel {
 						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 							name: "scrollPane2"
 							add( new FormComponent( "javax.swing.JTable" ) {
-								name: "table2"
+								name: "table1"
 								"rowHeight": 20
 								"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 									add( new java.util.Vector {
 										add( null )
 										add( null )
+										add( null )
 									} )
 									add( new java.util.Vector {
 										add( null )
 										add( null )
+										add( null )
 									} )
 								}, new java.util.Vector {
+									add( "id" )
 									add( "用户名" )
 									add( "密码" )
 								}, new java.util.Vector {
 									add( null )
 									add( null )
+									add( null )
 								}, new java.util.Vector {
 									add( null )
 									add( null )
+									add( null )
 								}, new java.util.Vector {
+									add( null )
 									add( null )
 									add( null )
 								} )
@@ -390,40 +376,46 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button6"
 							"text": "修改"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button6ActionPerformed", true ) )
 						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 							"x": 5
 							"y": 10
 							"width": 65
+							"height": 28
 						} )
 						add( new FormComponent( "javax.swing.JButton" ) {
 							name: "button7"
 							"text": "删除"
-						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-							"width": 65
-							"height": 28
-							"x": 75
-							"y": 10
-						} )
-						add( new FormComponent( "javax.swing.JButton" ) {
-							name: "button10"
-							"text": "添加"
-						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-							"width": 65
-							"height": 28
-							"x": 145
-							"y": 10
-						} )
-						add( new FormComponent( "javax.swing.JButton" ) {
-							name: "button11"
-							"text": "确定"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button7ActionPerformed", true ) )
 						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 							"width": 65
 							"height": 28
 							"x": 220
 							"y": 10
 						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button10"
+							"text": "添加"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button10ActionPerformed", true ) )
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+							"width": 65
+							"height": 28
+							"x": 150
+							"y": 10
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "button11"
+							"text": "确定"
+							"enabled": false
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button11ActionPerformed", true ) )
+						}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+							"width": 65
+							"height": 28
+							"x": 75
+							"y": 10
+						} )
 					}, new FormLayoutConstraints( null ) {
-						"title": "普通用户"
+						"title": "员工用户"
 					} )
 					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 						name: "panel6"

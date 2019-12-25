@@ -6,7 +6,8 @@ package com.lichang.ui;
 
 //TODO:
 //标记时间：2019/12/24 17:38  预解决时间：
-//1. 两个表之间，修改后的联动效果
+//1. 管理与设置+ 权限
+//2. 用户名合规、密码合规检测
 
 import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
@@ -47,6 +48,10 @@ public class Setting extends JFrame {
 
     private List<Map<String, Object>> machine_now_mapsList; //当前焊机表
     private List<Map<String, Object>> machine_setting_mapsList; //焊机表
+
+    private List<Map<String, Object>> employee_mapList; //员工用户表
+    private JDialog jDialog3; //员工表 添加
+    private JDialog jDialog4; //员工表 删除
 
     //无参（预设账户信息）
     public Setting() {
@@ -113,7 +118,7 @@ public class Setting extends JFrame {
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线，需以字母开头");
+        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
         tip.setLineWrap(true); // 自动换行
@@ -188,7 +193,7 @@ public class Setting extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String newPassword = newPasswordField.getText();
 
-                if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{4,15}$", newPassword)) {
+                if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", newPassword)) {
                     JOptionPane.showMessageDialog(jDialog2, "新密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                 } else {
                     if (oldChangeFlag) {
@@ -245,9 +250,12 @@ public class Setting extends JFrame {
      */
     //当打开此frame时，触发
     private void thisWindowOpened(WindowEvent e) {
-        updateComboBox1();
-        displayNowMachine();
-        updateComboBox2();
+        //焊机管理
+        updateComboBox1(); //当前焊机：焊机名称
+        displayNowMachine(); //当前焊机：显示当前状态
+        updateComboBox2(); //修改焊机：焊机名称
+        //用户信息管理
+        updateTable1(); //员工表格
     }
 
     /**
@@ -305,7 +313,7 @@ public class Setting extends JFrame {
         if (result) {
             JOptionPane.showMessageDialog(this, "修改成功！");
         } else {
-            JOptionPane.showMessageDialog(this, "修改失败!", "提示",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "修改失败!", "提示", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -342,9 +350,9 @@ public class Setting extends JFrame {
     //修改焊机： 确定
     private void button8ActionPerformed(ActionEvent e) {
         if (textField3.getText().equals("") || textField3.getText() == null) {
-            JOptionPane.showMessageDialog(this, "请输入焊机状态!", "提示",JOptionPane.WARNING_MESSAGE);
-        } else if (comboBox2.getSelectedIndex() == -1){
-            JOptionPane.showMessageDialog(this, "请选择焊机名称!", "提示",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "请输入焊机状态!", "提示", JOptionPane.WARNING_MESSAGE);
+        } else if (comboBox2.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "请选择焊机名称!", "提示", JOptionPane.WARNING_MESSAGE);
         } else {
             String machine_name = (String) comboBox2.getSelectedItem();
             String machine_status = textField3.getText();
@@ -355,7 +363,7 @@ public class Setting extends JFrame {
                 //修改完成后，更新当前表
                 SettingUtil.updateMachineStatus(machine_name, machine_status);
             } else {
-                JOptionPane.showMessageDialog(this, "修改失败!", "提示",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "修改失败!", "提示", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -372,11 +380,231 @@ public class Setting extends JFrame {
             textField1.setText(""); //清空内容
             textField2.setText(""); //清空内容
         } else {
-            JOptionPane.showMessageDialog(this, "添加失败!", "提示",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "添加失败!", "提示", JOptionPane.WARNING_MESSAGE);
         }
 
     }
 
+    /**
+     * 用户管理
+     */
+    //员工用户: 加载表格
+    private void updateTable1() {
+        //设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table1.setDefaultRenderer(Object.class, r);
+
+        employee_mapList = SettingUtil.getData("employee"); //获得表内容
+        //非空判断
+        if (employee_mapList == null || employee_mapList.size() == 0) {
+            return;
+        }
+
+        DefaultTableModel table1Model = (DefaultTableModel) table1.getModel(); //获取model
+        table1Model.setRowCount(0); //先清空，再加载新数据
+
+        for (Map<String, Object> map : employee_mapList) {
+            Object[] newRowData = {
+                    map.get("id"),
+                    map.get("username"),
+                    map.get("password")
+            };
+
+            table1Model.addRow(newRowData);
+        }
+    }
+
+    //员工用户：修改
+    private void button6ActionPerformed(ActionEvent e) {
+        //开使能
+        table1.setEnabled(true); //表格
+        button11.setEnabled(true); //确定
+        //去使能
+        button6.setEnabled(false); //修改
+        button7.setEnabled(false); //删除
+        button10.setEnabled(false); //添加
+
+        JOptionPane.showMessageDialog(this, "用户表已可进行编辑，修改完成后，请点击 确定\n" +
+                "用户名格式： 2~10长度，可使用 字母、数字、下划线，需以字母开头\n" +
+                "密码格式：2~10长度，可使用 字母、数字、下划线");
+    }
+
+    //员工用户：确定
+    private void button11ActionPerformed(ActionEvent e) {
+        boolean updateResult = true;
+        for (int i = 0; i < table1.getRowCount(); i++) {
+            int id = (int) table1.getValueAt(i, 0);
+            String username = (String) table1.getValueAt(i, 1);
+            String password = (String) table1.getValueAt(i, 2);
+
+            //用户名 与 密码 合规验证
+            if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{1,10}$", username)) {
+                JOptionPane.showMessageDialog(this, "用户名格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                updateTable1(); //修改有问题，更新，重新修改
+                return;
+            }
+            if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", password)) {
+                JOptionPane.showMessageDialog(this, "密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                updateTable1(); //修改有问题，更新，重新修改
+                return;
+            }
+
+            boolean result = SettingUtil.updateUser("employee", id, username, password);
+            if (!result) {
+                updateResult = false;
+            }
+        }
+        if (!updateResult) {
+            JOptionPane.showMessageDialog(this, "修改失败！");
+        } else {
+            JOptionPane.showMessageDialog(this, "修改成功！");
+        }
+        updateTable1(); //修改后，再次更新一下
+        //去使能
+        table1.setEnabled(false); //表格
+        button11.setEnabled(false); //确定
+        //开使能
+        button6.setEnabled(true); //修改
+        button7.setEnabled(true); //删除
+        button10.setEnabled(true); //添加
+    }
+
+    //员工用户：添加
+    private void button10ActionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(this,
+                "用户名格式： 2~10长度，可使用 字母、数字、下划线，需以字母开头\n" +
+                "密码格式：2~10长度，可使用 字母、数字、下划线");
+
+        jDialog3 = new JDialog(this, "添加用户", true);
+        JPanel addUserPanel = new JPanel();
+
+        addUserPanel.setLayout(null);
+
+        //用户名Label
+        JLabel usernameLabel = new JLabel("用户名： ");
+        addUserPanel.add(usernameLabel);
+        usernameLabel.setBounds(40, 60, 110, 30);
+        usernameLabel.setFont(new Font("", Font.BOLD, 15));
+
+
+        //密码Label
+        JLabel passwordLabel = new JLabel("密码:  ");
+        addUserPanel.add(passwordLabel);
+        passwordLabel.setBounds(40, 120, 110, 30);
+        passwordLabel.setFont(new Font("", Font.BOLD, 15));
+
+        //用户名
+        JTextField usernameField = new JTextField();
+        addUserPanel.add(usernameField);
+        usernameField.setBounds(120, 60, 140, 30);
+        usernameField.setColumns(10);
+        usernameField.setFont(new Font("黑体", Font.PLAIN, 15));
+
+        //密码
+        JTextField passwordField = new JTextField();
+        addUserPanel.add(passwordField);
+        passwordField.setBounds(120, 120, 140, 30);
+        passwordField.setColumns(10);
+        passwordField.setFont(new Font("黑体", Font.PLAIN, 15));
+
+        //确定 按钮
+        JButton enterButton = new JButton("确定");
+        addUserPanel.add(enterButton);
+        enterButton.setBounds(280, 60,80,90);
+        enterButton.setFont(new Font("黑体", Font.PLAIN, 18));
+
+        enterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = passwordField.getText();
+                //用户名 与 密码 合规验证
+                if (!Pattern.matches("^[a-zA-Z][a-zA-Z0-9_]{1,10}$", username)) {
+                    JOptionPane.showMessageDialog(jDialog3, "用户名格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", password)) {
+                    JOptionPane.showMessageDialog(jDialog3, "密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                boolean result = SettingUtil.insertNewUser("employee", username, password);
+                if (result) {
+                    JOptionPane.showMessageDialog(jDialog3, "添加成功！");
+                } else {
+                    JOptionPane.showMessageDialog(jDialog3, "添加失败！", "提示", JOptionPane.WARNING_MESSAGE);
+                }
+
+                updateTable1(); //添加后，更新员工表格
+            }
+        });
+
+        jDialog3.setSize(400, 250);
+        jDialog3.setAlwaysOnTop(true);
+        jDialog3.setLocationRelativeTo(null);
+        jDialog3.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        jDialog3.add(addUserPanel);
+        jDialog3.setVisible(true);
+    }
+
+    //员工用户：删除
+    private void button7ActionPerformed(ActionEvent e) {
+        jDialog4 = new JDialog(this, "添加用户", true);
+        JPanel deleteUserPanel = new JPanel();
+
+        deleteUserPanel.setLayout(null);
+
+        //用户名Label
+        JLabel usernameLabel = new JLabel("用户名： ");
+        deleteUserPanel.add(usernameLabel);
+        usernameLabel.setBounds(40, 60, 110, 30);
+        usernameLabel.setFont(new Font("", Font.BOLD, 15));
+
+        //用户名
+        JTextField usernameField = new JTextField();
+        deleteUserPanel.add(usernameField);
+        usernameField.setBounds(120, 60, 140, 30);
+        usernameField.setColumns(10);
+        usernameField.setFont(new Font("黑体", Font.PLAIN, 15));
+
+        //确定 按钮
+        JButton enterButton = new JButton("确定");
+        deleteUserPanel.add(enterButton);
+        enterButton.setBounds(280, 60,80,30);
+        enterButton.setFont(new Font("黑体", Font.PLAIN, 16));
+
+        enterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                //用户名合规判断
+                if (username == null || username.equals("")) {
+                    JOptionPane.showMessageDialog(jDialog3, "请输入用户名！", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                boolean userExistFlag = false;
+                for (Map<String, Object> map : employee_mapList) {
+                    if (map.get("username").equals(username)) {
+                        userExistFlag = true;
+                    }
+                }
+                if (!userExistFlag) {
+                    JOptionPane.showMessageDialog(jDialog3, "该用户名不存在！请检查后重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                //TODO: 删除后的id问题
+                //标记时间：2019/12/25 16:56  预解决时间：
+            }
+        });
+        
+        jDialog4.setSize(400, 200);
+        jDialog4.setAlwaysOnTop(true);
+        jDialog4.setLocationRelativeTo(null);
+        jDialog4.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        jDialog4.add(deleteUserPanel);
+        jDialog4.setVisible(true);
+    }
 
 
     /**
@@ -396,8 +624,6 @@ public class Setting extends JFrame {
         button3 = new JButton();
         button4 = new JButton();
         separator4 = new JPopupMenu.Separator();
-        label4 = new JLabel();
-        label5 = new JLabel();
         panel2 = new JPanel();
         label1 = new JLabel();
         label17 = new JLabel();
@@ -424,7 +650,7 @@ public class Setting extends JFrame {
         tabbedPane1 = new JTabbedPane();
         panel5 = new JPanel();
         scrollPane2 = new JScrollPane();
-        table2 = new JTable();
+        table1 = new JTable();
         button6 = new JButton();
         button7 = new JButton();
         button10 = new JButton();
@@ -535,18 +761,6 @@ public class Setting extends JFrame {
         button4.setBounds(805, 60, 120, 30);
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 965, 10);
-
-        //---- label4 ----
-        label4.setText("\u7528\u6237\u4fe1\u606f\u7ba1\u7406");
-        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 5f));
-        contentPane.add(label4);
-        label4.setBounds(530, 25, 125, 25);
-
-        //---- label5 ----
-        label5.setText("\u6570\u636e\u5e93\u8bbe\u7f6e");
-        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 5f));
-        contentPane.add(label5);
-        label5.setBounds(440, 30, 115, 25);
 
         //======== panel2 ========
         {
@@ -701,42 +915,47 @@ public class Setting extends JFrame {
                     //======== scrollPane2 ========
                     {
 
-                        //---- table2 ----
-                        table2.setRowHeight(20);
-                        table2.setModel(new DefaultTableModel(
+                        //---- table1 ----
+                        table1.setRowHeight(20);
+                        table1.setModel(new DefaultTableModel(
                             new Object[][] {
-                                {null, null},
-                                {null, null},
+                                {null, null, null},
+                                {null, null, null},
                             },
                             new String[] {
-                                "\u7528\u6237\u540d", "\u5bc6\u7801"
+                                "id", "\u7528\u6237\u540d", "\u5bc6\u7801"
                             }
                         ));
-                        table2.setEnabled(false);
-                        scrollPane2.setViewportView(table2);
+                        table1.setEnabled(false);
+                        scrollPane2.setViewportView(table1);
                     }
                     panel5.add(scrollPane2);
                     scrollPane2.setBounds(0, 50, 290, 355);
 
                     //---- button6 ----
                     button6.setText("\u4fee\u6539");
+                    button6.addActionListener(e -> button6ActionPerformed(e));
                     panel5.add(button6);
-                    button6.setBounds(5, 10, 65, button6.getPreferredSize().height);
+                    button6.setBounds(5, 10, 65, 28);
 
                     //---- button7 ----
                     button7.setText("\u5220\u9664");
+                    button7.addActionListener(e -> button7ActionPerformed(e));
                     panel5.add(button7);
-                    button7.setBounds(75, 10, 65, 28);
+                    button7.setBounds(220, 10, 65, 28);
 
                     //---- button10 ----
                     button10.setText("\u6dfb\u52a0");
+                    button10.addActionListener(e -> button10ActionPerformed(e));
                     panel5.add(button10);
-                    button10.setBounds(145, 10, 65, 28);
+                    button10.setBounds(150, 10, 65, 28);
 
                     //---- button11 ----
                     button11.setText("\u786e\u5b9a");
+                    button11.setEnabled(false);
+                    button11.addActionListener(e -> button11ActionPerformed(e));
                     panel5.add(button11);
-                    button11.setBounds(220, 10, 65, 28);
+                    button11.setBounds(75, 10, 65, 28);
 
                     {
                         // compute preferred size
@@ -753,7 +972,7 @@ public class Setting extends JFrame {
                         panel5.setPreferredSize(preferredSize);
                     }
                 }
-                tabbedPane1.addTab("\u666e\u901a\u7528\u6237", panel5);
+                tabbedPane1.addTab("\u5458\u5de5\u7528\u6237", panel5);
 
                 //======== panel6 ========
                 {
@@ -857,8 +1076,6 @@ public class Setting extends JFrame {
     private JButton button3;
     private JButton button4;
     private JPopupMenu.Separator separator4;
-    private JLabel label4;
-    private JLabel label5;
     private JPanel panel2;
     private JLabel label1;
     private JLabel label17;
@@ -885,7 +1102,7 @@ public class Setting extends JFrame {
     private JTabbedPane tabbedPane1;
     private JPanel panel5;
     private JScrollPane scrollPane2;
-    private JTable table2;
+    private JTable table1;
     private JButton button6;
     private JButton button7;
     private JButton button10;
