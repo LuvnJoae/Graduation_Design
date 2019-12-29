@@ -121,7 +121,6 @@ public class ExpertSystem extends JFrame {
 
         UIManager.put("ComboBox.disabledForeground", new Color(0, 45, 145)); //修改ComboBox不可选中时的字体颜色
         UIManager.put("TextField.inactiveForeground", new Color(0, 45, 145)); //修改TextField不可选中时的字体颜色
-
         initComponents();
         updateComboBox17(); //加载 产品选择
 
@@ -136,7 +135,6 @@ public class ExpertSystem extends JFrame {
 
         UIManager.put("ComboBox.disabledForeground", new Color(0, 45, 145)); //修改ComboBox不可选中时的字体颜色
         UIManager.put("TextField.inactiveForeground", new Color(0, 45, 145)); //修改TextField不可选中时的字体颜色
-
         initComponents();
 
         updateComboBox17(); //加载 产品选择
@@ -148,10 +146,19 @@ public class ExpertSystem extends JFrame {
     }
 
     /**
+     * 界面风格
+     */
+    private void setUI() {
+        this.getContentPane().setBackground(new Color(238,238,238)); //整体背景
+    }
+
+    /**
      * 整体页面 事件监听
      */
     //打开该frame时，触发
     private void thisWindowOpened(WindowEvent e) {
+        setUI();
+
         //非管理员用户，禁止使用重设 、设计、 仅调参等功能
         if (!adminFlag) {
             button6.setEnabled(false); //重设
@@ -2436,6 +2443,7 @@ public class ExpertSystem extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        setResizable(false);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -2451,12 +2459,15 @@ public class ExpertSystem extends JFrame {
 
         //======== panel1 ========
         {
+            panel1.setForeground(Color.black);
+            panel1.setBackground(new Color(238, 238, 238));
             panel1.setLayout(null);
 
             //---- label2 ----
             label2.setText("\u5f53\u524d\uff1a");
+            label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
             panel1.add(label2);
-            label2.setBounds(0, 0, 40, 30);
+            label2.setBounds(0, 0, 45, 30);
 
             //======== menuBar1 ========
             {
@@ -2493,8 +2504,9 @@ public class ExpertSystem extends JFrame {
 
             //---- label3 ----
             label3.setText("admin");
+            label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
             panel1.add(label3);
-            label3.setBounds(55, 0, 60, 30);
+            label3.setBounds(50, 0, 80, 30);
 
             {
                 // compute preferred size
@@ -2512,30 +2524,38 @@ public class ExpertSystem extends JFrame {
             }
         }
         contentPane.add(panel1);
-        panel1.setBounds(755, 0, panel1.getPreferredSize().width, 55);
+        panel1.setBounds(750, 0, 226, 50);
 
         //---- button1 ----
         button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
+        button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+        button1.setForeground(new Color(51, 51, 51));
         button1.addActionListener(e -> button1ActionPerformed(e));
         contentPane.add(button1);
-        button1.setBounds(55, 60, 120, 30);
+        button1.setBounds(55, 50, 135, 40);
 
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+        button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+        button2.setForeground(new Color(51, 51, 51));
         button2.addActionListener(e -> button2ActionPerformed(e));
         contentPane.add(button2);
-        button2.setBounds(295, 60, 130, 30);
+        button2.setBounds(295, 50, 135, 40);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
+        button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+        button3.setForeground(new Color(51, 51, 51));
         contentPane.add(button3);
-        button3.setBounds(550, 60, 120, 30);
+        button3.setBounds(540, 50, 135, 40);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+        button4.setForeground(new Color(51, 51, 51));
         button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
-        button4.setBounds(805, 60, 120, 30);
+        button4.setBounds(795, 50, 135, 40);
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 965, 10);
 

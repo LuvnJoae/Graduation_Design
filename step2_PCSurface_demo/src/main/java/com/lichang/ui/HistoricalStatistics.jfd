@@ -9,16 +9,20 @@ new FormModel {
 			"title": "界面"
 			"alwaysOnTop": true
 			"$locationPolicy": 1
+			"resizable": false
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowOpened", "thisWindowOpened", true ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel1"
+				"background": new java.awt.Color( 238, 238, 238, 255 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label2"
 					"text": "当前："
+					"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 0
 					"y": 0
-					"width": 40
+					"width": 50
 					"height": 30
 				} )
 				add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
@@ -61,55 +65,65 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
 					"text": "admin"
+					"font": #SwingDerivedFont0
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 55
+					"x": 50
 					"y": 0
-					"width": 60
+					"width": 85
 					"height": 30
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 755
-				"height": 55
+				"x": 750
+				"height": 50
 				"y": 0
+				"width": 226
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "实时监测"
+				"font": &Font0 new java.awt.Font( "微软雅黑", 1, 14 )
+				"foreground": &Color0 new java.awt.Color( 51, 51, 51, 255 )
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 55
-				"y": 60
-				"width": 120
-				"height": 30
+				"y": 50
+				"width": 135
+				"height": 40
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"text": "历史统计与查询"
+				"font": #Font0
+				"foreground": #Color0
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 130
-				"height": 30
+				"width": 135
+				"height": 40
 				"x": 295
-				"y": 60
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button3"
 				"text": "专家系统"
+				"font": #Font0
+				"foreground": #Color0
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button3ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 550
-				"y": 60
+				"width": 135
+				"height": 40
+				"x": 540
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button4"
 				"text": "管理与设置"
+				"font": #Font0
+				"foreground": #Color0
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button4ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 805
-				"y": 60
+				"width": 135
+				"height": 40
+				"x": 795
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 				name: "separator4"
@@ -121,7 +135,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+				"font": new java.awt.Font( "微软雅黑", 0, 15 )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 					name: "panel2"
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -152,10 +166,10 @@ new FormModel {
 								add( false )
 							}, new java.util.Vector {
 								add( new com.jformdesigner.model.SwingTableColumn( null, 50, 0, 0, true ) )
-								add( &SwingTableColumn0 new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
-								add( &SwingTableColumn1 new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
-								add( &SwingTableColumn2 new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
-								add( &SwingTableColumn3 new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 120, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
 								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
 							} )
 							"autoCreateRowSorter": true
@@ -164,7 +178,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 0
 						"y": 40
-						"width": 505
+						"width": 540
 						"height": 425
 					} )
 					add( new FormComponent( "javax.swing.JTextField" ) {
@@ -182,8 +196,8 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 155
 						"y": 5
-						"width": 65
-						"height": 28
+						"width": 70
+						"height": 30
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button6"
@@ -192,18 +206,18 @@ new FormModel {
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 225
 						"y": 5
-						"width": 65
-						"height": 28
+						"width": 70
+						"height": 30
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button7"
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button7ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"x": 440
+						"x": 460
 						"y": 5
-						"width": 65
-						"height": 28
+						"width": 70
+						"height": 30
 					} )
 				}, new FormLayoutConstraints( null ) {
 					"title": "工件统计与查询"
@@ -215,7 +229,18 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JTable" ) {
 							name: "table2"
 							"rowHeight": 20
-							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+								add( new java.util.Vector {
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+									add( null )
+								} )
+							}, new java.util.Vector {
 								add( "id" )
 								add( "时间" )
 								add( "产品名称" )
@@ -243,20 +268,20 @@ new FormModel {
 								add( false )
 								add( false )
 							}, new java.util.Vector {
-								add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
-								add( #SwingTableColumn0 )
-								add( #SwingTableColumn1 )
-								add( #SwingTableColumn2 )
-								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
-								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
-								add( #SwingTableColumn3 )
-								add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 30, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 110, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 110, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 57, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 57, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 57, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 0, 57, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 30, 35, 0, true ) )
 							} )
 							"autoCreateRowSorter": true
 							addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "table2MouseClicked", true ) )
 						} )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 505
+						"width": 540
 						"height": 425
 						"y": 40
 					} )
@@ -273,8 +298,8 @@ new FormModel {
 						"text": "查询"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button8ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 65
-						"height": 28
+						"width": 70
+						"height": 30
 						"x": 155
 						"y": 5
 					} )
@@ -283,8 +308,8 @@ new FormModel {
 						"text": "返回"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button9ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 65
-						"height": 28
+						"width": 70
+						"height": 30
 						"x": 225
 						"y": 5
 					} )
@@ -293,9 +318,9 @@ new FormModel {
 						"text": "刷新"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button10ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-						"width": 65
-						"height": 28
-						"x": 440
+						"width": 70
+						"height": 30
+						"x": 460
 						"y": 5
 					} )
 				}, new FormLayoutConstraints( null ) {
@@ -304,46 +329,47 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 5
 				"y": 100
-				"width": 510
+				"width": 540
 				"height": 490
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel4"
 				"background": new java.awt.Color( 153, 153, 153, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 445
-				"height": 465
-				"x": 525
-				"y": 125
+				"width": 420
+				"height": 460
+				"x": 550
+				"y": 130
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "工件统计图"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 4, false )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 100
 				"height": 25
-				"x": 690
-				"y": 95
+				"x": 705
+				"y": 100
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox1"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "comboBox1MouseClicked", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 120
-				"height": 27
+				"height": 30
 				"x": 850
-				"y": 95
+				"y": 100
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "产品:"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"width": 35
 				"height": 19
-				"x": 815
-				"y": 100
+				"x": 810
+				"y": 105
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 5 )

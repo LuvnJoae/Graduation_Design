@@ -5,13 +5,14 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 			name: "this"
-			"background": new java.awt.Color( 255, 255, 255, 255 )
+			"background": sfield java.awt.Color green
 			"alwaysOnTop": true
 			"foreground": sfield java.awt.SystemColor windowText
 			"title": "登录"
 			"defaultCloseOperation": 3
 			"resizable": false
 			"$sizePolicy": 1
+			"autoRequestFocus": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "焊接数据监测与管理系统"

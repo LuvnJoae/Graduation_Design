@@ -73,6 +73,25 @@ public class HistoricalStatistics extends JFrame {
     }
 
     /**
+     * 界面风格
+     */
+    private void setUI() {
+        this.getContentPane().setBackground(new Color(238,238,238)); //整体背景
+    }
+
+    /**
+     * 整体页面  事件监听
+     */
+    //当打开此frame时，触发
+    private void thisWindowOpened(WindowEvent e) {
+        setUI();
+        updateTable1();
+        updateTable2();
+        updateChartPanel();
+        updateComboBox1();
+    }
+
+    /**
      * Lable3 账户信息: 显示当前登录用户
      */
     private void label3Bind(String username) {
@@ -231,17 +250,6 @@ public class HistoricalStatistics extends JFrame {
     }
 
     /**
-     * 整体页面  事件监听
-     */
-    //当打开此frame时，触发
-    private void thisWindowOpened(WindowEvent e) {
-        updateTable1();
-        updateTable2();
-        updateChartPanel();
-        updateComboBox1();
-    }
-
-    /**
      * 工件统计与查询
      */
     //table1: 设置表格格式
@@ -249,7 +257,9 @@ public class HistoricalStatistics extends JFrame {
         //设置表格内容居中
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(SwingConstants.CENTER);
-        table1.setDefaultRenderer(Object.class, r);
+        table1.setDefaultRenderer(Object.class, r); //表格居中
+        //设置表头居中
+        ((DefaultTableCellRenderer)table1.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
     }
 
     //table1 主方法： 刷新table1
@@ -333,6 +343,8 @@ public class HistoricalStatistics extends JFrame {
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(SwingConstants.CENTER);
         table2.setDefaultRenderer(Object.class, r);
+        //设置表头居中
+        ((DefaultTableCellRenderer)table2.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
     }
 
     //table2 主方法： 刷新table1
@@ -441,13 +453,11 @@ public class HistoricalStatistics extends JFrame {
         chartPanel = new ChartPanel(lineChart);
 
         chartPanel.setLayout(null);
-        chartPanel.setBounds(0, 0, 445, 465);
+        chartPanel.setBounds(0, 0, 420, 460);
 
         panel4.add(chartPanel);
         panel4.repaint();
     }
-
-
 
     /**
      * JFormDesigner自带，定义自生成
@@ -490,6 +500,8 @@ public class HistoricalStatistics extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
+        setResizable(false);
+        setBackground(new Color(238, 238, 238));
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -501,12 +513,14 @@ public class HistoricalStatistics extends JFrame {
 
         //======== panel1 ========
         {
+            panel1.setBackground(new Color(238, 238, 238));
             panel1.setLayout(null);
 
             //---- label2 ----
             label2.setText("\u5f53\u524d\uff1a");
+            label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
             panel1.add(label2);
-            label2.setBounds(0, 0, 40, 30);
+            label2.setBounds(0, 0, 50, 30);
 
             //======== menuBar1 ========
             {
@@ -543,8 +557,9 @@ public class HistoricalStatistics extends JFrame {
 
             //---- label3 ----
             label3.setText("admin");
+            label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
             panel1.add(label3);
-            label3.setBounds(55, 0, 60, 30);
+            label3.setBounds(50, 0, 85, 30);
 
             {
                 // compute preferred size
@@ -562,36 +577,44 @@ public class HistoricalStatistics extends JFrame {
             }
         }
         contentPane.add(panel1);
-        panel1.setBounds(755, 0, panel1.getPreferredSize().width, 55);
+        panel1.setBounds(750, 0, 226, 50);
 
         //---- button1 ----
         button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
+        button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button1.setForeground(new Color(51, 51, 51));
         button1.addActionListener(e -> button1ActionPerformed(e));
         contentPane.add(button1);
-        button1.setBounds(55, 60, 120, 30);
+        button1.setBounds(55, 50, 135, 40);
 
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+        button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button2.setForeground(new Color(51, 51, 51));
         contentPane.add(button2);
-        button2.setBounds(295, 60, 130, 30);
+        button2.setBounds(295, 50, 135, 40);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
+        button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button3.setForeground(new Color(51, 51, 51));
         button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
-        button3.setBounds(550, 60, 120, 30);
+        button3.setBounds(540, 50, 135, 40);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button4.setForeground(new Color(51, 51, 51));
         button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
-        button4.setBounds(805, 60, 120, 30);
+        button4.setBounds(795, 50, 135, 40);
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 965, 10);
 
         //======== tabbedPane1 ========
         {
-            tabbedPane1.setFont(tabbedPane1.getFont().deriveFont(tabbedPane1.getFont().getSize() + 1f));
+            tabbedPane1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
 
             //======== panel2 ========
             {
@@ -636,7 +659,7 @@ public class HistoricalStatistics extends JFrame {
                     scrollPane1.setViewportView(table1);
                 }
                 panel2.add(scrollPane1);
-                scrollPane1.setBounds(0, 40, 505, 425);
+                scrollPane1.setBounds(0, 40, 540, 425);
                 panel2.add(textField1);
                 textField1.setBounds(5, 5, 135, 30);
 
@@ -644,19 +667,19 @@ public class HistoricalStatistics extends JFrame {
                 button5.setText("\u67e5\u8be2");
                 button5.addActionListener(e -> button5ActionPerformed(e));
                 panel2.add(button5);
-                button5.setBounds(155, 5, 65, 28);
+                button5.setBounds(155, 5, 70, 30);
 
                 //---- button6 ----
                 button6.setText("\u8fd4\u56de");
                 button6.addActionListener(e -> button6ActionPerformed(e));
                 panel2.add(button6);
-                button6.setBounds(225, 5, 65, 28);
+                button6.setBounds(225, 5, 70, 30);
 
                 //---- button7 ----
                 button7.setText("\u5237\u65b0");
                 button7.addActionListener(e -> button7ActionPerformed(e));
                 panel2.add(button7);
-                button7.setBounds(440, 5, 65, 28);
+                button7.setBounds(460, 5, 70, 30);
 
                 {
                     // compute preferred size
@@ -686,6 +709,7 @@ public class HistoricalStatistics extends JFrame {
                     table2.setRowHeight(20);
                     table2.setModel(new DefaultTableModel(
                         new Object[][] {
+                            {null, null, null, null, null, null, null, null},
                         },
                         new String[] {
                             "id", "\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u68c0\u6d4b\u7ed3\u679c", "\u8be6\u60c5"
@@ -701,14 +725,15 @@ public class HistoricalStatistics extends JFrame {
                     });
                     {
                         TableColumnModel cm = table2.getColumnModel();
-                        cm.getColumn(0).setPreferredWidth(40);
-                        cm.getColumn(1).setPreferredWidth(120);
-                        cm.getColumn(2).setPreferredWidth(120);
-                        cm.getColumn(3).setPreferredWidth(60);
-                        cm.getColumn(4).setPreferredWidth(60);
-                        cm.getColumn(5).setPreferredWidth(60);
-                        cm.getColumn(6).setPreferredWidth(60);
-                        cm.getColumn(7).setPreferredWidth(40);
+                        cm.getColumn(0).setMinWidth(30);
+                        cm.getColumn(1).setMinWidth(110);
+                        cm.getColumn(2).setMinWidth(110);
+                        cm.getColumn(3).setMinWidth(57);
+                        cm.getColumn(4).setMinWidth(57);
+                        cm.getColumn(5).setMinWidth(57);
+                        cm.getColumn(6).setMinWidth(57);
+                        cm.getColumn(7).setMinWidth(35);
+                        cm.getColumn(7).setPreferredWidth(30);
                     }
                     table2.setAutoCreateRowSorter(true);
                     table2.addMouseListener(new MouseAdapter() {
@@ -720,7 +745,7 @@ public class HistoricalStatistics extends JFrame {
                     scrollPane2.setViewportView(table2);
                 }
                 panel3.add(scrollPane2);
-                scrollPane2.setBounds(0, 40, 505, 425);
+                scrollPane2.setBounds(0, 40, 540, 425);
                 panel3.add(textField2);
                 textField2.setBounds(5, 5, 135, 30);
 
@@ -728,19 +753,19 @@ public class HistoricalStatistics extends JFrame {
                 button8.setText("\u67e5\u8be2");
                 button8.addActionListener(e -> button8ActionPerformed(e));
                 panel3.add(button8);
-                button8.setBounds(155, 5, 65, 28);
+                button8.setBounds(155, 5, 70, 30);
 
                 //---- button9 ----
                 button9.setText("\u8fd4\u56de");
                 button9.addActionListener(e -> button9ActionPerformed(e));
                 panel3.add(button9);
-                button9.setBounds(225, 5, 65, 28);
+                button9.setBounds(225, 5, 70, 30);
 
                 //---- button10 ----
                 button10.setText("\u5237\u65b0");
                 button10.addActionListener(e -> button10ActionPerformed(e));
                 panel3.add(button10);
-                button10.setBounds(440, 5, 65, 28);
+                button10.setBounds(460, 5, 70, 30);
 
                 {
                     // compute preferred size
@@ -760,7 +785,7 @@ public class HistoricalStatistics extends JFrame {
             tabbedPane1.addTab("\u6545\u969c\u7edf\u8ba1\u4e0e\u67e5\u8be2", panel3);
         }
         contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(5, 100, 510, 490);
+        tabbedPane1.setBounds(5, 100, 540, 490);
 
         //======== panel4 ========
         {
@@ -783,13 +808,14 @@ public class HistoricalStatistics extends JFrame {
             }
         }
         contentPane.add(panel4);
-        panel4.setBounds(525, 125, 445, 465);
+        panel4.setBounds(550, 130, 420, 460);
 
         //---- label1 ----
         label1.setText("\u5de5\u4ef6\u7edf\u8ba1\u56fe");
-        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 4f));
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 4f));
+        label1.setForeground(new Color(51, 51, 51));
         contentPane.add(label1);
-        label1.setBounds(690, 95, 100, 25);
+        label1.setBounds(705, 100, 100, 25);
 
         //---- comboBox1 ----
         comboBox1.addMouseListener(new MouseAdapter() {
@@ -799,13 +825,13 @@ public class HistoricalStatistics extends JFrame {
             }
         });
         contentPane.add(comboBox1);
-        comboBox1.setBounds(850, 95, 120, 27);
+        comboBox1.setBounds(850, 100, 120, 30);
 
         //---- label4 ----
         label4.setText("\u4ea7\u54c1:");
-        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 1f));
+        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 2f));
         contentPane.add(label4);
-        label4.setBounds(815, 100, 35, 19);
+        label4.setBounds(810, 105, 35, 19);
 
         {
             // compute preferred size

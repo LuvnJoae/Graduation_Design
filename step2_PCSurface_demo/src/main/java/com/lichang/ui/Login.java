@@ -28,6 +28,7 @@ public class Login extends JFrame {
     public Login() {
         log.debug("载入登录界面");
         initComponents();
+        this.getContentPane().setBackground(new Color(238,238,238));
         setVisible(true);
 
     }
@@ -119,12 +120,13 @@ public class Login extends JFrame {
         button2 = new JButton();
 
         //======== this ========
-        setBackground(Color.white);
+        setBackground(Color.green);
         setAlwaysOnTop(true);
         setForeground(SystemColor.windowText);
         setTitle("\u767b\u5f55");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        setAutoRequestFocus(false);
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 

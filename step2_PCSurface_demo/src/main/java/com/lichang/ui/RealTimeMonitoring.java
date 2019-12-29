@@ -13,7 +13,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.*;
+import com.jgoodies.forms.factories.*;
 
 import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.LimitRuleUtil;
@@ -60,9 +62,7 @@ public class RealTimeMonitoring extends JFrame {
     public RealTimeMonitoring() {
         username = "admin";
         adminFlag = true;
-
         initComponents();
-
         this.setBounds(273, 95, 990, 625);
         setVisible(true);
     }
@@ -71,7 +71,6 @@ public class RealTimeMonitoring extends JFrame {
     public RealTimeMonitoring(String username, Boolean adminFlag) {
         this.username = username;
         this.adminFlag = adminFlag;
-
         initComponents();
 
         label3Bind(username); //显示当前用户信息
@@ -81,12 +80,23 @@ public class RealTimeMonitoring extends JFrame {
     }
 
     /**
+     * 界面风格
+     */
+    private void setUI() {
+        this.getContentPane().setBackground(new Color(238,238,238)); //整体背景
+    }
+
+    /**
      * 页面监听
      */
     //第一次打开该页面时
     private void thisWindowOpened(WindowEvent e) {
+        setUI();
         updateComboBox1(); //先更新一次下拉框
         scheduledExecutor(); //开启定时器
+        //设置表格格式
+        initTable1Form();
+        initTable2Form();
     }
 
     /**
@@ -279,10 +289,14 @@ public class RealTimeMonitoring extends JFrame {
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(SwingConstants.CENTER);
         table1.setDefaultRenderer(Object.class, r);
+        //设置表头居中
+        ((DefaultTableCellRenderer)table1.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
     }
 
     //加载table1 数据，  添加一行
     private void addTable1Data() {
+        initTable1Form(); //设置表格格式
         //获取所选产品名称
         prodution_name = (String) comboBox1.getSelectedItem();
         //获得最后一条记录
@@ -304,7 +318,6 @@ public class RealTimeMonitoring extends JFrame {
                 machine_fault_data_map.get("result"),
                 "<html><font color = 'blue'><u>查看</u></font></html>"
         };
-        initTable1Form(); //设置表格格式
         table1Model.addRow(newRowData); //添加行
 
     }
@@ -358,7 +371,8 @@ public class RealTimeMonitoring extends JFrame {
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(SwingConstants.CENTER);
         table2.getColumnModel().getColumn(0).setCellRenderer(r); //设置仅第一列居中
-//        table2.setDefaultRenderer(Object.class, r);
+        //设置表头居中
+        ((DefaultTableCellRenderer)table2.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
     }
 
     //table2 主方法 ： 加载数据 + 更新
@@ -572,6 +586,8 @@ public class RealTimeMonitoring extends JFrame {
         setTitle("\u754c\u9762");
         setAlwaysOnTop(true);
         setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        setBackground(new Color(238, 238, 238));
+        setResizable(false);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -583,15 +599,18 @@ public class RealTimeMonitoring extends JFrame {
 
         //======== panel1 ========
         {
+            panel1.setBackground(new Color(238, 238, 238));
             panel1.setLayout(null);
 
             //---- label2 ----
             label2.setText("\u5f53\u524d\uff1a");
+            label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
             panel1.add(label2);
-            label2.setBounds(0, 0, 40, 30);
+            label2.setBounds(5, 0, 50, 30);
 
             //======== menuBar1 ========
             {
+                menuBar1.setBorder(null);
 
                 //======== menu1 ========
                 {
@@ -625,8 +644,9 @@ public class RealTimeMonitoring extends JFrame {
 
             //---- label3 ----
             label3.setText("admin");
+            label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
             panel1.add(label3);
-            label3.setBounds(55, 0, 60, 30);
+            label3.setBounds(55, 0, 80, 30);
 
             {
                 // compute preferred size
@@ -644,36 +664,46 @@ public class RealTimeMonitoring extends JFrame {
             }
         }
         contentPane.add(panel1);
-        panel1.setBounds(755, 0, panel1.getPreferredSize().width, 55);
+        panel1.setBounds(740, 0, 236, 50);
 
         //---- button1 ----
         button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
+        button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button1.setForeground(new Color(51, 51, 51));
         contentPane.add(button1);
-        button1.setBounds(55, 60, 120, 30);
+        button1.setBounds(55, 50, 135, 40);
 
         //---- button2 ----
         button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+        button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button2.setForeground(new Color(51, 51, 51));
         button2.addActionListener(e -> button2ActionPerformed(e));
         contentPane.add(button2);
-        button2.setBounds(295, 60, 130, 30);
+        button2.setBounds(295, 50, 135, 40);
 
         //---- button3 ----
         button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
+        button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button3.setForeground(new Color(51, 51, 51));
         button3.addActionListener(e -> button3ActionPerformed(e));
         contentPane.add(button3);
-        button3.setBounds(550, 60, 120, 30);
+        button3.setBounds(540, 50, 135, 40);
 
         //---- button4 ----
         button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+        button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+        button4.setForeground(new Color(51, 51, 51));
         button4.addActionListener(e -> button4ActionPerformed(e));
         contentPane.add(button4);
-        button4.setBounds(805, 60, 120, 30);
+        button4.setBounds(795, 50, 135, 40);
         contentPane.add(separator4);
         separator4.setBounds(5, 90, 965, 10);
 
         //======== tabbedPane1 ========
         {
-            tabbedPane1.setFont(tabbedPane1.getFont().deriveFont(tabbedPane1.getFont().getSize() + 2f));
+            tabbedPane1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
+            tabbedPane1.setForeground(new Color(204, 204, 0));
+            tabbedPane1.setBackground(Color.white);
 
             //======== panel2 ========
             {
@@ -700,13 +730,13 @@ public class RealTimeMonitoring extends JFrame {
                     });
                     {
                         TableColumnModel cm = table1.getColumnModel();
-                        cm.getColumn(0).setPreferredWidth(140);
-                        cm.getColumn(1).setPreferredWidth(110);
-                        cm.getColumn(2).setPreferredWidth(60);
-                        cm.getColumn(3).setPreferredWidth(60);
-                        cm.getColumn(4).setPreferredWidth(60);
-                        cm.getColumn(5).setPreferredWidth(35);
-                        cm.getColumn(6).setPreferredWidth(35);
+                        cm.getColumn(0).setMinWidth(110);
+                        cm.getColumn(1).setMinWidth(110);
+                        cm.getColumn(2).setMinWidth(55);
+                        cm.getColumn(3).setMinWidth(55);
+                        cm.getColumn(4).setMinWidth(55);
+                        cm.getColumn(5).setMinWidth(30);
+                        cm.getColumn(6).setMinWidth(30);
                     }
                     table1.setRowHeight(20);
                     table1.setAutoCreateRowSorter(true);
@@ -719,7 +749,7 @@ public class RealTimeMonitoring extends JFrame {
                     scrollPane1.setViewportView(table1);
                 }
                 panel2.add(scrollPane1);
-                scrollPane1.setBounds(0, 0, 470, 260);
+                scrollPane1.setBounds(0, 0, 485, 260);
 
                 {
                     // compute preferred size
@@ -739,11 +769,12 @@ public class RealTimeMonitoring extends JFrame {
             tabbedPane1.addTab("\u6545\u969c\u76d1\u6d4b", panel2);
         }
         contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(0, 300, 475, 290);
+        tabbedPane1.setBounds(0, 300, 485, 290);
 
         //======== tabbedPane2 ========
         {
-            tabbedPane2.setFont(tabbedPane2.getFont().deriveFont(tabbedPane2.getFont().getSize() + 2f));
+            tabbedPane2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
+            tabbedPane2.setForeground(new Color(51, 51, 51));
 
             //======== panel3 ========
             {
@@ -800,17 +831,18 @@ public class RealTimeMonitoring extends JFrame {
             tabbedPane2.addTab("\u53c2\u6570\u76d1\u6d4b", panel3);
         }
         contentPane.add(tabbedPane2);
-        tabbedPane2.setBounds(480, 300, 495, 290);
+        tabbedPane2.setBounds(490, 300, 485, 290);
 
         //---- button5 ----
         button5.setText("\u624b\u52a8\u5237\u65b0");
+        button5.setFont(button5.getFont().deriveFont(button5.getFont().getSize() + 1f));
         button5.addActionListener(e -> button5ActionPerformed(e));
         contentPane.add(button5);
-        button5.setBounds(275, 275, 85, button5.getPreferredSize().height);
+        button5.setBounds(270, 270, 85, 35);
 
         //---- label1 ----
         label1.setText("\u4ea7\u54c1\u9009\u62e9\uff1a");
-        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 2f));
+        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 3f));
         contentPane.add(label1);
         label1.setBounds(220, 110, 80, label1.getPreferredSize().height);
 
@@ -826,13 +858,14 @@ public class RealTimeMonitoring extends JFrame {
             }
         });
         contentPane.add(comboBox1);
-        comboBox1.setBounds(305, 107, 150, comboBox1.getPreferredSize().height);
+        comboBox1.setBounds(305, 105, 150, 30);
 
         //---- button6 ----
         button6.setText("\u6e05\u7a7a\u6545\u969c\u8bb0\u5f55");
+        button6.setFont(button6.getFont().deriveFont(button6.getFont().getSize() + 1f));
         button6.addActionListener(e -> button6ActionPerformed(e));
         contentPane.add(button6);
-        button6.setBounds(new Rectangle(new Point(365, 275), button6.getPreferredSize()));
+        button6.setBounds(360, 270, 105, 35);
 
         //======== panel4 ========
         {
@@ -865,43 +898,43 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label5 ----
         label5.setText("\u5f53\u524d\u710a\u673a\uff1a");
-        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 2f));
+        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 3f));
         contentPane.add(label5);
         label5.setBounds(new Rectangle(new Point(25, 110), label5.getPreferredSize()));
 
         //---- label6 ----
         label6.setText("\u710a\u673a\u72b6\u6001\uff1a");
-        label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 2f));
+        label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 3f));
         contentPane.add(label6);
         label6.setBounds(new Rectangle(new Point(25, 155), label6.getPreferredSize()));
 
         //---- label7 ----
         label7.setText("\u5b8c\u6210\u5de5\u4ef6\uff1a");
-        label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 2f));
+        label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 3f));
         contentPane.add(label7);
         label7.setBounds(new Rectangle(new Point(25, 200), label7.getPreferredSize()));
 
         //---- label8 ----
         label8.setText("\u6545\u969c\u5de5\u4ef6\uff1a");
-        label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 2f));
+        label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 3f));
         contentPane.add(label8);
         label8.setBounds(new Rectangle(new Point(25, 245), label8.getPreferredSize()));
 
         //---- label9 ----
         label9.setText("\u5de5\u4ef6\u7f16\u53f7\uff1a");
-        label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 2f));
+        label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 3f));
         contentPane.add(label9);
         label9.setBounds(new Rectangle(new Point(220, 155), label9.getPreferredSize()));
 
         //---- label10 ----
         label10.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
-        label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 2f));
+        label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 3f));
         contentPane.add(label10);
         label10.setBounds(new Rectangle(new Point(220, 200), label10.getPreferredSize()));
 
         //---- label11 ----
         label11.setText("-1");
-        label11.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 3f));
         label11.setBackground(Color.white);
         label11.setForeground(new Color(0, 153, 204));
         contentPane.add(label11);
@@ -909,7 +942,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label12 ----
         label12.setText("-1");
-        label12.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label12.setFont(label12.getFont().deriveFont(label12.getFont().getStyle() | Font.BOLD, label12.getFont().getSize() + 3f));
         label12.setBackground(Color.white);
         label12.setForeground(new Color(0, 153, 204));
         contentPane.add(label12);
@@ -917,7 +950,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label13 ----
         label13.setText("0");
-        label13.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label13.setFont(label13.getFont().deriveFont(label13.getFont().getStyle() | Font.BOLD, label13.getFont().getSize() + 3f));
         label13.setBackground(Color.white);
         label13.setForeground(new Color(0, 153, 204));
         contentPane.add(label13);
@@ -925,7 +958,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label14 ----
         label14.setText("0");
-        label14.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label14.setFont(label14.getFont().deriveFont(label14.getFont().getStyle() | Font.BOLD, label14.getFont().getSize() + 3f));
         label14.setBackground(Color.white);
         label14.setForeground(new Color(255, 51, 0));
         contentPane.add(label14);
@@ -933,7 +966,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label15 ----
         label15.setText("-1");
-        label15.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label15.setFont(label15.getFont().deriveFont(label15.getFont().getStyle() | Font.BOLD, label15.getFont().getSize() + 3f));
         label15.setBackground(Color.white);
         label15.setForeground(new Color(0, 153, 204));
         contentPane.add(label15);
@@ -941,7 +974,7 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- label16 ----
         label16.setText("-1");
-        label16.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        label16.setFont(label16.getFont().deriveFont(label16.getFont().getStyle() | Font.BOLD, label16.getFont().getSize() + 3f));
         label16.setBackground(Color.white);
         label16.setForeground(new Color(0, 153, 204));
         contentPane.add(label16);
@@ -949,9 +982,10 @@ public class RealTimeMonitoring extends JFrame {
 
         //---- button7 ----
         button7.setText("\u6d4b\u8bd5\uff1a\u6dfb\u52a0\u6545\u969c\u8bb0\u5f55");
+        button7.setFont(button7.getFont().deriveFont(button7.getFont().getSize() + 1f));
         button7.addActionListener(e -> button7ActionPerformed(e));
         contentPane.add(button7);
-        button7.setBounds(110, 275, 156, button7.getPreferredSize().height);
+        button7.setBounds(105, 270, 160, 35);
 
         {
             // compute preferred size

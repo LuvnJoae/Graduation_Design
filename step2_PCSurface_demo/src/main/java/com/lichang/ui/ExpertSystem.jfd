@@ -9,17 +9,21 @@ new FormModel {
 			"title": "界面"
 			"alwaysOnTop": true
 			"$locationPolicy": 1
+			"resizable": false
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowOpened", "thisWindowOpened", true ) )
 			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosed", "thisWindowClosed", true ) )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "panel1"
+				"foreground": new java.awt.Color( 0, 0, 0, 255 )
+				"background": new java.awt.Color( 238, 238, 238, 255 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label2"
 					"text": "当前："
+					"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 0
 					"y": 0
-					"width": 40
+					"width": 45
 					"height": 30
 				} )
 				add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
@@ -62,55 +66,65 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
 					"text": "admin"
+					"font": #SwingDerivedFont0
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 55
+					"x": 50
 					"y": 0
-					"width": 60
+					"width": 80
 					"height": 30
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 755
-				"height": 55
+				"x": 750
+				"height": 50
 				"y": 0
+				"width": 226
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "实时监测"
+				"font": &Font0 new java.awt.Font( "微软雅黑", 1, 15 )
+				"foreground": &Color0 new java.awt.Color( 51, 51, 51, 255 )
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 55
-				"y": 60
-				"width": 120
-				"height": 30
+				"y": 50
+				"width": 135
+				"height": 40
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"text": "历史统计与查询"
+				"font": #Font0
+				"foreground": #Color0
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button2ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 130
-				"height": 30
+				"width": 135
+				"height": 40
 				"x": 295
-				"y": 60
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button3"
 				"text": "专家系统"
+				"font": #Font0
+				"foreground": #Color0
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 550
-				"y": 60
+				"width": 135
+				"height": 40
+				"x": 540
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button4"
 				"text": "管理与设置"
+				"font": #Font0
+				"foreground": #Color0
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button4ActionPerformed", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 120
-				"height": 30
-				"x": 805
-				"y": 60
+				"width": 135
+				"height": 40
+				"x": 795
+				"y": 50
 			} )
 			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 				name: "separator4"
@@ -129,12 +143,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label1"
 						"text": "母材选取"
-						"background": &Color0 new java.awt.Color( 204, 204, 204, 255 )
+						"background": &Color1 new java.awt.Color( 204, 204, 204, 255 )
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": &SoftBevelBorder0 new javax.swing.border.SoftBevelBorder( 1, null, null, null, null )
-						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+						"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 25
 						"y": 30
@@ -144,12 +158,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label4"
 						"text": "焊接方法"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
+						"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, 1, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -159,12 +173,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label5"
 						"text": "焊接材料"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -174,12 +188,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label6"
 						"text": "辅材"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -189,12 +203,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label7"
 						"text": "工件厚度"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -204,12 +218,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label8"
 						"text": "焊接位置"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -219,12 +233,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label9"
 						"text": "接头、坡口"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -234,12 +248,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label10"
 						"text": "热工艺"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -249,12 +263,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label11"
 						"text": "其他"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont1
+						"font": #SwingDerivedFont2
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -402,7 +416,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label14"
 						"text": "焊接参数 "
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
@@ -417,12 +431,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label15"
 						"text": "焊接电流"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -432,12 +446,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label16"
 						"text": "焊接速度"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -447,12 +461,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label17"
 						"text": "焊接电压"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -462,12 +476,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label18"
 						"text": "干伸出量"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -477,12 +491,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label19"
 						"text": "阈值limit"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -554,12 +568,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label20"
 						"text": "建议值"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
+						"font": &SwingDerivedFont3 new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 160
 						"height": 30
@@ -615,12 +629,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label22"
 						"text": "产品选择"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -641,12 +655,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label23"
 						"text": "添加产品"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont0
+						"font": #SwingDerivedFont1
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 85
 						"height": 30
@@ -664,7 +678,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button10"
 						"text": "设计"
-						"font": &SwingDerivedFont3 new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
+						"font": &SwingDerivedFont4 new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button10ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 60
@@ -675,7 +689,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button11"
 						"text": "保存"
-						"font": &SwingDerivedFont4 new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
+						"font": &SwingDerivedFont5 new com.jformdesigner.model.SwingDerivedFont( null, 0, -1, false )
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button11ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -687,7 +701,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button12"
 						"text": "出参"
-						"font": #SwingDerivedFont3
+						"font": #SwingDerivedFont4
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button12ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -699,7 +713,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button13"
 						"text": "出参"
-						"font": #SwingDerivedFont3
+						"font": #SwingDerivedFont4
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button13ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -711,7 +725,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button14"
 						"text": "保存"
-						"font": #SwingDerivedFont4
+						"font": #SwingDerivedFont5
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button14ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
@@ -723,7 +737,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button15"
 						"text": "出参"
-						"font": #SwingDerivedFont3
+						"font": #SwingDerivedFont4
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button15ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 80
@@ -745,12 +759,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label21"
 						"text": "实际值"
-						"background": #Color0
+						"background": #Color1
 						"opaque": true
 						"horizontalTextPosition": 0
 						"horizontalAlignment": 0
 						"border": #SoftBevelBorder0
-						"font": #SwingDerivedFont2
+						"font": #SwingDerivedFont3
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"width": 150
 						"height": 30
@@ -760,7 +774,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button17"
 						"text": "保存"
-						"font": #SwingDerivedFont4
+						"font": #SwingDerivedFont5
 						"enabled": false
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button17ActionPerformed", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
