@@ -1,6 +1,6 @@
 package com.lichang.utils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -22,7 +22,6 @@ public class LimitRuleUtil {
                 break;
             }
         }
-        log.debug("****addLimit check start***");
         //如果该产品还未设定 焊接参数建议值，则不添加阈值limit，直接返回
         if (productionMap.get("voltage_advice") == null
                 || productionMap.get("voltage_advice").equals("0")
@@ -37,7 +36,6 @@ public class LimitRuleUtil {
                 || productionMap.get("speed_advice").equals("")) {
             return;
         }
-        log.debug("****addLimit check end***");
 
         Object expert_production_voltageCol; //参考电压
         Object expert_production_currentCol; //参考电流
@@ -102,7 +100,6 @@ public class LimitRuleUtil {
 
     //limit主方法
     private static void limit_main(String limitRule, Object expert_production_Col, int colSeq, JTable table) {
-        log.debug("**********进入limit_main*********");
         try {
             String[] ruleArray = limitRule.replaceAll(" ", "").split(";"); //拆分成单个的rule
             for (int i = 0; i < ruleArray.length; i++) {
@@ -164,7 +161,6 @@ public class LimitRuleUtil {
                         table.setValueAt("<html>" + "<font color='green'>" + table.getValueAt(j, colSeq) + "</font>" + "</html>", j, colSeq);
                     }
                 }
-                log.debug("********执行完毕********");
             }
         } catch (Exception e) {
             log.error("出现错误",e);

@@ -3,7 +3,7 @@ package com.lichang.utils.HistoricalStatisticsUtils;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -83,8 +83,6 @@ public class LineChartUtil {
      * 生成折线图 模型 主方法
      */
     private static JFreeChart lineChart_main(CategoryDataset dataset, String title, String categoryAxisLable, String valueAxisLable) {
-        log.debug("生成折线图模型");
-
         JFreeChart chart = ChartFactory.createLineChart(
                 title,
                 categoryAxisLable,
@@ -124,8 +122,6 @@ public class LineChartUtil {
      * @return
      */
     private static CategoryDataset getDataset(String production_name) {
-        log.debug("生成折线图所需 数据");
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         //通过遍历mapsList，查询每天的统计量

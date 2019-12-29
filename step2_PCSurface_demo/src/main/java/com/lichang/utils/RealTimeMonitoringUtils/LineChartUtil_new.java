@@ -5,7 +5,7 @@ import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
@@ -55,8 +55,6 @@ public class LineChartUtil_new {
      * 生成折线图 模型 主方法
      */
     private static JFreeChart LineChart_main(CategoryDataset dataset, String title, String categoryAxisLable, String valueAxisLable) {
-        log.debug("生成折线图模型");
-
         JFreeChart chart = ChartFactory.createLineChart(
                 title,
                 categoryAxisLable,
@@ -90,8 +88,6 @@ public class LineChartUtil_new {
      * 生成 chart所用的 dataset
      */
     private static CategoryDataset getDataset(List<Map<String, Object>> mapsList) {
-        log.debug("生成折线图所需 数据");
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // 将List中的信息添加到dataset中。

@@ -5,7 +5,7 @@ import com.lichang.DBbeans.Employee;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -23,8 +23,6 @@ public class ChangePasswordUtil {
      * @return
      */
     public static boolean validate(String table, String username, String password) {
-        log.debug("判断密码 是否 正确");
-
         String sqlStr = SqlStrUtil.query_sql1_1(table); // sql语句
         List<Object> params = SqlStrUtil.query_list1_1(username, password); // 参数列表
 
@@ -54,8 +52,6 @@ public class ChangePasswordUtil {
      * @return
      */
     public static void newPassword(String table, String username, String password) {
-        log.debug("数据库录入新密码");
-
         String sqlStr = SqlStrUtil.update_sql1(table);
         List<Object> params = SqlStrUtil.update_list1(username, password);
 

@@ -1,7 +1,9 @@
 package com.lichang.utils.ExpertSystemUtils;
 
+import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
+import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -13,6 +15,7 @@ import java.util.Map;
  * 用于工艺流程设计 内容与数据库的连接
  */
 public class ProcessDesignUtil {
+    private static Logger log = LoggerUtil.getLogger(); // 加载日志管理类
     /**
      * 获取专家系统相应表中的全部数据 给 下拉框
      *
@@ -156,7 +159,7 @@ public class ProcessDesignUtil {
             }
 
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e);
         }
 
         return lastProductionName;
@@ -197,7 +200,7 @@ public class ProcessDesignUtil {
             updateResult = JdbcTemplateUtil.update(sqlStr2, params);
 
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return updateResult;
     }

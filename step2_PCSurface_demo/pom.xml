@@ -16,11 +16,11 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.12.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
@@ -43,6 +43,169 @@
             <version>4.12</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.0.0.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/spring-jdbc-5.0.0.RELEASE.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>5.0.0.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/spring-tx-5.0.0.RELEASE.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.0.0.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/spring-beans-5.0.0.RELEASE.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.0.0.RELEASE</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/spring-core-5.0.0.RELEASE.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jdesktop</groupId>
+            <artifactId>beansbinding</artifactId>
+            <version>1.6.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/beansbinding.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons.logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/commons-logging-1.2.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.druid</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/druid-1.0.9.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.common</groupId>
+            <artifactId>jgoodies-common</artifactId>
+            <version>1.8.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.common</groupId>
+            <artifactId>jgoodies-common-javadoc</artifactId>
+            <version>1.8.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common-javadoc.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.common</groupId>
+            <artifactId>jgoodies-common-sources</artifactId>
+            <version>1.8.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common-sources.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.forms</groupId>
+            <artifactId>jgoodies-forms</artifactId>
+            <version>1.8.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.forms</groupId>
+            <artifactId>jgoodies-forms-javadoc</artifactId>
+            <version>1.8.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms-javadoc.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jgoodies.forms</groupId>
+            <artifactId>jgoodies-forms-sources</artifactId>
+            <version>1.8.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms-sources.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.layout</groupId>
+            <artifactId>miglayout-core</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.layout</groupId>
+            <artifactId>miglayout-core-javadoc</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core-javadoc.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.layout</groupId>
+            <artifactId>miglayout-core-sources</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core-sources.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.swing</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.swing</groupId>
+            <artifactId>miglayout-swing-javadoc</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing-javadoc.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>net.miginfocom.swing</groupId>
+            <artifactId>miglayout-swing-sources</artifactId>
+            <version>5.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing-sources.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.git.mm.mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.37</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/mysql-connector-java-5.1.37-bin.jar</systemPath>
+        </dependency>
+
     </dependencies>
+
+
 
 </project>

@@ -5,7 +5,7 @@ import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
 import com.lichang.utils.dao.JdbcUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -34,7 +34,7 @@ public class LabelUpdateTextUtil_new {
             return map;
 
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e);
             return null;
         }
 

@@ -4,17 +4,14 @@
 
 package com.lichang.ui;
 
-//TODO:
-//标记时间：2019/12/24 17:38  预解决时间：
-//1. 管理与设置+ 权限
-//2. 用户名合规、密码合规检测
 
 import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
+import com.lichang.utils.IOUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SettingUtils.SettingUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -25,6 +22,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -50,15 +48,12 @@ public class Setting extends JFrame {
     private List<Map<String, Object>> machine_setting_mapsList; //焊机表
 
     private List<Map<String, Object>> employee_mapList; //员工用户表
+    private List<Map<String, Object>> admin_mapList; //管理员用户表
     private JDialog jDialog3; //员工表 添加
     private JDialog jDialog4; //员工表 删除
 
     //无参（预设账户信息）
     public Setting() {
-        log.debug("无参构造");
-
-        //TEST: 测试用，直接打开该页面时，暂时给username和flag一个值
-        //标记时间：2019/11/21 15:56  预解决时间：
         username = "admin";
         adminFlag = true;
 
@@ -70,7 +65,6 @@ public class Setting extends JFrame {
 
     //有参（接收登录账户信息）
     public Setting(String username, Boolean adminFlag) {
-        log.debug("有参构造");
         this.username = username;
         this.adminFlag = adminFlag;
 
@@ -86,7 +80,6 @@ public class Setting extends JFrame {
      * Lable3 账户信息: 显示当前登录用户
      */
     private void label3Bind(String username) {
-        log.debug("Lable3 账户信息: 显示当前登录用户");
         label3.setText(username);
     }
 
@@ -95,9 +88,7 @@ public class Setting extends JFrame {
      */
     //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
-        log.debug("MenuItem 用户设置:  切换用户");
-
-        new Login();
+        Login login = new Login();
         this.dispose();
     }
 
@@ -256,6 +247,9 @@ public class Setting extends JFrame {
         updateComboBox2(); //修改焊机：焊机名称
         //用户信息管理
         updateTable1(); //员工表格
+        updateTable2(); //管理员表格
+        //数据库设置
+        initDBSetting(); //初始化数据库设置
     }
 
     /**
@@ -474,7 +468,7 @@ public class Setting extends JFrame {
     private void button10ActionPerformed(ActionEvent e) {
         JOptionPane.showMessageDialog(this,
                 "用户名格式： 2~10长度，可使用 字母、数字、下划线，需以字母开头\n" +
-                "密码格式：2~10长度，可使用 字母、数字、下划线");
+                        "密码格式：2~10长度，可使用 字母、数字、下划线");
 
         jDialog3 = new JDialog(this, "添加用户", true);
         JPanel addUserPanel = new JPanel();
@@ -511,7 +505,7 @@ public class Setting extends JFrame {
         //确定 按钮
         JButton enterButton = new JButton("确定");
         addUserPanel.add(enterButton);
-        enterButton.setBounds(280, 60,80,90);
+        enterButton.setBounds(280, 60, 80, 90);
         enterButton.setFont(new Font("黑体", Font.PLAIN, 18));
 
         enterButton.addActionListener(new ActionListener() {
@@ -527,6 +521,13 @@ public class Setting extends JFrame {
                 if (!Pattern.matches("[a-zA-Z0-9_]{2,10}$", password)) {
                     JOptionPane.showMessageDialog(jDialog3, "密码格式错误，请重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                     return;
+                }
+                //已有用户名验证
+                for (Map<String, Object> map : employee_mapList) {
+                    if (map.get("username").equals(username)) {
+                        JOptionPane.showMessageDialog(jDialog3, "该用户名已存在！请检查后重新输入", "提示", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                 }
 
                 boolean result = SettingUtil.insertNewUser("employee", username, password);
@@ -571,7 +572,7 @@ public class Setting extends JFrame {
         //确定 按钮
         JButton enterButton = new JButton("确定");
         deleteUserPanel.add(enterButton);
-        enterButton.setBounds(280, 60,80,30);
+        enterButton.setBounds(280, 60, 80, 30);
         enterButton.setFont(new Font("黑体", Font.PLAIN, 16));
 
         enterButton.addActionListener(new ActionListener() {
@@ -593,17 +594,147 @@ public class Setting extends JFrame {
                     JOptionPane.showMessageDialog(jDialog3, "该用户名不存在！请检查后重新输入", "提示", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                //TODO: 删除后的id问题
-                //标记时间：2019/12/25 16:56  预解决时间：
+
+                boolean result = SettingUtil.deleteUser("employee", username);
+                if (result) {
+                    JOptionPane.showMessageDialog(jDialog3, "删除成功!", "提示", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(jDialog3, "删除失败！", "提示", JOptionPane.WARNING_MESSAGE);
+                }
+
+                updateTable1(); //删除后，更新员工表格
             }
         });
-        
+
         jDialog4.setSize(400, 200);
         jDialog4.setAlwaysOnTop(true);
         jDialog4.setLocationRelativeTo(null);
         jDialog4.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         jDialog4.add(deleteUserPanel);
         jDialog4.setVisible(true);
+    }
+
+    //管理员用户：加载表格
+    private void updateTable2() {
+        //设置表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(SwingConstants.CENTER);
+        table2.setDefaultRenderer(Object.class, r);
+
+        admin_mapList = SettingUtil.getData("admin"); //获得表内容
+        //非空判断
+        if (admin_mapList == null || admin_mapList.size() == 0) {
+            return;
+        }
+
+        DefaultTableModel table2Model = (DefaultTableModel) table2.getModel(); //获取model
+        table2Model.setRowCount(0); //先清空，再加载新数据
+
+        for (Map<String, Object> map : admin_mapList) {
+            Object[] newRowData = {
+                    map.get("id"),
+                    map.get("username")
+            };
+
+            table2Model.addRow(newRowData);
+        }
+    }
+
+    /**
+     * 数据库设置
+     */
+    //初始化 配置
+    private void initDBSetting() {
+        //获取真实路径
+        String druid_properties_path = IOUtil.getPath("conf/druid.properties", "\\conf\\druid.properties");
+
+        ArrayList<String> DB_druidPro = IOUtil.read(druid_properties_path);
+
+        String url = DB_druidPro.get(1).split("mysql://")[1]; //数据库url
+        String username = DB_druidPro.get(2).split("=")[1]; //用户名
+        String password = DB_druidPro.get(3).split("=")[1]; //密码
+
+        String initialSize = DB_druidPro.get(4).split("=")[1]; //初始化连接数
+        String maxActive = DB_druidPro.get(5).split("=")[1]; //最大连接数
+        String maxWait = DB_druidPro.get(6).split("=")[1]; //最大等待时间
+
+        textField4.setText(url);
+        textField5.setText(username);
+        textField6.setText(password);
+        textField7.setText(initialSize);
+        textField8.setText(maxActive);
+        textField9.setText(maxWait);
+
+    }
+
+    //修改 按钮
+    private void button12ActionPerformed(ActionEvent e) {
+        button13.setEnabled(true);
+
+        textField4.setEditable(true);
+        textField5.setEditable(true);
+        textField6.setEditable(true);
+        textField7.setEditable(true);
+        textField8.setEditable(true);
+        textField9.setEditable(true);
+    }
+
+    //确认 按钮
+    private void button13ActionPerformed(ActionEvent e) {
+        String url = textField4.getText();
+        String username = textField5.getText();
+        String password = textField6.getText();
+
+        String initialSize = textField7.getText();
+        String maxActive = textField8.getText();
+        String maxWait = textField9.getText();
+
+        String[] DB_pro = {
+                "driverClassName=com.mysql.jdbc.Driver",
+                "url=jdbc:mysql://" + url,
+                "username=" + username,
+                "password=" + password,
+                "initialSize=" + initialSize,
+                "maxActive=" + maxActive,
+                "maxWait=" + maxWait
+        };
+        //获取真实路径
+        String druid_properties_path = IOUtil.getPath("conf/druid.properties", "\\conf\\druid.properties");
+        IOUtil.write(druid_properties_path, DB_pro);
+
+        //关 可编辑
+        textField4.setEditable(false);
+        textField5.setEditable(false);
+        textField6.setEditable(false);
+        textField7.setEditable(false);
+        textField8.setEditable(false);
+        textField9.setEditable(false);
+
+        System.exit(0);
+    }
+
+    //恢复默认 按钮
+    private void button14ActionPerformed(ActionEvent e) {
+        String[] DB_pro = {
+                "driverClassName=com.mysql.jdbc.Driver",
+                "url=jdbc:mysql://localhost:3306/haolesystem",
+                "username=root",
+                "password=root",
+                "initialSize=10",
+                "maxActive=15",
+                "maxWait=3000"
+        };
+        //获取真实路径h
+        String druid_properties_path = IOUtil.getPath("conf/druid.properties", "\\conf\\druid.properties");
+        IOUtil.write(druid_properties_path, DB_pro);
+
+        //关 可编辑
+        textField4.setEditable(false);
+        textField5.setEditable(false);
+        textField6.setEditable(false);
+        textField7.setEditable(false);
+        textField8.setEditable(false);
+        textField9.setEditable(false);
     }
 
 
@@ -656,8 +787,29 @@ public class Setting extends JFrame {
         button10 = new JButton();
         button11 = new JButton();
         panel6 = new JPanel();
+        scrollPane3 = new JScrollPane();
+        table2 = new JTable();
         panel4 = new JPanel();
-        label40 = new JLabel();
+        label14 = new JLabel();
+        label18 = new JLabel();
+        label19 = new JLabel();
+        label20 = new JLabel();
+        label21 = new JLabel();
+        label22 = new JLabel();
+        label23 = new JLabel();
+        label24 = new JLabel();
+        label25 = new JLabel();
+        textField4 = new JTextField();
+        textField5 = new JTextField();
+        textField6 = new JTextField();
+        textField7 = new JTextField();
+        textField8 = new JTextField();
+        textField9 = new JTextField();
+        button12 = new JButton();
+        button13 = new JButton();
+        label42 = new JLabel();
+        button14 = new JButton();
+        label43 = new JLabel();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -777,26 +929,26 @@ public class Setting extends JFrame {
             label17.setText("\u5f53\u524d\u710a\u673a");
             label17.setFont(label17.getFont().deriveFont(label17.getFont().getSize() + 2f));
             panel2.add(label17);
-            label17.setBounds(180, 35, 65, 18);
+            label17.setBounds(180, 45, 65, 18);
 
             //---- label12 ----
             label12.setText("\u710a\u673a\u540d\u79f0\uff1a");
             label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 2f));
             panel2.add(label12);
-            label12.setBounds(35, 60, 80, 20);
+            label12.setBounds(35, 70, 80, 20);
 
             //---- label13 ----
             label13.setText("\u710a\u673a\u72b6\u6001\uff1a");
             label13.setFont(label13.getFont().deriveFont(label13.getFont().getSize() + 2f));
             panel2.add(label13);
-            label13.setBounds(35, 95, 85, 20);
+            label13.setBounds(35, 105, 85, 20);
 
             //---- label15 ----
             label15.setText("\u5f53\u524d\u72b6\u6001");
             label15.setFont(label15.getFont().deriveFont(label15.getFont().getSize() + 2f));
             label15.setForeground(new Color(0, 153, 204));
             panel2.add(label15);
-            label15.setBounds(115, 95, 125, 20);
+            label15.setBounds(115, 105, 125, 20);
 
             //---- label16 ----
             label16.setText("\u4fee\u6539\u710a\u673a");
@@ -808,7 +960,7 @@ public class Setting extends JFrame {
             comboBox1.setSelectedIndex(-1);
             comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
             panel2.add(comboBox1);
-            comboBox1.setBounds(115, 60, 125, comboBox1.getPreferredSize().height);
+            comboBox1.setBounds(115, 70, 125, comboBox1.getPreferredSize().height);
 
             //---- label6 ----
             label6.setText("\u710a\u673a\u540d\u79f0\uff1a");
@@ -868,7 +1020,7 @@ public class Setting extends JFrame {
             button9.setText("\u786e\u5b9a");
             button9.addActionListener(e -> button9ActionPerformed(e));
             panel2.add(button9);
-            button9.setBounds(175, 120, 63, 28);
+            button9.setBounds(175, 125, 63, 28);
 
             //---- comboBox2 ----
             comboBox2.setSelectedIndex(-1);
@@ -919,8 +1071,6 @@ public class Setting extends JFrame {
                         table1.setRowHeight(20);
                         table1.setModel(new DefaultTableModel(
                             new Object[][] {
-                                {null, null, null},
-                                {null, null, null},
                             },
                             new String[] {
                                 "id", "\u7528\u6237\u540d", "\u5bc6\u7801"
@@ -978,6 +1128,32 @@ public class Setting extends JFrame {
                 {
                     panel6.setLayout(null);
 
+                    //======== scrollPane3 ========
+                    {
+
+                        //---- table2 ----
+                        table2.setRowHeight(20);
+                        table2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                            },
+                            new String[] {
+                                "id", "\u7528\u6237\u540d"
+                            }
+                        ) {
+                            boolean[] columnEditable = new boolean[] {
+                                false, false
+                            };
+                            @Override
+                            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return columnEditable[columnIndex];
+                            }
+                        });
+                        table2.setEnabled(false);
+                        scrollPane3.setViewportView(table2);
+                    }
+                    panel6.add(scrollPane3);
+                    scrollPane3.setBounds(0, 0, 290, 405);
+
                     {
                         // compute preferred size
                         Dimension preferredSize = new Dimension();
@@ -1021,10 +1197,120 @@ public class Setting extends JFrame {
             panel4.setBackground(new Color(204, 204, 204));
             panel4.setLayout(null);
 
-            //---- label40 ----
-            label40.setFont(label40.getFont().deriveFont(label40.getFont().getSize() + 2f));
-            panel4.add(label40);
-            label40.setBounds(35, 370, 75, 18);
+            //---- label14 ----
+            label14.setText("\u6570\u636e\u5e93\u8bbe\u7f6e");
+            label14.setFont(label14.getFont().deriveFont(label14.getFont().getSize() + 5f));
+            panel4.add(label14);
+            label14.setBounds(100, 10, 106, 25);
+
+            //---- label18 ----
+            label18.setText("\u6570\u636e\u5e93\u5730\u5740\uff1a");
+            label18.setFont(label18.getFont().deriveFont(label18.getFont().getSize() + 2f));
+            panel4.add(label18);
+            label18.setBounds(10, 80, 95, 20);
+
+            //---- label19 ----
+            label19.setText("\u767b\u5f55\u540d\uff1a");
+            label19.setFont(label19.getFont().deriveFont(label19.getFont().getSize() + 2f));
+            panel4.add(label19);
+            label19.setBounds(10, 120, 70, 20);
+
+            //---- label20 ----
+            label20.setText("\u5bc6\u7801\uff1a");
+            label20.setFont(label20.getFont().deriveFont(label20.getFont().getSize() + 2f));
+            panel4.add(label20);
+            label20.setBounds(10, 160, 80, 20);
+
+            //---- label21 ----
+            label21.setText("\u57fa\u672c\u914d\u7f6e");
+            label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 2f));
+            panel4.add(label21);
+            label21.setBounds(220, 45, 70, 20);
+
+            //---- label22 ----
+            label22.setText("\u9ad8\u7ea7\u914d\u7f6e");
+            label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 2f));
+            panel4.add(label22);
+            label22.setBounds(220, 210, 65, 20);
+
+            //---- label23 ----
+            label23.setText("\u521d\u59cb\u5316\u8fde\u63a5\u6570\u91cf\uff1a");
+            label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() + 2f));
+            panel4.add(label23);
+            label23.setBounds(10, 245, 125, 20);
+
+            //---- label24 ----
+            label24.setText("\u6700\u5927\u8fde\u63a5\u6570\uff1a");
+            label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() + 2f));
+            panel4.add(label24);
+            label24.setBounds(10, 285, 105, 20);
+
+            //---- label25 ----
+            label25.setText("\u6700\u5927\u7b49\u5f85\u65f6\u95f4\uff1a");
+            label25.setFont(label25.getFont().deriveFont(label25.getFont().getSize() + 2f));
+            panel4.add(label25);
+            label25.setBounds(10, 325, 110, 20);
+
+            //---- textField4 ----
+            textField4.setEditable(false);
+            panel4.add(textField4);
+            textField4.setBounds(90, 75, 195, 28);
+
+            //---- textField5 ----
+            textField5.setEditable(false);
+            panel4.add(textField5);
+            textField5.setBounds(90, 115, 195, 28);
+
+            //---- textField6 ----
+            textField6.setEditable(false);
+            panel4.add(textField6);
+            textField6.setBounds(90, 155, 195, 28);
+
+            //---- textField7 ----
+            textField7.setEditable(false);
+            panel4.add(textField7);
+            textField7.setBounds(150, 240, 130, 28);
+
+            //---- textField8 ----
+            textField8.setEditable(false);
+            panel4.add(textField8);
+            textField8.setBounds(150, 280, 130, 28);
+
+            //---- textField9 ----
+            textField9.setEditable(false);
+            panel4.add(textField9);
+            textField9.setBounds(150, 320, 130, 28);
+
+            //---- button12 ----
+            button12.setText("\u4fee\u6539");
+            button12.addActionListener(e -> button12ActionPerformed(e));
+            panel4.add(button12);
+            button12.setBounds(125, 425, 65, 28);
+
+            //---- button13 ----
+            button13.setText("\u4fdd\u5b58");
+            button13.setEnabled(false);
+            button13.addActionListener(e -> button13ActionPerformed(e));
+            panel4.add(button13);
+            button13.setBounds(205, 425, 65, 28);
+
+            //---- label42 ----
+            label42.setText("Tips: \u5982\u65e0\u9700\u8981\uff0c\u4e0d\u8981\u4fee\u6539\u6b64\u914d\u7f6e\u3002");
+            label42.setFont(label42.getFont().deriveFont(label42.getFont().getSize() - 1f));
+            panel4.add(label42);
+            label42.setBounds(5, 460, 290, 20);
+
+            //---- button14 ----
+            button14.setText("\u6062\u590d\u9ed8\u8ba4");
+            button14.addActionListener(e -> button14ActionPerformed(e));
+            panel4.add(button14);
+            button14.setBounds(10, 425, button14.getPreferredSize().width, 28);
+
+            //---- label43 ----
+            label43.setText("Tips:\u4fee\u6539\u540e\uff0c\u5c06\u81ea\u52a8\u5173\u95ed\u3002\u8bf7\u91cd\u65b0\u6253\u5f00\u8f6f\u4ef6");
+            label43.setForeground(new Color(255, 51, 51));
+            panel4.add(label43);
+            label43.setBounds(5, 375, 250, 20);
 
             {
                 // compute preferred size
@@ -1108,7 +1394,28 @@ public class Setting extends JFrame {
     private JButton button10;
     private JButton button11;
     private JPanel panel6;
+    private JScrollPane scrollPane3;
+    private JTable table2;
     private JPanel panel4;
-    private JLabel label40;
+    private JLabel label14;
+    private JLabel label18;
+    private JLabel label19;
+    private JLabel label20;
+    private JLabel label21;
+    private JLabel label22;
+    private JLabel label23;
+    private JLabel label24;
+    private JLabel label25;
+    private JTextField textField4;
+    private JTextField textField5;
+    private JTextField textField6;
+    private JTextField textField7;
+    private JTextField textField8;
+    private JTextField textField9;
+    private JButton button12;
+    private JButton button13;
+    private JLabel label42;
+    private JButton button14;
+    private JLabel label43;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

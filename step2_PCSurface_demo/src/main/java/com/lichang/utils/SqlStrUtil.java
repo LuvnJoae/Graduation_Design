@@ -2,7 +2,7 @@ package com.lichang.utils;
 
 import com.lichang.utils.LoggerUtil;
 import javafx.scene.chart.StackedBarChart;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,6 @@ public class SqlStrUtil {
      */
     //语句1： 查询*
     public static String query_sql1(String table) {
-        log.debug("查询：Sql合成5：" + table);
         String sqlStr = "select * from "
                 + table;
         return sqlStr;
@@ -28,7 +27,6 @@ public class SqlStrUtil {
 
     //语句1_1： 查询*  条件：username、password
     public static String query_sql1_1(String table) {
-        log.debug("语句1：sql");
         String sqlStr = "select * from "
                 + table
                 + " where username= ? and password= ?";
@@ -37,7 +35,6 @@ public class SqlStrUtil {
     }
 
     public static List<Object> query_list1_1(String username, String password) {
-        log.debug("语句1: params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(username);
         paramsList.add(password);
@@ -46,7 +43,6 @@ public class SqlStrUtil {
 
     //语句1_2： 查询*   条件：production_num
     public static String query_sql1_2(String table) {
-        log.debug("语句2：sql");
         String sqlStr = "select * from "
                 + table
                 + " where production_num = ?";
@@ -54,7 +50,6 @@ public class SqlStrUtil {
     }
 
     public static List<Object> query_list1_2(int production_num) {
-        log.debug("语句2：params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(production_num);
         return paramsList; // 占位符参数列表
@@ -105,7 +100,6 @@ public class SqlStrUtil {
 
     //语句2： 查询count（id）
     public static String query_sql2(String table) {
-        log.debug("语句4：sql");
         String sqlStr = "select count(id) from "
                 + table;
         return sqlStr;
@@ -113,7 +107,6 @@ public class SqlStrUtil {
 
     //语句2_1： 查询count（id） 条件：production_name
     public static String query_sql2_1(String table) {
-        log.debug("语句4：sql");
         String sqlStr = "select count(id) from "
                 + table +
                 " where production_name = ?";
@@ -156,7 +149,6 @@ public class SqlStrUtil {
      */
     //语句1： 更新password  条件：username
     public static String update_sql1(String table) {
-        log.debug("语句3：sql");
         String sqlStr = "update "
                 + table
                 + " set password = ?"
@@ -165,7 +157,6 @@ public class SqlStrUtil {
     }
 
     public static List<Object> update_list1(String username, String password) {
-        log.debug("语句3：params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(password);
         paramsList.add(username);
@@ -174,7 +165,6 @@ public class SqlStrUtil {
 
     //语句2： 更新*（除id列） 条件：name  说明：仅针对 产品表 expert_production
     public static String update_sql2() {
-        log.debug("语句7：sql");
         String sqlStr = "update expert_production " +
                 "set base_metal_a = ?, " +
                 "base_metal_b = ?, " +
@@ -222,7 +212,6 @@ public class SqlStrUtil {
                                             String speed_practical,
                                             String extension_practical
     ) {
-        log.debug("语句7：params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(base_metal_a);
         paramsList.add(base_metal_b);
@@ -272,7 +261,6 @@ public class SqlStrUtil {
      */
     //语句1： 插入*（除id列）  说明：仅针对 产品表 expert_production
     public static String insert_sql1() {
-        log.debug("语句6：sql");
         String sqlStr = "insert into expert_production (" +
                 "name, " +
                 "base_metal_a, " +
@@ -321,7 +309,6 @@ public class SqlStrUtil {
                                             String speed_practical,
                                             String extension_practical
     ) {
-        log.debug("语句6：params");
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(name);
         paramsList.add(base_metal_a);
@@ -367,4 +354,14 @@ public class SqlStrUtil {
         return sqlStr;
     }
 
+    /**
+     * 其他
+     */
+    //当进行过 删除操作后，恢复自增ID正常顺序
+    public static String[] recoverId(String table) {
+        String sqlStr = "alter table " + table + " DROP COLUMN id";
+        String sqlStr2 = "alter table " + table + " ADD COLUMN id INT NULL AUTO_INCREMENT FIRST ,ADD PRIMARY KEY (id)";
+
+        return new String[] {sqlStr, sqlStr2};
+    }
 }

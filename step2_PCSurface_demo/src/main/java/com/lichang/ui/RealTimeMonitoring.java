@@ -19,14 +19,10 @@ import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.LimitRuleUtil;
 import com.lichang.utils.RealTimeMonitoringUtils.*;
 import com.lichang.utils.LoggerUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
-
-//TODO: 整体待解决问题（低优先级）
-//标记时间：2019/11/20 17:22  预解决时间:
-////1. 故障添加： 当limit监测出故障后，要添加（还是说直接读数据库）？直接读数据库
 
 /**
  * @author unknown
@@ -62,10 +58,6 @@ public class RealTimeMonitoring extends JFrame {
 
     //无参（预设账户信息）
     public RealTimeMonitoring() {
-        log.debug("无参构造");
-
-        //TEST: 测试用，直接打开该页面时，暂时给username和flag一个值
-        //标记时间：2019/11/21 15:56  预解决时间：
         username = "admin";
         adminFlag = true;
 
@@ -77,7 +69,6 @@ public class RealTimeMonitoring extends JFrame {
 
     //有参（接收登录账户信息）
     public RealTimeMonitoring(String username, Boolean adminFlag) {
-        log.debug("有参构造");
         this.username = username;
         this.adminFlag = adminFlag;
 
@@ -102,7 +93,6 @@ public class RealTimeMonitoring extends JFrame {
      * Lable3 账户信息: 显示当前登录用户
      */
     private void label3Bind(String username) {
-        log.debug("Lable3 账户信息: 显示当前登录用户");
         label3.setText(username);
     }
 
@@ -111,16 +101,12 @@ public class RealTimeMonitoring extends JFrame {
      */
     //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
-        log.debug("MenuItem 用户设置:  切换用户");
-
         new Login();
         this.dispose();
     }
 
     //MenuItem 用户设置： 更改密码
     private void menuItem2ActionPerformed(ActionEvent e) {
-        log.debug("MenuItem 用户设置： 更改密码");
-
         if (!adminFlag) {
             JOptionPane.showMessageDialog(this, "您没有该权限！请用管理员身份登录！", "提示", JOptionPane.WARNING_MESSAGE);
             return;

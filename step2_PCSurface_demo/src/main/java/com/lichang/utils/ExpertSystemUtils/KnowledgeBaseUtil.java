@@ -38,6 +38,13 @@ public class KnowledgeBaseUtil {
         params.add(id);
 
         boolean result = JdbcTemplateUtil.update(sqlStr, params);
+
+        //恢复自增ID正常序列
+        if (result) {
+            JdbcTemplateUtil.update(SqlStrUtil.recoverId(table)[0]);
+            JdbcTemplateUtil.update(SqlStrUtil.recoverId(table)[1]);
+        }
+
         return result;
     }
 

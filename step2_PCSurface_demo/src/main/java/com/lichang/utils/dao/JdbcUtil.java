@@ -1,10 +1,14 @@
 package com.lichang.utils.dao;
 
+import com.lichang.utils.IOUtil;
 import com.lichang.utils.LoggerUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
@@ -26,13 +30,16 @@ public class JdbcUtil {
         try {
             //加载配置文件
             Properties dataSourceProperties = new Properties();
-            InputStream DruidPathStream = JdbcUtil.class.getClassLoader().getResourceAsStream("conf/druid.properties");
+
+            //获取真实路径
+            String druid_properties_path = IOUtil.getPath("conf/druid.properties", "\\conf\\druid.properties");
+
+            InputStream DruidPathStream = new FileInputStream(druid_properties_path);
             dataSourceProperties.load(DruidPathStream);
             //获取DataSource
             ds = com.alibaba.druid.pool.DruidDataSourceFactory.createDataSource(dataSourceProperties);
         } catch (Exception e) {
-            log.error("", e);
-            e.printStackTrace();
+            log.error(e);
         }
 
     }
@@ -56,8 +63,7 @@ public class JdbcUtil {
         try {
             connection = ds.getConnection();
         } catch (SQLException e) {
-            log.error("", e);
-            e.printStackTrace();
+            log.error(e);
         }
         return connection;
     }
@@ -73,7 +79,7 @@ public class JdbcUtil {
             try{
                 resultSet.close();
             }catch(SQLException e){
-                e.printStackTrace();
+                log.error(e);
             }finally {
                 resultSet = null;
             }
@@ -83,7 +89,7 @@ public class JdbcUtil {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(e);
             }finally {
                 statement = null;
             }
@@ -93,7 +99,7 @@ public class JdbcUtil {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error(e);
             }finally {
                 connection = null;
             }

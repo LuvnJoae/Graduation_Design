@@ -5,7 +5,7 @@ import com.lichang.DBbeans.Employee;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,6 @@ public class Login_Logout {
      * @return
      */
     public static String login(Object obj) {
-        log.debug("login");
         /*
             预留信息
          */
@@ -35,9 +34,7 @@ public class Login_Logout {
         /*
             身份验证
          */
-        log.debug("身份验证");
         if (Admin.class == obj.getClass()) {
-            log.debug("Admin");
             Admin admin = (Admin) obj;
             username = admin.getUsername();
             password = admin.getPassword();

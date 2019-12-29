@@ -8,7 +8,7 @@ import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.HistoricalStatisticsUtils.TableUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.ChangePasswordUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
@@ -50,10 +50,6 @@ public class HistoricalStatistics extends JFrame {
 
     //无参（预设账户信息）
     public HistoricalStatistics() {
-        log.debug("无参构造");
-
-        //TEST: 测试用，直接打开该页面时，暂时给username和flag一个值
-        //标记时间：2019/11/21 15:56  预解决时间：
         username = "admin";
         adminFlag = true;
 
@@ -65,7 +61,6 @@ public class HistoricalStatistics extends JFrame {
 
     //有参（接收登录账户信息）
     public HistoricalStatistics(String username, Boolean adminFlag) {
-        log.debug("有参构造");
         this.username = username;
         this.adminFlag = adminFlag;
 
@@ -81,7 +76,6 @@ public class HistoricalStatistics extends JFrame {
      * Lable3 账户信息: 显示当前登录用户
      */
     private void label3Bind(String username) {
-        log.debug("Lable3 账户信息: 显示当前登录用户");
         label3.setText(username);
     }
 
@@ -90,16 +84,12 @@ public class HistoricalStatistics extends JFrame {
      */
     //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
-        log.debug("MenuItem 用户设置:  切换用户");
-
         new Login();
         this.dispose();
     }
 
     //MenuItem 用户设置： 更改密码
     private void menuItem2ActionPerformed(ActionEvent e) {
-        log.debug("MenuItem 用户设置： 更改密码");
-
         if (!adminFlag) {
             JOptionPane.showMessageDialog(this, "您没有该权限！请用管理员身份登录！", "提示", JOptionPane.WARNING_MESSAGE);
             return;

@@ -8,7 +8,8 @@ import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
 import com.lichang.utils.LoginUtils.Login_Logout;
 import com.lichang.utils.LoggerUtil;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +20,8 @@ import javax.swing.*;
  */
 public class Login extends JFrame {
 
-    private static Logger log = LoggerUtil.getLogger(); // 加载日志管理类
+
+    private static Logger log = LoggerUtil.getLogger();; // 加载日志管理类
 
     private boolean adminFlag; // 区分用户身份，true：管理员  false：y员工
 
@@ -35,7 +37,6 @@ public class Login extends JFrame {
      * @param e
      */
     private void button1ActionPerformed(ActionEvent e) {
-        log.debug("登录按钮事件监听");
         /*
             空用户名与密码 检测
          */
@@ -59,7 +60,6 @@ public class Login extends JFrame {
         String password = new String(passwordField1.getPassword());
         Object userInfo = null;
 
-        log.debug("username: " + username + "  " + "password: " + password);
 
         if (empRadioButton.isSelected()) {
             userInfo = new Employee(username, password);
@@ -72,7 +72,6 @@ public class Login extends JFrame {
             账户信息认证
          */
         String loginResult = Login_Logout.login(userInfo);
-        log.debug(loginResult);
 
         /*
             账户认证后的界面跳转
@@ -97,9 +96,16 @@ public class Login extends JFrame {
         }
     }
 
+    /**
+     * 数据库设置
+     * @param e
+     */
+    private void button2ActionPerformed(ActionEvent e) {
+        new DB_Setting(this);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - unknown
         label2 = new JLabel();
         label3 = new JLabel();
         label4 = new JLabel();
@@ -110,6 +116,7 @@ public class Login extends JFrame {
         empRadioButton = new JRadioButton();
         admRadioButton = new JRadioButton();
         label1 = new JLabel();
+        button2 = new JButton();
 
         //======== this ========
         setBackground(Color.white);
@@ -183,7 +190,13 @@ public class Login extends JFrame {
         //---- label1 ----
         label1.setText("v1.0");
         contentPane.add(label1);
-        label1.setBounds(360, 225, 31, 20);
+        label1.setBounds(0, 235, 31, 20);
+
+        //---- button2 ----
+        button2.setText("\u6570\u636e\u5e93\u8bbe\u7f6e");
+        button2.addActionListener(e -> button2ActionPerformed(e));
+        contentPane.add(button2);
+        button2.setBounds(new Rectangle(new Point(305, 220), button2.getPreferredSize()));
 
         {
             // compute preferred size
@@ -210,7 +223,6 @@ public class Login extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - unknown
     private JLabel label2;
     private JLabel label3;
     private JLabel label4;
@@ -221,6 +233,7 @@ public class Login extends JFrame {
     private JRadioButton empRadioButton;
     private JRadioButton admRadioButton;
     private JLabel label1;
+    private JButton button2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 }

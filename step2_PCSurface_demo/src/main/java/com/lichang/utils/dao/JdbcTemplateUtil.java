@@ -1,14 +1,13 @@
 package com.lichang.utils.dao;
 
 import com.lichang.utils.LoggerUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class JdbcTemplateUtil {
 
@@ -157,6 +156,28 @@ public class JdbcTemplateUtil {
 
         try {
             updateCount = template.update(sqlStr, paramsList.toArray());
+        } catch (DataAccessException e) {
+            log.error("插入、 修改、 删除出错", e);
+        }
+
+        if (updateCount > 0) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    /**
+     * 插入、 修改、 删除 无参重载
+     * @param sqlStr
+     * @return
+     */
+    public static boolean update(String sqlStr) {
+        log.debug("插入、 修改、 删除");
+
+        int updateCount = 0;
+
+        try {
+            updateCount = template.update(sqlStr);
         } catch (DataAccessException e) {
             log.error("插入、 修改、 删除出错", e);
         }

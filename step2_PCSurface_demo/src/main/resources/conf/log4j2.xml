@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+
+<!-- Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出 -->
+<!-- monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数 -->
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="baseDir">${sys:user.dir}/logs</Property>
+    </Properties>
+
+    <!-- 先定义所有的appender -->
+    <Appenders>
+        <!-- 这个输出控制台的配置 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"></PatternLayout>
+        </Console>
+
+        <!-- 打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
+        <File name="log" fileName="${baseDir}/test.log" append="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"></PatternLayout>
+        </File>
+
+        <!-- 打印出所有的info及以上级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
+        <RollingFile name="RollingFileInfo" fileName="${baseDir}/info.log"
+                     filePattern="${baseDir}/%d{yyyyMMdd}/info-%i.log.zip">
+            <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"></ThresholdFilter>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %l %-5p - %msg%xEx%n"></PatternLayout>
+            <Policies>
+                <!-- 设置每天切换日志一次 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"></TimeBasedTriggeringPolicy>
+                <!-- 设置日志文件满50MB后切换 -->
+                <SizeBasedTriggeringPolicy size="50 MB"></SizeBasedTriggeringPolicy>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+            <DefaultRolloverStrategy max="20">
+                <!-- 配置说明：
+                    * 只处理位于${baseDir}文件夹下的文件
+                    * 只处理以 .log.zip 结尾的文件 (name match)
+                    * 只处理最后一次修改时间超过7天以内的文件
+                -->
+                <Delete basePath="${baseDir}" maxDepth="1">
+                    <IfFileName glob="*.log.zip" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="RollingFileError" fileName="${baseDir}/error.log"
+                     filePattern="${baseDir}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"></ThresholdFilter>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %p - %l - %m%n"></PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB"></SizeBasedTriggeringPolicy>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <Loggers>
+        <!--过滤掉Spring和MyBatis的一些无用的DEBUG信息 -->
+        <logger name="org.springframework" level="INFO"></logger>
+        <logger name="org.mybatis" level="INFO"></logger>
+        <root level="all">
+            <appender-ref ref="Console"></appender-ref>
+            <appender-ref ref="RollingFileInfo"></appender-ref>
+            <appender-ref ref="RollingFileError"></appender-ref>
+        </root>
+    </Loggers>
+</Configuration>

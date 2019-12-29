@@ -1,7 +1,9 @@
 package com.lichang.utils.SettingUtils;
 
+import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.net.InetAddress;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SettingUtil {
+    private static Logger log = LoggerUtil.getLogger(); // 加载日志管理类
+
     /**
      * 用于 查询指定表 的全部内容
      */
@@ -47,7 +51,7 @@ public class SettingUtil {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
 
         String[] machineStrs = {machineName, machineStatus};
@@ -90,7 +94,7 @@ public class SettingUtil {
             updateResult = JdbcTemplateUtil.update(sqlStr2, params);
 
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return updateResult;
     }
@@ -127,7 +131,7 @@ public class SettingUtil {
             return updateResult;
 
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            log.error(e);
             return false;
         }
 
@@ -174,4 +178,25 @@ public class SettingUtil {
         boolean result = JdbcTemplateUtil.update(sqlStr, params);
         return result;
     }
+
+    /**
+     * 用户信息管理 删除用户
+     */
+    public static boolean deleteUser(String table, String username) {
+        String sqlStr = "delete from " + table + " where username = ?";
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(username);
+
+        boolean result = JdbcTemplateUtil.update(sqlStr, params);
+
+        //恢复自增ID正常序列
+        if (result) {
+            JdbcTemplateUtil.update(SqlStrUtil.recoverId(table)[0]);
+            JdbcTemplateUtil.update(SqlStrUtil.recoverId(table)[1]);
+        }
+
+        return result;
+    }
+
+
 }
