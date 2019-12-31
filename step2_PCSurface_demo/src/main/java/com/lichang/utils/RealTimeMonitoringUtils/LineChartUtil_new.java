@@ -1,7 +1,5 @@
 package com.lichang.utils.RealTimeMonitoringUtils;
 
-import com.lichang.DBbeans.Machine_data_now;
-import com.lichang.utils.HistoricalStatisticsUtils.LineChartUtil;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
@@ -14,8 +12,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.awt.*;
 import java.util.List;

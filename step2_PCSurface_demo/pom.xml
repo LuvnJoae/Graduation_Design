@@ -30,13 +30,6 @@
             <version>1.0.19</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.jfree/jcommon -->
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jcommon</artifactId>
-            <version>1.0.24</version>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -77,14 +70,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jdesktop</groupId>
-            <artifactId>beansbinding</artifactId>
-            <version>1.6.5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/beansbinding.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.commons.logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
@@ -100,101 +85,6 @@
             <systemPath>${project.basedir}/src/main/resources/lib/druid-1.0.9.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>com.jgoodies.common</groupId>
-            <artifactId>jgoodies-common</artifactId>
-            <version>1.8.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jgoodies.common</groupId>
-            <artifactId>jgoodies-common-javadoc</artifactId>
-            <version>1.8.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common-javadoc.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jgoodies.common</groupId>
-            <artifactId>jgoodies-common-sources</artifactId>
-            <version>1.8.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-common-sources.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jgoodies.forms</groupId>
-            <artifactId>jgoodies-forms</artifactId>
-            <version>1.8.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jgoodies.forms</groupId>
-            <artifactId>jgoodies-forms-javadoc</artifactId>
-            <version>1.8.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms-javadoc.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jgoodies.forms</groupId>
-            <artifactId>jgoodies-forms-sources</artifactId>
-            <version>1.8.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/jgoodies-forms-sources.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.layout</groupId>
-            <artifactId>miglayout-core</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.layout</groupId>
-            <artifactId>miglayout-core-javadoc</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core-javadoc.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.layout</groupId>
-            <artifactId>miglayout-core-sources</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-core-sources.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.swing</groupId>
-            <artifactId>miglayout-swing</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.swing</groupId>
-            <artifactId>miglayout-swing-javadoc</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing-javadoc.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>net.miginfocom.swing</groupId>
-            <artifactId>miglayout-swing-sources</artifactId>
-            <version>5.1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/miglayout-swing-sources.jar</systemPath>
-        </dependency>
 
         <dependency>
             <groupId>org.git.mm.mysql</groupId>
@@ -204,13 +94,6 @@
             <systemPath>${project.basedir}/src/main/resources/lib/mysql-connector-java-5.1.37-bin.jar</systemPath>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/de.sciss/weblaf -->
-        <dependency>
-            <groupId>de.sciss</groupId>
-            <artifactId>weblaf</artifactId>
-            <version>2.2.1</version>
-            <type>pom</type>
-        </dependency>
 
     </dependencies>
 

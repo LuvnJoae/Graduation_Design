@@ -2,40 +2,22 @@
   <artifact type="jar" name="step2_PCSurface_demo:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/step2_PCSurface_demo_jar</output-path>
     <root id="archive" name="step2_PCSurface_demo.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="step2_PCSurface_demo" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-forms.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-core.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/beansbinding.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-core-javadoc.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.0.19/jfreechart-1.0.19.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-forms-sources.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/druid-1.0.9.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-common.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-swing.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/beansbinding-doc.zip" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/beansbinding-src.zip" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/mysql-connector-java-5.1.37-bin.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-core-5.0.0.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-beans-5.0.0.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-jdbc-5.0.0.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jcommon/1.0.23/jcommon-1.0.23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.0.19/jfreechart-1.0.19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/log4j-api-2.12.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/log4j-core-2.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/commons-logging-1.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-forms-javadoc.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-core-sources.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-common-javadoc.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/jgoodies-common-sources.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-swing-javadoc.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/miglayout-swing-sources.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-tx-5.0.0.RELEASE.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-core-5.0.0.RELEASE.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-jdbc-5.0.0.RELEASE.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/spring-beans-5.0.0.RELEASE.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/lib/mysql-connector-java-5.1.37-bin.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jfree/jcommon/1.0.24/jcommon-1.0.24.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

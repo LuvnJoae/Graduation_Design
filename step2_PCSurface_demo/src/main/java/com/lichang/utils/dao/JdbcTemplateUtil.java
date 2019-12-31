@@ -15,6 +15,31 @@ public class JdbcTemplateUtil {
     private static JdbcTemplate template = new JdbcTemplate(JdbcUtil.getDataSource()); // 获取JdbcTemplate对象
 
     /**
+     * 用于当 Druid 配置文件更改后，重新连接数据库。
+     */
+    public static void regainTemplate() {
+        JdbcUtil.regainDS(); //重新生成ds
+        template = new JdbcTemplate(JdbcUtil.getDataSource());
+    }
+
+    /**
+     * 用于判断是否成功连接到数据库
+     *      Druid不能直接给出是否成功连接数据库，所以先通过查询admin表的方式，验证是否连接成功数据库
+     */
+    public static boolean validate() {
+        log.debug("验证 数据库是否已连接");
+        try {
+            String sqlStr = "select * from admin";
+            template.queryForList(sqlStr);
+            return true;
+        } catch (DataAccessException e) {
+            log.error("数据库连接失败！");
+            return false;
+        }
+    }
+
+
+    /**
      * 查询 返回单条记录
      *      数据库相应表已做 唯一约束，确保不重名
      * @param sqlStr

@@ -2,8 +2,6 @@ package com.lichang.utils;
 
 import com.lichang.DBbeans.Admin;
 import com.lichang.DBbeans.Employee;
-import com.lichang.utils.LoggerUtil;
-import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
 import org.apache.logging.log4j.Logger;
 

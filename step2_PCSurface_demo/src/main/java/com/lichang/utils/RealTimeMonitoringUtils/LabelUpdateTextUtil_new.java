@@ -1,10 +1,8 @@
 package com.lichang.utils.RealTimeMonitoringUtils;
 
-import com.lichang.DBbeans.Machine_data_now;
 import com.lichang.utils.LoggerUtil;
 import com.lichang.utils.SqlStrUtil;
 import com.lichang.utils.dao.JdbcTemplateUtil;
-import com.lichang.utils.dao.JdbcUtil;
 import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;

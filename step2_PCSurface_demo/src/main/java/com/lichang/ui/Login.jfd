@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 			name: "this"
-			"background": sfield java.awt.Color green
+			"background": new java.awt.Color( 238, 238, 238, 255 )
 			"alwaysOnTop": true
 			"foreground": sfield java.awt.SystemColor windowText
 			"title": "登录"
@@ -13,115 +13,156 @@ new FormModel {
 			"resizable": false
 			"$sizePolicy": 1
 			"autoRequestFocus": false
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label2"
-				"text": "焊接数据监测与管理系统"
-				"font": new java.awt.Font( "微軟正黑體", 1, 22 )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 115
-				"y": 45
-				"width": 255
-				"height": 60
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
-				"icon": new com.jformdesigner.model.SwingIcon( 0, "/img/豪乐logo（仅图）.png" )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 40
-				"y": 45
-				"width": 80
-				"height": 60
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label4"
-				"text": "用户名："
-				"font": &Font0 new java.awt.Font( "微软雅黑", 1, 16 )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 45
-				"y": 115
-				"width": 80
-				"height": 30
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label5"
-				"text": "密码："
-				"font": #Font0
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 50
-				"height": 30
-				"x": 61
-				"y": 150
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "usernameTextField1"
-				"focusTraversalPolicyProvider": true
-				"nextFocusableComponent": new FormReference( "passwordField1" )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 115
-				"y": 120
-				"width": 170
-				"height": 26
-			} )
-			add( new FormComponent( "javax.swing.JPasswordField" ) {
-				name: "passwordField1"
-				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "passwordField1KeyPressed", true ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 115
-				"y": 155
-				"width": 170
-				"height": 25
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button1"
-				"text": "登录"
-				"font": new java.awt.Font( "微软雅黑", 1, 16 )
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 290
-				"y": 120
-				"height": 60
-				"width": 70
-			} )
-			add( new FormComponent( "javax.swing.JRadioButton" ) {
-				name: "empRadioButton"
-				"text": "员工"
-				"font": &Font1 new java.awt.Font( "微软雅黑", 0, 12 )
-				"$buttonGroup": new FormReference( "buttonGroup1" )
-				"selected": true
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 115
-				"y": 190
-			} )
-			add( new FormComponent( "javax.swing.JRadioButton" ) {
-				name: "admRadioButton"
-				"text": "管理员"
-				"font": #Font1
-				"$buttonGroup": new FormReference( "buttonGroup1" )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 75
-				"height": 25
-				"x": 210
-				"y": 190
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
-				"text": "v1.0"
+			"$locationPolicy": 1
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/img/system(big).png" )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowOpened", "thisWindowOpened", true ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
+				name: "panel1"
+				"background": new java.awt.Color( 238, 238, 238, 255 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/img/system2(72).png" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 70
+					"height": 60
+					"x": 35
+					"y": 30
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label2"
+					"text": "焊接数据监测与专家系统"
+					"font": new java.awt.Font( "微軟正黑體", 1, 22 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 255
+					"height": 60
+					"x": 115
+					"y": 25
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+					"text": "用户名："
+					"font": &Font0 new java.awt.Font( "微软雅黑", 1, 16 )
+					"foreground": &Color0 new java.awt.Color( 51, 51, 51, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 70
+					"height": 30
+					"x": 40
+					"y": 100
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label5"
+					"text": "密码："
+					"font": #Font0
+					"foreground": #Color0
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 54
+					"height": 30
+					"x": 55
+					"y": 140
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "v1.1"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 31
+					"height": 20
+					"x": 5
+					"y": 225
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "empRadioButton"
+					"text": "员工"
+					"font": &Font1 new java.awt.Font( "微软雅黑", 0, 12 )
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+					"selected": true
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 46
+					"height": 25
+					"x": 110
+					"y": 175
+				} )
+				add( new FormComponent( "javax.swing.JPasswordField" ) {
+					name: "passwordField1"
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyPressed", "passwordField1KeyPressed", true ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 30
+					"x": 110
+					"y": 140
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "usernameTextField1"
+					"focusTraversalPolicyProvider": true
+					"nextFocusableComponent": new FormReference( "passwordField1" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 170
+					"height": 31
+					"x": 110
+					"y": 100
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "admRadioButton"
+					"text": "管理员"
+					"font": #Font1
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 75
+					"height": 25
+					"x": 205
+					"y": 175
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"text": "登 录"
+					"font": new java.awt.Font( "微软雅黑", 1, 16 )
+					"foreground": #Color0
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 70
+					"height": 70
+					"x": 295
+					"y": 100
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button2"
+					"text": "数据库设置"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button2ActionPerformed", true ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 88
+					"height": 30
+					"x": 300
+					"y": 215
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label6"
+					"text": "数据库连接状态："
+					"font": new java.awt.Font( "微软雅黑", 0, 12 )
+					"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 110
+					"y": 220
+					"width": 100
+					"height": 23
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label7"
+					"font": new java.awt.Font( "微软雅黑", 0, 12 )
+					"text": "检测中···"
+					"foreground": new java.awt.Color( 51, 51, 51, 255 )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 215
+					"y": 220
+					"width": 60
+					"height": 22
+				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 0
-				"y": 235
-				"width": 31
-				"height": 20
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button2"
-				"text": "数据库设置"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button2ActionPerformed", true ) )
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 305
-				"y": 220
+				"y": 0
+				"height": 255
+				"width": 400
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 245, 110 )
+			"location": new java.awt.Point( 355, 145 )
 			"size": new java.awt.Dimension( 405, 285 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {

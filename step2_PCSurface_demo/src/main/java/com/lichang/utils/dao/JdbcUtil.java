@@ -5,10 +5,8 @@ import com.lichang.utils.LoggerUtil;
 import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
@@ -43,6 +41,29 @@ public class JdbcUtil {
         }
 
     }
+
+    /**
+     * 用于当修改 druid文件后， 重新加载数据库池配置
+     * @return
+     */
+    public static void regainDS() {
+        log.debug("重新加载数据库连接池配置");
+        try {
+            //加载配置文件
+            Properties dataSourceProperties = new Properties();
+
+            //获取真实路径
+            String druid_properties_path = IOUtil.getPath("conf/druid.properties", "\\conf\\druid.properties");
+
+            InputStream DruidPathStream = new FileInputStream(druid_properties_path);
+            dataSourceProperties.load(DruidPathStream);
+            //获取DataSource
+            ds = com.alibaba.druid.pool.DruidDataSourceFactory.createDataSource(dataSourceProperties);
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
+
 
     /**
      * 获取连接池对象

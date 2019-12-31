@@ -157,8 +157,6 @@ public class ExpertSystem extends JFrame {
      */
     //打开该frame时，触发
     private void thisWindowOpened(WindowEvent e) {
-        setUI();
-
         //非管理员用户，禁止使用重设 、设计、 仅调参等功能
         if (!adminFlag) {
             button6.setEnabled(false); //重设
@@ -211,8 +209,12 @@ public class ExpertSystem extends JFrame {
      */
     //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
+        //关闭所有frame
+        Window[] frame = JFrame.getWindows();
+        for (Window window : frame) {
+            window.dispose();
+        }
         new Login();
-        this.dispose();
     }
 
     //MenuItem 用户设置： 更改密码
@@ -227,12 +229,14 @@ public class ExpertSystem extends JFrame {
         oldValidationTip = new JLabel();
         oldChangeFlag = false;
 
+        changePasswordPanel.setBackground(new Color(238,238,238));
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线");
+        JTextArea tip = new JTextArea("提示：密码2~10个字符，可使用字母、数字、下划线");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
+        tip.setBorder(null); //设置无边框
         tip.setLineWrap(true); // 自动换行
         tip.setWrapStyleWord(true);
         tip.setEditable(false); // 不可编辑
@@ -2330,6 +2334,7 @@ public class ExpertSystem extends JFrame {
      */
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+        panel13 = new JPanel();
         panel1 = new JPanel();
         label2 = new JLabel();
         menuBar1 = new JMenuBar();
@@ -2337,10 +2342,10 @@ public class ExpertSystem extends JFrame {
         menuItem1 = new JMenuItem();
         menuItem2 = new JMenuItem();
         label3 = new JLabel();
-        button1 = new JButton();
-        button2 = new JButton();
-        button3 = new JButton();
         button4 = new JButton();
+        button3 = new JButton();
+        button2 = new JButton();
+        button1 = new JButton();
         separator4 = new JPopupMenu.Separator();
         tabbedPane2 = new JTabbedPane();
         panel4 = new JPanel();
@@ -2441,9 +2446,10 @@ public class ExpertSystem extends JFrame {
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("\u754c\u9762");
+        setTitle("\u4e13\u5bb6\u7cfb\u7edf");
         setAlwaysOnTop(true);
         setResizable(false);
+        setIconImage(new ImageIcon(getClass().getResource("/img/system(big).png")).getImage());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -2457,1226 +2463,1361 @@ public class ExpertSystem extends JFrame {
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        //======== panel1 ========
+        //======== panel13 ========
         {
-            panel1.setForeground(Color.black);
-            panel1.setBackground(new Color(238, 238, 238));
-            panel1.setLayout(null);
+            panel13.setBackground(new Color(238, 238, 238));
+            panel13.setLayout(null);
 
-            //---- label2 ----
-            label2.setText("\u5f53\u524d\uff1a");
-            label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
-            panel1.add(label2);
-            label2.setBounds(0, 0, 45, 30);
-
-            //======== menuBar1 ========
+            //======== panel1 ========
             {
+                panel1.setForeground(Color.black);
+                panel1.setBackground(new Color(238, 238, 238));
+                panel1.setLayout(null);
 
-                //======== menu1 ========
+                //---- label2 ----
+                label2.setText("\u5f53\u524d\uff1a");
+                label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
+                panel1.add(label2);
+                label2.setBounds(5, 0, 45, 30);
+
+                //======== menuBar1 ========
                 {
-                    menu1.setText("\u7528\u6237\u8bbe\u7f6e");
-                    menu1.setMaximumSize(new Dimension(80, 32767));
-                    menu1.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
-                    menu1.setHorizontalAlignment(SwingConstants.LEFT);
 
-                    //---- menuItem1 ----
-                    menuItem1.setText("\u5207\u6362\u7528\u6237");
-                    menuItem1.setPreferredSize(new Dimension(74, 25));
-                    menuItem1.setHorizontalTextPosition(SwingConstants.LEFT);
-                    menuItem1.setMargin(new Insets(2, 0, 2, 0));
-                    menuItem1.addActionListener(e -> menuItem1ActionPerformed(e));
-                    menu1.add(menuItem1);
-                    menu1.addSeparator();
+                    //======== menu1 ========
+                    {
+                        menu1.setText("\u7528\u6237\u8bbe\u7f6e");
+                        menu1.setMaximumSize(new Dimension(80, 32767));
+                        menu1.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
+                        menu1.setHorizontalAlignment(SwingConstants.LEFT);
 
-                    //---- menuItem2 ----
-                    menuItem2.setText("\u66f4\u6539\u5bc6\u7801");
-                    menuItem2.setPreferredSize(new Dimension(74, 25));
-                    menuItem2.setHorizontalTextPosition(SwingConstants.LEFT);
-                    menuItem2.setMargin(new Insets(2, 0, 2, 0));
-                    menuItem2.addActionListener(e -> menuItem2ActionPerformed(e));
-                    menu1.add(menuItem2);
-                    menu1.addSeparator();
+                        //---- menuItem1 ----
+                        menuItem1.setText("\u5207\u6362\u7528\u6237");
+                        menuItem1.setPreferredSize(new Dimension(74, 25));
+                        menuItem1.setHorizontalTextPosition(SwingConstants.LEFT);
+                        menuItem1.setMargin(new Insets(2, 0, 2, 0));
+                        menuItem1.addActionListener(e -> menuItem1ActionPerformed(e));
+                        menu1.add(menuItem1);
+                        menu1.addSeparator();
+
+                        //---- menuItem2 ----
+                        menuItem2.setText("\u66f4\u6539\u5bc6\u7801");
+                        menuItem2.setPreferredSize(new Dimension(74, 25));
+                        menuItem2.setHorizontalTextPosition(SwingConstants.LEFT);
+                        menuItem2.setMargin(new Insets(2, 0, 2, 0));
+                        menuItem2.addActionListener(e -> menuItem2ActionPerformed(e));
+                        menu1.add(menuItem2);
+                        menu1.addSeparator();
+                    }
+                    menuBar1.add(menu1);
                 }
-                menuBar1.add(menu1);
+                panel1.add(menuBar1);
+                menuBar1.setBounds(150, 0, 86, 30);
+
+                //---- label3 ----
+                label3.setText("admin");
+                label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
+                panel1.add(label3);
+                label3.setBounds(55, 0, 80, 30);
+
+                {
+                    // compute preferred size
+                    Dimension preferredSize = new Dimension();
+                    for(int i = 0; i < panel1.getComponentCount(); i++) {
+                        Rectangle bounds = panel1.getComponent(i).getBounds();
+                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                    }
+                    Insets insets = panel1.getInsets();
+                    preferredSize.width += insets.right;
+                    preferredSize.height += insets.bottom;
+                    panel1.setMinimumSize(preferredSize);
+                    panel1.setPreferredSize(preferredSize);
+                }
             }
-            panel1.add(menuBar1);
-            menuBar1.setBounds(135, 0, 86, 30);
+            panel13.add(panel1);
+            panel1.setBounds(750, 0, 236, 50);
 
-            //---- label3 ----
-            label3.setText("admin");
-            label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
-            panel1.add(label3);
-            label3.setBounds(50, 0, 80, 30);
+            //---- button4 ----
+            button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+            button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+            button4.setForeground(new Color(51, 51, 51));
+            button4.addActionListener(e -> button4ActionPerformed(e));
+            panel13.add(button4);
+            button4.setBounds(790, 50, 135, 40);
 
+            //---- button3 ----
+            button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
+            button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+            button3.setForeground(new Color(51, 51, 51));
+            panel13.add(button3);
+            button3.setBounds(535, 50, 135, 40);
+
+            //---- button2 ----
+            button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+            button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+            button2.setForeground(new Color(51, 51, 51));
+            button2.addActionListener(e -> button2ActionPerformed(e));
+            panel13.add(button2);
+            button2.setBounds(290, 50, 135, 40);
+
+            //---- button1 ----
+            button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
+            button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
+            button1.setForeground(new Color(51, 51, 51));
+            button1.addActionListener(e -> button1ActionPerformed(e));
+            panel13.add(button1);
+            button1.setBounds(50, 50, 135, 40);
+            panel13.add(separator4);
+            separator4.setBounds(5, 90, 965, 10);
+
+            //======== tabbedPane2 ========
             {
-                // compute preferred size
-                Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel1.getComponentCount(); i++) {
-                    Rectangle bounds = panel1.getComponent(i).getBounds();
-                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                }
-                Insets insets = panel1.getInsets();
-                preferredSize.width += insets.right;
-                preferredSize.height += insets.bottom;
-                panel1.setMinimumSize(preferredSize);
-                panel1.setPreferredSize(preferredSize);
-            }
-        }
-        contentPane.add(panel1);
-        panel1.setBounds(750, 0, 226, 50);
+                tabbedPane2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
+                tabbedPane2.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        tabbedPane2MouseClicked(e);
+                    }
+                });
 
-        //---- button1 ----
-        button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
-        button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
-        button1.setForeground(new Color(51, 51, 51));
-        button1.addActionListener(e -> button1ActionPerformed(e));
-        contentPane.add(button1);
-        button1.setBounds(55, 50, 135, 40);
+                //======== panel4 ========
+                {
+                    panel4.setLayout(null);
 
-        //---- button2 ----
-        button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
-        button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
-        button2.setForeground(new Color(51, 51, 51));
-        button2.addActionListener(e -> button2ActionPerformed(e));
-        contentPane.add(button2);
-        button2.setBounds(295, 50, 135, 40);
+                    //---- label1 ----
+                    label1.setText("\u6bcd\u6750\u9009\u53d6");
+                    label1.setBackground(new Color(204, 204, 204));
+                    label1.setOpaque(true);
+                    label1.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label1.setHorizontalAlignment(SwingConstants.CENTER);
+                    label1.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 1f));
+                    label1.setForeground(new Color(60, 60, 60));
+                    panel4.add(label1);
+                    label1.setBounds(25, 30, 85, 30);
 
-        //---- button3 ----
-        button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
-        button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
-        button3.setForeground(new Color(51, 51, 51));
-        contentPane.add(button3);
-        button3.setBounds(540, 50, 135, 40);
+                    //---- label4 ----
+                    label4.setText("\u710a\u63a5\u65b9\u6cd5");
+                    label4.setBackground(new Color(204, 204, 204));
+                    label4.setOpaque(true);
+                    label4.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label4.setHorizontalAlignment(SwingConstants.CENTER);
+                    label4.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label4.setFont(label4.getFont().deriveFont(label4.getFont().getStyle() | Font.BOLD, label4.getFont().getSize() + 1f));
+                    label4.setForeground(new Color(61, 61, 61));
+                    panel4.add(label4);
+                    label4.setBounds(25, 75, 85, 30);
 
-        //---- button4 ----
-        button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
-        button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 15));
-        button4.setForeground(new Color(51, 51, 51));
-        button4.addActionListener(e -> button4ActionPerformed(e));
-        contentPane.add(button4);
-        button4.setBounds(795, 50, 135, 40);
-        contentPane.add(separator4);
-        separator4.setBounds(5, 90, 965, 10);
+                    //---- label5 ----
+                    label5.setText("\u710a\u63a5\u6750\u6599");
+                    label5.setBackground(new Color(204, 204, 204));
+                    label5.setOpaque(true);
+                    label5.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label5.setHorizontalAlignment(SwingConstants.CENTER);
+                    label5.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label5.setFont(label5.getFont().deriveFont(label5.getFont().getStyle() | Font.BOLD, label5.getFont().getSize() + 1f));
+                    label5.setForeground(new Color(61, 61, 61));
+                    panel4.add(label5);
+                    label5.setBounds(25, 120, 85, 30);
 
-        //======== tabbedPane2 ========
-        {
-            tabbedPane2.setFont(tabbedPane2.getFont().deriveFont(tabbedPane2.getFont().getSize() + 1f));
-            tabbedPane2.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    tabbedPane2MouseClicked(e);
-                }
-            });
+                    //---- label6 ----
+                    label6.setText("\u8f85\u6750");
+                    label6.setBackground(new Color(204, 204, 204));
+                    label6.setOpaque(true);
+                    label6.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label6.setHorizontalAlignment(SwingConstants.CENTER);
+                    label6.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label6.setFont(label6.getFont().deriveFont(label6.getFont().getStyle() | Font.BOLD, label6.getFont().getSize() + 1f));
+                    label6.setForeground(new Color(61, 61, 61));
+                    panel4.add(label6);
+                    label6.setBounds(25, 165, 85, 30);
 
-            //======== panel4 ========
-            {
-                panel4.setLayout(null);
+                    //---- label7 ----
+                    label7.setText("\u5de5\u4ef6\u539a\u5ea6");
+                    label7.setBackground(new Color(204, 204, 204));
+                    label7.setOpaque(true);
+                    label7.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label7.setHorizontalAlignment(SwingConstants.CENTER);
+                    label7.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label7.setFont(label7.getFont().deriveFont(label7.getFont().getStyle() | Font.BOLD, label7.getFont().getSize() + 1f));
+                    label7.setForeground(new Color(61, 61, 61));
+                    panel4.add(label7);
+                    label7.setBounds(25, 210, 85, 30);
 
-                //---- label1 ----
-                label1.setText("\u6bcd\u6750\u9009\u53d6");
-                label1.setBackground(new Color(204, 204, 204));
-                label1.setOpaque(true);
-                label1.setHorizontalTextPosition(SwingConstants.CENTER);
-                label1.setHorizontalAlignment(SwingConstants.CENTER);
-                label1.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 1f));
-                panel4.add(label1);
-                label1.setBounds(25, 30, 85, 30);
+                    //---- label8 ----
+                    label8.setText("\u710a\u63a5\u4f4d\u7f6e");
+                    label8.setBackground(new Color(204, 204, 204));
+                    label8.setOpaque(true);
+                    label8.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label8.setHorizontalAlignment(SwingConstants.CENTER);
+                    label8.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label8.setFont(label8.getFont().deriveFont(label8.getFont().getStyle() | Font.BOLD, label8.getFont().getSize() + 1f));
+                    label8.setForeground(new Color(61, 61, 61));
+                    panel4.add(label8);
+                    label8.setBounds(25, 255, 85, 30);
 
-                //---- label4 ----
-                label4.setText("\u710a\u63a5\u65b9\u6cd5");
-                label4.setBackground(new Color(204, 204, 204));
-                label4.setOpaque(true);
-                label4.setHorizontalTextPosition(SwingConstants.CENTER);
-                label4.setHorizontalAlignment(SwingConstants.CENTER);
-                label4.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 1f));
-                panel4.add(label4);
-                label4.setBounds(25, 75, 85, 30);
+                    //---- label9 ----
+                    label9.setText("\u63a5\u5934\u3001\u5761\u53e3");
+                    label9.setBackground(new Color(204, 204, 204));
+                    label9.setOpaque(true);
+                    label9.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label9.setHorizontalAlignment(SwingConstants.CENTER);
+                    label9.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label9.setFont(label9.getFont().deriveFont(label9.getFont().getStyle() | Font.BOLD, label9.getFont().getSize() + 1f));
+                    label9.setForeground(new Color(61, 61, 61));
+                    panel4.add(label9);
+                    label9.setBounds(25, 300, 85, 30);
 
-                //---- label5 ----
-                label5.setText("\u710a\u63a5\u6750\u6599");
-                label5.setBackground(new Color(204, 204, 204));
-                label5.setOpaque(true);
-                label5.setHorizontalTextPosition(SwingConstants.CENTER);
-                label5.setHorizontalAlignment(SwingConstants.CENTER);
-                label5.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 1f));
-                panel4.add(label5);
-                label5.setBounds(25, 120, 85, 30);
+                    //---- label10 ----
+                    label10.setText("\u70ed\u5de5\u827a");
+                    label10.setBackground(new Color(204, 204, 204));
+                    label10.setOpaque(true);
+                    label10.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label10.setHorizontalAlignment(SwingConstants.CENTER);
+                    label10.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label10.setFont(label10.getFont().deriveFont(label10.getFont().getStyle() | Font.BOLD, label10.getFont().getSize() + 1f));
+                    label10.setForeground(new Color(61, 61, 61));
+                    panel4.add(label10);
+                    label10.setBounds(25, 345, 85, 30);
 
-                //---- label6 ----
-                label6.setText("\u8f85\u6750");
-                label6.setBackground(new Color(204, 204, 204));
-                label6.setOpaque(true);
-                label6.setHorizontalTextPosition(SwingConstants.CENTER);
-                label6.setHorizontalAlignment(SwingConstants.CENTER);
-                label6.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 1f));
-                panel4.add(label6);
-                label6.setBounds(25, 165, 85, 30);
+                    //---- label11 ----
+                    label11.setText("\u5176\u4ed6");
+                    label11.setBackground(new Color(204, 204, 204));
+                    label11.setOpaque(true);
+                    label11.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label11.setHorizontalAlignment(SwingConstants.CENTER);
+                    label11.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 1f));
+                    label11.setForeground(new Color(61, 61, 61));
+                    panel4.add(label11);
+                    label11.setBounds(25, 390, 85, 30);
 
-                //---- label7 ----
-                label7.setText("\u5de5\u4ef6\u539a\u5ea6");
-                label7.setBackground(new Color(204, 204, 204));
-                label7.setOpaque(true);
-                label7.setHorizontalTextPosition(SwingConstants.CENTER);
-                label7.setHorizontalAlignment(SwingConstants.CENTER);
-                label7.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 1f));
-                panel4.add(label7);
-                label7.setBounds(25, 210, 85, 30);
+                    //---- label12 ----
+                    label12.setText("A");
+                    panel4.add(label12);
+                    label12.setBounds(120, 30, 10, 30);
 
-                //---- label8 ----
-                label8.setText("\u710a\u63a5\u4f4d\u7f6e");
-                label8.setBackground(new Color(204, 204, 204));
-                label8.setOpaque(true);
-                label8.setHorizontalTextPosition(SwingConstants.CENTER);
-                label8.setHorizontalAlignment(SwingConstants.CENTER);
-                label8.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 1f));
-                panel4.add(label8);
-                label8.setBounds(25, 255, 85, 30);
+                    //---- label13 ----
+                    label13.setText("B");
+                    panel4.add(label13);
+                    label13.setBounds(285, 30, 10, 30);
 
-                //---- label9 ----
-                label9.setText("\u63a5\u5934\u3001\u5761\u53e3");
-                label9.setBackground(new Color(204, 204, 204));
-                label9.setOpaque(true);
-                label9.setHorizontalTextPosition(SwingConstants.CENTER);
-                label9.setHorizontalAlignment(SwingConstants.CENTER);
-                label9.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 1f));
-                panel4.add(label9);
-                label9.setBounds(25, 300, 85, 30);
+                    //---- comboBox1 ----
+                    comboBox1.setSelectedIndex(-1);
+                    comboBox1.setEnabled(false);
+                    comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
+                    panel4.add(comboBox1);
+                    comboBox1.setBounds(135, 30, 135, 30);
 
-                //---- label10 ----
-                label10.setText("\u70ed\u5de5\u827a");
-                label10.setBackground(new Color(204, 204, 204));
-                label10.setOpaque(true);
-                label10.setHorizontalTextPosition(SwingConstants.CENTER);
-                label10.setHorizontalAlignment(SwingConstants.CENTER);
-                label10.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 1f));
-                panel4.add(label10);
-                label10.setBounds(25, 345, 85, 30);
+                    //---- comboBox2 ----
+                    comboBox2.setSelectedIndex(-1);
+                    comboBox2.setEnabled(false);
+                    comboBox2.addItemListener(e -> comboBox2ItemStateChanged(e));
+                    panel4.add(comboBox2);
+                    comboBox2.setBounds(300, 30, 135, 30);
 
-                //---- label11 ----
-                label11.setText("\u5176\u4ed6");
-                label11.setBackground(new Color(204, 204, 204));
-                label11.setOpaque(true);
-                label11.setHorizontalTextPosition(SwingConstants.CENTER);
-                label11.setHorizontalAlignment(SwingConstants.CENTER);
-                label11.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label11.setFont(label11.getFont().deriveFont(label11.getFont().getSize() + 1f));
-                panel4.add(label11);
-                label11.setBounds(25, 390, 85, 30);
+                    //---- comboBox3 ----
+                    comboBox3.setSelectedIndex(-1);
+                    comboBox3.setEnabled(false);
+                    comboBox3.addItemListener(e -> comboBox3ItemStateChanged(e));
+                    panel4.add(comboBox3);
+                    comboBox3.setBounds(135, 75, 300, 30);
 
-                //---- label12 ----
-                label12.setText("A");
-                panel4.add(label12);
-                label12.setBounds(120, 30, 10, 30);
+                    //---- comboBox4 ----
+                    comboBox4.setSelectedIndex(-1);
+                    comboBox4.setEnabled(false);
+                    comboBox4.addItemListener(e -> comboBox4ItemStateChanged(e));
+                    panel4.add(comboBox4);
+                    comboBox4.setBounds(135, 120, 300, 30);
 
-                //---- label13 ----
-                label13.setText("B");
-                panel4.add(label13);
-                label13.setBounds(270, 30, 10, 30);
+                    //---- comboBox5 ----
+                    comboBox5.setSelectedIndex(-1);
+                    comboBox5.setEnabled(false);
+                    comboBox5.addItemListener(e -> comboBox5ItemStateChanged(e));
+                    panel4.add(comboBox5);
+                    comboBox5.setBounds(135, 165, 300, 30);
 
-                //---- comboBox1 ----
-                comboBox1.setSelectedIndex(-1);
-                comboBox1.setEnabled(false);
-                comboBox1.addItemListener(e -> comboBox1ItemStateChanged(e));
-                panel4.add(comboBox1);
-                comboBox1.setBounds(135, 30, 120, 30);
-
-                //---- comboBox2 ----
-                comboBox2.setSelectedIndex(-1);
-                comboBox2.setEnabled(false);
-                comboBox2.addItemListener(e -> comboBox2ItemStateChanged(e));
-                panel4.add(comboBox2);
-                comboBox2.setBounds(285, 30, 125, 30);
-
-                //---- comboBox3 ----
-                comboBox3.setSelectedIndex(-1);
-                comboBox3.setEnabled(false);
-                comboBox3.addItemListener(e -> comboBox3ItemStateChanged(e));
-                panel4.add(comboBox3);
-                comboBox3.setBounds(135, 75, 275, 30);
-
-                //---- comboBox4 ----
-                comboBox4.setSelectedIndex(-1);
-                comboBox4.setEnabled(false);
-                comboBox4.addItemListener(e -> comboBox4ItemStateChanged(e));
-                panel4.add(comboBox4);
-                comboBox4.setBounds(135, 120, 275, 30);
-
-                //---- comboBox5 ----
-                comboBox5.setSelectedIndex(-1);
-                comboBox5.setEnabled(false);
-                comboBox5.addItemListener(e -> comboBox5ItemStateChanged(e));
-                panel4.add(comboBox5);
-                comboBox5.setBounds(135, 165, 275, 30);
-
-                //---- comboBox6 ----
-                comboBox6.setSelectedIndex(-1);
-                comboBox6.setEnabled(false);
-                comboBox6.addItemListener(e -> {
+                    //---- comboBox6 ----
+                    comboBox6.setSelectedIndex(-1);
+                    comboBox6.setEnabled(false);
+                    comboBox6.addItemListener(e -> {
 			comboBox6ItemStateChanged(e);
 			comboBox6_2ItemStateChanged(e);
 			comboBox6_3ItemStateChanged(e);
 		});
-                panel4.add(comboBox6);
-                comboBox6.setBounds(135, 210, 275, 30);
+                    panel4.add(comboBox6);
+                    comboBox6.setBounds(135, 210, 300, 30);
 
-                //---- comboBox7 ----
-                comboBox7.setSelectedIndex(-1);
-                comboBox7.setEnabled(false);
-                panel4.add(comboBox7);
-                comboBox7.setBounds(135, 255, 275, 30);
+                    //---- comboBox7 ----
+                    comboBox7.setSelectedIndex(-1);
+                    comboBox7.setEnabled(false);
+                    panel4.add(comboBox7);
+                    comboBox7.setBounds(135, 255, 300, 30);
 
-                //---- comboBox8 ----
-                comboBox8.setSelectedIndex(-1);
-                comboBox8.setEnabled(false);
-                panel4.add(comboBox8);
-                comboBox8.setBounds(135, 300, 125, 30);
+                    //---- comboBox8 ----
+                    comboBox8.setSelectedIndex(-1);
+                    comboBox8.setEnabled(false);
+                    panel4.add(comboBox8);
+                    comboBox8.setBounds(135, 300, 135, 30);
 
-                //---- comboBox9 ----
-                comboBox9.setSelectedIndex(-1);
-                comboBox9.setEnabled(false);
-                comboBox9.addItemListener(e -> comboBox9ItemStateChanged(e));
-                panel4.add(comboBox9);
-                comboBox9.setBounds(285, 300, 125, 30);
+                    //---- comboBox9 ----
+                    comboBox9.setSelectedIndex(-1);
+                    comboBox9.setEnabled(false);
+                    comboBox9.addItemListener(e -> comboBox9ItemStateChanged(e));
+                    panel4.add(comboBox9);
+                    comboBox9.setBounds(300, 300, 135, 30);
 
-                //---- comboBox10 ----
-                comboBox10.setSelectedIndex(-1);
-                comboBox10.setEnabled(false);
-                panel4.add(comboBox10);
-                comboBox10.setBounds(135, 345, 275, 30);
+                    //---- comboBox10 ----
+                    comboBox10.setSelectedIndex(-1);
+                    comboBox10.setEnabled(false);
+                    panel4.add(comboBox10);
+                    comboBox10.setBounds(135, 345, 300, 30);
 
-                //---- comboBox11 ----
-                comboBox11.setEditable(true);
-                comboBox11.setSelectedIndex(-1);
-                comboBox11.setEnabled(false);
-                panel4.add(comboBox11);
-                comboBox11.setBounds(135, 390, 275, 30);
+                    //---- comboBox11 ----
+                    comboBox11.setEditable(true);
+                    comboBox11.setSelectedIndex(-1);
+                    comboBox11.setEnabled(false);
+                    panel4.add(comboBox11);
+                    comboBox11.setBounds(135, 390, 300, 30);
 
-                //---- label14 ----
-                label14.setText("\u710a\u63a5\u53c2\u6570 ");
-                label14.setBackground(new Color(204, 204, 204));
-                label14.setOpaque(true);
-                label14.setHorizontalTextPosition(SwingConstants.CENTER);
-                label14.setHorizontalAlignment(SwingConstants.CENTER);
-                label14.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label14.setFont(label14.getFont().deriveFont(label14.getFont().getStyle() | Font.BOLD, label14.getFont().getSize() + 2f));
-                panel4.add(label14);
-                label14.setBounds(520, 120, 100, 30);
+                    //---- label14 ----
+                    label14.setText("\u710a\u63a5\u53c2\u6570 ");
+                    label14.setBackground(new Color(204, 204, 204));
+                    label14.setOpaque(true);
+                    label14.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label14.setHorizontalAlignment(SwingConstants.CENTER);
+                    label14.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label14.setFont(label14.getFont().deriveFont(label14.getFont().getStyle() | Font.BOLD, label14.getFont().getSize() + 2f));
+                    panel4.add(label14);
+                    label14.setBounds(520, 120, 100, 30);
 
-                //---- label15 ----
-                label15.setText("\u710a\u63a5\u7535\u6d41");
-                label15.setBackground(new Color(204, 204, 204));
-                label15.setOpaque(true);
-                label15.setHorizontalTextPosition(SwingConstants.CENTER);
-                label15.setHorizontalAlignment(SwingConstants.CENTER);
-                label15.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label15.setFont(label15.getFont().deriveFont(label15.getFont().getSize() + 1f));
-                panel4.add(label15);
-                label15.setBounds(520, 165, 85, 30);
+                    //---- label15 ----
+                    label15.setText("\u710a\u63a5\u7535\u6d41");
+                    label15.setBackground(new Color(204, 204, 204));
+                    label15.setOpaque(true);
+                    label15.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label15.setHorizontalAlignment(SwingConstants.CENTER);
+                    label15.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label15.setFont(label15.getFont().deriveFont(label15.getFont().getStyle() | Font.BOLD, label15.getFont().getSize() + 1f));
+                    label15.setForeground(new Color(61, 61, 61));
+                    panel4.add(label15);
+                    label15.setBounds(520, 165, 85, 30);
 
-                //---- label16 ----
-                label16.setText("\u710a\u63a5\u901f\u5ea6");
-                label16.setBackground(new Color(204, 204, 204));
-                label16.setOpaque(true);
-                label16.setHorizontalTextPosition(SwingConstants.CENTER);
-                label16.setHorizontalAlignment(SwingConstants.CENTER);
-                label16.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label16.setFont(label16.getFont().deriveFont(label16.getFont().getSize() + 1f));
-                panel4.add(label16);
-                label16.setBounds(520, 255, 85, 30);
+                    //---- label16 ----
+                    label16.setText("\u710a\u63a5\u901f\u5ea6");
+                    label16.setBackground(new Color(204, 204, 204));
+                    label16.setOpaque(true);
+                    label16.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label16.setHorizontalAlignment(SwingConstants.CENTER);
+                    label16.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label16.setFont(label16.getFont().deriveFont(label16.getFont().getStyle() | Font.BOLD, label16.getFont().getSize() + 1f));
+                    label16.setForeground(new Color(61, 61, 61));
+                    panel4.add(label16);
+                    label16.setBounds(520, 255, 85, 30);
 
-                //---- label17 ----
-                label17.setText("\u710a\u63a5\u7535\u538b");
-                label17.setBackground(new Color(204, 204, 204));
-                label17.setOpaque(true);
-                label17.setHorizontalTextPosition(SwingConstants.CENTER);
-                label17.setHorizontalAlignment(SwingConstants.CENTER);
-                label17.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label17.setFont(label17.getFont().deriveFont(label17.getFont().getSize() + 1f));
-                panel4.add(label17);
-                label17.setBounds(520, 210, 85, 30);
+                    //---- label17 ----
+                    label17.setText("\u710a\u63a5\u7535\u538b");
+                    label17.setBackground(new Color(204, 204, 204));
+                    label17.setOpaque(true);
+                    label17.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label17.setHorizontalAlignment(SwingConstants.CENTER);
+                    label17.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label17.setFont(label17.getFont().deriveFont(label17.getFont().getStyle() | Font.BOLD, label17.getFont().getSize() + 1f));
+                    label17.setForeground(new Color(61, 61, 61));
+                    panel4.add(label17);
+                    label17.setBounds(520, 210, 85, 30);
 
-                //---- label18 ----
-                label18.setText("\u5e72\u4f38\u51fa\u91cf");
-                label18.setBackground(new Color(204, 204, 204));
-                label18.setOpaque(true);
-                label18.setHorizontalTextPosition(SwingConstants.CENTER);
-                label18.setHorizontalAlignment(SwingConstants.CENTER);
-                label18.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label18.setFont(label18.getFont().deriveFont(label18.getFont().getSize() + 1f));
-                panel4.add(label18);
-                label18.setBounds(520, 300, 85, 30);
+                    //---- label18 ----
+                    label18.setText("\u5e72\u4f38\u51fa\u91cf");
+                    label18.setBackground(new Color(204, 204, 204));
+                    label18.setOpaque(true);
+                    label18.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label18.setHorizontalAlignment(SwingConstants.CENTER);
+                    label18.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label18.setFont(label18.getFont().deriveFont(label18.getFont().getStyle() | Font.BOLD, label18.getFont().getSize() + 1f));
+                    label18.setForeground(new Color(61, 61, 61));
+                    panel4.add(label18);
+                    label18.setBounds(520, 300, 85, 30);
 
-                //---- label19 ----
-                label19.setText("\u9608\u503climit");
-                label19.setBackground(new Color(204, 204, 204));
-                label19.setOpaque(true);
-                label19.setHorizontalTextPosition(SwingConstants.CENTER);
-                label19.setHorizontalAlignment(SwingConstants.CENTER);
-                label19.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label19.setFont(label19.getFont().deriveFont(label19.getFont().getSize() + 1f));
-                panel4.add(label19);
-                label19.setBounds(520, 345, 85, 30);
+                    //---- label19 ----
+                    label19.setText("\u9608\u503climit");
+                    label19.setBackground(new Color(204, 204, 204));
+                    label19.setOpaque(true);
+                    label19.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label19.setHorizontalAlignment(SwingConstants.CENTER);
+                    label19.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label19.setFont(label19.getFont().deriveFont(label19.getFont().getStyle() | Font.BOLD, label19.getFont().getSize() + 1f));
+                    label19.setForeground(new Color(61, 61, 61));
+                    panel4.add(label19);
+                    label19.setBounds(520, 345, 85, 30);
 
-                //---- comboBox12 ----
-                comboBox12.setSelectedIndex(-1);
-                comboBox12.setEnabled(false);
-                panel4.add(comboBox12);
-                comboBox12.setBounds(620, 165, 160, 30);
+                    //---- comboBox12 ----
+                    comboBox12.setSelectedIndex(-1);
+                    comboBox12.setEnabled(false);
+                    panel4.add(comboBox12);
+                    comboBox12.setBounds(620, 165, 170, 30);
 
-                //---- comboBox13 ----
-                comboBox13.setSelectedIndex(-1);
-                comboBox13.setEnabled(false);
-                panel4.add(comboBox13);
-                comboBox13.setBounds(620, 210, 160, 30);
+                    //---- comboBox13 ----
+                    comboBox13.setSelectedIndex(-1);
+                    comboBox13.setEnabled(false);
+                    panel4.add(comboBox13);
+                    comboBox13.setBounds(620, 210, 170, 30);
 
-                //---- comboBox14 ----
-                comboBox14.setSelectedIndex(-1);
-                comboBox14.setEnabled(false);
-                panel4.add(comboBox14);
-                comboBox14.setBounds(620, 255, 160, 30);
+                    //---- comboBox14 ----
+                    comboBox14.setSelectedIndex(-1);
+                    comboBox14.setEnabled(false);
+                    panel4.add(comboBox14);
+                    comboBox14.setBounds(620, 255, 170, 30);
 
-                //---- comboBox15 ----
-                comboBox15.setSelectedIndex(-1);
-                comboBox15.setEnabled(false);
-                panel4.add(comboBox15);
-                comboBox15.setBounds(620, 300, 160, 30);
+                    //---- comboBox15 ----
+                    comboBox15.setSelectedIndex(-1);
+                    comboBox15.setEnabled(false);
+                    panel4.add(comboBox15);
+                    comboBox15.setBounds(620, 300, 170, 30);
 
-                //---- comboBox16 ----
-                comboBox16.setSelectedIndex(-1);
-                comboBox16.setEnabled(false);
-                comboBox16.setEditable(true);
-                panel4.add(comboBox16);
-                comboBox16.setBounds(620, 345, 160, 30);
+                    //---- comboBox16 ----
+                    comboBox16.setSelectedIndex(-1);
+                    comboBox16.setEnabled(false);
+                    comboBox16.setEditable(true);
+                    panel4.add(comboBox16);
+                    comboBox16.setBounds(620, 345, 170, 30);
 
-                //---- button6 ----
-                button6.setText("\u91cd\u8bbe");
-                button6.setFont(button6.getFont().deriveFont(button6.getFont().getSize() - 1f));
-                button6.addActionListener(e -> button6ActionPerformed(e));
-                panel4.add(button6);
-                button6.setBounds(740, 30, 60, 30);
+                    //---- button6 ----
+                    button6.setText("\u91cd\u8bbe");
+                    button6.setFont(button6.getFont().deriveFont(button6.getFont().getStyle() | Font.BOLD, button6.getFont().getSize() - 1f));
+                    button6.setForeground(new Color(51, 51, 51));
+                    button6.addActionListener(e -> button6ActionPerformed(e));
+                    panel4.add(button6);
+                    button6.setBounds(760, 30, 60, 30);
 
-                //---- label20 ----
-                label20.setText("\u5efa\u8bae\u503c");
-                label20.setBackground(new Color(204, 204, 204));
-                label20.setOpaque(true);
-                label20.setHorizontalTextPosition(SwingConstants.CENTER);
-                label20.setHorizontalAlignment(SwingConstants.CENTER);
-                label20.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label20.setFont(label20.getFont().deriveFont(label20.getFont().getSize() + 2f));
-                panel4.add(label20);
-                label20.setBounds(620, 120, 160, 30);
+                    //---- label20 ----
+                    label20.setText("\u5efa\u8bae\u503c");
+                    label20.setBackground(new Color(204, 204, 204));
+                    label20.setOpaque(true);
+                    label20.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label20.setHorizontalAlignment(SwingConstants.CENTER);
+                    label20.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label20.setFont(label20.getFont().deriveFont(label20.getFont().getStyle() | Font.BOLD, label20.getFont().getSize() + 2f));
+                    label20.setForeground(new Color(61, 61, 61));
+                    panel4.add(label20);
+                    label20.setBounds(620, 120, 170, 30);
 
-                //---- textField1 ----
-                textField1.setEnabled(false);
-                panel4.add(textField1);
-                textField1.setBounds(800, 165, 130, 30);
+                    //---- textField1 ----
+                    textField1.setEnabled(false);
+                    panel4.add(textField1);
+                    textField1.setBounds(805, 165, 145, 30);
 
-                //---- textField2 ----
-                textField2.setEnabled(false);
-                panel4.add(textField2);
-                textField2.setBounds(800, 210, 130, 30);
+                    //---- textField2 ----
+                    textField2.setEnabled(false);
+                    panel4.add(textField2);
+                    textField2.setBounds(805, 210, 145, 30);
 
-                //---- textField3 ----
-                textField3.setEnabled(false);
-                panel4.add(textField3);
-                textField3.setBounds(800, 255, 130, 30);
+                    //---- textField3 ----
+                    textField3.setEnabled(false);
+                    panel4.add(textField3);
+                    textField3.setBounds(805, 255, 145, 30);
 
-                //---- textField4 ----
-                textField4.setEnabled(false);
-                panel4.add(textField4);
-                textField4.setBounds(800, 300, 130, 30);
+                    //---- textField4 ----
+                    textField4.setEnabled(false);
+                    panel4.add(textField4);
+                    textField4.setBounds(805, 300, 145, 30);
 
-                //---- button7 ----
-                button7.setText("\u81ea\u5b9a\u4e49");
-                button7.addActionListener(e -> button7ActionPerformed(e));
-                panel4.add(button7);
-                button7.setBounds(750, 390, 85, 30);
+                    //---- button7 ----
+                    button7.setText("\u81ea\u5b9a\u4e49");
+                    button7.setFont(button7.getFont().deriveFont(button7.getFont().getStyle() | Font.BOLD, button7.getFont().getSize() - 1f));
+                    button7.setForeground(new Color(51, 51, 51));
+                    button7.addActionListener(e -> button7ActionPerformed(e));
+                    panel4.add(button7);
+                    button7.setBounds(780, 390, 85, 30);
 
-                //---- label22 ----
-                label22.setText("\u4ea7\u54c1\u9009\u62e9");
-                label22.setBackground(new Color(204, 204, 204));
-                label22.setOpaque(true);
-                label22.setHorizontalTextPosition(SwingConstants.CENTER);
-                label22.setHorizontalAlignment(SwingConstants.CENTER);
-                label22.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 1f));
-                panel4.add(label22);
-                label22.setBounds(520, 30, 85, 30);
+                    //---- label22 ----
+                    label22.setText("\u4ea7\u54c1\u9009\u62e9");
+                    label22.setBackground(new Color(204, 204, 204));
+                    label22.setOpaque(true);
+                    label22.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label22.setHorizontalAlignment(SwingConstants.CENTER);
+                    label22.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label22.setFont(label22.getFont().deriveFont(label22.getFont().getStyle() | Font.BOLD, label22.getFont().getSize() + 1f));
+                    label22.setForeground(new Color(61, 61, 61));
+                    panel4.add(label22);
+                    label22.setBounds(520, 30, 85, 30);
 
-                //---- comboBox17 ----
-                comboBox17.setSelectedIndex(-1);
-                comboBox17.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        comboBox17MouseClicked(e);
+                    //---- comboBox17 ----
+                    comboBox17.setSelectedIndex(-1);
+                    comboBox17.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            comboBox17MouseClicked(e);
+                        }
+                    });
+                    comboBox17.addItemListener(e -> comboBox17ItemStateChanged(e));
+                    panel4.add(comboBox17);
+                    comboBox17.setBounds(620, 30, 135, 30);
+
+                    //---- label23 ----
+                    label23.setText("\u6dfb\u52a0\u4ea7\u54c1");
+                    label23.setBackground(new Color(204, 204, 204));
+                    label23.setOpaque(true);
+                    label23.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label23.setHorizontalAlignment(SwingConstants.CENTER);
+                    label23.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label23.setFont(label23.getFont().deriveFont(label23.getFont().getStyle() | Font.BOLD, label23.getFont().getSize() + 1f));
+                    label23.setForeground(new Color(61, 61, 61));
+                    panel4.add(label23);
+                    label23.setBounds(520, 75, 85, 30);
+                    panel4.add(textField6);
+                    textField6.setBounds(620, 75, 135, 30);
+
+                    //---- button10 ----
+                    button10.setText("\u8bbe\u8ba1");
+                    button10.setFont(button10.getFont().deriveFont(button10.getFont().getStyle() | Font.BOLD, button10.getFont().getSize() - 1f));
+                    button10.setForeground(new Color(51, 51, 51));
+                    button10.addActionListener(e -> button10ActionPerformed(e));
+                    panel4.add(button10);
+                    button10.setBounds(760, 75, 60, 30);
+
+                    //---- button11 ----
+                    button11.setText("\u4fdd\u5b58");
+                    button11.setFont(button11.getFont().deriveFont(button11.getFont().getStyle() | Font.BOLD, button11.getFont().getSize() - 1f));
+                    button11.setEnabled(false);
+                    button11.setForeground(new Color(51, 51, 51));
+                    button11.addActionListener(e -> button11ActionPerformed(e));
+                    panel4.add(button11);
+                    button11.setBounds(890, 30, 60, 30);
+
+                    //---- button12 ----
+                    button12.setText("\u51fa\u53c2");
+                    button12.setFont(button12.getFont().deriveFont(button12.getFont().getStyle() | Font.BOLD, button12.getFont().getSize() - 1f));
+                    button12.setEnabled(false);
+                    button12.setForeground(new Color(51, 51, 51));
+                    button12.addActionListener(e -> button12ActionPerformed(e));
+                    panel4.add(button12);
+                    button12.setBounds(825, 30, 60, 30);
+
+                    //---- button13 ----
+                    button13.setText("\u51fa\u53c2");
+                    button13.setFont(button13.getFont().deriveFont(button13.getFont().getStyle() | Font.BOLD, button13.getFont().getSize() - 1f));
+                    button13.setEnabled(false);
+                    button13.setForeground(new Color(51, 51, 51));
+                    button13.addActionListener(e -> button13ActionPerformed(e));
+                    panel4.add(button13);
+                    button13.setBounds(825, 75, 60, 30);
+
+                    //---- button14 ----
+                    button14.setText("\u4fdd\u5b58");
+                    button14.setFont(button14.getFont().deriveFont(button14.getFont().getStyle() | Font.BOLD, button14.getFont().getSize() - 1f));
+                    button14.setEnabled(false);
+                    button14.setForeground(new Color(51, 51, 51));
+                    button14.addActionListener(e -> button14ActionPerformed(e));
+                    panel4.add(button14);
+                    button14.setBounds(890, 75, 60, 30);
+
+                    //---- button15 ----
+                    button15.setText("\u51fa\u53c2");
+                    button15.setFont(button15.getFont().deriveFont(button15.getFont().getStyle() | Font.BOLD, button15.getFont().getSize() - 1f));
+                    button15.setForeground(new Color(51, 51, 51));
+                    button15.addActionListener(e -> button15ActionPerformed(e));
+                    panel4.add(button15);
+                    button15.setBounds(870, 390, 80, 30);
+
+                    //---- button16 ----
+                    button16.setText("\u4ec5\u8c03\u53c2");
+                    button16.setFont(button16.getFont().deriveFont(button16.getFont().getStyle() | Font.BOLD, button16.getFont().getSize() - 1f));
+                    button16.setForeground(new Color(51, 51, 51));
+                    button16.addActionListener(e -> button16ActionPerformed(e));
+                    panel4.add(button16);
+                    button16.setBounds(805, 345, 70, 30);
+
+                    //---- label21 ----
+                    label21.setText("\u5b9e\u9645\u503c");
+                    label21.setBackground(new Color(204, 204, 204));
+                    label21.setOpaque(true);
+                    label21.setHorizontalTextPosition(SwingConstants.CENTER);
+                    label21.setHorizontalAlignment(SwingConstants.CENTER);
+                    label21.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+                    label21.setFont(label21.getFont().deriveFont(label21.getFont().getStyle() | Font.BOLD, label21.getFont().getSize() + 2f));
+                    label21.setForeground(new Color(61, 61, 61));
+                    panel4.add(label21);
+                    label21.setBounds(790, 120, 160, 30);
+
+                    //---- button17 ----
+                    button17.setText("\u4fdd\u5b58");
+                    button17.setFont(button17.getFont().deriveFont(button17.getFont().getStyle() | Font.BOLD, button17.getFont().getSize() - 1f));
+                    button17.setEnabled(false);
+                    button17.setForeground(new Color(51, 51, 51));
+                    button17.addActionListener(e -> button17ActionPerformed(e));
+                    panel4.add(button17);
+                    button17.setBounds(885, 345, 65, 30);
+
+                    //---- button18 ----
+                    button18.setText("\u53d6\u6d88");
+                    button18.setFont(button18.getFont().deriveFont(button18.getFont().getStyle() | Font.BOLD, button18.getFont().getSize() - 1f));
+                    button18.setForeground(new Color(51, 51, 51));
+                    button18.addActionListener(e -> button18ActionPerformed(e));
+                    panel4.add(button18);
+                    button18.setBounds(520, 390, 85, 30);
+
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel4.getComponentCount(); i++) {
+                            Rectangle bounds = panel4.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel4.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel4.setMinimumSize(preferredSize);
+                        panel4.setPreferredSize(preferredSize);
                     }
-                });
-                comboBox17.addItemListener(e -> comboBox17ItemStateChanged(e));
-                panel4.add(comboBox17);
-                comboBox17.setBounds(620, 30, 115, 30);
-
-                //---- label23 ----
-                label23.setText("\u6dfb\u52a0\u4ea7\u54c1");
-                label23.setBackground(new Color(204, 204, 204));
-                label23.setOpaque(true);
-                label23.setHorizontalTextPosition(SwingConstants.CENTER);
-                label23.setHorizontalAlignment(SwingConstants.CENTER);
-                label23.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() + 1f));
-                panel4.add(label23);
-                label23.setBounds(520, 75, 85, 30);
-                panel4.add(textField6);
-                textField6.setBounds(620, 75, 115, 30);
-
-                //---- button10 ----
-                button10.setText("\u8bbe\u8ba1");
-                button10.setFont(button10.getFont().deriveFont(button10.getFont().getSize() - 1f));
-                button10.addActionListener(e -> button10ActionPerformed(e));
-                panel4.add(button10);
-                button10.setBounds(740, 75, 60, 30);
-
-                //---- button11 ----
-                button11.setText("\u4fdd\u5b58");
-                button11.setFont(button11.getFont().deriveFont(button11.getFont().getSize() - 1f));
-                button11.setEnabled(false);
-                button11.addActionListener(e -> button11ActionPerformed(e));
-                panel4.add(button11);
-                button11.setBounds(870, 30, 60, 30);
-
-                //---- button12 ----
-                button12.setText("\u51fa\u53c2");
-                button12.setFont(button12.getFont().deriveFont(button12.getFont().getSize() - 1f));
-                button12.setEnabled(false);
-                button12.addActionListener(e -> button12ActionPerformed(e));
-                panel4.add(button12);
-                button12.setBounds(805, 30, 60, 30);
-
-                //---- button13 ----
-                button13.setText("\u51fa\u53c2");
-                button13.setFont(button13.getFont().deriveFont(button13.getFont().getSize() - 1f));
-                button13.setEnabled(false);
-                button13.addActionListener(e -> button13ActionPerformed(e));
-                panel4.add(button13);
-                button13.setBounds(805, 75, 60, 30);
-
-                //---- button14 ----
-                button14.setText("\u4fdd\u5b58");
-                button14.setFont(button14.getFont().deriveFont(button14.getFont().getSize() - 1f));
-                button14.setEnabled(false);
-                button14.addActionListener(e -> button14ActionPerformed(e));
-                panel4.add(button14);
-                button14.setBounds(870, 75, 60, 30);
-
-                //---- button15 ----
-                button15.setText("\u51fa\u53c2");
-                button15.setFont(button15.getFont().deriveFont(button15.getFont().getSize() - 1f));
-                button15.addActionListener(e -> button15ActionPerformed(e));
-                panel4.add(button15);
-                button15.setBounds(850, 390, 80, 30);
-
-                //---- button16 ----
-                button16.setText("\u4ec5\u8c03\u53c2");
-                button16.setFont(button16.getFont().deriveFont(button16.getFont().getSize() - 1f));
-                button16.addActionListener(e -> button16ActionPerformed(e));
-                panel4.add(button16);
-                button16.setBounds(800, 345, 70, 30);
-
-                //---- label21 ----
-                label21.setText("\u5b9e\u9645\u503c");
-                label21.setBackground(new Color(204, 204, 204));
-                label21.setOpaque(true);
-                label21.setHorizontalTextPosition(SwingConstants.CENTER);
-                label21.setHorizontalAlignment(SwingConstants.CENTER);
-                label21.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-                label21.setFont(label21.getFont().deriveFont(label21.getFont().getSize() + 2f));
-                panel4.add(label21);
-                label21.setBounds(780, 120, 150, 30);
-
-                //---- button17 ----
-                button17.setText("\u4fdd\u5b58");
-                button17.setFont(button17.getFont().deriveFont(button17.getFont().getSize() - 1f));
-                button17.setEnabled(false);
-                button17.addActionListener(e -> button17ActionPerformed(e));
-                panel4.add(button17);
-                button17.setBounds(870, 345, 60, 30);
-
-                //---- button18 ----
-                button18.setText("\u53d6\u6d88");
-                button18.addActionListener(e -> button18ActionPerformed(e));
-                panel4.add(button18);
-                button18.setBounds(520, 390, 85, 30);
-
-                {
-                    // compute preferred size
-                    Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel4.getComponentCount(); i++) {
-                        Rectangle bounds = panel4.getComponent(i).getBounds();
-                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                    }
-                    Insets insets = panel4.getInsets();
-                    preferredSize.width += insets.right;
-                    preferredSize.height += insets.bottom;
-                    panel4.setMinimumSize(preferredSize);
-                    panel4.setPreferredSize(preferredSize);
                 }
-            }
-            tabbedPane2.addTab("\u5de5\u827a\u6d41\u7a0b\u8bbe\u8ba1", panel4);
+                tabbedPane2.addTab("\u5de5\u827a\u6d41\u7a0b\u8bbe\u8ba1", panel4);
 
-            //======== panel2 ========
+                //======== panel2 ========
+                {
+                    panel2.setLayout(null);
+
+                    //======== tabbedPane1 ========
+                    {
+                        tabbedPane1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 13));
+
+                        //======== panel11 ========
+                        {
+                            panel11.setLayout(null);
+
+                            //======== scrollPane8 ========
+                            {
+
+                                //---- table8 ----
+                                table8.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u6750\u724c\u53f7", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u4f4d\u7f6e", "\u710a\u63a5\u63a5\u5934", "\u5761\u53e3\u5f62\u5f0f", "\u70ed\u5904\u7406\u7c7b\u578b", "\u5176\u4ed61", "\u710a\u63a5\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u7535\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u9608\u503climit", "\u710a\u63a5\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table8.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(180);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                    cm.getColumn(8).setPreferredWidth(180);
+                                    cm.getColumn(9).setPreferredWidth(180);
+                                    cm.getColumn(10).setPreferredWidth(180);
+                                    cm.getColumn(11).setPreferredWidth(180);
+                                    cm.getColumn(12).setPreferredWidth(180);
+                                    cm.getColumn(13).setPreferredWidth(180);
+                                    cm.getColumn(14).setPreferredWidth(180);
+                                    cm.getColumn(15).setPreferredWidth(180);
+                                    cm.getColumn(16).setPreferredWidth(180);
+                                    cm.getColumn(17).setPreferredWidth(180);
+                                    cm.getColumn(18).setPreferredWidth(180);
+                                    cm.getColumn(19).setPreferredWidth(180);
+                                    cm.getColumn(20).setPreferredWidth(180);
+                                    cm.getColumn(21).setPreferredWidth(180);
+                                }
+                                table8.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table8.setAutoCreateRowSorter(true);
+                                table8.setRowHeight(20);
+                                scrollPane8.setViewportView(table8);
+                            }
+                            panel11.add(scrollPane8);
+                            scrollPane8.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel11.getComponentCount(); i++) {
+                                    Rectangle bounds = panel11.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel11.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel11.setMinimumSize(preferredSize);
+                                panel11.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u4ea7\u54c1", panel11);
+
+                        //======== panel3 ========
+                        {
+                            panel3.setFont(panel3.getFont().deriveFont(panel3.getFont().getSize() - 1f));
+                            panel3.setLayout(null);
+
+                            //======== scrollPane1 ========
+                            {
+
+                                //---- table1 ----
+                                table1.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table1.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                    cm.getColumn(8).setPreferredWidth(180);
+                                    cm.getColumn(9).setPreferredWidth(180);
+                                    cm.getColumn(10).setPreferredWidth(180);
+                                }
+                                table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table1.setAutoCreateRowSorter(true);
+                                table1.setRowHeight(20);
+                                scrollPane1.setViewportView(table1);
+                            }
+                            panel3.add(scrollPane1);
+                            scrollPane1.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel3.getComponentCount(); i++) {
+                                    Rectangle bounds = panel3.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel3.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel3.setMinimumSize(preferredSize);
+                                panel3.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u6bcd\u6750", panel3);
+
+                        //======== panel5 ========
+                        {
+                            panel5.setLayout(null);
+
+                            //======== scrollPane2 ========
+                            {
+
+                                //---- table2 ----
+                                table2.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a\u710a\u63a5\u6750\u6599", "\u5339\u914d\uff1a\u8f85\u6750", "\u65b9\u6cd5\u7279\u70b9", "\u8bbe\u5907\u578b\u53f7", "\u8bbe\u5907\u53c2\u6570", "\u5e94\u7528\u8303\u56f4"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table2.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                    cm.getColumn(8).setPreferredWidth(180);
+                                }
+                                table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table2.setAutoCreateRowSorter(true);
+                                table2.setRowHeight(20);
+                                scrollPane2.setViewportView(table2);
+                            }
+                            panel5.add(scrollPane2);
+                            scrollPane2.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel5.getComponentCount(); i++) {
+                                    Rectangle bounds = panel5.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel5.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel5.setMinimumSize(preferredSize);
+                                panel5.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u710a\u63a5\u65b9\u6cd5", panel5);
+
+                        //======== panel6 ========
+                        {
+                            panel6.setLayout(null);
+
+                            //======== scrollPane3 ========
+                            {
+
+                                //---- table3 ----
+                                table3.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a\u8f85\u6750", "\u710a\u6750\u7c7b\u578b", "\u5316\u5b66\u6210\u5206", "\u529b\u5b66\u6027\u80fd", "\u4e3b\u8981\u7528\u9014"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table3.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                }
+                                table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table3.setAutoCreateRowSorter(true);
+                                table3.setRowHeight(20);
+                                scrollPane3.setViewportView(table3);
+                            }
+                            panel6.add(scrollPane3);
+                            scrollPane3.setBounds(0, 0, 960, 400);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel6.getComponentCount(); i++) {
+                                    Rectangle bounds = panel6.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel6.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel6.setMinimumSize(preferredSize);
+                                panel6.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u710a\u63a5\u6750\u6599", panel6);
+
+                        //======== panel7 ========
+                        {
+                            panel7.setLayout(null);
+
+                            //======== scrollPane4 ========
+                            {
+
+                                //---- table4 ----
+                                table4.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "app", "\u53c2\u6570"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table4.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(300);
+                                    cm.getColumn(4).setPreferredWidth(430);
+                                }
+                                table4.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table4.setAutoCreateRowSorter(true);
+                                table4.setRowHeight(20);
+                                scrollPane4.setViewportView(table4);
+                            }
+                            panel7.add(scrollPane4);
+                            scrollPane4.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel7.getComponentCount(); i++) {
+                                    Rectangle bounds = panel7.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel7.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel7.setMinimumSize(preferredSize);
+                                panel7.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u8f85\u6750", panel7);
+
+                        //======== panel8 ========
+                        {
+                            panel8.setLayout(null);
+
+                            //======== scrollPane5 ========
+                            {
+
+                                //---- table5 ----
+                                table5.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a\u63a5\u5934\u5f62\u5f0f\u3001\u5761\u53e3\u5f62\u5f0f\u3001\u710a\u63a5\u4f4d\u7f6e", "\u53c2\u6570"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table5.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(370);
+                                    cm.getColumn(4).setPreferredWidth(350);
+                                }
+                                table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table5.setAutoCreateRowSorter(true);
+                                table5.setRowHeight(20);
+                                scrollPane5.setViewportView(table5);
+                            }
+                            panel8.add(scrollPane5);
+                            scrollPane5.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel8.getComponentCount(); i++) {
+                                    Rectangle bounds = panel8.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel8.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel8.setMinimumSize(preferredSize);
+                                panel8.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u5de5\u4ef6\u539a\u5ea6", panel8);
+
+                        //======== panel9 ========
+                        {
+                            panel9.setLayout(null);
+
+                            //======== scrollPane6 ========
+                            {
+
+                                //---- table6 ----
+                                table6.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a", "\u63a5\u5934\u5f62\u5f0f", "\u5761\u53e3\u5f62\u5f0f", "\u5761\u53e3\u53c2\u6570", "\u710a\u63a5\u4f4d\u7f6e"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table6.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                }
+                                table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table6.setAutoCreateRowSorter(true);
+                                table6.setRowHeight(20);
+                                scrollPane6.setViewportView(table6);
+                            }
+                            panel9.add(scrollPane6);
+                            scrollPane6.setBounds(0, 0, 960, 395);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel9.getComponentCount(); i++) {
+                                    Rectangle bounds = panel9.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel9.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel9.setMinimumSize(preferredSize);
+                                panel9.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u710a\u63a5\u63a5\u5934\u3001\u4f4d\u7f6e\u3001\u5761\u53e3", panel9);
+
+                        //======== panel10 ========
+                        {
+                            panel10.setLayout(null);
+
+                            //======== scrollPane7 ========
+                            {
+
+                                //---- table7 ----
+                                table7.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a", "\u70ed\u5904\u7406\u7c7b\u578b", "\u9884\u70ed\u6e29\u5ea6", "\u9884\u70ed\u65f6\u95f4", "\u5c42\u95f4\u6e29\u5ea6", "\u70ed\u5904\u7406\u6e29\u5ea6", "\u70ed\u5904\u7406\u4fdd\u6e29\u65f6\u95f4"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table7.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                    cm.getColumn(8).setPreferredWidth(180);
+                                    cm.getColumn(9).setPreferredWidth(180);
+                                }
+                                table7.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table7.setAutoCreateRowSorter(true);
+                                table7.setRowHeight(20);
+                                scrollPane7.setViewportView(table7);
+                            }
+                            panel10.add(scrollPane7);
+                            scrollPane7.setBounds(0, 0, 960, 400);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel10.getComponentCount(); i++) {
+                                    Rectangle bounds = panel10.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel10.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel10.setMinimumSize(preferredSize);
+                                panel10.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u70ed\u5de5\u827a", panel10);
+
+                        //======== panel12 ========
+                        {
+                            panel12.setLayout(null);
+
+                            //======== scrollPane9 ========
+                            {
+
+                                //---- table9 ----
+                                table9.setModel(new DefaultTableModel(
+                                    new Object[][] {
+                                    },
+                                    new String[] {
+                                        "id", "name", "seq", "\u5339\u914d\uff1a", "\u710a\u63a5\u7535\u6d41", "\u7535\u6d41\u79cd\u7c7b", "\u7535\u6d41\u6781\u6027", "\u7535\u5f27\u7535\u538b", "\u7ebf\u80fd\u91cf", "\u710a\u63a5\u901f\u5ea6", "\u5e72\u4f38\u51fa\u91cf"
+                                    }
+                                ) {
+                                    Class<?>[] columnTypes = new Class<?>[] {
+                                        Integer.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
+                                    };
+                                    boolean[] columnEditable = new boolean[] {
+                                        false, false, false, false, false, false, false, false, false, false, false
+                                    };
+                                    @Override
+                                    public Class<?> getColumnClass(int columnIndex) {
+                                        return columnTypes[columnIndex];
+                                    }
+                                    @Override
+                                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                        return columnEditable[columnIndex];
+                                    }
+                                });
+                                {
+                                    TableColumnModel cm = table9.getColumnModel();
+                                    cm.getColumn(0).setPreferredWidth(50);
+                                    cm.getColumn(1).setPreferredWidth(100);
+                                    cm.getColumn(2).setPreferredWidth(100);
+                                    cm.getColumn(3).setPreferredWidth(180);
+                                    cm.getColumn(4).setPreferredWidth(180);
+                                    cm.getColumn(5).setPreferredWidth(180);
+                                    cm.getColumn(6).setPreferredWidth(180);
+                                    cm.getColumn(7).setPreferredWidth(180);
+                                    cm.getColumn(8).setPreferredWidth(180);
+                                    cm.getColumn(9).setPreferredWidth(180);
+                                    cm.getColumn(10).setPreferredWidth(180);
+                                }
+                                table9.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                                table9.setAutoCreateRowSorter(true);
+                                table9.setRowHeight(20);
+                                scrollPane9.setViewportView(table9);
+                            }
+                            panel12.add(scrollPane9);
+                            scrollPane9.setBounds(0, 0, 960, 400);
+
+                            {
+                                // compute preferred size
+                                Dimension preferredSize = new Dimension();
+                                for(int i = 0; i < panel12.getComponentCount(); i++) {
+                                    Rectangle bounds = panel12.getComponent(i).getBounds();
+                                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                                }
+                                Insets insets = panel12.getInsets();
+                                preferredSize.width += insets.right;
+                                preferredSize.height += insets.bottom;
+                                panel12.setMinimumSize(preferredSize);
+                                panel12.setPreferredSize(preferredSize);
+                            }
+                        }
+                        tabbedPane1.addTab("\u710a\u63a5\u53c2\u6570", panel12);
+                    }
+                    panel2.add(tabbedPane1);
+                    tabbedPane1.setBounds(0, 35, 965, 425);
+
+                    //---- textField11 ----
+                    textField11.setBackground(Color.white);
+                    panel2.add(textField11);
+                    textField11.setBounds(70, 4, 125, 30);
+
+                    //---- button21 ----
+                    button21.setText("\u641c\u7d22");
+                    button21.setForeground(new Color(51, 51, 51));
+                    button21.setFont(button21.getFont().deriveFont(button21.getFont().getStyle() | Font.BOLD));
+                    button21.addActionListener(e -> button21ActionPerformed(e));
+                    panel2.add(button21);
+                    button21.setBounds(195, 4, 70, 30);
+
+                    //---- label35 ----
+                    label35.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
+                    label35.setFont(label35.getFont().deriveFont(label35.getFont().getSize() - 2f));
+                    panel2.add(label35);
+                    label35.setBounds(330, 7, 155, 23);
+
+                    //---- button20 ----
+                    button20.setText("\u6dfb\u52a0");
+                    button20.setFont(button20.getFont().deriveFont(button20.getFont().getStyle() | Font.BOLD));
+                    button20.setForeground(new Color(51, 51, 51));
+                    button20.addActionListener(e -> button20ActionPerformed(e));
+                    panel2.add(button20);
+                    button20.setBounds(590, 4, 70, 30);
+
+                    //---- button22 ----
+                    button22.setText("\u4fee\u6539");
+                    button22.setFont(button22.getFont().deriveFont(button22.getFont().getStyle() | Font.BOLD));
+                    button22.setForeground(new Color(51, 51, 51));
+                    button22.addActionListener(e -> button22ActionPerformed(e));
+                    panel2.add(button22);
+                    button22.setBounds(740, 4, 70, 30);
+
+                    //---- button23 ----
+                    button23.setText("\u5237\u65b0");
+                    button23.setFont(button23.getFont().deriveFont(button23.getFont().getStyle() | Font.BOLD));
+                    button23.setForeground(new Color(51, 51, 51));
+                    button23.addActionListener(e -> button42ActionPerformed(e));
+                    panel2.add(button23);
+                    button23.setBounds(505, 4, 70, 30);
+
+                    //---- button24 ----
+                    button24.setText("\u8fd4\u56de");
+                    button24.setFont(button24.getFont().deriveFont(button24.getFont().getStyle() | Font.BOLD));
+                    button24.setForeground(new Color(51, 51, 51));
+                    button24.addActionListener(e -> button24ActionPerformed(e));
+                    panel2.add(button24);
+                    button24.setBounds(265, 4, 70, 30);
+
+                    //---- label24 ----
+                    label24.setText("\u8868\u5185\u641c\u7d22");
+                    label24.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 13));
+                    label24.setForeground(new Color(51, 51, 51));
+                    panel2.add(label24);
+                    label24.setBounds(10, 8, 58, 23);
+
+                    //---- button5 ----
+                    button5.setText("\u786e\u5b9a");
+                    button5.setEnabled(false);
+                    button5.setFont(button5.getFont().deriveFont(button5.getFont().getStyle() | Font.BOLD));
+                    button5.setForeground(new Color(51, 51, 51));
+                    button5.addActionListener(e -> button5ActionPerformed(e));
+                    panel2.add(button5);
+                    button5.setBounds(820, 4, 70, 30);
+
+                    //---- button9 ----
+                    button9.setText("\u5220\u9664");
+                    button9.setFont(button9.getFont().deriveFont(button9.getFont().getStyle() | Font.BOLD));
+                    button9.setForeground(new Color(51, 51, 51));
+                    button9.addActionListener(e -> button9ActionPerformed(e));
+                    panel2.add(button9);
+                    button9.setBounds(665, 4, 70, 30);
+
+                    //---- button19 ----
+                    button19.setText("\u8fd4\u56de");
+                    button19.setEnabled(false);
+                    button19.setFont(button19.getFont().deriveFont(button19.getFont().getStyle() | Font.BOLD));
+                    button19.setForeground(new Color(51, 51, 51));
+                    button19.addActionListener(e -> button19ActionPerformed(e));
+                    panel2.add(button19);
+                    button19.setBounds(895, 4, 70, 30);
+
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel2.getComponentCount(); i++) {
+                            Rectangle bounds = panel2.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel2.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel2.setMinimumSize(preferredSize);
+                        panel2.setPreferredSize(preferredSize);
+                    }
+                }
+                tabbedPane2.addTab("\u8d44\u6599\u5e93", panel2);
+            }
+            panel13.add(tabbedPane2);
+            tabbedPane2.setBounds(2, 95, 970, 490);
+
             {
-                panel2.setLayout(null);
-
-                //======== tabbedPane1 ========
-                {
-
-                    //======== panel11 ========
-                    {
-                        panel11.setLayout(null);
-
-                        //======== scrollPane8 ========
-                        {
-
-                            //---- table8 ----
-                            table8.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "\u6bcd\u6750A", "\u6bcd\u6750B", "\u710a\u63a5\u65b9\u6cd5", "\u710a\u6750\u724c\u53f7", "\u8f85\u6750", "\u5de5\u4ef6\u539a\u5ea6", "\u710a\u63a5\u4f4d\u7f6e", "\u710a\u63a5\u63a5\u5934", "\u5761\u53e3\u5f62\u5f0f", "\u70ed\u5904\u7406\u7c7b\u578b", "\u5176\u4ed61", "\u710a\u63a5\u7535\u6d41\uff08\u5efa\u8bae\u503c\uff09", "\u7535\u5f27\u7535\u538b\uff08\u5efa\u8bae\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5efa\u8bae\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5efa\u8bae\u503c\uff09", "\u9608\u503climit", "\u710a\u63a5\u7535\u6d41\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u7535\u538b\uff08\u5b9e\u9645\u503c\uff09", "\u710a\u63a5\u901f\u5ea6\uff08\u5b9e\u9645\u503c\uff09", "\u5e72\u4f38\u51fa\u91cf\uff08\u5b9e\u9645\u503c\uff09"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table8.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(180);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                                cm.getColumn(8).setPreferredWidth(180);
-                                cm.getColumn(9).setPreferredWidth(180);
-                                cm.getColumn(10).setPreferredWidth(180);
-                                cm.getColumn(11).setPreferredWidth(180);
-                                cm.getColumn(12).setPreferredWidth(180);
-                                cm.getColumn(13).setPreferredWidth(180);
-                                cm.getColumn(14).setPreferredWidth(180);
-                                cm.getColumn(15).setPreferredWidth(180);
-                                cm.getColumn(16).setPreferredWidth(180);
-                                cm.getColumn(17).setPreferredWidth(180);
-                                cm.getColumn(18).setPreferredWidth(180);
-                                cm.getColumn(19).setPreferredWidth(180);
-                                cm.getColumn(20).setPreferredWidth(180);
-                                cm.getColumn(21).setPreferredWidth(180);
-                            }
-                            table8.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table8.setAutoCreateRowSorter(true);
-                            table8.setRowHeight(20);
-                            scrollPane8.setViewportView(table8);
-                        }
-                        panel11.add(scrollPane8);
-                        scrollPane8.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel11.getComponentCount(); i++) {
-                                Rectangle bounds = panel11.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel11.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel11.setMinimumSize(preferredSize);
-                            panel11.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u4ea7\u54c1", panel11);
-
-                    //======== panel3 ========
-                    {
-                        panel3.setFont(panel3.getFont().deriveFont(panel3.getFont().getSize() - 1f));
-                        panel3.setLayout(null);
-
-                        //======== scrollPane1 ========
-                        {
-
-                            //---- table1 ----
-                            table1.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u6bcd\u6750", "\u5339\u914d\uff1a\u710a\u63a5\u65b9\u6cd5", "\u6e29\u5ea6\u7b49\u7ea7", "\u710a\u63a5\u6027\u80fd", "\u673a\u68b0\u6027\u80fd", "\u89c4\u683c", "\u5316\u5b66\u6210\u5206", "\u5de5\u827a\u8981\u70b9"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table1.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                                cm.getColumn(8).setPreferredWidth(180);
-                                cm.getColumn(9).setPreferredWidth(180);
-                                cm.getColumn(10).setPreferredWidth(180);
-                            }
-                            table1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table1.setAutoCreateRowSorter(true);
-                            table1.setRowHeight(20);
-                            scrollPane1.setViewportView(table1);
-                        }
-                        panel3.add(scrollPane1);
-                        scrollPane1.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel3.getComponentCount(); i++) {
-                                Rectangle bounds = panel3.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel3.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel3.setMinimumSize(preferredSize);
-                            panel3.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u6bcd\u6750", panel3);
-
-                    //======== panel5 ========
-                    {
-                        panel5.setLayout(null);
-
-                        //======== scrollPane2 ========
-                        {
-
-                            //---- table2 ----
-                            table2.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u710a\u63a5\u6750\u6599", "\u5339\u914d\uff1a\u8f85\u6750", "\u65b9\u6cd5\u7279\u70b9", "\u8bbe\u5907\u578b\u53f7", "\u8bbe\u5907\u53c2\u6570", "\u5e94\u7528\u8303\u56f4"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table2.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                                cm.getColumn(8).setPreferredWidth(180);
-                            }
-                            table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table2.setAutoCreateRowSorter(true);
-                            table2.setRowHeight(20);
-                            scrollPane2.setViewportView(table2);
-                        }
-                        panel5.add(scrollPane2);
-                        scrollPane2.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel5.getComponentCount(); i++) {
-                                Rectangle bounds = panel5.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel5.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel5.setMinimumSize(preferredSize);
-                            panel5.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u710a\u63a5\u65b9\u6cd5", panel5);
-
-                    //======== panel6 ========
-                    {
-                        panel6.setLayout(null);
-
-                        //======== scrollPane3 ========
-                        {
-
-                            //---- table3 ----
-                            table3.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u8f85\u6750", "\u710a\u6750\u7c7b\u578b", "\u5316\u5b66\u6210\u5206", "\u529b\u5b66\u6027\u80fd", "\u4e3b\u8981\u7528\u9014"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table3.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                            }
-                            table3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table3.setAutoCreateRowSorter(true);
-                            table3.setRowHeight(20);
-                            scrollPane3.setViewportView(table3);
-                        }
-                        panel6.add(scrollPane3);
-                        scrollPane3.setBounds(0, 0, 960, 400);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel6.getComponentCount(); i++) {
-                                Rectangle bounds = panel6.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel6.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel6.setMinimumSize(preferredSize);
-                            panel6.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u710a\u63a5\u6750\u6599", panel6);
-
-                    //======== panel7 ========
-                    {
-                        panel7.setLayout(null);
-
-                        //======== scrollPane4 ========
-                        {
-
-                            //---- table4 ----
-                            table4.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "app", "\u53c2\u6570"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table4.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(300);
-                                cm.getColumn(4).setPreferredWidth(430);
-                            }
-                            table4.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table4.setAutoCreateRowSorter(true);
-                            table4.setRowHeight(20);
-                            scrollPane4.setViewportView(table4);
-                        }
-                        panel7.add(scrollPane4);
-                        scrollPane4.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel7.getComponentCount(); i++) {
-                                Rectangle bounds = panel7.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel7.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel7.setMinimumSize(preferredSize);
-                            panel7.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u8f85\u6750", panel7);
-
-                    //======== panel8 ========
-                    {
-                        panel8.setLayout(null);
-
-                        //======== scrollPane5 ========
-                        {
-
-                            //---- table5 ----
-                            table5.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a\u63a5\u5934\u5f62\u5f0f\u3001\u5761\u53e3\u5f62\u5f0f\u3001\u710a\u63a5\u4f4d\u7f6e", "\u53c2\u6570"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table5.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(370);
-                                cm.getColumn(4).setPreferredWidth(350);
-                            }
-                            table5.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table5.setAutoCreateRowSorter(true);
-                            table5.setRowHeight(20);
-                            scrollPane5.setViewportView(table5);
-                        }
-                        panel8.add(scrollPane5);
-                        scrollPane5.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel8.getComponentCount(); i++) {
-                                Rectangle bounds = panel8.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel8.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel8.setMinimumSize(preferredSize);
-                            panel8.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u5de5\u4ef6\u539a\u5ea6", panel8);
-
-                    //======== panel9 ========
-                    {
-                        panel9.setLayout(null);
-
-                        //======== scrollPane6 ========
-                        {
-
-                            //---- table6 ----
-                            table6.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a", "\u63a5\u5934\u5f62\u5f0f", "\u5761\u53e3\u5f62\u5f0f", "\u5761\u53e3\u53c2\u6570", "\u710a\u63a5\u4f4d\u7f6e"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table6.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                            }
-                            table6.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table6.setAutoCreateRowSorter(true);
-                            table6.setRowHeight(20);
-                            scrollPane6.setViewportView(table6);
-                        }
-                        panel9.add(scrollPane6);
-                        scrollPane6.setBounds(0, 0, 960, 395);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel9.getComponentCount(); i++) {
-                                Rectangle bounds = panel9.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel9.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel9.setMinimumSize(preferredSize);
-                            panel9.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u710a\u63a5\u63a5\u5934\u3001\u4f4d\u7f6e\u3001\u5761\u53e3", panel9);
-
-                    //======== panel10 ========
-                    {
-                        panel10.setLayout(null);
-
-                        //======== scrollPane7 ========
-                        {
-
-                            //---- table7 ----
-                            table7.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a", "\u70ed\u5904\u7406\u7c7b\u578b", "\u9884\u70ed\u6e29\u5ea6", "\u9884\u70ed\u65f6\u95f4", "\u5c42\u95f4\u6e29\u5ea6", "\u70ed\u5904\u7406\u6e29\u5ea6", "\u70ed\u5904\u7406\u4fdd\u6e29\u65f6\u95f4"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table7.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                                cm.getColumn(8).setPreferredWidth(180);
-                                cm.getColumn(9).setPreferredWidth(180);
-                            }
-                            table7.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table7.setAutoCreateRowSorter(true);
-                            table7.setRowHeight(20);
-                            scrollPane7.setViewportView(table7);
-                        }
-                        panel10.add(scrollPane7);
-                        scrollPane7.setBounds(0, 0, 960, 400);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel10.getComponentCount(); i++) {
-                                Rectangle bounds = panel10.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel10.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel10.setMinimumSize(preferredSize);
-                            panel10.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u70ed\u5de5\u827a", panel10);
-
-                    //======== panel12 ========
-                    {
-                        panel12.setLayout(null);
-
-                        //======== scrollPane9 ========
-                        {
-
-                            //---- table9 ----
-                            table9.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                    "id", "name", "seq", "\u5339\u914d\uff1a", "\u710a\u63a5\u7535\u6d41", "\u7535\u6d41\u79cd\u7c7b", "\u7535\u6d41\u6781\u6027", "\u7535\u5f27\u7535\u538b", "\u7ebf\u80fd\u91cf", "\u710a\u63a5\u901f\u5ea6", "\u5e72\u4f38\u51fa\u91cf"
-                                }
-                            ) {
-                                boolean[] columnEditable = new boolean[] {
-                                    false, false, false, false, false, false, false, false, false, false, false
-                                };
-                                @Override
-                                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                    return columnEditable[columnIndex];
-                                }
-                            });
-                            {
-                                TableColumnModel cm = table9.getColumnModel();
-                                cm.getColumn(0).setPreferredWidth(50);
-                                cm.getColumn(1).setPreferredWidth(100);
-                                cm.getColumn(2).setPreferredWidth(100);
-                                cm.getColumn(3).setPreferredWidth(180);
-                                cm.getColumn(4).setPreferredWidth(180);
-                                cm.getColumn(5).setPreferredWidth(180);
-                                cm.getColumn(6).setPreferredWidth(180);
-                                cm.getColumn(7).setPreferredWidth(180);
-                                cm.getColumn(8).setPreferredWidth(180);
-                                cm.getColumn(9).setPreferredWidth(180);
-                                cm.getColumn(10).setPreferredWidth(180);
-                            }
-                            table9.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                            table9.setAutoCreateRowSorter(true);
-                            table9.setRowHeight(20);
-                            scrollPane9.setViewportView(table9);
-                        }
-                        panel12.add(scrollPane9);
-                        scrollPane9.setBounds(0, 0, 960, 400);
-
-                        {
-                            // compute preferred size
-                            Dimension preferredSize = new Dimension();
-                            for(int i = 0; i < panel12.getComponentCount(); i++) {
-                                Rectangle bounds = panel12.getComponent(i).getBounds();
-                                preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                                preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                            }
-                            Insets insets = panel12.getInsets();
-                            preferredSize.width += insets.right;
-                            preferredSize.height += insets.bottom;
-                            panel12.setMinimumSize(preferredSize);
-                            panel12.setPreferredSize(preferredSize);
-                        }
-                    }
-                    tabbedPane1.addTab("\u710a\u63a5\u53c2\u6570", panel12);
+                // compute preferred size
+                Dimension preferredSize = new Dimension();
+                for(int i = 0; i < panel13.getComponentCount(); i++) {
+                    Rectangle bounds = panel13.getComponent(i).getBounds();
+                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                 }
-                panel2.add(tabbedPane1);
-                tabbedPane1.setBounds(0, 35, 965, 425);
-
-                //---- textField11 ----
-                textField11.setBackground(Color.white);
-                panel2.add(textField11);
-                textField11.setBounds(70, 5, 120, 25);
-
-                //---- button21 ----
-                button21.setText("\u641c\u7d22");
-                button21.addActionListener(e -> button21ActionPerformed(e));
-                panel2.add(button21);
-                button21.setBounds(195, 5, 65, 25);
-
-                //---- label35 ----
-                label35.setText("\uff08\u8bf7\u5148\u8df3\u8f6c\u5230\u6240\u5c5e\u5b50\u9875\uff09");
-                label35.setFont(label35.getFont().deriveFont(label35.getFont().getSize() - 2f));
-                panel2.add(label35);
-                label35.setBounds(330, 7, 155, 23);
-
-                //---- button20 ----
-                button20.setText("\u6dfb\u52a0");
-                button20.addActionListener(e -> button20ActionPerformed(e));
-                panel2.add(button20);
-                button20.setBounds(625, 5, 60, 28);
-
-                //---- button22 ----
-                button22.setText("\u4fee\u6539");
-                button22.addActionListener(e -> button22ActionPerformed(e));
-                panel2.add(button22);
-                button22.setBounds(755, 5, 60, 28);
-
-                //---- button23 ----
-                button23.setText("\u5237\u65b0");
-                button23.addActionListener(e -> button42ActionPerformed(e));
-                panel2.add(button23);
-                button23.setBounds(550, 5, 61, 28);
-
-                //---- button24 ----
-                button24.setText("\u8fd4\u56de");
-                button24.addActionListener(e -> button24ActionPerformed(e));
-                panel2.add(button24);
-                button24.setBounds(265, 5, 65, 25);
-
-                //---- label24 ----
-                label24.setText("\u8868\u5185\u641c\u7d22");
-                label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() + 1f));
-                panel2.add(label24);
-                label24.setBounds(10, 5, 58, 23);
-
-                //---- button5 ----
-                button5.setText("\u786e\u5b9a");
-                button5.setEnabled(false);
-                button5.addActionListener(e -> button5ActionPerformed(e));
-                panel2.add(button5);
-                button5.setBounds(830, 5, 60, button5.getPreferredSize().height);
-
-                //---- button9 ----
-                button9.setText("\u5220\u9664");
-                button9.addActionListener(e -> button9ActionPerformed(e));
-                panel2.add(button9);
-                button9.setBounds(new Rectangle(new Point(690, 5), button9.getPreferredSize()));
-
-                //---- button19 ----
-                button19.setText("\u8fd4\u56de");
-                button19.setEnabled(false);
-                button19.addActionListener(e -> button19ActionPerformed(e));
-                panel2.add(button19);
-                button19.setBounds(895, 5, 60, button19.getPreferredSize().height);
-
-                {
-                    // compute preferred size
-                    Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel2.getComponentCount(); i++) {
-                        Rectangle bounds = panel2.getComponent(i).getBounds();
-                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                    }
-                    Insets insets = panel2.getInsets();
-                    preferredSize.width += insets.right;
-                    preferredSize.height += insets.bottom;
-                    panel2.setMinimumSize(preferredSize);
-                    panel2.setPreferredSize(preferredSize);
-                }
+                Insets insets = panel13.getInsets();
+                preferredSize.width += insets.right;
+                preferredSize.height += insets.bottom;
+                panel13.setMinimumSize(preferredSize);
+                panel13.setPreferredSize(preferredSize);
             }
-            tabbedPane2.addTab("\u8d44\u6599\u5e93", panel2);
         }
-        contentPane.add(tabbedPane2);
-        tabbedPane2.setBounds(5, 95, 970, 490);
+        contentPane.add(panel13);
+        panel13.setBounds(0, 0, 985, 595);
 
         {
             // compute preferred size
@@ -3698,6 +3839,7 @@ public class ExpertSystem extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    private JPanel panel13;
     private JPanel panel1;
     private JLabel label2;
     private JMenuBar menuBar1;
@@ -3705,10 +3847,10 @@ public class ExpertSystem extends JFrame {
     private JMenuItem menuItem1;
     private JMenuItem menuItem2;
     private JLabel label3;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
     private JButton button4;
+    private JButton button3;
+    private JButton button2;
+    private JButton button1;
     private JPopupMenu.Separator separator4;
     private JTabbedPane tabbedPane2;
     private JPanel panel4;

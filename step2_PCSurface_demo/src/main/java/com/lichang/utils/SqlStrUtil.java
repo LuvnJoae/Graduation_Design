@@ -1,7 +1,5 @@
 package com.lichang.utils;
 
-import com.lichang.utils.LoggerUtil;
-import javafx.scene.chart.StackedBarChart;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;

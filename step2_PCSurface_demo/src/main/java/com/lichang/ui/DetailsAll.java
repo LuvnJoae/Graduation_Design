@@ -42,21 +42,21 @@ public class DetailsAll extends JDialog {
     public DetailsAll(Window owner) {
         super(owner);
         initComponents();
-
+        this.setSize( 995, 500);
         setVisible(true);
     }
 
     public DetailsAll(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
         initComponents();
-
+        this.setSize( 995, 500);
         setVisible(true);
     }
 
     public DetailsAll(Frame owner, String title, boolean modal, String time) {
         super(owner, title, modal);
         initComponents();
-
+        this.setSize( 995, 540);
         this.time = time; //赋值production_name
         setVisible(true);
     }
@@ -198,6 +198,7 @@ public class DetailsAll extends JDialog {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+        panel2 = new JPanel();
         scrollPane1 = new JScrollPane();
         table1 = new JTable();
         panel1 = new JPanel();
@@ -209,6 +210,8 @@ public class DetailsAll extends JDialog {
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setFont(this.getFont().deriveFont(this.getFont().getSize() + 1f));
+        setBackground(new Color(238, 238, 238));
+        setResizable(false);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -218,97 +221,123 @@ public class DetailsAll extends JDialog {
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        //======== scrollPane1 ========
+        //======== panel2 ========
         {
+            panel2.setBackground(new Color(238, 238, 238));
+            panel2.setLayout(null);
 
-            //---- table1 ----
-            table1.setModel(new DefaultTableModel(
-                new Object[][] {
-                },
-                new String[] {
-                    "id", "\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u5224\u5b9a"
-                }
-            ) {
-                boolean[] columnEditable = new boolean[] {
-                    false, false, false, false, false
-                };
-                @Override
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return columnEditable[columnIndex];
-                }
-            });
-            table1.setRowHeight(25);
-            scrollPane1.setViewportView(table1);
-        }
-        contentPane.add(scrollPane1);
-        scrollPane1.setBounds(0, 0, 985, 50);
+            //======== scrollPane1 ========
+            {
 
-        //======== panel1 ========
-        {
-            panel1.setBackground(new Color(153, 153, 153));
-            panel1.setLayout(null);
+                //---- table1 ----
+                table1.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "id", "\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u5224\u5b9a"
+                    }
+                ) {
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false, false
+                    };
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                table1.setRowHeight(25);
+                scrollPane1.setViewportView(table1);
+            }
+            panel2.add(scrollPane1);
+            scrollPane1.setBounds(0, 0, 985, 55);
+
+            //======== panel1 ========
+            {
+                panel1.setBackground(new Color(153, 153, 153));
+                panel1.setLayout(null);
+
+                {
+                    // compute preferred size
+                    Dimension preferredSize = new Dimension();
+                    for(int i = 0; i < panel1.getComponentCount(); i++) {
+                        Rectangle bounds = panel1.getComponent(i).getBounds();
+                        preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                        preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                    }
+                    Insets insets = panel1.getInsets();
+                    preferredSize.width += insets.right;
+                    preferredSize.height += insets.bottom;
+                    panel1.setMinimumSize(preferredSize);
+                    panel1.setPreferredSize(preferredSize);
+                }
+            }
+            panel2.add(panel1);
+            panel1.setBounds(5, 85, 460, 405);
+
+            //---- label1 ----
+            label1.setText("\u7535\u538b\u3001\u7535\u6d41 \u6298\u7ebf\u56fe");
+            label1.setFont(label1.getFont().deriveFont(label1.getFont().getStyle() | Font.BOLD, label1.getFont().getSize() + 3f));
+            label1.setForeground(new Color(51, 51, 51));
+            panel2.add(label1);
+            label1.setBounds(160, 60, 135, 22);
+
+            //======== scrollPane2 ========
+            {
+
+                //---- table2 ----
+                table2.setModel(new DefaultTableModel(
+                    new Object[][] {
+                    },
+                    new String[] {
+                        "\u5e8f\u53f7", "\u7535\u6d41", "\u7535\u5f27\u7535\u538b", "\u710a\u63a5\u901f\u5ea6"
+                    }
+                ) {
+                    boolean[] columnEditable = new boolean[] {
+                        false, false, false, false
+                    };
+                    @Override
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return columnEditable[columnIndex];
+                    }
+                });
+                {
+                    TableColumnModel cm = table2.getColumnModel();
+                    cm.getColumn(0).setPreferredWidth(60);
+                    cm.getColumn(1).setPreferredWidth(120);
+                    cm.getColumn(2).setPreferredWidth(120);
+                    cm.getColumn(3).setPreferredWidth(120);
+                }
+                table2.setRowHeight(20);
+                table2.setAutoCreateRowSorter(true);
+                scrollPane2.setViewportView(table2);
+            }
+            panel2.add(scrollPane2);
+            scrollPane2.setBounds(470, 85, 515, 405);
+
+            //---- label2 ----
+            label2.setText("\u5177\u4f53\u53c2\u6570\u4fe1\u606f");
+            label2.setFont(label2.getFont().deriveFont(label2.getFont().getStyle() | Font.BOLD, label2.getFont().getSize() + 3f));
+            label2.setForeground(new Color(51, 51, 51));
+            panel2.add(label2);
+            label2.setBounds(680, 60, 105, 22);
 
             {
                 // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel1.getComponentCount(); i++) {
-                    Rectangle bounds = panel1.getComponent(i).getBounds();
+                for(int i = 0; i < panel2.getComponentCount(); i++) {
+                    Rectangle bounds = panel2.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                 }
-                Insets insets = panel1.getInsets();
+                Insets insets = panel2.getInsets();
                 preferredSize.width += insets.right;
                 preferredSize.height += insets.bottom;
-                panel1.setMinimumSize(preferredSize);
-                panel1.setPreferredSize(preferredSize);
+                panel2.setMinimumSize(preferredSize);
+                panel2.setPreferredSize(preferredSize);
             }
         }
-        contentPane.add(panel1);
-        panel1.setBounds(0, 85, 465, 410);
-
-        //---- label1 ----
-        label1.setText("\u7535\u538b\u3001\u7535\u6d41 \u6298\u7ebf\u56fe");
-        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 3f));
-        contentPane.add(label1);
-        label1.setBounds(130, 60, 155, label1.getPreferredSize().height);
-
-        //======== scrollPane2 ========
-        {
-
-            //---- table2 ----
-            table2.setModel(new DefaultTableModel(
-                new Object[][] {
-                },
-                new String[] {
-                    "\u5e8f\u53f7", "\u7535\u6d41", "\u7535\u5f27\u7535\u538b", "\u710a\u63a5\u901f\u5ea6"
-                }
-            ) {
-                boolean[] columnEditable = new boolean[] {
-                    false, false, false, false
-                };
-                @Override
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return columnEditable[columnIndex];
-                }
-            });
-            {
-                TableColumnModel cm = table2.getColumnModel();
-                cm.getColumn(0).setPreferredWidth(60);
-                cm.getColumn(1).setPreferredWidth(120);
-                cm.getColumn(2).setPreferredWidth(120);
-                cm.getColumn(3).setPreferredWidth(120);
-            }
-            table2.setRowHeight(20);
-            scrollPane2.setViewportView(table2);
-        }
-        contentPane.add(scrollPane2);
-        scrollPane2.setBounds(470, 85, 515, 410);
-
-        //---- label2 ----
-        label2.setText("\u5177\u4f53\u53c2\u6570\u4fe1\u606f");
-        label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 3f));
-        contentPane.add(label2);
-        label2.setBounds(665, 60, 105, 22);
+        contentPane.add(panel2);
+        panel2.setBounds(0, 0, 995, 500);
 
         {
             // compute preferred size
@@ -324,12 +353,13 @@ public class DetailsAll extends JDialog {
             contentPane.setMinimumSize(preferredSize);
             contentPane.setPreferredSize(preferredSize);
         }
-        setSize(1000, 535);
+        setSize(1000, 530);
         setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    private JPanel panel2;
     private JScrollPane scrollPane1;
     private JTable table1;
     private JPanel panel1;

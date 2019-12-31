@@ -4,7 +4,6 @@ import org.apache.logging.log4j.*;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 

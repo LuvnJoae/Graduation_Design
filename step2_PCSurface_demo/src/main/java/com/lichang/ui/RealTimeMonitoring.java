@@ -13,9 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
-import com.jgoodies.forms.factories.*;
 
 import com.lichang.utils.ChangePasswordUtil;
 import com.lichang.utils.LimitRuleUtil;
@@ -91,12 +89,12 @@ public class RealTimeMonitoring extends JFrame {
      */
     //第一次打开该页面时
     private void thisWindowOpened(WindowEvent e) {
-        setUI();
         updateComboBox1(); //先更新一次下拉框
         scheduledExecutor(); //开启定时器
         //设置表格格式
         initTable1Form();
         initTable2Form();
+        this.repaint();
     }
 
     /**
@@ -111,8 +109,12 @@ public class RealTimeMonitoring extends JFrame {
      */
     //MenuItem 用户设置:  切换用户
     private void menuItem1ActionPerformed(ActionEvent e) {
+        //关闭所有frame
+        Window[] frame = JFrame.getWindows();
+        for (Window window : frame) {
+            window.dispose();
+        }
         new Login();
-        this.dispose();
     }
 
     //MenuItem 用户设置： 更改密码
@@ -123,16 +125,19 @@ public class RealTimeMonitoring extends JFrame {
         }
 
         jDialog2 = new JDialog(this, "", true);
+
         changePasswordPanel = new JPanel();
         oldValidationTip = new JLabel();
         oldChangeFlag = false;
 
+        changePasswordPanel.setBackground(new Color(238,238,238));
         changePasswordPanel.setLayout(null);
 
         //提示
-        JTextArea tip = new JTextArea("提示：密码5~10个字符，可使用字母、数字、下划线");
+        JTextArea tip = new JTextArea("提示：密码2~10个字符，可使用字母、数字、下划线");
         changePasswordPanel.add(tip);
         tip.setBounds(50, 20, 300, 40);
+        tip.setBorder(null); //设置无边框
         tip.setLineWrap(true); // 自动换行
         tip.setWrapStyleWord(true);
         tip.setEditable(false); // 不可编辑
@@ -230,6 +235,7 @@ public class RealTimeMonitoring extends JFrame {
         });
 
         jDialog2.setSize(400, 250);
+
         jDialog2.setAlwaysOnTop(true);
         jDialog2.setLocationRelativeTo(null);
         jDialog2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -541,6 +547,11 @@ public class RealTimeMonitoring extends JFrame {
      */
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+        panel5 = new JPanel();
+        button1 = new JButton();
+        button2 = new JButton();
+        button3 = new JButton();
+        button4 = new JButton();
         panel1 = new JPanel();
         label2 = new JLabel();
         menuBar1 = new JMenuBar();
@@ -548,46 +559,43 @@ public class RealTimeMonitoring extends JFrame {
         menuItem1 = new JMenuItem();
         menuItem2 = new JMenuItem();
         label3 = new JLabel();
-        button1 = new JButton();
-        button2 = new JButton();
-        button3 = new JButton();
-        button4 = new JButton();
+        panel4 = new JPanel();
         separator4 = new JPopupMenu.Separator();
-        tabbedPane1 = new JTabbedPane();
-        panel2 = new JPanel();
-        scrollPane1 = new JScrollPane();
-        table1 = new JTable();
+        comboBox1 = new JComboBox<>();
+        label1 = new JLabel();
+        label11 = new JLabel();
+        label5 = new JLabel();
+        label6 = new JLabel();
+        label12 = new JLabel();
+        label9 = new JLabel();
+        label15 = new JLabel();
+        label16 = new JLabel();
+        label10 = new JLabel();
+        label13 = new JLabel();
+        label7 = new JLabel();
+        label8 = new JLabel();
+        label14 = new JLabel();
+        button7 = new JButton();
+        button5 = new JButton();
+        button6 = new JButton();
+        label4 = new JLabel();
         tabbedPane2 = new JTabbedPane();
         panel3 = new JPanel();
         scrollPane2 = new JScrollPane();
         table2 = new JTable();
-        button5 = new JButton();
-        label1 = new JLabel();
-        comboBox1 = new JComboBox<>();
-        button6 = new JButton();
-        panel4 = new JPanel();
-        label4 = new JLabel();
-        label5 = new JLabel();
-        label6 = new JLabel();
-        label7 = new JLabel();
-        label8 = new JLabel();
-        label9 = new JLabel();
-        label10 = new JLabel();
-        label11 = new JLabel();
-        label12 = new JLabel();
-        label13 = new JLabel();
-        label14 = new JLabel();
-        label15 = new JLabel();
-        label16 = new JLabel();
-        button7 = new JButton();
+        tabbedPane1 = new JTabbedPane();
+        panel2 = new JPanel();
+        scrollPane1 = new JScrollPane();
+        table1 = new JTable();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("\u754c\u9762");
+        setTitle("\u5b9e\u65f6\u76d1\u6d4b");
         setAlwaysOnTop(true);
         setFont(new Font(Font.DIALOG, Font.BOLD, 14));
         setBackground(new Color(238, 238, 238));
         setResizable(false);
+        setIconImage(new ImageIcon(getClass().getResource("/img/system(big).png")).getImage());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -597,395 +605,430 @@ public class RealTimeMonitoring extends JFrame {
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-        //======== panel1 ========
+        //======== panel5 ========
         {
-            panel1.setBackground(new Color(238, 238, 238));
-            panel1.setLayout(null);
+            panel5.setBackground(new Color(238, 238, 238));
+            panel5.setLayout(null);
 
-            //---- label2 ----
-            label2.setText("\u5f53\u524d\uff1a");
-            label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
-            panel1.add(label2);
-            label2.setBounds(5, 0, 50, 30);
+            //---- button1 ----
+            button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
+            button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+            button1.setForeground(new Color(51, 51, 51));
+            panel5.add(button1);
+            button1.setBounds(55, 50, 135, 40);
 
-            //======== menuBar1 ========
+            //---- button2 ----
+            button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
+            button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+            button2.setForeground(new Color(51, 51, 51));
+            button2.addActionListener(e -> button2ActionPerformed(e));
+            panel5.add(button2);
+            button2.setBounds(295, 50, 135, 40);
+
+            //---- button3 ----
+            button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
+            button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+            button3.setForeground(new Color(51, 51, 51));
+            button3.addActionListener(e -> button3ActionPerformed(e));
+            panel5.add(button3);
+            button3.setBounds(540, 50, 135, 40);
+
+            //---- button4 ----
+            button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
+            button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
+            button4.setForeground(new Color(51, 51, 51));
+            button4.addActionListener(e -> button4ActionPerformed(e));
+            panel5.add(button4);
+            button4.setBounds(795, 50, 135, 40);
+
+            //======== panel1 ========
             {
-                menuBar1.setBorder(null);
+                panel1.setBackground(new Color(238, 238, 238));
+                panel1.setLayout(null);
 
-                //======== menu1 ========
+                //---- label2 ----
+                label2.setText("\u5f53\u524d\uff1a");
+                label2.setFont(label2.getFont().deriveFont(label2.getFont().getSize() + 2f));
+                panel1.add(label2);
+                label2.setBounds(5, 0, 50, 30);
+
+                //======== menuBar1 ========
                 {
-                    menu1.setText("\u7528\u6237\u8bbe\u7f6e");
-                    menu1.setMaximumSize(new Dimension(80, 32767));
-                    menu1.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
-                    menu1.setHorizontalAlignment(SwingConstants.LEFT);
+                    menuBar1.setBorder(null);
 
-                    //---- menuItem1 ----
-                    menuItem1.setText("\u5207\u6362\u7528\u6237");
-                    menuItem1.setPreferredSize(new Dimension(74, 25));
-                    menuItem1.setHorizontalTextPosition(SwingConstants.LEFT);
-                    menuItem1.setMargin(new Insets(2, 0, 2, 0));
-                    menuItem1.addActionListener(e -> menuItem1ActionPerformed(e));
-                    menu1.add(menuItem1);
-                    menu1.addSeparator();
-
-                    //---- menuItem2 ----
-                    menuItem2.setText("\u66f4\u6539\u5bc6\u7801");
-                    menuItem2.setPreferredSize(new Dimension(74, 25));
-                    menuItem2.setHorizontalTextPosition(SwingConstants.LEFT);
-                    menuItem2.setMargin(new Insets(2, 0, 2, 0));
-                    menuItem2.addActionListener(e -> menuItem2ActionPerformed(e));
-                    menu1.add(menuItem2);
-                    menu1.addSeparator();
-                }
-                menuBar1.add(menu1);
-            }
-            panel1.add(menuBar1);
-            menuBar1.setBounds(135, 0, 86, 30);
-
-            //---- label3 ----
-            label3.setText("admin");
-            label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
-            panel1.add(label3);
-            label3.setBounds(55, 0, 80, 30);
-
-            {
-                // compute preferred size
-                Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel1.getComponentCount(); i++) {
-                    Rectangle bounds = panel1.getComponent(i).getBounds();
-                    preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
-                    preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
-                }
-                Insets insets = panel1.getInsets();
-                preferredSize.width += insets.right;
-                preferredSize.height += insets.bottom;
-                panel1.setMinimumSize(preferredSize);
-                panel1.setPreferredSize(preferredSize);
-            }
-        }
-        contentPane.add(panel1);
-        panel1.setBounds(740, 0, 236, 50);
-
-        //---- button1 ----
-        button1.setText("\u5b9e\u65f6\u76d1\u6d4b");
-        button1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
-        button1.setForeground(new Color(51, 51, 51));
-        contentPane.add(button1);
-        button1.setBounds(55, 50, 135, 40);
-
-        //---- button2 ----
-        button2.setText("\u5386\u53f2\u7edf\u8ba1\u4e0e\u67e5\u8be2");
-        button2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
-        button2.setForeground(new Color(51, 51, 51));
-        button2.addActionListener(e -> button2ActionPerformed(e));
-        contentPane.add(button2);
-        button2.setBounds(295, 50, 135, 40);
-
-        //---- button3 ----
-        button3.setText("\u4e13\u5bb6\u7cfb\u7edf");
-        button3.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
-        button3.setForeground(new Color(51, 51, 51));
-        button3.addActionListener(e -> button3ActionPerformed(e));
-        contentPane.add(button3);
-        button3.setBounds(540, 50, 135, 40);
-
-        //---- button4 ----
-        button4.setText("\u7ba1\u7406\u4e0e\u8bbe\u7f6e");
-        button4.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.BOLD, 14));
-        button4.setForeground(new Color(51, 51, 51));
-        button4.addActionListener(e -> button4ActionPerformed(e));
-        contentPane.add(button4);
-        button4.setBounds(795, 50, 135, 40);
-        contentPane.add(separator4);
-        separator4.setBounds(5, 90, 965, 10);
-
-        //======== tabbedPane1 ========
-        {
-            tabbedPane1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
-            tabbedPane1.setForeground(new Color(204, 204, 0));
-            tabbedPane1.setBackground(Color.white);
-
-            //======== panel2 ========
-            {
-                panel2.setLayout(null);
-
-                //======== scrollPane1 ========
-                {
-
-                    //---- table1 ----
-                    table1.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u6545\u969c\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
-                        }
-                    ) {
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false, false, false, false
-                        };
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
+                    //======== menu1 ========
                     {
-                        TableColumnModel cm = table1.getColumnModel();
-                        cm.getColumn(0).setMinWidth(110);
-                        cm.getColumn(1).setMinWidth(110);
-                        cm.getColumn(2).setMinWidth(55);
-                        cm.getColumn(3).setMinWidth(55);
-                        cm.getColumn(4).setMinWidth(55);
-                        cm.getColumn(5).setMinWidth(30);
-                        cm.getColumn(6).setMinWidth(30);
+                        menu1.setText(" \u7528\u6237\u8bbe\u7f6e");
+                        menu1.setMaximumSize(new Dimension(80, 32767));
+                        menu1.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 14));
+                        menu1.setHorizontalAlignment(SwingConstants.LEFT);
+
+                        //---- menuItem1 ----
+                        menuItem1.setText("\u5207\u6362\u7528\u6237");
+                        menuItem1.setPreferredSize(new Dimension(74, 25));
+                        menuItem1.setHorizontalTextPosition(SwingConstants.LEFT);
+                        menuItem1.setMargin(new Insets(2, 0, 2, 0));
+                        menuItem1.addActionListener(e -> menuItem1ActionPerformed(e));
+                        menu1.add(menuItem1);
+                        menu1.addSeparator();
+
+                        //---- menuItem2 ----
+                        menuItem2.setText("\u66f4\u6539\u5bc6\u7801");
+                        menuItem2.setPreferredSize(new Dimension(74, 25));
+                        menuItem2.setHorizontalTextPosition(SwingConstants.LEFT);
+                        menuItem2.setMargin(new Insets(2, 0, 2, 0));
+                        menuItem2.addActionListener(e -> menuItem2ActionPerformed(e));
+                        menu1.add(menuItem2);
+                        menu1.addSeparator();
                     }
-                    table1.setRowHeight(20);
-                    table1.setAutoCreateRowSorter(true);
-                    table1.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            table1MouseClicked(e);
-                        }
-                    });
-                    scrollPane1.setViewportView(table1);
+                    menuBar1.add(menu1);
                 }
-                panel2.add(scrollPane1);
-                scrollPane1.setBounds(0, 0, 485, 260);
+                panel1.add(menuBar1);
+                menuBar1.setBounds(150, 0, 86, 30);
+
+                //---- label3 ----
+                label3.setText("admin");
+                label3.setFont(label3.getFont().deriveFont(label3.getFont().getSize() + 2f));
+                panel1.add(label3);
+                label3.setBounds(55, 0, 80, 30);
 
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel2.getComponentCount(); i++) {
-                        Rectangle bounds = panel2.getComponent(i).getBounds();
+                    for(int i = 0; i < panel1.getComponentCount(); i++) {
+                        Rectangle bounds = panel1.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                     }
-                    Insets insets = panel2.getInsets();
+                    Insets insets = panel1.getInsets();
                     preferredSize.width += insets.right;
                     preferredSize.height += insets.bottom;
-                    panel2.setMinimumSize(preferredSize);
-                    panel2.setPreferredSize(preferredSize);
+                    panel1.setMinimumSize(preferredSize);
+                    panel1.setPreferredSize(preferredSize);
                 }
             }
-            tabbedPane1.addTab("\u6545\u969c\u76d1\u6d4b", panel2);
-        }
-        contentPane.add(tabbedPane1);
-        tabbedPane1.setBounds(0, 300, 485, 290);
+            panel5.add(panel1);
+            panel1.setBounds(750, 0, 236, 50);
 
-        //======== tabbedPane2 ========
-        {
-            tabbedPane2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
-            tabbedPane2.setForeground(new Color(51, 51, 51));
-
-            //======== panel3 ========
+            //======== panel4 ========
             {
-                panel3.setLayout(null);
-
-                //======== scrollPane2 ========
-                {
-
-                    //---- table2 ----
-                    table2.setRowHeight(20);
-                    table2.setModel(new DefaultTableModel(
-                        new Object[][] {
-                        },
-                        new String[] {
-                            "\u5e8f\u53f7", "\u7535\u6d41", "\u7535\u5f27\u7535\u538b", "\u710a\u63a5\u901f\u5ea6"
-                        }
-                    ) {
-                        boolean[] columnEditable = new boolean[] {
-                            false, false, false, false
-                        };
-                        @Override
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                            return columnEditable[columnIndex];
-                        }
-                    });
-                    {
-                        TableColumnModel cm = table2.getColumnModel();
-                        cm.getColumn(0).setPreferredWidth(80);
-                        cm.getColumn(1).setPreferredWidth(130);
-                        cm.getColumn(2).setPreferredWidth(130);
-                        cm.getColumn(3).setPreferredWidth(130);
-                    }
-                    table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                    scrollPane2.setViewportView(table2);
-                }
-                panel3.add(scrollPane2);
-                scrollPane2.setBounds(0, 0, 490, 260);
+                panel4.setBackground(new Color(153, 153, 153));
+                panel4.setLayout(null);
 
                 {
                     // compute preferred size
                     Dimension preferredSize = new Dimension();
-                    for(int i = 0; i < panel3.getComponentCount(); i++) {
-                        Rectangle bounds = panel3.getComponent(i).getBounds();
+                    for(int i = 0; i < panel4.getComponentCount(); i++) {
+                        Rectangle bounds = panel4.getComponent(i).getBounds();
                         preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                         preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                     }
-                    Insets insets = panel3.getInsets();
+                    Insets insets = panel4.getInsets();
                     preferredSize.width += insets.right;
                     preferredSize.height += insets.bottom;
-                    panel3.setMinimumSize(preferredSize);
-                    panel3.setPreferredSize(preferredSize);
+                    panel4.setMinimumSize(preferredSize);
+                    panel4.setPreferredSize(preferredSize);
                 }
             }
-            tabbedPane2.addTab("\u53c2\u6570\u76d1\u6d4b", panel3);
-        }
-        contentPane.add(tabbedPane2);
-        tabbedPane2.setBounds(490, 300, 485, 290);
+            panel5.add(panel4);
+            panel4.setBounds(510, 100, 460, 195);
+            panel5.add(separator4);
+            separator4.setBounds(5, 90, 965, 10);
 
-        //---- button5 ----
-        button5.setText("\u624b\u52a8\u5237\u65b0");
-        button5.setFont(button5.getFont().deriveFont(button5.getFont().getSize() + 1f));
-        button5.addActionListener(e -> button5ActionPerformed(e));
-        contentPane.add(button5);
-        button5.setBounds(270, 270, 85, 35);
+            //---- comboBox1 ----
+            comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+                "production_default"
+            }));
+            comboBox1.setSelectedIndex(-1);
+            comboBox1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    comboBox1MouseClicked(e);
+                }
+            });
+            panel5.add(comboBox1);
+            comboBox1.setBounds(305, 105, 150, 30);
 
-        //---- label1 ----
-        label1.setText("\u4ea7\u54c1\u9009\u62e9\uff1a");
-        label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 3f));
-        contentPane.add(label1);
-        label1.setBounds(220, 110, 80, label1.getPreferredSize().height);
+            //---- label1 ----
+            label1.setText("\u4ea7\u54c1\u9009\u62e9\uff1a");
+            label1.setFont(label1.getFont().deriveFont(label1.getFont().getSize() + 3f));
+            panel5.add(label1);
+            label1.setBounds(220, 110, 80, 22);
 
-        //---- comboBox1 ----
-        comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
-            "production_default"
-        }));
-        comboBox1.setSelectedIndex(-1);
-        comboBox1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                comboBox1MouseClicked(e);
+            //---- label11 ----
+            label11.setText("-1");
+            label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 3f));
+            label11.setBackground(Color.white);
+            label11.setForeground(new Color(0, 153, 204));
+            panel5.add(label11);
+            label11.setBounds(105, 110, 90, 20);
+
+            //---- label5 ----
+            label5.setText("\u5f53\u524d\u710a\u673a\uff1a");
+            label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 3f));
+            panel5.add(label5);
+            label5.setBounds(25, 110, 80, 22);
+
+            //---- label6 ----
+            label6.setText("\u710a\u673a\u72b6\u6001\uff1a");
+            label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 3f));
+            panel5.add(label6);
+            label6.setBounds(25, 155, 80, 22);
+
+            //---- label12 ----
+            label12.setText("-1");
+            label12.setFont(label12.getFont().deriveFont(label12.getFont().getStyle() | Font.BOLD, label12.getFont().getSize() + 3f));
+            label12.setBackground(Color.white);
+            label12.setForeground(new Color(0, 153, 204));
+            panel5.add(label12);
+            label12.setBounds(105, 155, 90, 20);
+
+            //---- label9 ----
+            label9.setText("\u5de5\u4ef6\u7f16\u53f7\uff1a");
+            label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 3f));
+            panel5.add(label9);
+            label9.setBounds(220, 155, 80, 22);
+
+            //---- label15 ----
+            label15.setText("-1");
+            label15.setFont(label15.getFont().deriveFont(label15.getFont().getStyle() | Font.BOLD, label15.getFont().getSize() + 3f));
+            label15.setBackground(Color.white);
+            label15.setForeground(new Color(0, 153, 204));
+            panel5.add(label15);
+            label15.setBounds(305, 155, 85, 22);
+
+            //---- label16 ----
+            label16.setText("-1");
+            label16.setFont(label16.getFont().deriveFont(label16.getFont().getStyle() | Font.BOLD, label16.getFont().getSize() + 3f));
+            label16.setBackground(Color.white);
+            label16.setForeground(new Color(0, 153, 204));
+            panel5.add(label16);
+            label16.setBounds(305, 200, 85, 22);
+
+            //---- label10 ----
+            label10.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
+            label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 3f));
+            panel5.add(label10);
+            label10.setBounds(220, 200, 80, 22);
+
+            //---- label13 ----
+            label13.setText("0");
+            label13.setFont(label13.getFont().deriveFont(label13.getFont().getStyle() | Font.BOLD, label13.getFont().getSize() + 3f));
+            label13.setBackground(Color.white);
+            label13.setForeground(new Color(0, 153, 204));
+            panel5.add(label13);
+            label13.setBounds(105, 200, 75, 22);
+
+            //---- label7 ----
+            label7.setText("\u5b8c\u6210\u5de5\u4ef6\uff1a");
+            label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 3f));
+            panel5.add(label7);
+            label7.setBounds(25, 200, 80, 22);
+
+            //---- label8 ----
+            label8.setText("\u6545\u969c\u5de5\u4ef6\uff1a");
+            label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 3f));
+            panel5.add(label8);
+            label8.setBounds(25, 245, 80, 22);
+
+            //---- label14 ----
+            label14.setText("0");
+            label14.setFont(label14.getFont().deriveFont(label14.getFont().getStyle() | Font.BOLD, label14.getFont().getSize() + 3f));
+            label14.setBackground(Color.white);
+            label14.setForeground(new Color(255, 51, 0));
+            panel5.add(label14);
+            label14.setBounds(105, 245, 75, 22);
+
+            //---- button7 ----
+            button7.setText("\u6d4b\u8bd5\uff1a\u6dfb\u52a0\u6545\u969c\u8bb0\u5f55");
+            button7.setFont(button7.getFont().deriveFont(button7.getFont().getStyle() | Font.BOLD, button7.getFont().getSize() + 1f));
+            button7.setForeground(new Color(51, 51, 51));
+            button7.addActionListener(e -> button7ActionPerformed(e));
+            panel5.add(button7);
+            button7.setBounds(105, 270, 160, 35);
+
+            //---- button5 ----
+            button5.setText("\u624b\u52a8\u5237\u65b0");
+            button5.setFont(button5.getFont().deriveFont(button5.getFont().getStyle() | Font.BOLD, button5.getFont().getSize() + 1f));
+            button5.setForeground(new Color(51, 51, 51));
+            button5.addActionListener(e -> button5ActionPerformed(e));
+            panel5.add(button5);
+            button5.setBounds(270, 270, 85, 35);
+
+            //---- button6 ----
+            button6.setText("\u6e05\u7a7a\u6545\u969c\u8bb0\u5f55");
+            button6.setFont(button6.getFont().deriveFont(button6.getFont().getStyle() | Font.BOLD, button6.getFont().getSize() + 1f));
+            button6.setForeground(new Color(51, 51, 51));
+            button6.addActionListener(e -> button6ActionPerformed(e));
+            panel5.add(button6);
+            button6.setBounds(360, 270, 120, 35);
+
+            //---- label4 ----
+            label4.setText("<html>\u7535<br>\u538b<br>\u7535<br>\u6d41<br>\u5b9e<br>\u65f6<br>\u56fe</html>");
+            label4.setFont(label4.getFont().deriveFont(label4.getFont().getStyle() | Font.BOLD, label4.getFont().getSize() + 2f));
+            label4.setForeground(new Color(51, 51, 51));
+            panel5.add(label4);
+            label4.setBounds(485, 130, 20, 140);
+
+            //======== tabbedPane2 ========
+            {
+                tabbedPane2.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
+                tabbedPane2.setForeground(new Color(51, 51, 51));
+
+                //======== panel3 ========
+                {
+                    panel3.setLayout(null);
+
+                    //======== scrollPane2 ========
+                    {
+
+                        //---- table2 ----
+                        table2.setRowHeight(20);
+                        table2.setModel(new DefaultTableModel(
+                            new Object[][] {
+                            },
+                            new String[] {
+                                "\u5e8f\u53f7", "\u7535\u6d41", "\u7535\u5f27\u7535\u538b", "\u710a\u63a5\u901f\u5ea6"
+                            }
+                        ) {
+                            Class<?>[] columnTypes = new Class<?>[] {
+                                Integer.class, Object.class, Object.class, Object.class
+                            };
+                            boolean[] columnEditable = new boolean[] {
+                                false, false, false, false
+                            };
+                            @Override
+                            public Class<?> getColumnClass(int columnIndex) {
+                                return columnTypes[columnIndex];
+                            }
+                            @Override
+                            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return columnEditable[columnIndex];
+                            }
+                        });
+                        {
+                            TableColumnModel cm = table2.getColumnModel();
+                            cm.getColumn(0).setPreferredWidth(80);
+                            cm.getColumn(1).setPreferredWidth(130);
+                            cm.getColumn(2).setPreferredWidth(130);
+                            cm.getColumn(3).setPreferredWidth(130);
+                        }
+                        table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                        table2.setAutoCreateRowSorter(true);
+                        scrollPane2.setViewportView(table2);
+                    }
+                    panel3.add(scrollPane2);
+                    scrollPane2.setBounds(0, 0, 490, 260);
+
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel3.getComponentCount(); i++) {
+                            Rectangle bounds = panel3.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel3.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel3.setMinimumSize(preferredSize);
+                        panel3.setPreferredSize(preferredSize);
+                    }
+                }
+                tabbedPane2.addTab("\u53c2\u6570\u76d1\u6d4b", panel3);
             }
-        });
-        contentPane.add(comboBox1);
-        comboBox1.setBounds(305, 105, 150, 30);
+            panel5.add(tabbedPane2);
+            tabbedPane2.setBounds(490, 300, 485, 290);
 
-        //---- button6 ----
-        button6.setText("\u6e05\u7a7a\u6545\u969c\u8bb0\u5f55");
-        button6.setFont(button6.getFont().deriveFont(button6.getFont().getSize() + 1f));
-        button6.addActionListener(e -> button6ActionPerformed(e));
-        contentPane.add(button6);
-        button6.setBounds(360, 270, 105, 35);
+            //======== tabbedPane1 ========
+            {
+                tabbedPane1.setFont(new Font("\u5fae\u8f6f\u96c5\u9ed1", Font.PLAIN, 15));
+                tabbedPane1.setForeground(new Color(51, 51, 51));
+                tabbedPane1.setBackground(Color.white);
 
-        //======== panel4 ========
-        {
-            panel4.setBackground(new Color(153, 153, 153));
-            panel4.setLayout(null);
+                //======== panel2 ========
+                {
+                    panel2.setLayout(null);
+
+                    //======== scrollPane1 ========
+                    {
+
+                        //---- table1 ----
+                        table1.setModel(new DefaultTableModel(
+                            new Object[][] {
+                            },
+                            new String[] {
+                                "\u6545\u969c\u65f6\u95f4", "\u4ea7\u54c1\u540d\u79f0", "\u5de5\u4ef6\u7f16\u53f7", "\u6545\u969c\u7c7b\u578b", "\u6700\u5927\u9891\u6b21", "\u5224\u5b9a", "\u8be6\u60c5"
+                            }
+                        ) {
+                            boolean[] columnEditable = new boolean[] {
+                                false, false, false, false, false, false, false
+                            };
+                            @Override
+                            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return columnEditable[columnIndex];
+                            }
+                        });
+                        {
+                            TableColumnModel cm = table1.getColumnModel();
+                            cm.getColumn(0).setMinWidth(110);
+                            cm.getColumn(1).setMinWidth(110);
+                            cm.getColumn(2).setMinWidth(55);
+                            cm.getColumn(3).setMinWidth(55);
+                            cm.getColumn(4).setMinWidth(55);
+                            cm.getColumn(5).setMinWidth(30);
+                            cm.getColumn(6).setMinWidth(30);
+                        }
+                        table1.setRowHeight(20);
+                        table1.setAutoCreateRowSorter(true);
+                        table1.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                table1MouseClicked(e);
+                            }
+                        });
+                        scrollPane1.setViewportView(table1);
+                    }
+                    panel2.add(scrollPane1);
+                    scrollPane1.setBounds(0, 0, 485, 260);
+
+                    {
+                        // compute preferred size
+                        Dimension preferredSize = new Dimension();
+                        for(int i = 0; i < panel2.getComponentCount(); i++) {
+                            Rectangle bounds = panel2.getComponent(i).getBounds();
+                            preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
+                            preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
+                        }
+                        Insets insets = panel2.getInsets();
+                        preferredSize.width += insets.right;
+                        preferredSize.height += insets.bottom;
+                        panel2.setMinimumSize(preferredSize);
+                        panel2.setPreferredSize(preferredSize);
+                    }
+                }
+                tabbedPane1.addTab("\u6545\u969c\u76d1\u6d4b", panel2);
+            }
+            panel5.add(tabbedPane1);
+            tabbedPane1.setBounds(0, 300, 485, 290);
 
             {
                 // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < panel4.getComponentCount(); i++) {
-                    Rectangle bounds = panel4.getComponent(i).getBounds();
+                for(int i = 0; i < panel5.getComponentCount(); i++) {
+                    Rectangle bounds = panel5.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
                 }
-                Insets insets = panel4.getInsets();
+                Insets insets = panel5.getInsets();
                 preferredSize.width += insets.right;
                 preferredSize.height += insets.bottom;
-                panel4.setMinimumSize(preferredSize);
-                panel4.setPreferredSize(preferredSize);
+                panel5.setMinimumSize(preferredSize);
+                panel5.setPreferredSize(preferredSize);
             }
         }
-        contentPane.add(panel4);
-        panel4.setBounds(510, 100, 460, 195);
-
-        //---- label4 ----
-        label4.setText("<html>\u7535<br>\u538b<br>\u7535<br>\u6d41<br>\u5b9e<br>\u65f6<br>\u56fe</html>");
-        label4.setFont(label4.getFont().deriveFont(label4.getFont().getSize() + 2f));
-        contentPane.add(label4);
-        label4.setBounds(485, 130, 20, label4.getPreferredSize().height);
-
-        //---- label5 ----
-        label5.setText("\u5f53\u524d\u710a\u673a\uff1a");
-        label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() + 3f));
-        contentPane.add(label5);
-        label5.setBounds(new Rectangle(new Point(25, 110), label5.getPreferredSize()));
-
-        //---- label6 ----
-        label6.setText("\u710a\u673a\u72b6\u6001\uff1a");
-        label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() + 3f));
-        contentPane.add(label6);
-        label6.setBounds(new Rectangle(new Point(25, 155), label6.getPreferredSize()));
-
-        //---- label7 ----
-        label7.setText("\u5b8c\u6210\u5de5\u4ef6\uff1a");
-        label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() + 3f));
-        contentPane.add(label7);
-        label7.setBounds(new Rectangle(new Point(25, 200), label7.getPreferredSize()));
-
-        //---- label8 ----
-        label8.setText("\u6545\u969c\u5de5\u4ef6\uff1a");
-        label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 3f));
-        contentPane.add(label8);
-        label8.setBounds(new Rectangle(new Point(25, 245), label8.getPreferredSize()));
-
-        //---- label9 ----
-        label9.setText("\u5de5\u4ef6\u7f16\u53f7\uff1a");
-        label9.setFont(label9.getFont().deriveFont(label9.getFont().getSize() + 3f));
-        contentPane.add(label9);
-        label9.setBounds(new Rectangle(new Point(220, 155), label9.getPreferredSize()));
-
-        //---- label10 ----
-        label10.setText("\u68c0\u6d4b\u7ed3\u679c\uff1a");
-        label10.setFont(label10.getFont().deriveFont(label10.getFont().getSize() + 3f));
-        contentPane.add(label10);
-        label10.setBounds(new Rectangle(new Point(220, 200), label10.getPreferredSize()));
-
-        //---- label11 ----
-        label11.setText("-1");
-        label11.setFont(label11.getFont().deriveFont(label11.getFont().getStyle() | Font.BOLD, label11.getFont().getSize() + 3f));
-        label11.setBackground(Color.white);
-        label11.setForeground(new Color(0, 153, 204));
-        contentPane.add(label11);
-        label11.setBounds(100, 110, 90, 20);
-
-        //---- label12 ----
-        label12.setText("-1");
-        label12.setFont(label12.getFont().deriveFont(label12.getFont().getStyle() | Font.BOLD, label12.getFont().getSize() + 3f));
-        label12.setBackground(Color.white);
-        label12.setForeground(new Color(0, 153, 204));
-        contentPane.add(label12);
-        label12.setBounds(100, 155, 90, 20);
-
-        //---- label13 ----
-        label13.setText("0");
-        label13.setFont(label13.getFont().deriveFont(label13.getFont().getStyle() | Font.BOLD, label13.getFont().getSize() + 3f));
-        label13.setBackground(Color.white);
-        label13.setForeground(new Color(0, 153, 204));
-        contentPane.add(label13);
-        label13.setBounds(100, 200, 75, label13.getPreferredSize().height);
-
-        //---- label14 ----
-        label14.setText("0");
-        label14.setFont(label14.getFont().deriveFont(label14.getFont().getStyle() | Font.BOLD, label14.getFont().getSize() + 3f));
-        label14.setBackground(Color.white);
-        label14.setForeground(new Color(255, 51, 0));
-        contentPane.add(label14);
-        label14.setBounds(100, 245, 75, label14.getPreferredSize().height);
-
-        //---- label15 ----
-        label15.setText("-1");
-        label15.setFont(label15.getFont().deriveFont(label15.getFont().getStyle() | Font.BOLD, label15.getFont().getSize() + 3f));
-        label15.setBackground(Color.white);
-        label15.setForeground(new Color(0, 153, 204));
-        contentPane.add(label15);
-        label15.setBounds(305, 155, 85, label15.getPreferredSize().height);
-
-        //---- label16 ----
-        label16.setText("-1");
-        label16.setFont(label16.getFont().deriveFont(label16.getFont().getStyle() | Font.BOLD, label16.getFont().getSize() + 3f));
-        label16.setBackground(Color.white);
-        label16.setForeground(new Color(0, 153, 204));
-        contentPane.add(label16);
-        label16.setBounds(305, 200, 85, label16.getPreferredSize().height);
-
-        //---- button7 ----
-        button7.setText("\u6d4b\u8bd5\uff1a\u6dfb\u52a0\u6545\u969c\u8bb0\u5f55");
-        button7.setFont(button7.getFont().deriveFont(button7.getFont().getSize() + 1f));
-        button7.addActionListener(e -> button7ActionPerformed(e));
-        contentPane.add(button7);
-        button7.setBounds(105, 270, 160, 35);
+        contentPane.add(panel5);
+        panel5.setBounds(0, 0, 985, 595);
 
         {
             // compute preferred size
@@ -1007,6 +1050,11 @@ public class RealTimeMonitoring extends JFrame {
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+    private JPanel panel5;
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
     private JPanel panel1;
     private JLabel label2;
     private JMenuBar menuBar1;
@@ -1014,37 +1062,33 @@ public class RealTimeMonitoring extends JFrame {
     private JMenuItem menuItem1;
     private JMenuItem menuItem2;
     private JLabel label3;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
+    private JPanel panel4;
     private JPopupMenu.Separator separator4;
-    private JTabbedPane tabbedPane1;
-    private JPanel panel2;
-    private JScrollPane scrollPane1;
-    private JTable table1;
+    private JComboBox<String> comboBox1;
+    private JLabel label1;
+    private JLabel label11;
+    private JLabel label5;
+    private JLabel label6;
+    private JLabel label12;
+    private JLabel label9;
+    private JLabel label15;
+    private JLabel label16;
+    private JLabel label10;
+    private JLabel label13;
+    private JLabel label7;
+    private JLabel label8;
+    private JLabel label14;
+    private JButton button7;
+    private JButton button5;
+    private JButton button6;
+    private JLabel label4;
     private JTabbedPane tabbedPane2;
     private JPanel panel3;
     private JScrollPane scrollPane2;
     private JTable table2;
-    private JButton button5;
-    private JLabel label1;
-    private JComboBox<String> comboBox1;
-    private JButton button6;
-    private JPanel panel4;
-    private JLabel label4;
-    private JLabel label5;
-    private JLabel label6;
-    private JLabel label7;
-    private JLabel label8;
-    private JLabel label9;
-    private JLabel label10;
-    private JLabel label11;
-    private JLabel label12;
-    private JLabel label13;
-    private JLabel label14;
-    private JLabel label15;
-    private JLabel label16;
-    private JButton button7;
+    private JTabbedPane tabbedPane1;
+    private JPanel panel2;
+    private JScrollPane scrollPane1;
+    private JTable table1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
