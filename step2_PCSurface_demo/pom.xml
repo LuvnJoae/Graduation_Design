@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>5.0.0.RELEASE</version>
+            <version>5.3.19</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/spring-core-5.0.0.RELEASE.jar</systemPath>
         </dependency>
