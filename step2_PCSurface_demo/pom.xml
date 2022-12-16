@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>5.0.0.RELEASE</version>
+            <version>5.2.20.RELEASE</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/spring-beans-5.0.0.RELEASE.jar</systemPath>
         </dependency>
